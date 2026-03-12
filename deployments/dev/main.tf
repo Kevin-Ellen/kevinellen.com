@@ -9,9 +9,7 @@ terraform {
   }
 }
 
-provider "cloudflare" {
-  api_token = var.cloudflare_api_token
-}
+provider "cloudflare" {}
 
 module "site_app" {
   source = "../../infra"
