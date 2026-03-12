@@ -17,7 +17,7 @@ export default [
   ...tseslint.configs.recommended,
 
   {
-    files: ["build/**/*.mjs"],
+    files: ["scripts/**/*.mjs"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
