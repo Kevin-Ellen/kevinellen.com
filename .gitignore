@@ -70,3 +70,4 @@ __snapshots__/
 # =========================
 # Terraform lockfile must be committed
 !**/.terraform.lock.hcl
+!**/*.tfvars.example

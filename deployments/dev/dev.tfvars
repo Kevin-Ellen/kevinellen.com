@@ -1,5 +1,0 @@
-account_id         = "aae13859d2866d7a208e1526df50cff2"
-zone_id            = "085a33d1cd2048192e83e47d78b7c284"
-zone_name          = "kevinellen.com"
-project_name       = "kevinellen"
-compatibility_date = "2025-03-12"
