@@ -96,3 +96,92 @@ jobs:
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
+
+  publish-worker-artifact:
+    name: Publish worker artifact
+    runs-on: ubuntu-latest
+    needs:
+      - app-validation
+      - terraform-validation
+      - secrets-scan
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node 25
+        uses: actions/setup-node@v6
+        with:
+          node-version: 25
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build worker (prod)
+        run: npm run build:prod
+
+      - name: Prepare artifact package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          GIT_SHA="${GITHUB_SHA}"
+          BUILD_ID="${GITHUB_RUN_ID}"
+          ARTIFACT_DIR=".artifact"
+          PACKAGE_DIR="${ARTIFACT_DIR}/package"
+
+          mkdir -p "${PACKAGE_DIR}"
+
+          cp dist/prod/entry.js "${PACKAGE_DIR}/entry.js"
+          cp dist/prod/entry.js.map "${PACKAGE_DIR}/entry.js.map"
+
+          cat > "${PACKAGE_DIR}/manifest.json" <<EOF
+          {
+            "project": "kevinellen.com",
+            "git_sha": "${GIT_SHA}",
+            "build_id": "${BUILD_ID}",
+            "bundle": "entry.js",
+            "node_version": "25",
+            "compatibility_date": "2025-03-12"
+          }
+          EOF
+
+          tar -czf "${ARTIFACT_DIR}/worker-bundle.tar.gz" -C "${PACKAGE_DIR}" .
+
+          sha256sum "${ARTIFACT_DIR}/worker-bundle.tar.gz" | tee "${ARTIFACT_DIR}/checksums.txt"
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Upload artifact to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          GIT_SHA="${GITHUB_SHA}"
+          BUCKET="kevinellen-artifacts"
+          PREFIX="workers/${GIT_SHA}"
+          ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+
+          aws s3 cp ".artifact/worker-bundle.tar.gz" \
+            "s3://${BUCKET}/${PREFIX}/worker-bundle.tar.gz" \
+            --endpoint-url "${ENDPOINT}"
+
+          aws s3 cp ".artifact/package/manifest.json" \
+            "s3://${BUCKET}/${PREFIX}/manifest.json" \
+            --endpoint-url "${ENDPOINT}"
+
+          aws s3 cp ".artifact/checksums.txt" \
+            "s3://${BUCKET}/${PREFIX}/checksums.txt" \
+            --endpoint-url "${ENDPOINT}"
