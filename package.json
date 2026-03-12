@@ -5,7 +5,7 @@
   "description": "Personal portfolio website built on Cloudflare Workers, Terraform, KV, and Images.",
   "type": "module",
   "engines": {
-    "node": "22.x"
+    "node": "25.x"
   },
   "scripts": {
     "type-check": "tsc --noEmit",
@@ -24,6 +24,7 @@
   "keywords": [],
   "author": "Kevin Ellen",
   "license": "UNLICENSED",
+  "packageManager": "npm@11.11.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
