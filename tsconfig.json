@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023"],
+    "types": ["./worker-configuration.d.ts", "jest"],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "allowJs": false,
+    "checkJs": false,
+
+    "noEmit": true,
+    "isolatedModules": true,
+
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["src/core/*"],
+      "@modules/*": ["src/modules/*"],
+      "@content/*": ["src/content/*"],
+      "@test/*": ["tests/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "scripts/**/*.ts",
+    "worker-configuration.d.ts"
+  ],
+  "exclude": ["dist", "coverage", "node_modules"]
+}

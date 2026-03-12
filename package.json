@@ -1,0 +1,40 @@
+{
+  "name": "kevinellen.com",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal portfolio website built on Cloudflare Workers, Terraform, KV, and Images.",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "npm run build:dev",
+    "build:dev": "node build/build-worker.mjs dev",
+    "build:stg": "node build/build-worker.mjs stg",
+    "build:prod": "node build/build-worker.mjs prod",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "test": "jest --passWithNoTests",
+    "dev": "wrangler dev",
+    "cf-typegen": "wrangler types"
+  },
+  "keywords": [],
+  "author": "Kevin Ellen",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/jest": "^30.0.0",
+    "esbuild": "^0.27.4",
+    "eslint": "^10.0.3",
+    "eslint-config-prettier": "^10.1.8",
+    "jest": "^30.3.0",
+    "prettier": "^3.8.1",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "wrangler": "^4.72.0"
+  }
+}

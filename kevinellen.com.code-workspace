@@ -1,0 +1,50 @@
+{
+  "folders": [{ "path": "." }],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+    },
+
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+    "eslint.useFlatConfig": true,
+    "eslint.validate": ["typescript", "javascript"],
+
+    "jest.runMode": "on-demand",
+
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/.wrangler": true,
+      "**/node_modules": true,
+      "**/.terraform": true,
+      "**/*.tfstate": true,
+      "**/*.tfstate.backup": true,
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.terraform": true,
+      "**/.wrangler": true,
+      "**/dist": true,
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "hashicorp.terraform",
+      "orta.vscode-jest",
+      "eamodio.gitlens",
+      "usernamehw.errorlens",
+      "christian-kohler.path-intellisense",
+    ],
+  },
+}
