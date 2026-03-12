@@ -56,11 +56,13 @@ resource "cloudflare_worker_version" "site" {
   compatibility_date = var.compatibility_date
 
   main_module = "entry.js"
-  modules = [{
-    name         = "entry.js"
-    content_file = var.worker_script_path
-    content_type = "application/javascript+module"
-  }]
+  modules = [
+    {
+      name         = "entry.js"
+      content_file = var.worker_script_path
+      content_type = "application/javascript+module"
+    }
+]
 
   bindings = [
     {
