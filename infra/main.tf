@@ -62,7 +62,7 @@ resource "cloudflare_worker_version" "site" {
       content_file = var.worker_script_path
       content_type = "application/javascript+module"
     }
-]
+  ]
 
   bindings = [
     {
