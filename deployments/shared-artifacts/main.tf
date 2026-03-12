@@ -9,10 +9,7 @@ terraform {
   }
 }
 
-provider "cloudflare" {
-  api_token = var.cloudflare_api_token
-}
-
+provider "cloudflare" {}
 resource "cloudflare_r2_bucket" "worker_artifacts" {
   account_id = var.account_id
   name       = var.artifacts_bucket_name
