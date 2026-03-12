@@ -155,9 +155,14 @@ jobs:
           sha256sum "${ARTIFACT_DIR}/worker-bundle.tar.gz" | tee "${ARTIFACT_DIR}/checksums.txt"
 
       - name: Install AWS CLI
+        shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
+          set -euo pipefail
+
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install --update
+          aws --version
 
       - name: Upload artifact to R2
         env:
