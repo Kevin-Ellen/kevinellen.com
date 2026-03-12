@@ -10,9 +10,9 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build": "npm run build:dev",
-    "build:dev": "node build/build-worker.mjs dev",
-    "build:stg": "node build/build-worker.mjs stg",
-    "build:prod": "node build/build-worker.mjs prod",
+    "build:dev": "node scripts/build-worker.mjs dev",
+    "build:stg": "node scripts/build-worker.mjs stg",
+    "build:prod": "node scripts/build-worker.mjs prod",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
