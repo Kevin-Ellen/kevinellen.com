@@ -21,7 +21,10 @@ module "site_app" {
   zone_name          = var.zone_name
   project_name       = var.project_name
   instance_name      = "dev"
-  subdomain          = "dev"
-  worker_script_path = "../../dist/dev/entry.js"
+  worker_script_path = var.worker_script_path
   compatibility_date = var.compatibility_date
+  subdomain          = "dev"
+
+  release_sha = var.release_sha
+  release_key = var.release_key
 }
