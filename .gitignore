@@ -37,6 +37,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 **/.terraform/
+*.tfvars
+*.tfvars.json
 
 # =========================
 # OS / editor
@@ -67,4 +69,4 @@ __snapshots__/
 # ALLOWS
 # =========================
 # Terraform lockfile must be committed
-!.terraform.lock.hcl
+!**/.terraform.lock.hcl
