@@ -20,7 +20,7 @@ locals {
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
     "www.${var.zone_name}/*"
-  ] : [
+    ] : [
     "${var.instance_name}.${var.zone_name}/*"
   ]
 }
@@ -55,7 +55,7 @@ resource "cloudflare_worker_version" "site" {
   worker_id          = cloudflare_worker.site.id
   compatibility_date = var.compatibility_date
 
-  main_module        = "entry.js"
+  main_module = "entry.js"
   modules = [{
     name         = "entry.js"
     content_file = var.worker_script_path
@@ -100,9 +100,9 @@ resource "cloudflare_workers_deployment" "site" {
 resource "cloudflare_workers_route" "site" {
   for_each = toset(local.route_patterns)
 
-  zone_id     = var.zone_id
-  pattern     = each.value
-  script      = cloudflare_worker.site.name
+  zone_id = var.zone_id
+  pattern = each.value
+  script  = cloudflare_worker.site.name
 
   depends_on = [cloudflare_workers_deployment.site]
 }
