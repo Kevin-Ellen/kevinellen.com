@@ -36,6 +36,7 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+**/.terraform/
 
 # =========================
 # OS / editor
@@ -43,6 +44,8 @@ override.tf.json
 .DS_Store
 Thumbs.db
 .vscode/
+.AppleDouble
+.LSOverride
 
 # =========================
 # Logs
@@ -59,3 +62,9 @@ __snapshots__/
 # Misc
 # =========================
 *.tsbuildinfo
+
+# =========================
+# ALLOWS
+# =========================
+# Terraform lockfile must be committed
+!.terraform.lock.hcl
