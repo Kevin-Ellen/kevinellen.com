@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: Commit SHA from main to promote
-        required: true
+        description: Commit SHA from main to promote (leave blank for latest successful CI on main)
+        required: false
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: promote-stg
@@ -22,20 +23,50 @@ jobs:
 
     steps:
       - name: Resolve artefact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_SHA: ${{ github.event.inputs.sha }}
+          REPO: ${{ github.repository }}
         shell: bash
         run: |
           set -euo pipefail
 
-          RELEASE_SHA="${{ github.event.inputs.sha }}"
-          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
+          if [ -n "${INPUT_SHA:-}" ]; then
+            RELEASE_SHA="${INPUT_SHA}"
+            echo "Using manually provided SHA: ${RELEASE_SHA}"
+          else
+            echo "No SHA provided, resolving latest successful CI run on main"
 
-          echo "RELEASE_SHA=${RELEASE_SHA}" >> "$GITHUB_ENV"
-          echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
-          echo "STACK_ID=${{ vars.SPACELIFT_STG_STACK_ID }}" >> "$GITHUB_ENV"
+            API_URL="https://api.github.com/repos/${REPO}/actions/workflows/ci.yml/runs?branch=main&status=completed&per_page=20"
 
-          echo "Resolved release SHA: ${RELEASE_SHA}"
-          echo "Resolved release key: ${RELEASE_KEY}"
-          echo "Resolved stack ID: ${{ vars.SPACELIFT_STG_STACK_ID }}"
+            RELEASE_SHA="$(
+              curl -sS \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                "${API_URL}" \
+              | python3 - <<'PY'
+                import json, sys
+                data = json.load(sys.stdin)
+                for run in data.get("workflow_runs", []):
+                    if run.get("conclusion") == "success":
+                        print(run["head_sha"])
+                        break
+                else:
+                    raise SystemExit("No successful CI run found on main")
+                PY
+                            )"
+
+                            echo "Resolved latest successful CI SHA: ${RELEASE_SHA}"
+                          fi
+
+                          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
+
+                          echo "RELEASE_SHA=${RELEASE_SHA}" >> "$GITHUB_ENV"
+                          echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
+                          echo "STACK_ID=${{ vars.SPACELIFT_STG_STACK_ID }}" >> "$GITHUB_ENV"
+
+                          echo "Resolved release key: ${RELEASE_KEY}"
+                          echo "Resolved stack ID: ${{ vars.SPACELIFT_STG_STACK_ID }}"
 
       - name: Verify promoted artefact exists
         env:
@@ -74,8 +105,6 @@ jobs:
               --data "{\"query\":\"mutation GetSpaceliftToken(\$id: ID!, \$secret: String!) { apiKeyUser(id: \$id, secret: \$secret) { jwt } }\",\"variables\":{\"id\":\"${SPACELIFT_API_KEY_ID}\",\"secret\":\"${SPACELIFT_API_KEY_SECRET}\"}}" \
             | python3 -c 'import sys, json; print(json.load(sys.stdin)["data"]["apiKeyUser"]["jwt"])'
           )"
-
-          echo "JWT acquired"
 
           RESPONSE="$(
             curl -sS \
