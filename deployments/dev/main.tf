@@ -19,10 +19,10 @@ module "site_app" {
   zone_id            = var.zone_id
   zone_name          = var.zone_name
   project_name       = var.project_name
-  instance_name      = "dev"
+  instance_name      = var.instance_name
+  subdomain          = var.subdomain
   worker_script_path = var.worker_script_path
   compatibility_date = var.compatibility_date
-  subdomain          = "dev"
 
   release_sha = var.release_sha
   release_key = var.release_key

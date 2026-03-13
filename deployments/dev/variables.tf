@@ -21,7 +21,6 @@ variable "compatibility_date" {
 variable "worker_script_path" {
   type        = string
   description = "Path to the built Worker bundle for this deployment."
-  default     = "../../../.artifact/entry.js"
 }
 
 variable "release_sha" {
@@ -34,4 +33,14 @@ variable "release_key" {
   type        = string
   description = "Artifact storage key of the release bundle."
   default     = null
+}
+
+variable "instance_name" {
+  type        = string
+  description = "Deployment instance name (dev / prod / etc)"
+}
+
+variable "subdomain" {
+  type        = string
+  description = "Subdomain to attach worker to"
 }
