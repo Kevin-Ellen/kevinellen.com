@@ -32,7 +32,7 @@ jobs:
           if [ -n "${INPUT_SHA:-}" ]; then
             RELEASE_SHA="${INPUT_SHA}"
           else
-            API_URL="https://api.github.com/repos/${REPO}/actions/workflows/main-ci.yml/runs?branch=main&status=completed&per_page=20"
+            API_URL="https://api.github.com/repos/${REPO}/actions/workflows/ci-main.yml/runs?branch=main&status=completed&per_page=20"
 
             JSON="$(curl -sS \
               -H "Authorization: Bearer ${GH_TOKEN}" \
