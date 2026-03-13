@@ -1,14 +1,7 @@
 import { build } from "esbuild";
 import fs from "fs";
 
-const env = process.argv[2];
-
-if (!env) {
-  console.error("Missing env: dev | stg | prod");
-  process.exit(1);
-}
-
-const outdir = `dist/${env}`;
+const outdir = "dist";
 fs.mkdirSync(outdir, { recursive: true });
 
 await build({
@@ -19,5 +12,5 @@ await build({
   platform: "browser",
   target: "es2022",
   sourcemap: true,
-  minify: env === "prod",
+  minify: true,
 });

@@ -48,7 +48,7 @@ jobs:
         run: npm run type-check
 
       - name: Build worker
-        run: npm run build:prod
+        run: npm run build
 
   terraform-validation:
     name: Terraform validation (${{ matrix.environment }})
@@ -124,7 +124,7 @@ jobs:
         run: npm ci
 
       - name: Build worker
-        run: npm run build:prod
+        run: npm run build
 
       - name: Resolve release metadata
         id: release_meta
@@ -153,8 +153,8 @@ jobs:
 
           mkdir -p "${PACKAGE_DIR}"
 
-          cp dist/prod/entry.js "${PACKAGE_DIR}/entry.js"
-          cp dist/prod/entry.js.map "${PACKAGE_DIR}/entry.js.map"
+          cp dist/entry.js "${PACKAGE_DIR}/entry.js"
+          cp dist/entry.js.map "${PACKAGE_DIR}/entry.js.map"
 
           cat > "${PACKAGE_DIR}/manifest.json" <<EOF
           {

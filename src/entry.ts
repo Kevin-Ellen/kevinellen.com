@@ -1,8 +1,32 @@
 export default {
   async fetch(): Promise<Response> {
-    return new Response(
-      "Hello from kevinellen.com - C bundle created at " +
-        new Date().toISOString(),
-    );
+    const bundleName = "SASS/CSS - A";
+    const css = `body{background:pink;}`;
+
+    const html = `<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${bundleName}</title>
+
+    <style>
+      ${css}
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>${bundleName}</h1>
+      <p>Hello from Cloudflare + GitHub + Spacelift + Terraform</p>
+    </main>
+  </body>
+</html>`;
+
+    return new Response(html, {
+      headers: {
+        "content-type": "text/html; charset=UTF-8",
+        "x-robots-tag": "noindex",
+      },
+    });
   },
 };
