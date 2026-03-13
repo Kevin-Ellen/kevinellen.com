@@ -2,7 +2,7 @@ import CSS from "./generated/styles.css?raw";
 
 export default {
   async fetch(): Promise<Response> {
-    const bundleName = "SASS/CSS - C";
+    const bundleName = "SASS/CSS - D";
 
     const html = `<!doctype html>
 <html lang="en-GB">

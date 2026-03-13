@@ -13,4 +13,7 @@ await build({
   target: "es2022",
   sourcemap: true,
   minify: true,
+  loader: {
+    ".css": "text"
+  }
 });
