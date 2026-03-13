@@ -40,8 +40,10 @@ echo "Using bucket: $ARTIFACT_BUCKET"
 echo "Available commit-related env vars:"
 env | sort | grep -E 'SPACELIFT|GIT_COMMIT|COMMIT_SHA' || true
 
-COMMIT_SHA="${SPACELIFT_GIT_COMMIT:-${SPACELIFT_COMMIT_SHA:-}}"
-test -n "$COMMIT_SHA" || { echo "No Spacelift commit SHA variable found"; exit 1; }
+COMMIT_SHA="$(git -C /mnt/workspace/source rev-parse HEAD)"
+test -n "$COMMIT_SHA" || { echo "Could not determine commit SHA from git"; exit 1; }
+
+echo "Resolved commit SHA: $COMMIT_SHA"
 
 ARTIFACT_KEY="workers/${COMMIT_SHA}/worker-bundle.tar.gz"
 echo "Using key: $ARTIFACT_KEY"
