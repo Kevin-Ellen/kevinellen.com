@@ -9,6 +9,5 @@ export default {
       },
     ],
     "no-descending-specificity": null,
-    "scss/at-import-no-partial-leading-underscore": null,
   },
 };
