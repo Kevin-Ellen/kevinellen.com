@@ -94,6 +94,10 @@ jobs:
                   {
                     "key": "TF_VAR_release_key",
                     "value": "${RELEASE_KEY}"
+                  },
+                  {
+                    "key": "TF_VAR_worker_script_path",
+                    "value": "/mnt/workspace/.artifact/releases/${RELEASE_SHA}/entry.js"
                   }
                 ]
               }
