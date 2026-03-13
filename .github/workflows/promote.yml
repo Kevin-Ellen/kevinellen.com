@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: Commit SHA from main to promote (leave blank for latest successful CI on main)
+        description: Commit SHA from main to promote (leave blank for latest successful 'main CI' on main)
         required: false
 
 permissions:
@@ -32,7 +32,7 @@ jobs:
           if [ -n "${INPUT_SHA:-}" ]; then
             RELEASE_SHA="${INPUT_SHA}"
           else
-            API_URL="https://api.github.com/repos/${REPO}/actions/workflows/ci.yml/runs?branch=main&status=completed&per_page=20"
+            API_URL="https://api.github.com/repos/${REPO}/actions/workflows/main-ci.yml/runs?branch=main&status=completed&per_page=20"
 
             JSON="$(curl -sS \
               -H "Authorization: Bearer ${GH_TOKEN}" \
