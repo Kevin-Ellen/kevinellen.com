@@ -61,9 +61,9 @@ const SYSTEM_ROUTE_MAP: RouteMap = {
  */
 async function handlePrefixRoutes(
   path: string,
-  req: Request,
-  env: Env,
-  ctx: ExecutionContext,
+  // req: Request,
+  // env: Env,
+  // ctx: ExecutionContext,
 ): Promise<Response | null> {
   if (path.startsWith("/images/")) {
     return new Response("image placeholder", { status: 501 });
