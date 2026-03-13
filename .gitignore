@@ -15,6 +15,7 @@ build/
 coverage/
 .tmp/
 .cache/
+.build/
 
 # =========================
 # Cloudflare

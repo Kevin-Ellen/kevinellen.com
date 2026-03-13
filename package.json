@@ -17,8 +17,8 @@
     "test": "jest --passWithNoTests",
     "dev": "wrangler dev",
     "cf-typegen": "wrangler types && prettier worker-configuration.d.ts --write",
-    "build:styles": "sass src/styles/main.scss src/generated/styles.css --no-source-map",
-    "watch:styles": "sass --watch src/styles/main.scss:src/generated/styles.css --no-source-map",
+    "build:styles": "sass src/styles/main.scss .build/generated/styles.css --no-source-map",
+    "watch:styles": "sass --watch src/styles/main.scss:.build/generated/styles.css --no-source-map",
     "lint:styles": "stylelint \"src/styles/**/*.scss\"",
     "lint:styles:fix": "stylelint \"src/styles/**/*.scss\" --fix"
   },

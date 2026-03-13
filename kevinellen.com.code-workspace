@@ -1,6 +1,13 @@
 {
   "folders": [{ "path": "." }],
   "settings": {
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+      "package.json": "package-lock.json,.nvmrc",
+      "tsconfig.json": "worker-configuration.d.ts",
+      "stylelint.config.mjs": ".stylelintignore",
+      ".prettierrc.json": ".prettierignore",
+    },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
@@ -29,6 +36,7 @@
       "**/.terraform": true,
       "**/*.tfstate": true,
       "**/*.tfstate.backup": true,
+      "**/.build": true,
     },
     "search.exclude": {
       "**/node_modules": true,
