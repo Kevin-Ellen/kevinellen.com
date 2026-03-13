@@ -20,7 +20,7 @@ locals {
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
     "www.${var.zone_name}/*"
-  ] : [
+    ] : [
     "${var.instance_name}.${var.zone_name}/*"
   ]
 }
