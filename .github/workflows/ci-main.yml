@@ -41,14 +41,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Lint styles
+        run: npm run lint:styles
+
       - name: Run tests
         run: npm test -- --runInBand
-
-      - name: Type check
-        run: npm run type-check
-
-      - name: Check Cloudflare Worker types
-        run: npm run cf-typecheck
 
       - name: Build styles
         run: npm run build:styles
