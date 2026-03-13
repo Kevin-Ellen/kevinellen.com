@@ -1,7 +1,6 @@
-name: ci
+name: main ci
 
 on:
-  pull_request:
   push:
     branches:
       - main
@@ -15,7 +14,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: main-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -104,7 +103,6 @@ jobs:
       - app-validation
       - terraform-validation
       - secrets-scan
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     outputs:
       release_sha: ${{ steps.release_meta.outputs.release_sha }}
@@ -218,16 +216,3 @@ jobs:
           echo "release_key=${{ steps.release_meta.outputs.release_key }}"
           echo "manifest_key=${{ steps.release_meta.outputs.manifest_key }}"
           echo "checksums_key=${{ steps.release_meta.outputs.checksums_key }}"
-
-  pr-gate:
-    name: PR gate
-    runs-on: ubuntu-latest
-    needs:
-      - app-validation
-      - terraform-validation
-      - secrets-scan
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: PR gate passed
-        run: echo "All required PR validation jobs passed."
