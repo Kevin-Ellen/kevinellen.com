@@ -12,11 +12,14 @@
     "build": "node scripts/build.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier . --write prettier worker-configuration.d.ts  --write",
+    "format": "prettier . --write",
     "format:check": "prettier . --check",
     "test": "jest --passWithNoTests",
     "dev": "wrangler dev",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types && prettier worker-configuration.d.ts --write",
+    "cf-typecheck": "wrangler types --check",
+    "build:styles": "sass src/styles/main.scss src/generated/styles.css --no-source-map",
+    "watch:styles": "sass --watch src/styles/main.scss:src/generated/styles.css --no-source-map"
   },
   "keywords": [],
   "author": "Kevin Ellen",
