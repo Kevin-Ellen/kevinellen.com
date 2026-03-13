@@ -31,7 +31,6 @@ jobs:
           set -euo pipefail
 
           MERGE_SHA="${GITHUB_SHA}"
-
           PARENTS="$(git rev-list --parents -n 1 "${MERGE_SHA}")"
           PARENT_COUNT="$(echo "${PARENTS}" | wc -w | tr -d ' ')"
 
@@ -100,22 +99,23 @@ jobs:
           test -n "${RELEASE_SHA:-}" || { echo "RELEASE_SHA is not set"; exit 1; }
           test -n "${RELEASE_KEY:-}" || { echo "RELEASE_KEY is not set"; exit 1; }
 
+          sudo apt-get update >/dev/null 2>&1
+          sudo apt-get install -y jq >/dev/null 2>&1
+
           JWT="$(
             curl -sS \
               -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
               -H "Content-Type: application/json" \
               --data "{\"query\":\"mutation GetSpaceliftToken(\$id: ID!, \$secret: String!) { apiKeyUser(id: \$id, secret: \$secret) { jwt } }\",\"variables\":{\"id\":\"${SPACELIFT_API_KEY_ID}\",\"secret\":\"${SPACELIFT_API_KEY_SECRET}\"}}" \
-            | python3 -c 'import sys, json; print(json.load(sys.stdin)["data"]["apiKeyUser"]["jwt"])'
+            | jq -r '.data.apiKeyUser.jwt'
           )"
+
+          test -n "${JWT}" || { echo "Failed to obtain JWT"; exit 1; }
+          test "${JWT}" != "null" || { echo "JWT was null"; exit 1; }
 
           echo "JWT acquired"
 
-          RESPONSE="$(
-            curl -sS \
-              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
-              -H "Authorization: Bearer ${JWT}" \
-              -H "Content-Type: application/json" \
-              --data "$(cat <<EOF
+          PAYLOAD="$(cat <<EOF
           {
             "query": "mutation RunTrigger(\$stack: ID!, \$commitSha: String!, \$runtimeConfig: RuntimeConfigInput) { runTrigger(stack: \$stack, commitSha: \$commitSha, runtimeConfig: \$runtimeConfig) { id } }",
             "variables": {
@@ -141,35 +141,26 @@ jobs:
           }
           EOF
           )"
+
+          RESPONSE="$(
+            curl -sS \
+              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+              -H "Authorization: Bearer ${JWT}" \
+              -H "Content-Type: application/json" \
+              --data "${PAYLOAD}"
           )"
 
           echo "${RESPONSE}"
 
-          printf '%s' "${RESPONSE}" | python3 - <<'PY'
-          import json, sys
-          data = json.load(sys.stdin)
-          if data.get("errors"):
-              print(json.dumps(data["errors"], indent=2))
-              raise SystemExit(1)
-          run_id = data.get("data", {}).get("runTrigger", {}).get("id")
-          if not run_id:
-              print("Missing runTrigger.id in response")
-              raise SystemExit(1)
-          PY
+          if printf '%s' "${RESPONSE}" | jq -e '.errors != null' >/dev/null; then
+            echo "GraphQL returned errors:"
+            printf '%s' "${RESPONSE}" | jq '.errors'
+            exit 1
+          fi
 
-          RUN_ID="$(
-            printf '%s' "${RESPONSE}" | python3 - <<'PY'
-          import json, sys
-          data = json.load(sys.stdin)
-          if data.get("errors"):
-              raise SystemExit(1)
-          run_id = data.get("data", {}).get("runTrigger", {}).get("id")
-          if not run_id:
-              raise SystemExit(1)
-          print(run_id)
-          PY
-          )"
+          RUN_ID="$(printf '%s' "${RESPONSE}" | jq -r '.data.runTrigger.id')"
 
           test -n "${RUN_ID}" || { echo "Failed to extract run ID"; exit 1; }
+          test "${RUN_ID}" != "null" || { echo "Run ID was null"; exit 1; }
 
           echo "Triggered Spacelift run: ${RUN_ID}"
