@@ -20,7 +20,7 @@ locals {
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
     "www.${var.zone_name}/*"
-    ] : [
+  ] : [
     "${var.instance_name}.${var.zone_name}/*"
   ]
 }
@@ -56,6 +56,7 @@ resource "cloudflare_worker_version" "site" {
   compatibility_date = var.compatibility_date
 
   main_module = "entry.js"
+
   modules = [
     {
       name         = "entry.js"
@@ -90,7 +91,7 @@ resource "cloudflare_worker_version" "site" {
 
 resource "cloudflare_workers_deployment" "site" {
   account_id  = var.account_id
-  script_name = cloudflare_worker.site.name
+  script_name = local.worker_name
   strategy    = "percentage"
 
   versions = [{
@@ -104,7 +105,7 @@ resource "cloudflare_workers_route" "site" {
 
   zone_id = var.zone_id
   pattern = each.value
-  script  = cloudflare_worker.site.name
+  script  = local.worker_name
 
   depends_on = [cloudflare_workers_deployment.site]
 }
