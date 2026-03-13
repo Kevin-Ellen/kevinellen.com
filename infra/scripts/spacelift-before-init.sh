@@ -8,16 +8,21 @@ BUNDLE_TAR="$ARTIFACT_DIR/worker-bundle.tar.gz"
 EXTRACT_DIR="$ARTIFACT_DIR"
 PY_BIN="${PY_BIN:-python3}"
 
+test -n "${R2_ACCOUNT_ID:-}" || { echo "R2_ACCOUNT_ID is not set"; exit 1; }
+test -n "${R2_ARTIFACT_BUCKET:-}" || { echo "R2_ARTIFACT_BUCKET is not set"; exit 1; }
+test -n "${R2_ARTIFACT_KEY:-}" || { echo "R2_ARTIFACT_KEY is not set"; exit 1; }
+test -n "${R2_ACCESS_KEY_ID:-}" || { echo "R2_ACCESS_KEY_ID is not set"; exit 1; }
+test -n "${R2_SECRET_ACCESS_KEY:-}" || { echo "R2_SECRET_ACCESS_KEY is not set"; exit 1; }
+
 ARTIFACT_ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 ARTIFACT_BUCKET="${R2_ARTIFACT_BUCKET}"
-ARTIFACT_KEY="${R2_ARTIFACT_KEY:-}"
+ARTIFACT_KEY="${R2_ARTIFACT_KEY}"
+
+export AWS_ACCESS_KEY_ID="${R2_ACCESS_KEY_ID}"
+export AWS_SECRET_ACCESS_KEY="${R2_SECRET_ACCESS_KEY}"
 
 mkdir -p "$ARTIFACT_DIR"
 rm -f "$BUNDLE_TAR"
-
-test -n "$R2_ACCOUNT_ID" || { echo "R2_ACCOUNT_ID is not set"; exit 1; }
-test -n "$R2_ARTIFACT_BUCKET" || { echo "R2_ARTIFACT_BUCKET is not set"; exit 1; }
-test -n "$ARTIFACT_KEY" || { echo "ARTIFACT_KEY is not set"; exit 1; }
 
 echo "Checking Python"
 "$PY_BIN" --version
