@@ -1,7 +1,8 @@
+import CSS from "./generated/styles.css";
+
 export default {
   async fetch(): Promise<Response> {
     const bundleName = "SASS/CSS - A";
-    const css = `body{background:pink;}`;
 
     const html = `<!doctype html>
 <html lang="en-GB">
@@ -11,7 +12,7 @@ export default {
     <title>${bundleName}</title>
 
     <style>
-      ${css}
+      ${CSS}
     </style>
   </head>
   <body>
