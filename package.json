@@ -12,7 +12,7 @@
     "build": "node scripts/build.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier . --write",
+    "format": "prettier . --write prettier worker-configuration.d.ts  --write",
     "format:check": "prettier . --check",
     "test": "jest --passWithNoTests",
     "dev": "wrangler dev",

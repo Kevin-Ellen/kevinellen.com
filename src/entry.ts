@@ -1,8 +1,8 @@
-import CSS from "./generated/styles.css";
+import CSS from "./generated/styles.css?raw";
 
 export default {
   async fetch(): Promise<Response> {
-    const bundleName = "SASS/CSS - A";
+    const bundleName = "SASS/CSS - B";
 
     const html = `<!doctype html>
 <html lang="en-GB">
