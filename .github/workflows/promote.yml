@@ -1,0 +1,142 @@
+name: Promote artefact to STG
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Commit SHA from main to promote
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: promote-stg
+  cancel-in-progress: true
+
+jobs:
+  promote-stg:
+    name: Trigger STG deployment in Spacelift
+    runs-on: ubuntu-latest
+    environment: stg
+
+    steps:
+      - name: Resolve artefact
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RELEASE_SHA="${{ github.event.inputs.sha }}"
+          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
+
+          echo "RELEASE_SHA=${RELEASE_SHA}" >> "$GITHUB_ENV"
+          echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
+          echo "STACK_ID=${{ vars.SPACELIFT_STG_STACK_ID }}" >> "$GITHUB_ENV"
+
+          echo "Resolved release SHA: ${RELEASE_SHA}"
+          echo "Resolved release key: ${RELEASE_KEY}"
+          echo "Resolved stack ID: ${{ vars.SPACELIFT_STG_STACK_ID }}"
+
+      - name: Verify promoted artefact exists
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          BUCKET="kevinellen-artifacts"
+
+          python3 -m pip install --no-cache-dir awscli >/dev/null 2>&1
+
+          python3 -m awscli s3 ls \
+            "s3://${BUCKET}/${RELEASE_KEY}" \
+            --endpoint-url "${ENDPOINT}" >/dev/null
+
+          echo "Artefact exists: ${RELEASE_KEY}"
+
+      - name: Trigger STG run via Spacelift GraphQL
+        env:
+          SPACELIFT_API_KEY_ENDPOINT: ${{ vars.SPACELIFT_API_KEY_ENDPOINT }}
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          JWT="$(
+            curl -sS \
+              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+              -H "Content-Type: application/json" \
+              --data "{\"query\":\"mutation GetSpaceliftToken(\$id: ID!, \$secret: String!) { apiKeyUser(id: \$id, secret: \$secret) { jwt } }\",\"variables\":{\"id\":\"${SPACELIFT_API_KEY_ID}\",\"secret\":\"${SPACELIFT_API_KEY_SECRET}\"}}" \
+            | python3 -c 'import sys, json; print(json.load(sys.stdin)["data"]["apiKeyUser"]["jwt"])'
+          )"
+
+          echo "JWT acquired"
+
+          RESPONSE="$(
+            curl -sS \
+              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+              -H "Authorization: Bearer ${JWT}" \
+              -H "Content-Type: application/json" \
+              --data "$(cat <<EOF
+          {
+            "query": "mutation RunTrigger(\$stack: ID!, \$commitSha: String!, \$runtimeConfig: RuntimeConfigInput) { runTrigger(stack: \$stack, commitSha: \$commitSha, runtimeConfig: \$runtimeConfig) { id } }",
+            "variables": {
+              "stack": "${STACK_ID}",
+              "commitSha": "${RELEASE_SHA}",
+              "runtimeConfig": {
+                "environment": [
+                  {
+                    "key": "TF_VAR_release_sha",
+                    "value": "${RELEASE_SHA}"
+                  },
+                  {
+                    "key": "TF_VAR_release_key",
+                    "value": "${RELEASE_KEY}"
+                  },
+                  {
+                    "key": "TF_VAR_worker_script_path",
+                    "value": "/mnt/workspace/.artifact/releases/${RELEASE_SHA}/entry.js"
+                  }
+                ]
+              }
+            }
+          }
+          EOF
+          )"
+          )"
+
+          echo "${RESPONSE}"
+
+          printf '%s' "${RESPONSE}" | python3 - <<'PY'
+          import json, sys
+          data = json.load(sys.stdin)
+          if data.get("errors"):
+              print(json.dumps(data["errors"], indent=2))
+              raise SystemExit(1)
+          run_id = data.get("data", {}).get("runTrigger", {}).get("id")
+          if not run_id:
+              print("Missing runTrigger.id in response")
+              raise SystemExit(1)
+          PY
+
+          RUN_ID="$(
+            printf '%s' "${RESPONSE}" | python3 - <<'PY'
+          import json, sys
+          data = json.load(sys.stdin)
+          if data.get("errors"):
+              raise SystemExit(1)
+          run_id = data.get("data", {}).get("runTrigger", {}).get("id")
+          if not run_id:
+              raise SystemExit(1)
+          print(run_id)
+          PY
+          )"
+
+          test -n "${RUN_ID}" || { echo "Failed to extract run ID"; exit 1; }
+
+          echo "Triggered Spacelift run: ${RUN_ID}"
