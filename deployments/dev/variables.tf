@@ -21,7 +21,7 @@ variable "compatibility_date" {
 variable "worker_script_path" {
   type        = string
   description = "Path to the built Worker bundle for this deployment."
-  default     = "../../dist/dev/entry.js"
+  default     = "../../../.artifact/entry.js"
 }
 
 variable "release_sha" {
