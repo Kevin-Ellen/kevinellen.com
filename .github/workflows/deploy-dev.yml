@@ -38,22 +38,6 @@ jobs:
           echo "Resolved release SHA: ${RELEASE_SHA}"
           echo "Resolved release key: ${RELEASE_KEY}"
 
-      - name: Create runtime config
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p .spacelift
-
-          cat > .spacelift/dev-runtime.yml <<EOF
-          environment:
-            TF_VAR_release_sha: "${{ steps.release.outputs.release_sha }}"
-            TF_VAR_release_key: "${{ steps.release.outputs.release_key }}"
-          EOF
-
-          echo "Runtime config:"
-          cat .spacelift/dev-runtime.yml
-
       - name: Show deploy inputs
         shell: bash
         run: |
@@ -61,31 +45,67 @@ jobs:
           echo "release_sha=${{ steps.release.outputs.release_sha }}"
           echo "release_key=${{ steps.release.outputs.release_key }}"
 
-      - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@main
-
-      - name: Spacectl debug
+      - name: Trigger DEV run via Spacelift GraphQL
         env:
           SPACELIFT_API_KEY_ENDPOINT: ${{ vars.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+          SPACELIFT_DEV_STACK_ID: ${{ vars.SPACELIFT_DEV_STACK_ID }}
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+          RELEASE_KEY: ${{ steps.release.outputs.release_key }}
         shell: bash
         run: |
           set -euo pipefail
 
-          spacectl version
-          spacectl profile list || true
+          test -n "${SPACELIFT_API_KEY_ENDPOINT:-}" || { echo "SPACELIFT_API_KEY_ENDPOINT is not set"; exit 1; }
+          test -n "${SPACELIFT_API_KEY_ID:-}" || { echo "SPACELIFT_API_KEY_ID is not set"; exit 1; }
+          test -n "${SPACELIFT_API_KEY_SECRET:-}" || { echo "SPACELIFT_API_KEY_SECRET is not set"; exit 1; }
+          test -n "${SPACELIFT_DEV_STACK_ID:-}" || { echo "SPACELIFT_DEV_STACK_ID is not set"; exit 1; }
+          test -n "${RELEASE_SHA:-}" || { echo "RELEASE_SHA is not set"; exit 1; }
+          test -n "${RELEASE_KEY:-}" || { echo "RELEASE_KEY is not set"; exit 1; }
 
-      - name: Trigger DEV stack deploy
-        env:
-          SPACELIFT_API_KEY_ENDPOINT: ${{ vars.SPACELIFT_API_KEY_ENDPOINT }}
-          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
-          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-        shell: bash
-        run: |
-          set -euo pipefail
+          JWT="$(
+            curl -sS \
+              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+              -H "Content-Type: application/json" \
+              --data "{\"query\":\"mutation GetSpaceliftToken(\$id: ID!, \$secret: String!) { apiKeyUser(id: \$id, secret: \$secret) { jwt } }\",\"variables\":{\"id\":\"${SPACELIFT_API_KEY_ID}\",\"secret\":\"${SPACELIFT_API_KEY_SECRET}\"}}" \
+            | python3 -c 'import sys, json; print(json.load(sys.stdin)["data"]["apiKeyUser"]["jwt"])'
+          )"
 
-          spacectl stack deploy \
-            --id "${{ vars.SPACELIFT_DEV_STACK_ID }}" \
-            --runtime-config .spacelift/dev-runtime.yml \
-            --run-metadata "release_sha=${{ steps.release.outputs.release_sha }}"
+          echo "JWT acquired"
+
+          RESPONSE="$(
+            curl -sS \
+              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+              -H "Authorization: Bearer ${JWT}" \
+              -H "Content-Type: application/json" \
+              --data "$(cat <<EOF
+          {
+            "query": "mutation RunTrigger(\$stack: ID!, \$commitSha: String!, \$runtimeConfig: RuntimeConfigInput) { runTrigger(stack: \$stack, commitSha: \$commitSha, runtimeConfig: \$runtimeConfig) { id } }",
+            "variables": {
+              "stack": "${SPACELIFT_DEV_STACK_ID}",
+              "commitSha": "${RELEASE_SHA}",
+              "runtimeConfig": {
+                "environment": [
+                  {
+                    "name": "TF_VAR_release_sha",
+                    "value": "${RELEASE_SHA}"
+                  },
+                  {
+                    "name": "TF_VAR_release_key",
+                    "value": "${RELEASE_KEY}"
+                  }
+                ]
+              }
+            }
+          }
+          EOF
+          )"
+          )"
+
+          echo "${RESPONSE}"
+
+          RUN_ID="$(printf '%s' "${RESPONSE}" | python3 -c 'import sys, json; data=json.load(sys.stdin); print(data["data"]["runTrigger"]["id"])')"
+          test -n "${RUN_ID}" || { echo "Failed to extract run ID"; exit 1; }
+
+          echo "Triggered Spacelift run: ${RUN_ID}"
