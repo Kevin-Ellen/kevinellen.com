@@ -64,6 +64,18 @@ jobs:
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@main
 
+      - name: Spacectl debug
+        env:
+          SPACELIFT_API_KEY_ENDPOINT: ${{ vars.SPACELIFT_API_KEY_ENDPOINT }}
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          spacectl version
+          spacectl profile list || true
+
       - name: Trigger DEV stack deploy
         env:
           SPACELIFT_API_KEY_ENDPOINT: ${{ vars.SPACELIFT_API_KEY_ENDPOINT }}
