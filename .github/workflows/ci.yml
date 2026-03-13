@@ -215,3 +215,16 @@ jobs:
           echo "release_key=${{ steps.release_meta.outputs.release_key }}"
           echo "manifest_key=${{ steps.release_meta.outputs.manifest_key }}"
           echo "checksums_key=${{ steps.release_meta.outputs.checksums_key }}"
+
+  pr-gate:
+    name: PR gate
+    runs-on: ubuntu-latest
+    needs:
+      - app-validation
+      - terraform-validation
+      - secrets-scan
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: PR gate passed
+        run: echo "All required PR validation jobs passed."
