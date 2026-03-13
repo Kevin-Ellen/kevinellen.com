@@ -21,7 +21,7 @@ locals {
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
     "www.${var.zone_name}/*"
-    ] : [
+  ] : [
     "${var.instance_name}.${var.zone_name}/*"
   ]
 }
@@ -112,6 +112,8 @@ resource "cloudflare_workers_route" "site" {
 }
 
 resource "cloudflare_dns_record" "worker_subdomain" {
+  count = var.instance_name == "prod" ? 0 : 1
+
   zone_id = var.zone_id
   name    = var.subdomain
   type    = "A"

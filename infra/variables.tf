@@ -23,7 +23,9 @@ variable "compatibility_date" {
 }
 
 variable "subdomain" {
-  type = string
+  type        = string
+  description = "Subdomain to attach worker to"
+  default     = null
 }
 
 variable "worker_script_path" {
