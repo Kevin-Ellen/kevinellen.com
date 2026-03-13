@@ -1,0 +1,79 @@
+name: Deploy DEV
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+jobs:
+  deploy-dev:
+    name: Trigger DEV deployment in Spacelift
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+
+    steps:
+      - name: Resolve release metadata
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RELEASE_SHA="${{ github.event.workflow_run.head_sha }}"
+          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
+
+          echo "release_sha=${RELEASE_SHA}" >> "$GITHUB_OUTPUT"
+          echo "release_key=${RELEASE_KEY}" >> "$GITHUB_OUTPUT"
+
+          echo "Resolved release SHA: ${RELEASE_SHA}"
+          echo "Resolved release key: ${RELEASE_KEY}"
+
+      - name: Create runtime config
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p .spacelift
+
+          cat > .spacelift/dev-runtime.yml <<EOF
+          environment:
+            TF_VAR_release_sha: "${{ steps.release.outputs.release_sha }}"
+            TF_VAR_release_key: "${{ steps.release.outputs.release_key }}"
+          EOF
+
+          echo "Runtime config:"
+          cat .spacelift/dev-runtime.yml
+
+      - name: Show deploy inputs
+        shell: bash
+        run: |
+          echo "stack_id=${{ vars.SPACELIFT_DEV_STACK_ID }}"
+          echo "release_sha=${{ steps.release.outputs.release_sha }}"
+          echo "release_key=${{ steps.release.outputs.release_key }}"
+
+      - name: Install spacectl
+        uses: spacelift-io/setup-spacectl@main
+
+      - name: Trigger DEV stack deploy
+        env:
+          SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          spacectl stack deploy \
+            --id "${{ vars.SPACELIFT_DEV_STACK_ID }}" \
+            --runtime-config .spacelift/dev-runtime.yml \
+            --run-metadata "release_sha=${{ steps.release.outputs.release_sha }}"

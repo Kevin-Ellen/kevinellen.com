@@ -103,6 +103,12 @@ jobs:
       - secrets-scan
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
+    outputs:
+      release_sha: ${{ steps.release_meta.outputs.release_sha }}
+      release_key: ${{ steps.release_meta.outputs.release_key }}
+      manifest_key: ${{ steps.release_meta.outputs.manifest_key }}
+      checksums_key: ${{ steps.release_meta.outputs.checksums_key }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -119,12 +125,27 @@ jobs:
       - name: Build worker
         run: npm run build:prod
 
+      - name: Resolve release metadata
+        id: release_meta
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RELEASE_SHA="${GITHUB_SHA}"
+          RELEASE_PREFIX="workers/${RELEASE_SHA}"
+
+          echo "release_sha=${RELEASE_SHA}" >> "$GITHUB_OUTPUT"
+          echo "release_key=${RELEASE_PREFIX}/worker-bundle.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "manifest_key=${RELEASE_PREFIX}/manifest.json" >> "$GITHUB_OUTPUT"
+          echo "checksums_key=${RELEASE_PREFIX}/checksums.txt" >> "$GITHUB_OUTPUT"
+
       - name: Prepare artifact package
         shell: bash
         run: |
           set -euo pipefail
 
-          GIT_SHA="${GITHUB_SHA}"
+          GIT_SHA="${{ steps.release_meta.outputs.release_sha }}"
+          RELEASE_KEY="${{ steps.release_meta.outputs.release_key }}"
           BUILD_ID="${GITHUB_RUN_ID}"
           ARTIFACT_DIR=".artifact"
           PACKAGE_DIR="${ARTIFACT_DIR}/package"
@@ -140,13 +161,18 @@ jobs:
             "git_sha": "${GIT_SHA}",
             "build_id": "${BUILD_ID}",
             "bundle": "entry.js",
+            "bundle_archive": "worker-bundle.tar.gz",
+            "release_key": "${RELEASE_KEY}",
             "node_version": "25",
             "compatibility_date": "2026-03-12"
           }
           EOF
 
           tar -czf "${ARTIFACT_DIR}/worker-bundle.tar.gz" -C "${PACKAGE_DIR}" .
-          sha256sum "${ARTIFACT_DIR}/worker-bundle.tar.gz" | tee "${ARTIFACT_DIR}/checksums.txt"
+          (
+            cd "${ARTIFACT_DIR}"
+            sha256sum "worker-bundle.tar.gz" | tee "checksums.txt"
+          )
 
       - name: Install AWS CLI
         shell: bash
@@ -167,19 +193,25 @@ jobs:
         run: |
           set -euo pipefail
 
-          GIT_SHA="${GITHUB_SHA}"
           BUCKET="kevinellen-artifacts"
-          PREFIX="workers/${GIT_SHA}"
           ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
           aws s3 cp ".artifact/worker-bundle.tar.gz" \
-            "s3://${BUCKET}/${PREFIX}/worker-bundle.tar.gz" \
+            "s3://${BUCKET}/${{ steps.release_meta.outputs.release_key }}" \
             --endpoint-url "${ENDPOINT}"
 
           aws s3 cp ".artifact/package/manifest.json" \
-            "s3://${BUCKET}/${PREFIX}/manifest.json" \
+            "s3://${BUCKET}/${{ steps.release_meta.outputs.manifest_key }}" \
             --endpoint-url "${ENDPOINT}"
 
           aws s3 cp ".artifact/checksums.txt" \
-            "s3://${BUCKET}/${PREFIX}/checksums.txt" \
+            "s3://${BUCKET}/${{ steps.release_meta.outputs.checksums_key }}" \
             --endpoint-url "${ENDPOINT}"
+
+      - name: Show release outputs
+        shell: bash
+        run: |
+          echo "release_sha=${{ steps.release_meta.outputs.release_sha }}"
+          echo "release_key=${{ steps.release_meta.outputs.release_key }}"
+          echo "manifest_key=${{ steps.release_meta.outputs.manifest_key }}"
+          echo "checksums_key=${{ steps.release_meta.outputs.checksums_key }}"
