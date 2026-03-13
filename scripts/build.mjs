@@ -14,6 +14,6 @@ await build({
   sourcemap: true,
   minify: true,
   loader: {
-    ".css": "text"
-  }
+    ".css": "text",
+  },
 });
