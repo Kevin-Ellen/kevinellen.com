@@ -17,155 +17,100 @@ concurrency:
 
 jobs:
   promote-stg:
-    name: Trigger STG deployment in Spacelift
     runs-on: ubuntu-latest
     environment: stg
 
     steps:
-      - name: Resolve artefact
+      - name: Resolve artefact SHA
         env:
           GH_TOKEN: ${{ github.token }}
           INPUT_SHA: ${{ github.event.inputs.sha }}
           REPO: ${{ github.repository }}
-        shell: bash
         run: |
           set -euo pipefail
 
           if [ -n "${INPUT_SHA:-}" ]; then
             RELEASE_SHA="${INPUT_SHA}"
-            echo "Using manually provided SHA: ${RELEASE_SHA}"
           else
-            echo "No SHA provided, resolving latest successful CI run on main"
-
             API_URL="https://api.github.com/repos/${REPO}/actions/workflows/ci.yml/runs?branch=main&status=completed&per_page=20"
 
-            RELEASE_SHA="$(
-              curl -sS \
-                -H "Authorization: Bearer ${GH_TOKEN}" \
-                -H "Accept: application/vnd.github+json" \
-                "${API_URL}" \
-              | python3 - <<'PY'
-                import json, sys
-                data = json.load(sys.stdin)
-                for run in data.get("workflow_runs", []):
-                    if run.get("conclusion") == "success":
-                        print(run["head_sha"])
-                        break
-                else:
-                    raise SystemExit("No successful CI run found on main")
-                PY
-                            )"
+            JSON="$(curl -sS \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "${API_URL}")"
 
-                            echo "Resolved latest successful CI SHA: ${RELEASE_SHA}"
-                          fi
+            RELEASE_SHA="$(echo "$JSON" | jq -r '.workflow_runs[] | select(.conclusion=="success") | .head_sha' | head -n1)"
+          fi
 
-                          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
+          if [ -z "${RELEASE_SHA}" ]; then
+            echo "Could not resolve release SHA"
+            exit 1
+          fi
 
-                          echo "RELEASE_SHA=${RELEASE_SHA}" >> "$GITHUB_ENV"
-                          echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
-                          echo "STACK_ID=${{ vars.SPACELIFT_STG_STACK_ID }}" >> "$GITHUB_ENV"
+          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
 
-                          echo "Resolved release key: ${RELEASE_KEY}"
-                          echo "Resolved stack ID: ${{ vars.SPACELIFT_STG_STACK_ID }}"
+          echo "RELEASE_SHA=${RELEASE_SHA}" >> "$GITHUB_ENV"
+          echo "RELEASE_KEY=${RELEASE_KEY}" >> "$GITHUB_ENV"
+          echo "STACK_ID=${{ vars.SPACELIFT_STG_STACK_ID }}" >> "$GITHUB_ENV"
 
-      - name: Verify promoted artefact exists
+          echo "Resolved SHA: ${RELEASE_SHA}"
+          echo "Release key: ${RELEASE_KEY}"
+
+      - name: Verify artefact exists in R2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-        shell: bash
         run: |
           set -euo pipefail
 
-          ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
-          BUCKET="kevinellen-artifacts"
+          pip install awscli >/dev/null
 
-          python3 -m pip install --no-cache-dir awscli >/dev/null 2>&1
+          aws s3 ls \
+            "s3://kevinellen-artifacts/${RELEASE_KEY}" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
-          python3 -m awscli s3 ls \
-            "s3://${BUCKET}/${RELEASE_KEY}" \
-            --endpoint-url "${ENDPOINT}" >/dev/null
-
-          echo "Artefact exists: ${RELEASE_KEY}"
-
-      - name: Trigger STG run via Spacelift GraphQL
+      - name: Trigger Spacelift STG
         env:
           SPACELIFT_API_KEY_ENDPOINT: ${{ vars.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-        shell: bash
         run: |
           set -euo pipefail
 
-          JWT="$(
-            curl -sS \
-              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
-              -H "Content-Type: application/json" \
-              --data "{\"query\":\"mutation GetSpaceliftToken(\$id: ID!, \$secret: String!) { apiKeyUser(id: \$id, secret: \$secret) { jwt } }\",\"variables\":{\"id\":\"${SPACELIFT_API_KEY_ID}\",\"secret\":\"${SPACELIFT_API_KEY_SECRET}\"}}" \
-            | python3 -c 'import sys, json; print(json.load(sys.stdin)["data"]["apiKeyUser"]["jwt"])'
-          )"
+          JWT=$(curl -sS \
+            -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+            -H "Content-Type: application/json" \
+            --data "{\"query\":\"mutation GetSpaceliftToken(\$id: ID!, \$secret: String!) { apiKeyUser(id: \$id, secret: \$secret) { jwt } }\",\"variables\":{\"id\":\"${SPACELIFT_API_KEY_ID}\",\"secret\":\"${SPACELIFT_API_KEY_SECRET}\"}}" \
+            | jq -r '.data.apiKeyUser.jwt')
 
-          RESPONSE="$(
-            curl -sS \
-              -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
-              -H "Authorization: Bearer ${JWT}" \
-              -H "Content-Type: application/json" \
-              --data "$(cat <<EOF
-          {
-            "query": "mutation RunTrigger(\$stack: ID!, \$commitSha: String!, \$runtimeConfig: RuntimeConfigInput) { runTrigger(stack: \$stack, commitSha: \$commitSha, runtimeConfig: \$runtimeConfig) { id } }",
-            "variables": {
-              "stack": "${STACK_ID}",
-              "commitSha": "${RELEASE_SHA}",
-              "runtimeConfig": {
-                "environment": [
-                  {
-                    "key": "TF_VAR_release_sha",
-                    "value": "${RELEASE_SHA}"
-                  },
-                  {
-                    "key": "TF_VAR_release_key",
-                    "value": "${RELEASE_KEY}"
-                  },
-                  {
-                    "key": "TF_VAR_worker_script_path",
-                    "value": "/mnt/workspace/.artifact/releases/${RELEASE_SHA}/entry.js"
-                  }
-                ]
+          RESPONSE=$(curl -sS \
+            -X POST "${SPACELIFT_API_KEY_ENDPOINT}/graphql" \
+            -H "Authorization: Bearer ${JWT}" \
+            -H "Content-Type: application/json" \
+            --data "{
+              \"query\": \"mutation RunTrigger(\$stack: ID!, \$commitSha: String!, \$runtimeConfig: RuntimeConfigInput) { runTrigger(stack: \$stack, commitSha: \$commitSha, runtimeConfig: \$runtimeConfig) { id } }\",
+              \"variables\": {
+                \"stack\": \"${STACK_ID}\",
+                \"commitSha\": \"${RELEASE_SHA}\",
+                \"runtimeConfig\": {
+                  \"environment\": [
+                    { \"key\": \"TF_VAR_release_sha\", \"value\": \"${RELEASE_SHA}\" },
+                    { \"key\": \"TF_VAR_release_key\", \"value\": \"${RELEASE_KEY}\" },
+                    { \"key\": \"TF_VAR_worker_script_path\", \"value\": \"/mnt/workspace/.artifact/releases/${RELEASE_SHA}/entry.js\" }
+                  ]
+                }
               }
-            }
-          }
-          EOF
-          )"
-          )"
+            }")
 
-          echo "${RESPONSE}"
+          echo "$RESPONSE"
 
-          printf '%s' "${RESPONSE}" | python3 - <<'PY'
-          import json, sys
-          data = json.load(sys.stdin)
-          if data.get("errors"):
-              print(json.dumps(data["errors"], indent=2))
-              raise SystemExit(1)
-          run_id = data.get("data", {}).get("runTrigger", {}).get("id")
-          if not run_id:
-              print("Missing runTrigger.id in response")
-              raise SystemExit(1)
-          PY
+          RUN_ID=$(echo "$RESPONSE" | jq -r '.data.runTrigger.id')
 
-          RUN_ID="$(
-            printf '%s' "${RESPONSE}" | python3 - <<'PY'
-          import json, sys
-          data = json.load(sys.stdin)
-          if data.get("errors"):
-              raise SystemExit(1)
-          run_id = data.get("data", {}).get("runTrigger", {}).get("id")
-          if not run_id:
-              raise SystemExit(1)
-          print(run_id)
-          PY
-          )"
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "Failed to trigger Spacelift"
+            exit 1
+          fi
 
-          test -n "${RUN_ID}" || { echo "Failed to extract run ID"; exit 1; }
-
-          echo "Triggered Spacelift run: ${RUN_ID}"
+          echo "Triggered Spacelift run: $RUN_ID"
