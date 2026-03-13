@@ -88,11 +88,11 @@ jobs:
               "runtimeConfig": {
                 "environment": [
                   {
-                    "name": "TF_VAR_release_sha",
+                    "key": "TF_VAR_release_sha",
                     "value": "${RELEASE_SHA}"
                   },
                   {
-                    "name": "TF_VAR_release_key",
+                    "key": "TF_VAR_release_key",
                     "value": "${RELEASE_KEY}"
                   }
                 ]
