@@ -1,4 +1,4 @@
-name: Promote artefact to STG
+name: promote artefact to stg
 
 on:
   workflow_dispatch:
