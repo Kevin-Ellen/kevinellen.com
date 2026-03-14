@@ -1,0 +1,17 @@
+@use "../tokens" as tokens;
+
+.l-page {
+  /* TO DO: REMOVE */
+  background: red;
+  /* END REMOVE */
+
+  padding-inline: tokens.$space-lg;
+
+  @media (min-width: tokens.$bp-sm) {
+    padding-inline: tokens.$space-xl;
+  }
+
+  @media (min-width: tokens.$bp-lg) {
+    padding-inline: tokens.$space-2xl;
+  }
+}

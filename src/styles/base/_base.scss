@@ -1,0 +1,24 @@
+@use "../tokens/colours" as colours;
+
+html {
+  font-size: 100%;
+}
+
+body {
+  line-height: 1.5;
+  background: colours.$colour-page;
+  color: colours.$colour-text;
+}
+
+main {
+  display: block;
+}
+
+article,
+section,
+header,
+footer,
+figure,
+figcaption {
+  display: block;
+}

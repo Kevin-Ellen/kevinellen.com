@@ -27,8 +27,8 @@ ARTIFACT_BUCKET="${R2_ARTIFACT_BUCKET}"
 export AWS_ACCESS_KEY_ID="${R2_ACCESS_KEY_ID}"
 export AWS_SECRET_ACCESS_KEY="${R2_SECRET_ACCESS_KEY}"
 
+rm -rf "${RELEASE_DIR}"
 mkdir -p "${RELEASE_DIR}"
-rm -f "${BUNDLE_TAR}" "${CHECKSUM_FILE}" "${MANIFEST_FILE}"
 
 echo "Checking Python"
 "${PY_BIN}" --version
@@ -82,9 +82,9 @@ echo "Listing extracted files"
 find "${EXTRACT_DIR}" -maxdepth 4 -type f | sort
 
 echo "Validating entry.js exists"
-test -f "${EXTRACT_DIR}/entry.js"
+test -f "${EXTRACT_DIR}/worker/entry.js"
 
-export TF_VAR_worker_script_path="${EXTRACT_DIR}/entry.js"
+export TF_VAR_worker_script_path="${EXTRACT_DIR}/worker/entry.js"
 echo "Resolved worker script path: ${TF_VAR_worker_script_path}"
 
 echo "before_init hook completed successfully"

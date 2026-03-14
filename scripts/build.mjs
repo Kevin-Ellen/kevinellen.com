@@ -1,12 +1,16 @@
 import { build } from "esbuild";
 import fs from "fs";
+import path from "path";
 
-const outdir = "dist";
-fs.mkdirSync(outdir, { recursive: true });
+const distDir = "dist";
+const workerDir = path.join(distDir, "worker");
+
+fs.rmSync(distDir, { recursive: true, force: true });
+fs.mkdirSync(workerDir, { recursive: true });
 
 await build({
   entryPoints: ["src/entry.ts"],
-  outfile: `${outdir}/entry.js`,
+  outfile: path.join(workerDir, "entry.js"),
   bundle: true,
   format: "esm",
   platform: "browser",

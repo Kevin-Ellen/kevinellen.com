@@ -38,14 +38,20 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Lint styles
+        run: npm run lint:styles
+
       - name: Run tests
         run: npm test -- --runInBand
 
       - name: Type check
         run: npm run type-check
 
+      - name: Build styles
+        run: npm run build:styles
+
       - name: Build worker
-        run: npm run build:prod
+        run: npm run build
 
   terraform-validation:
     name: Terraform validation (${{ matrix.environment }})

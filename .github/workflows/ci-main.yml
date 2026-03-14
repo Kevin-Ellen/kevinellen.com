@@ -99,8 +99,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  publish-worker-artifact:
-    name: Publish worker artifact
+  publish-release-artifact:
+    name: Publish release artifact
     runs-on: ubuntu-latest
     needs:
       - app-validation
@@ -157,17 +157,18 @@ jobs:
           ARTIFACT_DIR=".artifact"
           PACKAGE_DIR="${ARTIFACT_DIR}/package"
 
-          mkdir -p "${PACKAGE_DIR}"
+          rm -rf "${ARTIFACT_DIR}"
+          mkdir -p "${PACKAGE_DIR}/worker"
 
-          cp dist/entry.js "${PACKAGE_DIR}/entry.js"
-          cp dist/entry.js.map "${PACKAGE_DIR}/entry.js.map"
+          cp dist/worker/entry.js "${PACKAGE_DIR}/worker/entry.js"
+          cp dist/worker/entry.js.map "${PACKAGE_DIR}/worker/entry.js.map"
 
           cat > "${PACKAGE_DIR}/manifest.json" <<EOF
           {
             "project": "kevinellen.com",
             "git_sha": "${GIT_SHA}",
             "build_id": "${BUILD_ID}",
-            "bundle": "entry.js",
+            "worker_entry": "worker/entry.js",
             "bundle_archive": "worker-bundle.tar.gz",
             "release_key": "${RELEASE_KEY}",
             "node_version": "25",

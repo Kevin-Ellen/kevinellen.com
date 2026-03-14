@@ -117,7 +117,7 @@ export default {
     if (systemHandler) return systemHandler(req, env, ctx);
 
     // prefix routes
-    const prefixResponse = await handlePrefixRoutes(path, req, env, ctx);
+    const prefixResponse = await handlePrefixRoutes(path /*req, env, ctx*/);
     if (prefixResponse) return prefixResponse;
 
     // fallback → app

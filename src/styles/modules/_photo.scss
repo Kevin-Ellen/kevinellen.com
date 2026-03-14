@@ -1,0 +1,85 @@
+@use "../tokens" as tokens;
+
+.m-photo {
+  background: tokens.$colour-surface-strong;
+  padding-inline: tokens.$space-3xl;
+  padding-block: tokens.$space-2xl;
+
+  &--immersive {
+    background: tokens.$colour-immersive;
+  }
+
+  &__object {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    border: 1px solid tokens.$colour-rule;
+  }
+
+  &__annotation {
+    display: flex;
+    flex-direction: column;
+    gap: tokens.$space-md;
+    margin-top: tokens.$space-md;
+    padding-inline: 1rem;
+
+    @media (min-width: tokens.$bp-sm) {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: tokens.$space-xl;
+      padding-inline: tokens.$space-3xl;
+    }
+  }
+
+  &__caption {
+    color: tokens.$colour-text;
+    max-width: 40ch;
+    text-align: left;
+    font-size: 0.95em;
+    margin-top: tokens.$space-sm;
+
+    .m-photo--immersive & {
+      color: tokens.$colour-text-inverse;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    row-gap: tokens.$space-2xs;
+    color: tokens.$colour-text-muted;
+    font-size: 0.75em;
+    text-align: left;
+
+    @media (min-width: tokens.$bp-sm) {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .m-photo--immersive & {
+      color: tokens.$colour-text-inverse-muted;
+    }
+  }
+
+  &__meta-item {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: tokens.$space-sm;
+    justify-content: end;
+
+    @media (min-width: tokens.$bp-sm) {
+      justify-content: flex-end;
+    }
+  }
+
+  &__meta-term {
+    opacity: 0.5;
+    font-weight: 500;
+  }
+
+  &__meta-detail {
+    font-weight: 400;
+    margin: 0;
+  }
+}
