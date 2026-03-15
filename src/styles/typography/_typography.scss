@@ -3,7 +3,7 @@
 
 html {
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -23,13 +23,6 @@ p {
 
 p + p {
   margin-top: type.$paragraph-spacing;
-}
-
-.intro {
-  font-weight: type.$font-weight-intro;
-  font-size: type.$font-size-intro;
-  line-height: type.$line-height-intro;
-  color: type.$colour-type-intro;
 }
 
 em {
