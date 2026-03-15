@@ -1,14 +1,15 @@
 @use "../tokens" as tokens;
 
 .l-content {
-  /* TO DO: REMOVE */
-  background: green;
-
-  /* END REMOVE */
-
-  max-width: tokens.$width-content;
+  max-width: tokens.$width-reading;
   margin-inline: auto;
-  padding-inline: tokens.$space-sm;
+  padding-inline: tokens.$space-lg;
+
+  + .l-content,
+  + .m-photo,
+  + .m-photo--immersive {
+    margin-top: tokens.$space-2xl;
+  }
 
   @media (min-width: tokens.$bp-sm) {
     padding-inline: 0;

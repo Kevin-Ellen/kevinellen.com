@@ -1,0 +1,26 @@
+@use "../tokens" as tokens;
+
+.m-article-heading {
+  display: flex;
+  flex-direction: column;
+
+  &__eyebrow,
+  &__title,
+  &__intro {
+    margin: 0;
+  }
+
+  &__eyebrow {
+    font-size: tokens.$font-size-label;
+    line-height: 1.2;
+    color: tokens.$colour-text-muted;
+  }
+
+  &__title {
+    margin-top: tokens.$space-2xs;
+  }
+
+  &__intro {
+    margin-top: tokens.$space-sm;
+  }
+}

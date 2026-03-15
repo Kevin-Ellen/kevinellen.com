@@ -1,18 +1,18 @@
 @use "../tokens" as tokens;
 
 .l-page {
-  /* TO DO: REMOVE */
-  background: red;
+  &__frame {
+    max-width: tokens.$width-frame;
+    margin-inline: auto;
+    padding-top: tokens.$space-2xl;
+    padding-inline: tokens.$space-lg;
 
-  /* END REMOVE */
+    @media (min-width: tokens.$bp-sm) {
+      padding-inline: tokens.$space-xl;
+    }
 
-  padding-inline: tokens.$space-lg;
-
-  @media (min-width: tokens.$bp-sm) {
-    padding-inline: tokens.$space-xl;
-  }
-
-  @media (min-width: tokens.$bp-lg) {
-    padding-inline: tokens.$space-2xl;
+    @media (min-width: tokens.$bp-lg) {
+      padding-inline: tokens.$space-2xl;
+    }
   }
 }

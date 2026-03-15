@@ -1,16 +1,104 @@
 @use "../typography/typography-families" as families;
 @use "colours" as colours;
+@use "spacing" as spacing;
 
 $font-family-body: families.$font-family-body;
+$font-family-heading: families.$font-family-heading;
+$font-family-quote: families.$font-family-heading;
+$font-family-caption: $font-family-body;
+$font-family-meta: $font-family-body;
+
 $font-weight-body: 400;
 $font-weight-intro: 300;
 $font-weight-strong: 600;
+
+$font-weight-h1: 600;
+$font-weight-h2: 600;
+$font-weight-h3: 550;
+$font-weight-h4: 550;
+$font-weight-h5: 600;
+$font-weight-h6: 600;
+
+$font-weight-blockquote: 400;
+$font-weight-blockquote-cite: 400;
+
+$font-weight-caption: 400;
+$font-weight-meta: 400;
+$font-weight-meta-term: 500;
+$font-weight-meta-detail: 400;
+
 $font-size-body: 18px;
+$font-size-body-sm: 0.8rem;
 $font-size-intro: 1.25rem;
+$font-size-label: 0.875rem;
+
+$font-size-h1: clamp(2.5rem, 5vw, 4.25rem);
+$font-size-h2: clamp(1.875rem, 3vw, 2.5rem);
+$font-size-h3: clamp(1.5rem, 2.2vw, 1.875rem);
+$font-size-h4: 1.25rem;
+$font-size-h5: 1.125rem;
+$font-size-h6: 1rem;
+
+$font-size-blockquote: clamp(1.25rem, 2vw, 1.625rem);
+$font-size-blockquote-cite: 0.95rem;
+
+$font-size-caption: 0.95em;
+$font-size-meta: 0.75em;
+$font-size-meta-term: 0.875em;
+
+$font-size-footer-value: 0.9375rem;
+$line-height-footer-value: 1.45;
+
 $line-height-body: 1.5;
 $line-height-intro: 1.5;
-$paragraph-spacing: 1em;
+
+$line-height-h1: 1.05;
+$line-height-h2: 1.15;
+$line-height-h3: 1.2;
+$line-height-h4: 1.3;
+$line-height-h5: 1.35;
+$line-height-h6: 1.4;
+
+$line-height-blockquote: 1.35;
+$line-height-blockquote-cite: 1.4;
+
+$line-height-caption: 1.5;
+$line-height-meta: 1.35;
+$line-height-meta-term: 1.2;
+
+$paragraph-spacing: spacing.$space-lg;
+
+$heading-margin-top: 0;
+$heading-margin-bottom: spacing.$space-sm;
+
+$section-heading-spacing-top: spacing.$space-3xl;
+
+$h3-spacing-top: spacing.$space-xl;
+$h4-spacing-top: spacing.$space-lg;
+$h5-spacing-top: spacing.$space-lg;
+$h6-spacing-top: spacing.$space-md;
+
+$blockquote-spacing-top: spacing.$space-xl;
+$blockquote-spacing-bottom: spacing.$space-xl;
+$blockquote-padding-inline: spacing.$space-lg;
+$blockquote-rule-width: 2px;
+
+$blockquote-cite-spacing-top: spacing.$space-md;
+
 $colour-type-body: colours.$colour-text;
-$colour-type-intro: colours.$colour-text;
+$colour-type-intro: colours.$colour-text-muted;
 $colour-type-strong: colours.$colour-text;
 $colour-type-emphasis: colours.$colour-text;
+
+$colour-type-heading: colours.$colour-text;
+$colour-type-blockquote: colours.$colour-text;
+$colour-type-blockquote-cite: colours.$colour-text-muted;
+$colour-rule-blockquote: colours.$colour-rule;
+
+$colour-type-caption: colours.$colour-text;
+$colour-type-caption-inverse: colours.$colour-text-inverse;
+
+$colour-type-meta: colours.$colour-text-muted;
+$colour-type-meta-inverse: colours.$colour-text-inverse-muted;
+
+$meta-term-opacity: 0.7;

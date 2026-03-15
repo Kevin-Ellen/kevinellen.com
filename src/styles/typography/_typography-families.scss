@@ -1,6 +1,24 @@
 @font-face {
+  font-family: "Source Sans 3";
+  src: url("../../static/fonts/source-sans/SourceSans3-VariableFont_wght.ttf")
+    format("truetype-variations");
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("../../static/fonts/source-sans/SourceSans3-Italic-VariableFont_wght.ttf")
+    format("truetype-variations");
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Source Serif 4";
-  src: url("/static/fonts/source-serif/SourceSerif4-VariableFont_opsz,wght.ttf")
+  src: url("../../static/fonts/source-serif/SourceSerif4-VariableFont_opsz,wght.ttf")
     format("truetype-variations");
   font-style: normal;
   font-weight: 200 900;
@@ -9,14 +27,22 @@
 
 @font-face {
   font-family: "Source Serif 4";
-  src: url("/static/fonts/source-serif/SourceSerif4-Italic-VariableFont_opsz,wght.ttf")
+  src: url("../../static/fonts/source-serif/SourceSerif4-Italic-VariableFont_opsz,wght.ttf")
     format("truetype-variations");
   font-style: italic;
   font-weight: 200 900;
   font-display: swap;
 }
 
-/* prettier-ignore */
-$font-family-serif-fallback: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+$font-family-sans-fallback:
+  -apple-system, blinkmacsystemfont, "Segoe UI", "Helvetica Neue", arial,
+  sans-serif;
+
+$font-family-serif-fallback:
+  "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+
+$font-family-source-sans: "Source Sans 3", $font-family-sans-fallback;
 $font-family-source-serif: "Source Serif 4", $font-family-serif-fallback;
-$font-family-body: $font-family-source-serif;
+
+$font-family-body: $font-family-source-sans;
+$font-family-heading: $font-family-source-serif;

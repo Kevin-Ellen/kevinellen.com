@@ -1,11 +1,7 @@
 @use "../tokens" as tokens;
 
 .l-frame {
-  /* TO DO: REMOVE */
-  background: yellow;
-
-  /* END REMOVE */
-
   max-width: tokens.$width-frame;
   margin-inline: auto;
+  padding-top: tokens.$space-2xl;
 }

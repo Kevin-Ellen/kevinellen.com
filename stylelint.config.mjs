@@ -9,5 +9,7 @@ export default {
       },
     ],
     "no-descending-specificity": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "scss/dollar-variable-colon-space-after": null,
   },
 };

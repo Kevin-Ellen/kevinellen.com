@@ -1,0 +1,79 @@
+@use "../tokens" as tokens;
+
+.m-article-footer {
+  display: grid;
+  gap: tokens.$space-xl;
+  margin-top: tokens.$space-3xl;
+  padding-top: tokens.$space-xl;
+  border-top: 1px solid tokens.$colour-rule;
+
+  @media (min-width: tokens.$bp-sm) {
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: tokens.$space-2xl;
+  }
+
+  &__group {
+    min-width: 0;
+  }
+
+  &__heading {
+    font-size: tokens.$font-size-meta;
+    font-weight: tokens.$font-weight-meta-term;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: tokens.$colour-type-meta;
+  }
+
+  &__list {
+    margin: 0;
+  }
+
+  &__item {
+    display: grid;
+    gap: tokens.$space-2xs;
+    margin-top: tokens.$space-sm;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__label {
+    margin: 0;
+    font-size: tokens.$font-size-meta;
+    font-weight: tokens.$font-weight-meta-term;
+    line-height: tokens.$line-height-meta-term;
+    color: tokens.$colour-type-meta;
+    opacity: tokens.$meta-term-opacity;
+  }
+
+  &__value {
+    font-size: tokens.$font-size-label;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-text; // keep readable
+    opacity: 0.85;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: tokens.$space-xs;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__tags a {
+    font-size: tokens.$font-size-meta;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-type-meta;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  &__tags a:hover,
+  &__tags a:focus-visible {
+    color: tokens.$colour-type-body;
+    text-decoration: underline;
+  }
+}

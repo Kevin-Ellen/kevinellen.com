@@ -2,8 +2,12 @@
 
 .m-photo {
   background: tokens.$colour-surface-strong;
-  padding-inline: tokens.$space-3xl;
+  padding-inline: tokens.$space-sm;
   padding-block: tokens.$space-2xl;
+
+  @media (min-width: tokens.$bp-sm) {
+    padding-inline: tokens.$space-3xl;
+  }
 
   &--immersive {
     background: tokens.$colour-immersive;
@@ -19,67 +23,73 @@
   &__annotation {
     display: flex;
     flex-direction: column;
-    gap: tokens.$space-md;
     margin-top: tokens.$space-md;
-    padding-inline: 1rem;
+    padding-inline: tokens.$space-md;
 
     @media (min-width: tokens.$bp-sm) {
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: minmax(16rem, 40ch) minmax(12rem, 18rem);
       justify-content: space-between;
-      align-items: flex-start;
-      gap: tokens.$space-xl;
-      padding-inline: tokens.$space-3xl;
+      align-items: start;
+      padding-inline: tokens.$space-xl;
     }
   }
 
   &__caption {
-    color: tokens.$colour-text;
+    margin: 0;
     max-width: 40ch;
+    font-family: tokens.$font-family-caption;
+    font-weight: tokens.$font-weight-caption;
+    font-size: tokens.$font-size-caption;
+    line-height: tokens.$line-height-caption;
+    color: tokens.$colour-type-caption;
     text-align: left;
-    font-size: 0.95em;
-    margin-top: tokens.$space-sm;
 
     .m-photo--immersive & {
-      color: tokens.$colour-text-inverse;
+      color: tokens.$colour-type-caption-inverse;
     }
   }
 
   &__meta {
     display: flex;
     flex-direction: column;
-    row-gap: tokens.$space-2xs;
-    color: tokens.$colour-text-muted;
-    font-size: 0.75em;
+    row-gap: tokens.$space-xs;
+    margin: 0;
+    font-family: tokens.$font-family-meta;
+    font-weight: tokens.$font-weight-meta;
+    font-size: tokens.$font-size-meta;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-type-meta;
     text-align: left;
 
     @media (min-width: tokens.$bp-sm) {
-      align-items: flex-end;
       text-align: right;
     }
 
     .m-photo--immersive & {
-      color: tokens.$colour-text-inverse-muted;
+      color: tokens.$colour-type-meta-inverse;
     }
   }
 
   &__meta-item {
     display: grid;
-    grid-template-columns: auto auto;
     column-gap: tokens.$space-sm;
-    justify-content: end;
+    align-items: start;
 
     @media (min-width: tokens.$bp-sm) {
-      justify-content: flex-end;
+      justify-content: end;
     }
   }
 
   &__meta-term {
-    opacity: 0.5;
-    font-weight: 500;
+    font-size: tokens.$font-size-meta-term;
+    font-weight: tokens.$font-weight-meta-term;
+    line-height: tokens.$line-height-meta-term;
+    opacity: tokens.$meta-term-opacity;
   }
 
   &__meta-detail {
-    font-weight: 400;
     margin: 0;
+    font-weight: tokens.$font-weight-meta-detail;
   }
 }

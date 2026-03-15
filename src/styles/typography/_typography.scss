@@ -17,6 +17,58 @@ body {
   background: colours.$colour-page;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: type.$heading-margin-top;
+  margin-bottom: type.$heading-margin-bottom;
+  font-family: type.$font-family-heading;
+}
+
+h1 {
+  font-weight: type.$font-weight-h1;
+  font-size: type.$font-size-h1;
+  line-height: type.$line-height-h1;
+}
+
+h2 {
+  margin-top: type.$section-heading-spacing-top;
+  font-weight: type.$font-weight-h2;
+  font-size: type.$font-size-h2;
+  line-height: type.$line-height-h2;
+}
+
+h3 {
+  margin-top: type.$h3-spacing-top;
+  font-weight: type.$font-weight-h3;
+  font-size: type.$font-size-h3;
+  line-height: type.$line-height-h3;
+}
+
+h4 {
+  margin-top: type.$h4-spacing-top;
+  font-weight: type.$font-weight-h4;
+  font-size: type.$font-size-h4;
+  line-height: type.$line-height-h4;
+}
+
+h5 {
+  margin-top: type.$h5-spacing-top;
+  font-weight: type.$font-weight-h5;
+  font-size: type.$font-size-h5;
+  line-height: type.$line-height-h5;
+}
+
+h6 {
+  margin-top: type.$h6-spacing-top;
+  font-weight: type.$font-weight-h6;
+  font-size: type.$font-size-h6;
+  line-height: type.$line-height-h6;
+}
+
 p {
   margin: 0;
 }
@@ -33,4 +85,35 @@ em {
 strong {
   font-weight: type.$font-weight-strong;
   color: type.$colour-type-strong;
+}
+
+blockquote {
+  margin: type.$blockquote-spacing-top 0 type.$blockquote-spacing-bottom;
+  padding-inline-start: type.$blockquote-padding-inline;
+  border-inline-start: type.$blockquote-rule-width solid
+    type.$colour-rule-blockquote;
+  font-family: type.$font-family-quote;
+  font-weight: type.$font-weight-blockquote;
+  font-size: type.$font-size-blockquote;
+  line-height: type.$line-height-blockquote;
+  color: type.$colour-type-blockquote;
+}
+
+blockquote > *:first-child {
+  margin-top: 0;
+}
+
+blockquote > *:last-child {
+  margin-bottom: 0;
+}
+
+blockquote cite {
+  display: block;
+  margin-top: type.$blockquote-cite-spacing-top;
+  font-style: normal;
+  font-family: type.$font-family-body;
+  font-weight: type.$font-weight-blockquote-cite;
+  font-size: type.$font-size-blockquote-cite;
+  line-height: type.$line-height-blockquote-cite;
+  color: type.$colour-type-blockquote-cite;
 }

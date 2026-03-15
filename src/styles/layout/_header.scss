@@ -1,0 +1,120 @@
+@use "../tokens" as tokens;
+
+.l-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  background-color: rgba(tokens.$colour-page, 0.75);
+  border-bottom: 1px solid tokens.$colour-rule;
+  padding-block: tokens.$space-xl tokens.$space-lg;
+  transition:
+    padding-block 180ms ease,
+    background-color 180ms ease;
+
+  @media (min-width: tokens.$bp-sm) {
+    padding-block: tokens.$space-xl tokens.$space-2xl;
+  }
+
+  &.is-condensed {
+    padding-block: tokens.$space-xs tokens.$space-2xs;
+
+    .l-header__breadcrumb {
+      margin-top: tokens.$space-2xs;
+    }
+
+    .l-page__frame {
+      padding-top: 0;
+    }
+  }
+
+  &__primary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: tokens.$space-lg;
+  }
+
+  &__nav,
+  &__social {
+    min-width: 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: tokens.$space-md;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &--social {
+      justify-content: flex-end;
+      gap: tokens.$space-sm;
+    }
+  }
+
+  &__link {
+    color: tokens.$colour-type-body;
+    text-decoration: none;
+    transition: color 140ms ease;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+      color: tokens.$colour-field-accent;
+    }
+  }
+
+  &__icon {
+    width: auto;
+    height: tokens.$font-size-body;
+    display: block;
+    overflow: visible;
+  }
+
+  &__breadcrumb {
+    margin-top: tokens.$space-xs;
+    color: tokens.$colour-type-meta;
+    font-size: tokens.$font-size-label;
+    line-height: 1.3;
+    transition: margin-top 180ms ease;
+  }
+
+  &__breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: tokens.$space-2xs tokens.$space-xs;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: tokens.$space-xs;
+
+    &:not(:last-child)::after {
+      content: "/";
+      color: inherit;
+    }
+  }
+
+  &__breadcrumb-link {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+    }
+  }
+
+  &-sentinel {
+    block-size: 1px;
+  }
+}

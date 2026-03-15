@@ -1,0 +1,113 @@
+@use "../tokens" as tokens;
+
+.l-footer {
+  background-color: tokens.$colour-footer-bg;
+  color: tokens.$colour-text-inverse;
+  margin-top: tokens.$space-2xl;
+  padding-block: tokens.$space-3xl tokens.$space-xl;
+
+  &__grid {
+    display: grid;
+    gap: tokens.$space-2xl;
+
+    @media (min-width: tokens.$bp-sm) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: tokens.$space-3xl;
+    }
+  }
+
+  &__group {
+    min-width: 0;
+  }
+
+  &__heading {
+    margin: 0 0 tokens.$space-sm;
+    color: inherit;
+    font-size: tokens.$font-size-h5;
+  }
+
+  &__list,
+  &__logos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__list {
+    display: grid;
+    gap: tokens.$space-xs;
+  }
+
+  &__list a,
+  &__logos a {
+    color: inherit;
+    text-decoration: none;
+    font-size: tokens.$font-size-body-sm;
+    line-height: 1.45;
+    transition: color 140ms ease;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+      color: tokens.$colour-field-accent;
+    }
+  }
+
+  &__conservation {
+    margin-top: tokens.$space-3xl;
+    padding-top: tokens.$space-2xl;
+    border-top: 1px solid rgba(tokens.$colour-text-inverse, 0.14);
+
+    @media (min-width: tokens.$bp-sm) {
+      margin-top: tokens.$space-2xl;
+      padding-top: tokens.$space-3xl;
+    }
+  }
+
+  &__intro {
+    max-width: 42rem;
+    margin: 0 0 tokens.$space-lg;
+    color: rgba(tokens.$colour-text-inverse, 0.82);
+    font-size: tokens.$font-size-body-sm;
+    line-height: 1.5;
+  }
+
+  &__logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: tokens.$space-lg tokens.$space-xl;
+
+    @media (min-width: tokens.$bp-sm) {
+      gap: tokens.$space-xl tokens.$space-2xl;
+    }
+  }
+
+  &__icon {
+    display: block;
+    width: auto;
+    height: 3.5rem;
+    color: currentcolor;
+
+    @media (min-width: tokens.$bp-md) {
+      height: 5rem;
+    }
+  }
+
+  &__meta {
+    margin-top: tokens.$space-3xl;
+    padding-top: tokens.$space-lg;
+    border-top: 1px solid rgba(tokens.$colour-text-inverse, 0.1);
+    color: rgba(tokens.$colour-text-inverse, 0.72);
+    font-size: tokens.$font-size-label;
+  }
+
+  &__meta p {
+    margin: 0;
+  }
+
+  @media (min-width: tokens.$bp-sm) {
+    padding-block: tokens.$space-3xl tokens.$space-2xl;
+  }
+}
