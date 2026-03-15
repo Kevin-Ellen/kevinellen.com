@@ -16,6 +16,9 @@
   font-display: swap;
 }
 
-$font-family-serif-fallback: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+$font-family-serif-fallback:
+  "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+
 $font-family-source-serif: "Source Serif 4", $font-family-serif-fallback;
+
 $font-family-body: $font-family-source-serif;
