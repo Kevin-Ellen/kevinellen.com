@@ -24,10 +24,16 @@
 
     "baseUrl": ".",
     "paths": {
-      "@core/*": ["src/core/*"],
-      "@modules/*": ["src/modules/*"],
-      "@content/*": ["src/content/*"],
-      "@test/*": ["tests/*"]
+      "@generated/*": [".build/generated/*"],
+      "@system/*": ["src/system-handlers/*"],
+      "@types-src/*": ["src/types/*"],
+      "@app/*": ["src/app/*"],
+      "@app.router/*": ["src/app/router/*"],
+      "@app.pages/*": ["src/app/pages/*"],
+      "@app.renderers/*": ["src/app/renderers/*"]
+      // "@modules/*": ["src/modules/*"],
+      // "@content/*": ["src/content/*"],
+      // "@test/*": ["tests/*"]
     }
   },
   "include": [

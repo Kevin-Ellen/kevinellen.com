@@ -1,7 +1,7 @@
 @font-face {
   font-family: "Source Sans 3";
-  src: url("../../static/fonts/source-sans/SourceSans3-VariableFont_wght.ttf")
-    format("truetype-variations");
+  src: url("/fonts/source-sans/SourceSans3-VariableFont_wght.woff2")
+    format("woff2-variations");
   font-style: normal;
   font-weight: 200 900;
   font-display: swap;
@@ -9,8 +9,8 @@
 
 @font-face {
   font-family: "Source Sans 3";
-  src: url("../../static/fonts/source-sans/SourceSans3-Italic-VariableFont_wght.ttf")
-    format("truetype-variations");
+  src: url("/fonts/source-sans/SourceSans3-Italic-VariableFont_wght.woff2")
+    format("woff2-variations");
   font-style: italic;
   font-weight: 200 900;
   font-display: swap;
@@ -18,8 +18,8 @@
 
 @font-face {
   font-family: "Source Serif 4";
-  src: url("../../static/fonts/source-serif/SourceSerif4-VariableFont_opsz,wght.ttf")
-    format("truetype-variations");
+  src: url("/fonts/source-serif/SourceSerif4-VariableFont_opsz,wght.woff2")
+    format("woff2-variations");
   font-style: normal;
   font-weight: 200 900;
   font-display: swap;
@@ -27,8 +27,8 @@
 
 @font-face {
   font-family: "Source Serif 4";
-  src: url("../../static/fonts/source-serif/SourceSerif4-Italic-VariableFont_opsz,wght.ttf")
-    format("truetype-variations");
+  src: url("/fonts/source-serif/SourceSerif4-Italic-VariableFont_opsz,wght.woff2")
+    format("woff2-variations");
   font-style: italic;
   font-weight: 200 900;
   font-display: swap;
