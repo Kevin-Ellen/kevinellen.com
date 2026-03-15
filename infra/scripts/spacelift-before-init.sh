@@ -84,6 +84,13 @@ find "${EXTRACT_DIR}" -maxdepth 4 -type f | sort
 echo "Validating entry.js exists"
 test -f "${EXTRACT_DIR}/worker/entry.js"
 
+if [ -d "${EXTRACT_DIR}/static" ]; then
+  echo "Static directory found: ${EXTRACT_DIR}/static"
+  find "${EXTRACT_DIR}/static" -maxdepth 4 -type f | sort
+else
+  echo "No static directory present in release"
+fi
+
 export TF_VAR_worker_script_path="${EXTRACT_DIR}/worker/entry.js"
 echo "Resolved worker script path: ${TF_VAR_worker_script_path}"
 

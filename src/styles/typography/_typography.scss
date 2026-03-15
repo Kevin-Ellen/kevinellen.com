@@ -1,0 +1,43 @@
+@use "../tokens/typography" as type;
+@use "../tokens/colours" as colours;
+
+html {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  font-family: type.$font-family-body;
+  font-weight: type.$font-weight-body;
+  font-size: type.$font-size-body;
+  line-height: type.$line-height-body;
+  color: type.$colour-type-body;
+  background: colours.$colour-page;
+}
+
+p {
+  margin: 0;
+}
+
+p + p {
+  margin-top: type.$paragraph-spacing;
+}
+
+.intro {
+  font-weight: type.$font-weight-intro;
+  font-size: type.$font-size-intro;
+  line-height: type.$line-height-intro;
+  color: type.$colour-type-intro;
+}
+
+em {
+  font-style: italic;
+  color: type.$colour-type-emphasis;
+}
+
+strong {
+  font-weight: type.$font-weight-strong;
+  color: type.$colour-type-strong;
+}

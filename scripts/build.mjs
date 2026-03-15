@@ -4,6 +4,8 @@ import path from "path";
 
 const distDir = "dist";
 const workerDir = path.join(distDir, "worker");
+const staticSourceDir = "static";
+const staticDistDir = path.join(distDir, "static");
 
 fs.rmSync(distDir, { recursive: true, force: true });
 fs.mkdirSync(workerDir, { recursive: true });
@@ -21,3 +23,7 @@ await build({
     ".css": "text",
   },
 });
+
+if (fs.existsSync(staticSourceDir)) {
+  fs.cpSync(staticSourceDir, staticDistDir, { recursive: true });
+}

@@ -1,0 +1,21 @@
+@use "../typography/typography-families" as families;
+@use "colours" as colours;
+
+$font-family-body: families.$font-family-body;
+
+$font-weight-body: 400;
+$font-weight-intro: 300;
+$font-weight-strong: 600;
+
+$font-size-body: 18px;
+$font-size-intro: 1.25rem;
+
+$line-height-body: 1.5;
+$line-height-intro: 1.5;
+
+$paragraph-spacing: 1em;
+
+$colour-type-body: colours.$colour-text;
+$colour-type-intro: colours.$colour-text;
+$colour-type-strong: colours.$colour-text;
+$colour-type-emphasis: colours.$colour-text;
