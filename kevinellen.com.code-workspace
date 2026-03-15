@@ -11,11 +11,15 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "never",
     },
     "[json]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+    "[scss]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
