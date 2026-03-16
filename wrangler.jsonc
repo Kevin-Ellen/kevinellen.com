@@ -13,4 +13,21 @@
   "dev": {
     "port": 8787,
   },
+  "vars": {
+    "APP_ENV": "dev",
+  },
+  "env": {
+    "stg": {
+      "name": "stg",
+      "vars": {
+        "APP_ENV": "stg",
+      },
+    },
+    "prod": {
+      "name": "prod",
+      "vars": {
+        "APP_ENV": "prod",
+      },
+    },
+  },
 }

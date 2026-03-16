@@ -1,8 +1,12 @@
 // src/app/renderers/partials/pageHead.partial.ts
 
+import type { BreadcrumbItem, PageHead } from "@types-src/appPage.types";
+
 // import type { AppPage } from "@types-src/appPage.types";
 
-const renderPageHead = (): string => {
+const renderPageHead = (pageHead: PageHead): string => {
+  const breadcrumbsMarkup = renderBreadcrumbs(pageHead.breadcrumbs);
+
   return `
 <header class="l-header">
   <div class="l-page__frame">
@@ -48,22 +52,67 @@ const renderPageHead = (): string => {
       </div>
     </nav>
 
-    <nav class="l-header__breadcrumb" aria-label="Breadcrumb">
-      <ol class="l-header__breadcrumb-list">
-        <li class="l-header__breadcrumb-item">
-          <a class="l-header__breadcrumb-link" href="/">Home</a>
-        </li>
-        <li class="l-header__breadcrumb-item">
-          <a class="l-header__breadcrumb-link" href="/journal">Journal</a>
-        </li>
-        <li class="l-header__breadcrumb-item" aria-current="page">
-          The Marsh at First Light
-        </li>
-      </ol>
-    </nav>
+    ${breadcrumbsMarkup}
   </div>
 </header>
 
 <div class="l-header-sentinel" aria-hidden="true"></div>`;
 };
 export default renderPageHead;
+
+const renderBreadcrumbs = (breadcrumbs: PageHead["breadcrumbs"]): string => {
+  if (!breadcrumbs?.length) {
+    return "";
+  }
+
+  const itemsMarkup = breadcrumbs
+    .map((breadcrumb, index) =>
+      renderBreadcrumbItem(breadcrumb, index, breadcrumbs.length),
+    )
+    .join("");
+
+  return `
+    <nav class="l-header__breadcrumb" aria-label="Breadcrumb">
+      <ol class="l-header__breadcrumb-list">
+        ${itemsMarkup}
+      </ol>
+    </nav>
+  `;
+};
+
+const renderBreadcrumbItem = (
+  breadcrumb: BreadcrumbItem,
+  index: number,
+  total: number,
+): string => {
+  const isCurrentPage = index === total - 1;
+
+  if (isCurrentPage) {
+    return `
+      <li class="l-header__breadcrumb-item" aria-current="page">
+        ${escapeHtml(breadcrumb.label)}
+      </li>
+    `;
+  }
+
+  return `
+    <li class="l-header__breadcrumb-item">
+      <a class="l-header__breadcrumb-link" href="${escapeHtmlAttribute(breadcrumb.href)}">
+        ${escapeHtml(breadcrumb.label)}
+      </a>
+    </li>
+  `;
+};
+
+const escapeHtml = (value: string): string => {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+};
+
+const escapeHtmlAttribute = (value: string): string => {
+  return escapeHtml(value);
+};

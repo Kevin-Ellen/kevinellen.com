@@ -1,55 +1,57 @@
-// src/app/pages/home.page.ts
+// src/app/pages/error/error.500.page.ts
 
 import type {
   AppPage,
-  Breadcrumbs,
   DocFooter,
   DocHead,
-  DocScript,
   PageConfig,
   PageContent,
   PageDefinition,
   PageHead,
+  Breadcrumbs,
   StructuredDataNode,
+  DocScript,
 } from "@types-src/appPage.types";
 
 const definition: PageDefinition = {
-  id: "home",
-  kind: "home",
+  id: "error-500",
+  kind: "static",
   slug: "/",
-  renderMode: "request-composed",
+  renderMode: "bundled",
 };
 
 const config: PageConfig = {
   robots: {
-    allowIndex: true,
-    allowFollow: true,
-    noarchive: false,
-    nosnippet: false,
-    noimageindex: false,
+    allowIndex: false,
+    allowFollow: false,
+    noarchive: true,
+    nosnippet: true,
+    noimageindex: true,
   },
   robotsTxt: {
     disallow: false,
   },
   sitemap: {
-    include: true,
+    include: false,
   },
 };
 
-const breadcrumbs: Breadcrumbs = [{ label: "Home", href: "/" }];
+const breadcrumbs: Breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Server Error", href: "/" },
+];
 
 const docHead: DocHead = {
-  pageTitle: "Kevin Ellen",
-  metaDescription:
-    "Nature photography, journal writing, and technical architecture.",
+  pageTitle: "Server Error | Kevin Ellen",
+  metaDescription: "Something went wrong while trying to load this page.",
 };
 
 const content: PageContent = {
   head: {
-    eyebrow: "Kevin Ellen",
-    title: "Nature, writing, and technical architecture",
+    eyebrow: "Error 500",
+    title: "Something went wrong",
     intro:
-      "A personal platform for nature photography, field notes, articles, and transparent technical thinking.",
+      "An unexpected error occurred while loading this page. Please try again in a moment.",
   },
   body: [],
   footer: [],
@@ -69,14 +71,14 @@ const docFooter: DocFooter = {
   structuredData: pageStructuredData,
 };
 
-const homePage: AppPage = {
+const error500Page: AppPage = {
   definition,
   config,
   docHead,
   pageHead,
   content,
   docFooter,
-  status: 200,
+  status: 500,
 };
 
-export default homePage;
+export default error500Page;

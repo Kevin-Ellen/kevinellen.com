@@ -22,18 +22,17 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
 
+    "esModuleInterop": true,
+
     "baseUrl": ".",
     "paths": {
+      "@src/*": ["src/*"],
       "@generated/*": [".build/generated/*"],
-      "@system/*": ["src/system-handlers/*"],
+      "@system/*": ["src/system/*"],
+      "@resources/*": ["src/resources/*"],
       "@types-src/*": ["src/types/*"],
-      "@app/*": ["src/app/*"],
-      "@app.router/*": ["src/app/router/*"],
-      "@app.pages/*": ["src/app/pages/*"],
-      "@app.renderers/*": ["src/app/renderers/*"]
-      // "@modules/*": ["src/modules/*"],
-      // "@content/*": ["src/content/*"],
-      // "@test/*": ["tests/*"]
+      "@config/*": ["src/app/config/*"],
+      "@app/*": ["src/app/*"]
     }
   },
   "include": [

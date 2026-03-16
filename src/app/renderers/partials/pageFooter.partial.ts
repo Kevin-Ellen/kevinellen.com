@@ -1,7 +1,5 @@
 // src/app/renderers/partials/pageFooter.partial.ts
 
-// import type { AppPage } from "@types-src/appPage.types";
-
 const renderPageFooter = (): string => {
   return `
 <footer class="l-footer">
