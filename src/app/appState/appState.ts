@@ -21,6 +21,8 @@ export class AppState {
   readonly pages: Pages;
 
   constructor(init: AppStateInit) {
+    this.assertRequiredErrorPages(init);
+
     this.siteConfig = Object.freeze({ ...init.siteConfig });
 
     this.appAssets = Object.freeze({
@@ -36,6 +38,20 @@ export class AppState {
         500: init.pages.errors[500],
       }),
     });
+  }
+
+  private assertRequiredErrorPages(init: AppStateInit): void {
+    if (!init.pages?.errors?.[404]) {
+      throw new Error(
+        "Invariant violation: 404 error page is not registered in AppState.",
+      );
+    }
+
+    if (!init.pages?.errors?.[500]) {
+      throw new Error(
+        "Invariant violation: 500 error page is not registered in AppState.",
+      );
+    }
   }
 
   public getPageBySlug(slug: string): PageDefinition | null {
