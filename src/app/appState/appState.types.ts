@@ -12,7 +12,7 @@ export interface AppAssets {
   svgs: readonly SvgAsset[];
 }
 
-export type ErrorPageStatus = 404 | 500;
+export type ErrorPageStatus = 404 | 410 | 500;
 
 export type ErrorPages = Record<ErrorPageStatus, PageDefinition>;
 

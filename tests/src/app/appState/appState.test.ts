@@ -5,9 +5,13 @@ import { createTestAppSeed } from "@app/bootstrap/appSeed.test.create";
 import { error404page } from "@app/pages/error/error.404.page";
 
 describe("AppState", () => {
-  it("keeps its container structure immutable after construction", async () => {
+  const createValidState = async (): Promise<AppState> => {
     const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+    return new AppState(appSeed);
+  };
+
+  it("keeps its container structure immutable after construction", async () => {
+    const appState = await createValidState();
 
     expect(Object.isFrozen(appState)).toBe(true);
     expect(Object.isFrozen(appState.appAssets)).toBe(true);
@@ -49,8 +53,7 @@ describe("AppState", () => {
   });
 
   it("returns the raw AppState shape via toJSON", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+    const appState = await createValidState();
 
     expect(appState.toJSON()).toEqual({
       siteConfig: appState.siteConfig,
@@ -63,8 +66,7 @@ describe("AppState", () => {
   });
 
   it("returns stable container references via toJSON", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+    const appState = await createValidState();
     const json = appState.toJSON();
 
     expect(json.siteConfig).toBe(appState.siteConfig);
@@ -79,19 +81,22 @@ describe("AppState", () => {
     const appState = new AppState(appSeed);
 
     expect(appState.getErrorPageByStatus(404)).toBe(appSeed.pages.errors[404]);
+    expect(appState.getErrorPageByStatus(410)).toBe(appSeed.pages.errors[410]);
     expect(appState.getErrorPageByStatus(500)).toBe(appSeed.pages.errors[500]);
   });
 
   it("throws when the 404 error page is missing", async () => {
-    const appSeed = await createTestAppSeed();
+    const appState = await createValidState();
+    const validState = appState.toJSON();
 
     expect(() => {
       new AppState({
-        ...appSeed,
+        ...validState,
         pages: {
-          ...appSeed.pages,
+          ...validState.pages,
           errors: {
-            500: appSeed.pages.errors[500],
+            410: validState.pages.errors[410],
+            500: validState.pages.errors[500],
           } as never,
         },
       });
@@ -100,16 +105,38 @@ describe("AppState", () => {
     );
   });
 
-  it("throws when the 500 error page is missing", async () => {
-    const appSeed = await createTestAppSeed();
+  it("throws when the 410 error page is missing", async () => {
+    const appState = await createValidState();
+    const validState = appState.toJSON();
 
     expect(() => {
       new AppState({
-        ...appSeed,
+        ...validState,
         pages: {
-          ...appSeed.pages,
+          ...validState.pages,
           errors: {
-            404: appSeed.pages.errors[404],
+            404: validState.pages.errors[404],
+            500: validState.pages.errors[500],
+          } as never,
+        },
+      });
+    }).toThrow(
+      "Invariant violation: 410 error page is not registered in AppState.",
+    );
+  });
+
+  it("throws when the 500 error page is missing", async () => {
+    const appState = await createValidState();
+    const validState = appState.toJSON();
+
+    expect(() => {
+      new AppState({
+        ...validState,
+        pages: {
+          ...validState.pages,
+          errors: {
+            404: validState.pages.errors[404],
+            410: validState.pages.errors[410],
           } as never,
         },
       });
@@ -119,8 +146,7 @@ describe("AppState", () => {
   });
 
   it("returns a page from pages.all when the slug exists", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+    const appState = await createValidState();
 
     const page = appState.getPageBySlug("/");
 
@@ -128,16 +154,13 @@ describe("AppState", () => {
   });
 
   it("returns null when no page in pages.all matches the slug", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+    const appState = await createValidState();
 
     expect(appState.getPageBySlug("/does-not-exist")).toBeNull();
   });
 
   it("keeps AppStateInit and AppState intentionally aligned", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
-
+    const appState = await createValidState();
     const json = appState.toJSON();
 
     expect(json).toEqual({
@@ -152,8 +175,7 @@ describe("AppState", () => {
   });
 
   it("can reconstruct the same runtime shape from AppStateInit", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+    const appState = await createValidState();
 
     const reconstructed = new AppState(appState.toJSON());
 

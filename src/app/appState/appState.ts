@@ -35,6 +35,7 @@ export class AppState {
       all: Object.freeze([...init.pages.all]),
       errors: Object.freeze({
         404: init.pages.errors[404],
+        410: init.pages.errors[410],
         500: init.pages.errors[500],
       }),
     });
@@ -46,6 +47,12 @@ export class AppState {
     if (!init.pages?.errors?.[404]) {
       throw new Error(
         "Invariant violation: 404 error page is not registered in AppState.",
+      );
+    }
+
+    if (!init.pages?.errors?.[410]) {
+      throw new Error(
+        "Invariant violation: 410 error page is not registered in AppState.",
       );
     }
 
