@@ -8,6 +8,7 @@ export const error404page: PageDefinition = {
     kind: "error",
     slug: "/errors/404",
     renderMode: "request-composed",
+    label: "404: Not found",
   },
 
   config: {

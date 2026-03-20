@@ -8,6 +8,7 @@ export const error410page: PageDefinition = {
     kind: "error",
     slug: "/errors/410",
     renderMode: "request-composed",
+    label: "410: Gone",
   },
 
   config: {

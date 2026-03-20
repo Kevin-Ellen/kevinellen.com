@@ -18,9 +18,14 @@ const getUrlParts = (req: Request): CanonicalUrlParts => {
   return {
     protocol: url.protocol,
     hostname: url.hostname,
+    port: url.port,
     pathname: url.pathname,
     search: url.search,
   };
+};
+
+const buildHost = (hostname: string, port: string): string => {
+  return port ? `${hostname}:${port}` : hostname;
 };
 
 const resolveCanonicalHostname = (hostname: string, env: Env): string => {
@@ -50,8 +55,9 @@ const resolveCanonicalPathname = (pathname: string): string => {
 const buildCanonicalUrl = (parts: CanonicalUrlParts, env: Env): string => {
   const hostname = resolveCanonicalHostname(parts.hostname, env);
   const pathname = resolveCanonicalPathname(parts.pathname);
+  const host = buildHost(hostname, parts.port);
 
-  return `${parts.protocol}//${hostname}${pathname}${parts.search}`;
+  return `${parts.protocol}//${host}${pathname}${parts.search}`;
 };
 
 const hasCanonicalDifference = (

@@ -1,16 +1,28 @@
 // src/app/request/requestHandler.ts
 
 import type { AppState } from "@app/appState/appState";
+import type { PageDefinition } from "@app/pages/page.definition";
 import type {
   PreRoutingOutcome,
   ErrorRenderIntent,
 } from "@app/request/request.types";
+
 import { routeRequest } from "@app/request/router.request";
 
 import { evaluateRedirectPolicy } from "@app/policies/redirects/engine.redirects";
 import { evaluateGonePolicy } from "@app/policies/gone/engine.gone";
 import { evaluateCanonicalPolicy } from "@app/policies/canonical/engine.canonical";
 import { evaluateMethodPolicy } from "../policies/method/engine.method";
+
+import { buildDocumentRender } from "@app/rendering/document/build.document";
+
+/* -------------------------------------------------------------------------- */
+/* Helpers                                                                    */
+/* -------------------------------------------------------------------------- */
+
+const createNonce = (): string => {
+  return crypto.randomUUID().replace(/-/g, "");
+};
 
 const runPreRoutingStage = (
   req: Request,
@@ -61,32 +73,52 @@ const resolveRenderStatus = (intent: ErrorRenderIntent): 404 | 410 | 500 => {
   }
 };
 
-const renderPageResponse = (page: unknown): Response => {
-  return new Response(JSON.stringify(page, null, 2), {
-    status: 200,
+/* -------------------------------------------------------------------------- */
+/* Render inspection responses                                                */
+/* -------------------------------------------------------------------------- */
+
+const renderDocumentInspectionResponse = (
+  req: Request,
+  appState: AppState,
+  page: PageDefinition,
+  status: number = 200,
+): Response => {
+  const nonce = createNonce();
+  const documentRender = buildDocumentRender(appState, page, nonce);
+
+  return new Response(JSON.stringify(documentRender, null, 2), {
+    status,
     headers: {
       "content-type": "application/json; charset=utf-8",
+      "x-render-mode": "document-inspection",
     },
   });
 };
 
 const renderErrorIntent = (
+  req: Request,
   intent: ErrorRenderIntent,
   appState: AppState,
 ): Response => {
   const status = resolveRenderStatus(intent);
   const errorPage = appState.getErrorPageByStatus(status);
 
-  const headers = new Headers({
-    "content-type": "application/json; charset=utf-8",
-  });
+  const response = renderDocumentInspectionResponse(
+    req,
+    appState,
+    errorPage,
+    status,
+  );
 
-  if (intent.kind === "gone") {
-    headers.set("x-runtime-policy", "gone");
+  if (intent.kind !== "gone") {
+    return response;
   }
 
-  return new Response(JSON.stringify(errorPage, null, 2), {
-    status,
+  const headers = new Headers(response.headers);
+  headers.set("x-runtime-policy", "gone");
+
+  return new Response(response.body, {
+    status: response.status,
     headers,
   });
 };
@@ -99,6 +131,10 @@ const applyResponsePolicies = (
 ): Response => {
   return response;
 };
+
+/* -------------------------------------------------------------------------- */
+/* Main handler                                                               */
+/* -------------------------------------------------------------------------- */
 
 export const handleRequest = async (
   req: Request,
@@ -123,7 +159,7 @@ export const handleRequest = async (
         req,
         env,
         appState,
-        renderErrorIntent(preRoutingOutcome.intent, appState),
+        renderErrorIntent(req, preRoutingOutcome.intent, appState),
       );
     }
 
@@ -134,7 +170,7 @@ export const handleRequest = async (
         req,
         env,
         appState,
-        renderErrorIntent({ kind: "not-found" }, appState),
+        renderErrorIntent(req, { kind: "not-found" }, appState),
       );
     }
 
@@ -142,14 +178,14 @@ export const handleRequest = async (
       req,
       env,
       appState,
-      renderPageResponse(routingOutcome.page),
+      renderDocumentInspectionResponse(req, appState, routingOutcome.page),
     );
   } catch (_error) {
     return applyResponsePolicies(
       req,
       env,
       appState,
-      renderErrorIntent({ kind: "failure" }, appState),
+      renderErrorIntent(req, { kind: "failure" }, appState),
     );
   }
 };

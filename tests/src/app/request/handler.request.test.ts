@@ -1,5 +1,7 @@
 // tests/src/app/request/handler.request.test.ts
 
+import type { DocumentRender } from "@app/rendering/document/document.render.types";
+
 import { AppState } from "@app/appState/appState";
 import { createTestAppSeed } from "@src/app/bootstrap/appSeed.test.create";
 
@@ -86,6 +88,10 @@ describe("handleRequest", () => {
     return callOrder;
   };
 
+  const getJsonBody = async <T>(response: Response): Promise<T> => {
+    return (await response.json()) as T;
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -103,7 +109,7 @@ describe("handleRequest", () => {
   });
 
   describe("successful routing flow", () => {
-    it("returns the resolved page with status 200 when the router returns found", async () => {
+    it("returns document render inspection with status 200 when the router returns found", async () => {
       const homePage = appState.getPageBySlug("/");
 
       if (!homePage) {
@@ -124,14 +130,54 @@ describe("handleRequest", () => {
         "application/json; charset=utf-8",
       );
       expect(response.headers.get("x-runtime-policy")).toBeNull();
+      expect(response.headers.get("x-render-mode")).toBe("document-inspection");
 
-      const body = await response.json();
-      expect(body).toEqual(homePage);
+      const body = await getJsonBody<DocumentRender>(response);
+
+      expect(body).toMatchObject({
+        security: {
+          nonce: expect.any(String),
+        },
+        site: {
+          language: appState.siteConfig.language,
+          siteName: appState.siteConfig.siteName,
+          siteUrl: appState.siteConfig.siteUrl,
+          socialMedia: appState.siteConfig.socialMedia,
+        },
+        page: {
+          id: homePage.core.id,
+          kind: homePage.core.kind,
+          slug: homePage.core.slug,
+          renderMode: homePage.core.renderMode,
+        },
+        seo: {
+          pageTitle: homePage.docHead.pageTitle,
+          metaDescription: homePage.docHead.metaDescription,
+          canonicalUrl: `${appState.siteConfig.siteUrl}/`,
+        },
+        pageHead: {
+          breadcrumbs: [
+            {
+              id: "home",
+              label: "Home",
+              href: "/",
+            },
+          ],
+        },
+        content: homePage.content,
+        assets: {
+          scripts: expect.any(Array),
+          svgs: expect.any(Array),
+        },
+        structuredData: expect.any(Array),
+      });
+
+      expect(body.security.nonce).not.toHaveLength(0);
     });
   });
 
   describe("routing miss flow", () => {
-    it("returns rendered 404 error page", async () => {
+    it("returns rendered 404 document inspection object", async () => {
       const expected = appState.getErrorPageByStatus(404);
 
       mockedRouteRequest.mockReturnValue({ kind: "not-found" });
@@ -145,14 +191,28 @@ describe("handleRequest", () => {
 
       expect(response.status).toBe(404);
       expect(response.headers.get("x-runtime-policy")).toBeNull();
+      expect(response.headers.get("x-render-mode")).toBe("document-inspection");
 
       const body = await response.json();
-      expect(body).toEqual(expected);
+
+      expect(body).toMatchObject({
+        page: {
+          id: expected.core.id,
+          kind: expected.core.kind,
+          slug: expected.core.slug,
+          renderMode: expected.core.renderMode,
+        },
+        seo: {
+          pageTitle: expected.docHead.pageTitle,
+          metaDescription: expected.docHead.metaDescription,
+        },
+        content: expected.content,
+      });
     });
   });
 
   describe("unexpected failure flow", () => {
-    it("returns rendered 500 error page", async () => {
+    it("returns rendered 500 document inspection object", async () => {
       const expected = appState.getErrorPageByStatus(500);
 
       mockedRouteRequest.mockImplementation(() => {
@@ -168,9 +228,23 @@ describe("handleRequest", () => {
 
       expect(response.status).toBe(500);
       expect(response.headers.get("x-runtime-policy")).toBeNull();
+      expect(response.headers.get("x-render-mode")).toBe("document-inspection");
 
       const body = await response.json();
-      expect(body).toEqual(expected);
+
+      expect(body).toMatchObject({
+        page: {
+          id: expected.core.id,
+          kind: expected.core.kind,
+          slug: expected.core.slug,
+          renderMode: expected.core.renderMode,
+        },
+        seo: {
+          pageTitle: expected.docHead.pageTitle,
+          metaDescription: expected.docHead.metaDescription,
+        },
+        content: expected.content,
+      });
     });
   });
 
@@ -299,7 +373,7 @@ describe("handleRequest", () => {
   });
 
   describe("gone pre-routing policy flow", () => {
-    it("renders 410 gone error page", async () => {
+    it("returns rendered 410 document inspection object", async () => {
       const expected = appState.getErrorPageByStatus(410);
 
       mockedEvaluateGonePolicy.mockReturnValue({
@@ -319,9 +393,23 @@ describe("handleRequest", () => {
       expect(response.headers.get("content-type")).toBe(
         "application/json; charset=utf-8",
       );
+      expect(response.headers.get("x-render-mode")).toBe("document-inspection");
 
       const body = await response.json();
-      expect(body).toEqual(expected);
+
+      expect(body).toMatchObject({
+        page: {
+          id: expected.core.id,
+          kind: expected.core.kind,
+          slug: expected.core.slug,
+          renderMode: expected.core.renderMode,
+        },
+        seo: {
+          pageTitle: expected.docHead.pageTitle,
+          metaDescription: expected.docHead.metaDescription,
+        },
+        content: expected.content,
+      });
     });
   });
 
@@ -520,6 +608,140 @@ describe("handleRequest", () => {
       expect(getFirstCallOrder(mockedEvaluateGonePolicy)).toBeLessThan(
         getFirstCallOrder(mockedRouteRequest),
       );
+    });
+  });
+
+  describe("error page guard contract", () => {
+    it("does not use pages.errors for direct method responses", async () => {
+      const getErrorPageSpy = jest.spyOn(
+        AppState.prototype,
+        "getErrorPageByStatus",
+      );
+
+      mockedEvaluateMethodPolicy.mockReturnValue({
+        type: "direct-response",
+        response: createMethodResponse(),
+      });
+
+      const request = new Request("https://example.com/", {
+        method: "POST",
+      });
+
+      const response = await handleRequest(
+        request,
+        {} as Env,
+        {} as ExecutionContext,
+        appState,
+      );
+
+      expect(response.status).toBe(405);
+      expect(getErrorPageSpy).not.toHaveBeenCalled();
+    });
+
+    it("does not use pages.errors for canonical direct responses", async () => {
+      const getErrorPageSpy = jest.spyOn(
+        AppState.prototype,
+        "getErrorPageByStatus",
+      );
+
+      mockedEvaluateCanonicalPolicy.mockReturnValue({
+        type: "direct-response",
+        response: createCanonicalResponse("https://example.com/about"),
+      });
+
+      const response = await handleRequest(
+        createRequest("/About/"),
+        { APP_ENV: "prod" } as Env,
+        {} as ExecutionContext,
+        appState,
+      );
+
+      expect(response.status).toBe(308);
+      expect(getErrorPageSpy).not.toHaveBeenCalled();
+    });
+
+    it("does not use pages.errors for redirect direct responses", async () => {
+      const getErrorPageSpy = jest.spyOn(
+        AppState.prototype,
+        "getErrorPageByStatus",
+      );
+
+      mockedEvaluateRedirectPolicy.mockReturnValue({
+        type: "direct-response",
+        response: createRedirectResponse(301),
+      });
+
+      const response = await handleRequest(
+        createRequest("/old"),
+        {} as Env,
+        {} as ExecutionContext,
+        appState,
+      );
+
+      expect(response.status).toBe(301);
+      expect(getErrorPageSpy).not.toHaveBeenCalled();
+    });
+
+    it("uses pages.errors for rendered gone responses", async () => {
+      const getErrorPageSpy = jest.spyOn(
+        AppState.prototype,
+        "getErrorPageByStatus",
+      );
+
+      mockedEvaluateGonePolicy.mockReturnValue({
+        type: "render-error",
+        intent: { kind: "gone" },
+      });
+
+      const response = await handleRequest(
+        createRequest("/gone"),
+        {} as Env,
+        {} as ExecutionContext,
+        appState,
+      );
+
+      expect(response.status).toBe(410);
+      expect(getErrorPageSpy).toHaveBeenCalledWith(410);
+    });
+
+    it("uses pages.errors for routing misses", async () => {
+      const getErrorPageSpy = jest.spyOn(
+        AppState.prototype,
+        "getErrorPageByStatus",
+      );
+
+      mockedRouteRequest.mockReturnValue({ kind: "not-found" });
+
+      const response = await handleRequest(
+        createRequest("/missing"),
+        {} as Env,
+        {} as ExecutionContext,
+        appState,
+      );
+
+      expect(response.status).toBe(404);
+      expect(getErrorPageSpy).toHaveBeenCalledWith(404);
+    });
+
+    it("uses pages.errors for unexpected failures", async () => {
+      const getErrorPageSpy = jest.spyOn(
+        AppState.prototype,
+        "getErrorPageByStatus",
+      );
+
+      mockedRouteRequest.mockImplementation(() => {
+        throw new Error("Boom");
+      });
+
+      const response = await handleRequest(
+        createRequest("/"),
+        {} as Env,
+        {} as ExecutionContext,
+        appState,
+      );
+
+      expect(response.status).toBe(500);
+      expect(getErrorPageSpy).toHaveBeenCalledWith(500);
     });
   });
 });

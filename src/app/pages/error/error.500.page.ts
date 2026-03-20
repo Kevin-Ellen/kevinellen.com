@@ -8,6 +8,7 @@ export const error500page: PageDefinition = {
     kind: "error",
     slug: "/errors/500",
     renderMode: "request-composed",
+    label: "500: Server error",
   },
 
   config: {

@@ -26,6 +26,7 @@ export type PageDefinitionCore = {
   kind: PageKind;
   slug: string;
   renderMode: PageRenderMode;
+  label: string;
 };
 
 /* -------------------------------------------------------------------------- */
