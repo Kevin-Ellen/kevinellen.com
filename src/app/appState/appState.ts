@@ -38,6 +38,8 @@ export class AppState {
         500: init.pages.errors[500],
       }),
     });
+
+    Object.freeze(this);
   }
 
   private assertRequiredErrorPages(init: AppStateInit): void {
