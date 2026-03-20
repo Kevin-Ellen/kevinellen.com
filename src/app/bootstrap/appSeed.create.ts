@@ -8,8 +8,8 @@ import { siteConfig } from "@app/config/site.config";
 import { appScripts } from "@app/assets/scripts/global.scripts.assets";
 import { appSvgs } from "@app/assets/svgs/global.svgs.assets";
 
-import { STATIC_PAGE_REGISTRY } from "@app/site/page.registry";
-import { ERROR_PAGE_REGISTRY } from "@app/site/page.registry";
+import { STATIC_PAGE_REGISTRY } from "@src/app/pages/page.registry";
+import { ERROR_PAGE_REGISTRY } from "@src/app/pages/page.registry";
 
 export const createAppSeed = async (): Promise<AppStateInit> => {
   return {

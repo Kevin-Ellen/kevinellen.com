@@ -1,4 +1,4 @@
-// src/app/site/page.registry.ts
+// src/app/pages/page.registry.ts
 
 import type { PageDefinition } from "@app/pages/page.definition";
 import type { ErrorPages } from "@app/appState/appState.types";

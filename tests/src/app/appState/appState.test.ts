@@ -9,7 +9,7 @@ describe("AppState", () => {
     const appSeed = await createTestAppSeed();
     const appState = new AppState(appSeed);
 
-    expect(Object.isFrozen(appState)).toBe(false);
+    expect(Object.isFrozen(appState)).toBe(true);
     expect(Object.isFrozen(appState.appAssets)).toBe(true);
     expect(Object.isFrozen(appState.appAssets.scripts)).toBe(true);
     expect(Object.isFrozen(appState.appAssets.svgs)).toBe(true);
@@ -38,6 +38,14 @@ describe("AppState", () => {
     expect(() => {
       (appState.pages.errors as Record<number, unknown>)[404] = null;
     }).toThrow();
+
+    expect(() => {
+      (appState.pages as { all: unknown }).all = [];
+    }).toThrow();
+
+    expect(() => {
+      (appState as { pages: unknown }).pages = {};
+    }).toThrow();
   });
 
   it("returns the raw AppState shape via toJSON", async () => {
@@ -52,6 +60,18 @@ describe("AppState", () => {
         errors: appState.pages.errors,
       },
     });
+  });
+
+  it("returns stable container references via toJSON", async () => {
+    const appSeed = await createTestAppSeed();
+    const appState = new AppState(appSeed);
+    const json = appState.toJSON();
+
+    expect(json.siteConfig).toBe(appState.siteConfig);
+    expect(json.appAssets).toBe(appState.appAssets);
+    expect(json.pages).toBe(appState.pages);
+    expect(json.pages.all).toBe(appState.pages.all);
+    expect(json.pages.errors).toBe(appState.pages.errors);
   });
 
   it("returns the registered error page for a valid status", async () => {
@@ -96,5 +116,47 @@ describe("AppState", () => {
     }).toThrow(
       "Invariant violation: 500 error page is not registered in AppState.",
     );
+  });
+
+  it("returns a page from pages.all when the slug exists", async () => {
+    const appSeed = await createTestAppSeed();
+    const appState = new AppState(appSeed);
+
+    const page = appState.getPageBySlug("/");
+
+    expect(page).toBe(appState.pages.all[0]);
+  });
+
+  it("returns null when no page in pages.all matches the slug", async () => {
+    const appSeed = await createTestAppSeed();
+    const appState = new AppState(appSeed);
+
+    expect(appState.getPageBySlug("/does-not-exist")).toBeNull();
+  });
+
+  it("keeps AppStateInit and AppState intentionally aligned", async () => {
+    const appSeed = await createTestAppSeed();
+    const appState = new AppState(appSeed);
+
+    const json = appState.toJSON();
+
+    expect(json).toEqual({
+      siteConfig: appState.siteConfig,
+      appAssets: appState.appAssets,
+      pages: appState.pages,
+    });
+
+    expect(json.siteConfig).toBe(appState.siteConfig);
+    expect(json.appAssets).toBe(appState.appAssets);
+    expect(json.pages).toBe(appState.pages);
+  });
+
+  it("can reconstruct the same runtime shape from AppStateInit", async () => {
+    const appSeed = await createTestAppSeed();
+    const appState = new AppState(appSeed);
+
+    const reconstructed = new AppState(appState.toJSON());
+
+    expect(reconstructed.toJSON()).toEqual(appState.toJSON());
   });
 });

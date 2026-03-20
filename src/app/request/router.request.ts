@@ -6,5 +6,9 @@ import type { RouteResult } from "@app/request/request.types";
 export const routeRequest = (slug: string, appState: AppState): RouteResult => {
   const page = appState.getPageBySlug(slug);
 
-  return page ? { kind: "found", page } : { kind: "not-found" };
+  if (!page) {
+    return { kind: "not-found" };
+  }
+
+  return { kind: "found", page };
 };

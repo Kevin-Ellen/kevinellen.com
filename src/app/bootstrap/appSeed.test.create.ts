@@ -9,7 +9,7 @@ import { appSvgs } from "@app/assets/svgs/global.svgs.assets";
 import {
   STATIC_PAGE_REGISTRY,
   ERROR_PAGE_REGISTRY,
-} from "@app/site/page.registry";
+} from "@src/app/pages/page.registry";
 
 export const createTestAppSeed = async (): Promise<AppStateInit> => {
   return {

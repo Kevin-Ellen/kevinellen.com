@@ -21,10 +21,14 @@ describe("handleRequest", () => {
     appState = new AppState(appSeed);
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it("returns the 404 page via getErrorPageByStatus(404) with status 404 when the router returns not-found", async () => {
     const expectedErrorPage = appState.getErrorPageByStatus(404);
     const getErrorPageByStatusSpy = jest.spyOn(
-      appState,
+      AppState.prototype,
       "getErrorPageByStatus",
     );
 
@@ -62,7 +66,7 @@ describe("handleRequest", () => {
   it("returns the 500 page via getErrorPageByStatus(500) with status 500 when an unexpected error is thrown", async () => {
     const expectedErrorPage = appState.getErrorPageByStatus(500);
     const getErrorPageByStatusSpy = jest.spyOn(
-      appState,
+      AppState.prototype,
       "getErrorPageByStatus",
     );
 
@@ -96,7 +100,7 @@ describe("handleRequest", () => {
 
   it("returns the resolved page with status 200 when the router returns found", async () => {
     const getErrorPageByStatusSpy = jest.spyOn(
-      appState,
+      AppState.prototype,
       "getErrorPageByStatus",
     );
 
