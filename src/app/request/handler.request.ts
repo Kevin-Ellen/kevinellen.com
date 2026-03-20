@@ -9,10 +9,10 @@ export const handleRequest = async (
   ctx: ExecutionContext,
   appState: AppState,
 ): Promise<Response> => {
-  try {
-    const url = new URL(req.url);
-    const slug = url.pathname;
+  const url = new URL(req.url);
+  const slug = url.pathname;
 
+  try {
     const result = routeRequest(slug, appState);
 
     if (result.kind === "not-found") {
@@ -27,6 +27,7 @@ export const handleRequest = async (
     }
 
     return new Response(JSON.stringify(result.page, null, 2), {
+      status: 200,
       headers: {
         "content-type": "application/json; charset=utf-8",
       },
