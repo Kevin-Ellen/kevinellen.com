@@ -1,84 +1,53 @@
 // src/app/pages/error/error.500.page.ts
 
-import type {
-  AppPage,
-  DocFooter,
-  DocHead,
-  PageConfig,
-  PageContent,
-  PageDefinition,
-  PageHead,
-  Breadcrumbs,
-  StructuredDataNode,
-  DocScript,
-} from "@types-src/appPage.types";
+import type { PageDefinition } from "@app/pages/page.definition";
 
-const definition: PageDefinition = {
-  id: "error-500",
-  kind: "static",
-  slug: "/",
-  renderMode: "bundled",
-};
-
-const config: PageConfig = {
-  robots: {
-    allowIndex: false,
-    allowFollow: false,
-    noarchive: true,
-    nosnippet: true,
-    noimageindex: true,
+export const error500page: PageDefinition = {
+  core: {
+    id: "error-500",
+    kind: "error",
+    slug: "/errors/500",
+    renderMode: "request-composed",
   },
-  robotsTxt: {
-    disallow: false,
+
+  config: {
+    robots: {
+      allowIndex: false,
+      allowFollow: true,
+      noarchive: true,
+      nosnippet: true,
+      noimageindex: true,
+    },
+    robotsTxt: {
+      disallow: false,
+    },
+    sitemap: {
+      include: false,
+    },
   },
-  sitemap: {
-    include: false,
+
+  docHead: {
+    pageTitle: "500 Server Error | KevinEllen.com",
+    metaDescription: "Something went wrong!",
+  },
+
+  pageHead: {
+    breadcrumbs: ["home"],
+  },
+
+  content: {
+    head: {
+      eyebrow: "Error: 500",
+      title: "Server Error",
+      intro: "Something went wrong with the application.",
+    },
+    body: [],
+    footer: [],
+  },
+
+  docFooter: {
+    scripts: [],
+    svgs: [],
+    structuredData: [],
   },
 };
-
-const breadcrumbs: Breadcrumbs = [
-  { label: "Home", href: "/" },
-  { label: "Server Error", href: "/" },
-];
-
-const docHead: DocHead = {
-  pageTitle: "Server Error | Kevin Ellen",
-  metaDescription: "Something went wrong while trying to load this page.",
-};
-
-const content: PageContent = {
-  head: {
-    eyebrow: "Error 500",
-    title: "Something went wrong",
-    intro:
-      "An unexpected error occurred while loading this page. Please try again in a moment.",
-  },
-  body: [],
-  footer: [],
-};
-
-const pageScripts: DocScript[] = [];
-const pageInlineSvgSprite: string[] = [];
-const pageStructuredData: StructuredDataNode[] = [];
-
-const pageHead: PageHead = {
-  breadcrumbs,
-};
-
-const docFooter: DocFooter = {
-  scripts: pageScripts,
-  inlineSvgSprite: pageInlineSvgSprite,
-  structuredData: pageStructuredData,
-};
-
-const error500Page: AppPage = {
-  definition,
-  config,
-  docHead,
-  pageHead,
-  content,
-  docFooter,
-  status: 500,
-};
-
-export default error500Page;
