@@ -1,5 +1,5 @@
 {
-  "name": "kevinellen-com",
+  "name": "kevinellen-com-dev",
   "main": "src/entry.ts",
   "compatibility_date": "2025-03-12",
   "rules": [
@@ -16,18 +16,36 @@
   "vars": {
     "APP_ENV": "dev",
   },
+  "kv_namespaces": [
+    { "binding": "KV_CONTENT", "id": "ef29d26ead344a609879d2622605373c" },
+    { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
+    { "binding": "KV_ARTICLES", "id": "773d0f0582124523aa5e933023bc14a6" },
+    { "binding": "KV_JOURNALS", "id": "b700b98bdf8d45d089391a0d94b165ca" },
+  ],
   "env": {
     "stg": {
-      "name": "stg",
+      "name": "kevinellen-stg",
       "vars": {
         "APP_ENV": "stg",
       },
+      "kv_namespaces": [
+        { "binding": "KV_CONTENT", "id": "9b41de8a3bdb4231b4c46a93216161a8" },
+        { "binding": "KV_PHOTOS", "id": "19bdbb6c476f4602914ad95c5727efcd" },
+        { "binding": "KV_ARTICLES", "id": "108ed7ebbd144f17b34f0763984eda51" },
+        { "binding": "KV_JOURNALS", "id": "88b0288ec5ba42d8a659a52e4db4fdc9" },
+      ],
     },
     "prod": {
-      "name": "prod",
+      "name": "kevinellen-prod",
       "vars": {
         "APP_ENV": "prod",
       },
+      "kv_namespaces": [
+        { "binding": "KV_CONTENT", "id": "8fdf1554689d4c708badf6c818ebf1da" },
+        { "binding": "KV_PHOTOS", "id": "0caf63a76a0447228373e972ecb190dc" },
+        { "binding": "KV_ARTICLES", "id": "dbe14ff004e1470fb252d3d9b807e7f1" },
+        { "binding": "KV_JOURNALS", "id": "a95d961386dc49f480081360f40eb9f0" },
+      ],
     },
   },
 }

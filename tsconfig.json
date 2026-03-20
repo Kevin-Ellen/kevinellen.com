@@ -39,7 +39,8 @@
     "src/**/*.ts",
     "tests/**/*.ts",
     "scripts/**/*.ts",
-    "worker-configuration.d.ts"
+    "worker-configuration.d.ts",
+    "src/app/assets/scripts/menuCondense.inline.script.js"
   ],
   "exclude": ["dist", "coverage", "node_modules"]
 }

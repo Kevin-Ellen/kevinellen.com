@@ -1,83 +1,53 @@
-// src/app/pages/error/error.500.page.ts
+// src/app/pages/error/error.404.page.ts
 
-import type {
-  AppPage,
-  DocFooter,
-  DocHead,
-  PageConfig,
-  PageContent,
-  PageDefinition,
-  PageHead,
-  Breadcrumbs,
-  StructuredDataNode,
-  DocScript,
-} from "@types-src/appPage.types";
+import type { PageDefinition } from "@app/pages/page.definition";
 
-const definition: PageDefinition = {
-  id: "error-404",
-  kind: "static",
-  slug: "/404",
-  renderMode: "bundled",
-};
-
-const config: PageConfig = {
-  robots: {
-    allowIndex: false,
-    allowFollow: false,
-    noarchive: true,
-    nosnippet: true,
-    noimageindex: true,
+export const error404page: PageDefinition = {
+  core: {
+    id: "error-404",
+    kind: "error",
+    slug: "/errors/404",
+    renderMode: "request-composed",
   },
-  robotsTxt: {
-    disallow: false,
+
+  config: {
+    robots: {
+      allowIndex: false,
+      allowFollow: true,
+      noarchive: true,
+      nosnippet: true,
+      noimageindex: true,
+    },
+    robotsTxt: {
+      disallow: false,
+    },
+    sitemap: {
+      include: false,
+    },
   },
-  sitemap: {
-    include: false,
+
+  docHead: {
+    pageTitle: "404 Not Found | KevinEllen.com",
+    metaDescription: "Page was not found.",
+  },
+
+  pageHead: {
+    breadcrumbs: ["home"],
+  },
+
+  content: {
+    head: {
+      eyebrow: "Error: 404",
+      title: "Page not found",
+      intro: "This page was not found.",
+    },
+    body: [],
+    footer: [],
+  },
+
+  docFooter: {
+    scripts: [],
+    svgs: [],
+    structuredData: [],
   },
 };
-
-const breadcrumbs: Breadcrumbs = [
-  { label: "Home", href: "/" },
-  { label: "Server Error", href: "/" },
-];
-
-const docHead: DocHead = {
-  pageTitle: "Client Error | Kevin Ellen",
-  metaDescription: "This page does not exist.",
-};
-
-const content: PageContent = {
-  head: {
-    eyebrow: "Error 404",
-    title: "Something couldn't be found",
-    intro: "This page cannot be found.",
-  },
-  body: [],
-  footer: [],
-};
-
-const pageScripts: DocScript[] = [];
-const pageInlineSvgSprite: string[] = [];
-const pageStructuredData: StructuredDataNode[] = [];
-
-const pageHead: PageHead = {
-  breadcrumbs,
-};
-
-const docFooter: DocFooter = {
-  scripts: pageScripts,
-  inlineSvgSprite: pageInlineSvgSprite,
-  structuredData: pageStructuredData,
-};
-
-const error404page: AppPage = {
-  definition,
-  config,
-  docHead,
-  pageHead,
-  content,
-  docFooter,
-  status: 404,
-};
-
-export default error404page;
