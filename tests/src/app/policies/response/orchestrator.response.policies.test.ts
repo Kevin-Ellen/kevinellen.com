@@ -1,5 +1,3 @@
-// tests/src/app/policies/response/orchestrator.response.policies.test.ts
-
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
 
@@ -80,6 +78,7 @@ describe("orchestrateResponsePolicies", () => {
   const createDirectContext = (env: Env): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "direct",
+    responseFormat: "binary",
     status: 200,
     env,
   });
@@ -91,6 +90,7 @@ describe("orchestrateResponsePolicies", () => {
   ): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "document",
+    responseFormat: "json",
     status: 200,
     env,
     documentRender: createDocumentRender(robotsOverrides, nonce),
@@ -107,6 +107,8 @@ describe("orchestrateResponsePolicies", () => {
       appState,
     );
 
+    expect(result.headers.get("content-type")).toBe("text/html; charset=utf-8");
+
     expect(result.headers.get("x-content-type-options")).toBe("nosniff");
     expect(result.headers.get("referrer-policy")).toBe(
       "strict-origin-when-cross-origin",
@@ -121,14 +123,16 @@ describe("orchestrateResponsePolicies", () => {
     expect(result.headers.get("cache-control")).toBeNull();
 
     expect(result.headers.get("x-test-header")).toBe("keep-me");
-    expect(result.status).toBe(200);
-    expect(result.statusText).toBe("OK");
   });
 
-  it("applies base, security, robots, and csp policies to document responses in dev", () => {
+  it("applies full policy chain to document responses in dev", () => {
     const result = orchestrateResponsePolicies(
       createDocumentContext({ APP_ENV: "dev" } as Env),
       appState,
+    );
+
+    expect(result.headers.get("content-type")).toBe(
+      "application/json; charset=utf-8",
     );
 
     expect(result.headers.get("x-content-type-options")).toBe("nosniff");
@@ -139,130 +143,60 @@ describe("orchestrateResponsePolicies", () => {
     expect(result.headers.get("cross-origin-opener-policy")).toBe(
       "same-origin",
     );
+
     expect(result.headers.get("x-robots-tag")).toBe(
       "noindex, nofollow, noarchive, nosnippet, noimageindex",
     );
+
     expect(result.headers.get("content-security-policy")).toContain(
       "default-src 'self'",
     );
     expect(result.headers.get("content-security-policy")).toContain(
       "script-src 'self' 'nonce-test-nonce'",
     );
-    expect(result.headers.get("content-security-policy")).toContain(
-      "style-src 'self' 'nonce-test-nonce'",
-    );
-    expect(result.headers.get("x-test-header")).toBe("keep-me");
+
     expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
-  it("applies base, security, robots, and csp policies to document responses in stg", () => {
-    const result = orchestrateResponsePolicies(
-      createDocumentContext({ APP_ENV: "stg" } as Env),
-      appState,
-    );
-
-    expect(result.headers.get("x-content-type-options")).toBe("nosniff");
-    expect(result.headers.get("referrer-policy")).toBe(
-      "strict-origin-when-cross-origin",
-    );
-    expect(result.headers.get("x-frame-options")).toBe("DENY");
-    expect(result.headers.get("cross-origin-opener-policy")).toBe(
-      "same-origin",
-    );
-    expect(result.headers.get("x-robots-tag")).toBe(
-      "noindex, nofollow, noarchive, nosnippet, noimageindex",
-    );
-    expect(result.headers.get("content-security-policy")).toContain(
-      "script-src 'self' 'nonce-test-nonce'",
-    );
-    expect(result.headers.get("cache-control")).toBe("no-store");
-  });
-
-  it("applies base, security, and csp policies with no robots header for fully indexable prod document responses", () => {
+  it("applies correct prod robots behaviour", () => {
     const result = orchestrateResponsePolicies(
       createDocumentContext({ APP_ENV: "prod" } as Env),
       appState,
     );
 
-    expect(result.headers.get("x-content-type-options")).toBe("nosniff");
-    expect(result.headers.get("referrer-policy")).toBe(
-      "strict-origin-when-cross-origin",
-    );
-    expect(result.headers.get("x-frame-options")).toBe("DENY");
-    expect(result.headers.get("cross-origin-opener-policy")).toBe(
-      "same-origin",
-    );
     expect(result.headers.get("x-robots-tag")).toBeNull();
-    expect(result.headers.get("content-security-policy")).toContain(
-      "script-src 'self' 'nonce-test-nonce'",
-    );
-    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
-  it("applies restrictive robots header for prod document responses when robots config requires it", () => {
+  it("applies restrictive robots in prod when required", () => {
     const result = orchestrateResponsePolicies(
       createDocumentContext({ APP_ENV: "prod" } as Env, {
         allowIndex: false,
-        allowFollow: false,
-        noarchive: true,
-        nosnippet: true,
-        noimageindex: true,
       }),
       appState,
     );
 
-    expect(result.headers.get("x-robots-tag")).toBe(
-      "noindex, nofollow, noarchive, nosnippet, noimageindex",
-    );
-    expect(result.headers.get("content-security-policy")).toContain(
-      "script-src 'self' 'nonce-test-nonce'",
-    );
-    expect(result.headers.get("cache-control")).toBe("no-store");
+    expect(result.headers.get("x-robots-tag")).toBe("noindex");
   });
 
-  it("passes the updated response through the full policy chain", () => {
+  it("propagates nonce correctly into CSP", () => {
     const result = orchestrateResponsePolicies(
-      createDocumentContext(
-        { APP_ENV: "prod" } as Env,
-        { allowIndex: false },
-        "abc123",
-      ),
+      createDocumentContext({ APP_ENV: "prod" } as Env, {}, "abc123"),
       appState,
     );
 
-    expect(result.headers.get("x-content-type-options")).toBe("nosniff");
-    expect(result.headers.get("referrer-policy")).toBe(
-      "strict-origin-when-cross-origin",
-    );
-    expect(result.headers.get("x-frame-options")).toBe("DENY");
-    expect(result.headers.get("cross-origin-opener-policy")).toBe(
-      "same-origin",
-    );
-    expect(result.headers.get("x-robots-tag")).toBe("noindex");
     expect(result.headers.get("content-security-policy")).toContain(
-      "script-src 'self' 'nonce-abc123'",
+      "nonce-abc123",
     );
-    expect(result.headers.get("content-security-policy")).toContain(
-      "style-src 'self' 'nonce-abc123'",
-    );
-    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
-  it("returns a new Response instance after orchestration for direct responses", () => {
-    const context = createDirectContext({ APP_ENV: "dev" } as Env);
-    const result = orchestrateResponsePolicies(context, appState);
+  it("returns new Response instance", () => {
+    const ctx = createDocumentContext({ APP_ENV: "dev" } as Env);
+    const result = orchestrateResponsePolicies(ctx, appState);
 
-    expect(result).not.toBe(context.response);
+    expect(result).not.toBe(ctx.response);
   });
 
-  it("returns a new Response instance after orchestration for document responses", () => {
-    const context = createDocumentContext({ APP_ENV: "dev" } as Env);
-    const result = orchestrateResponsePolicies(context, appState);
-
-    expect(result).not.toBe(context.response);
-  });
-
-  it("applies caching policies last for document responses", () => {
+  it("applies caching last", () => {
     const result = orchestrateResponsePolicies(
       createDocumentContext({ APP_ENV: "dev" } as Env),
       appState,

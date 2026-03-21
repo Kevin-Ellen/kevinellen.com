@@ -4,9 +4,20 @@ import type { DocumentRenderContext } from "@app/rendering/document/document.ren
 
 export type ResponseKind = "document" | "resource" | "asset" | "direct";
 
+export type ResponseFormat =
+  | "html"
+  | "json"
+  | "xml"
+  | "text"
+  | "ico"
+  | "woff2"
+  | "image"
+  | "binary";
+
 export type DocumentResponsePolicyContext = {
   response: Response;
   responseKind: "document";
+  responseFormat: ResponseFormat;
   status: number;
   documentRender: DocumentRenderContext;
   env: Env;
@@ -15,6 +26,7 @@ export type DocumentResponsePolicyContext = {
 export type NonDocumentResponsePolicyContext = {
   response: Response;
   responseKind: "resource" | "asset" | "direct";
+  responseFormat: ResponseFormat;
   status: number;
   env: Env;
 };

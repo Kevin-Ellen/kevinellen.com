@@ -64,25 +64,27 @@ describe("applyCspResponsePolicies", () => {
       structuredData: [],
     }) as DocumentRenderContext;
 
-  const createDirectContext = (): ResponsePolicyContext => ({
-    response: createBaseResponse(),
-    responseKind: "direct",
-    status: 200,
-    env: { APP_ENV: "dev" } as Env,
-  });
-
   const createDocumentContext = (
     nonce = "test-nonce",
   ): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "document",
+    responseFormat: "json",
     status: 200,
     env: { APP_ENV: "dev" } as Env,
     documentRender: createDocumentRender(nonce),
   });
 
+  const createNonDocumentContext = (): ResponsePolicyContext => ({
+    response: createBaseResponse(),
+    responseKind: "direct",
+    responseFormat: "binary",
+    status: 200,
+    env: { APP_ENV: "dev" } as Env,
+  });
+
   it("returns unchanged response for non-document responses", () => {
-    const context = createDirectContext();
+    const context = createNonDocumentContext();
     const result = applyCspResponsePolicies(context);
 
     expect(result).toBe(context.response);

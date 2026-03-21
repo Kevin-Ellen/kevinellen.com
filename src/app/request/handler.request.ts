@@ -89,6 +89,7 @@ export const handleRequest = async (
       const context: ResponsePolicyContext = {
         response: outcome.response,
         responseKind: "direct",
+        responseFormat: "binary",
         status: outcome.response.status,
         env,
       };
@@ -107,6 +108,7 @@ export const handleRequest = async (
       const context: ResponsePolicyContext = {
         response,
         responseKind: "document",
+        responseFormat: "json",
         status: response.status,
         documentRender,
         env,
@@ -128,6 +130,7 @@ export const handleRequest = async (
     const context: ResponsePolicyContext = {
       response,
       responseKind: "document",
+      responseFormat: "json",
       status: response.status,
       documentRender,
       env,
@@ -143,6 +146,7 @@ export const handleRequest = async (
     const context: ResponsePolicyContext = {
       response,
       responseKind: "document",
+      responseFormat: "json",
       status: response.status,
       documentRender,
       env,

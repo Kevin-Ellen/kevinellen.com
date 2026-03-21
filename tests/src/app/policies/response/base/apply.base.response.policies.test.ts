@@ -71,6 +71,7 @@ describe("applyBaseResponsePolicies", () => {
   const createDocumentContext = (): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "document",
+    responseFormat: "json",
     status: 200,
     env: { APP_ENV: "dev" } as Env,
     documentRender: createDocumentRender(),
@@ -79,6 +80,7 @@ describe("applyBaseResponsePolicies", () => {
   const createDirectContext = (): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "direct",
+    responseFormat: "binary",
     status: 200,
     env: { APP_ENV: "dev" } as Env,
   });

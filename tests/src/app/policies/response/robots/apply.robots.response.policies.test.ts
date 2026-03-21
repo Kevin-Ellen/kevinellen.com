@@ -76,6 +76,7 @@ describe("applyRobotsResponsePolicies", () => {
   ): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "document",
+    responseFormat: "json",
     status: 200,
     env,
     documentRender: createDocumentRender(robotsOverrides),
@@ -84,6 +85,7 @@ describe("applyRobotsResponsePolicies", () => {
   const createNonDocumentContext = (env: Env): ResponsePolicyContext => ({
     response: createBaseResponse(),
     responseKind: "direct",
+    responseFormat: "binary",
     status: 200,
     env,
   });
