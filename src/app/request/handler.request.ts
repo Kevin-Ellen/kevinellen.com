@@ -24,6 +24,35 @@ const createNonce = (): string => {
   return crypto.randomUUID().replace(/-/g, "");
 };
 
+/* -------------------------------------------------------------------------- */
+/* Pre-routing policy ordering contract                                       */
+/* -------------------------------------------------------------------------- */
+/*
+  Policies in this stage must run in this order:
+
+  1. Method policy
+     - validates request method before any URL-based policy work
+     - may terminate with direct response
+
+  2. Canonical policy
+     - normalises request URL before redirect/gone lookups
+     - may terminate with direct response
+
+  3. Redirect policy
+     - resolves explicit redirect mappings after canonical normalisation
+     - may terminate with direct response
+
+  4. Gone policy
+     - resolves explicit gone mappings after redirect checks
+     - may terminate with render-error
+
+  New pre-routing policies must define:
+  - why they belong in pre-routing
+  - whether they must run before or after canonical / redirect / gone
+  - whether they return continue, direct-response, or render-error
+
+  Ordering changes require corresponding test updates.
+*/
 const runPreRoutingStage = (
   req: Request,
   env: Env,
