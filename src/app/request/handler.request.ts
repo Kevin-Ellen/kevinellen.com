@@ -1,18 +1,11 @@
 // src/app/request/requestHandler.ts
 
 import type { AppState } from "@app/appState/appState";
-import type { PageDefinition } from "@app/pages/page.definition";
-import type {
-  PreRoutingOutcome,
-  ErrorRenderIntent,
-} from "@app/request/request.types";
+import type { ErrorRenderIntent } from "@app/request/request.types";
+import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 
-import { routeRequest } from "@app/request/router.request";
-
-import { evaluateRedirectPolicy } from "@app/policies/request/redirects/engine.redirects";
-import { evaluateGonePolicy } from "@app/policies/request/gone/engine.gone";
-import { evaluateCanonicalPolicy } from "@app/policies/request/canonical/engine.canonical";
-import { evaluateMethodPolicy } from "@app/policies/request/method/engine.method";
+import { orchestrateRequestPolicies } from "@app/policies/request/orchestrator.request.policies";
+import { orchestrateResponsePolicies } from "@app/policies/response/orchestrator.response.policies";
 
 import { buildDocumentRender } from "@app/rendering/document/build.document";
 
@@ -22,73 +15,6 @@ import { buildDocumentRender } from "@app/rendering/document/build.document";
 
 const createNonce = (): string => {
   return crypto.randomUUID().replace(/-/g, "");
-};
-
-/* -------------------------------------------------------------------------- */
-/* Pre-routing policy ordering contract                                       */
-/* -------------------------------------------------------------------------- */
-/*
-  Policies in this stage must run in this order:
-
-  1. Method policy
-     - validates request method before any URL-based policy work
-     - may terminate with direct response
-
-  2. Canonical policy
-     - normalises request URL before redirect/gone lookups
-     - may terminate with direct response
-
-  3. Redirect policy
-     - resolves explicit redirect mappings after canonical normalisation
-     - may terminate with direct response
-
-  4. Gone policy
-     - resolves explicit gone mappings after redirect checks
-     - may terminate with render-error
-
-  New pre-routing policies must define:
-  - why they belong in pre-routing
-  - whether they must run before or after canonical / redirect / gone
-  - whether they return continue, direct-response, or render-error
-
-  Ordering changes require corresponding test updates.
-*/
-const runPreRoutingStage = (
-  req: Request,
-  env: Env,
-  _ctx: ExecutionContext,
-  _appState: AppState,
-): PreRoutingOutcome => {
-  const methodOutcome = evaluateMethodPolicy(req);
-
-  if (methodOutcome.type !== "continue") {
-    return methodOutcome;
-  }
-
-  const canonicalOutcome = evaluateCanonicalPolicy(req, env);
-
-  if (canonicalOutcome.type !== "continue") {
-    return canonicalOutcome;
-  }
-
-  const redirectOutcome = evaluateRedirectPolicy(req);
-  if (redirectOutcome.type !== "continue") {
-    return redirectOutcome;
-  }
-
-  const goneOutcome = evaluateGonePolicy(req);
-  if (goneOutcome.type !== "continue") {
-    return goneOutcome;
-  }
-
-  return { type: "continue" };
-};
-
-const runRoutingStage = (req: Request, appState: AppState) => {
-  const url = new URL(req.url);
-  const slug = url.pathname;
-
-  return routeRequest(slug, appState);
 };
 
 const resolveRenderStatus = (intent: ErrorRenderIntent): 404 | 410 | 500 => {
@@ -103,18 +29,13 @@ const resolveRenderStatus = (intent: ErrorRenderIntent): 404 | 410 | 500 => {
 };
 
 /* -------------------------------------------------------------------------- */
-/* Render inspection responses                                                */
+/* Response builders                                                          */
 /* -------------------------------------------------------------------------- */
 
-const renderDocumentInspectionResponse = (
-  req: Request,
-  appState: AppState,
-  page: PageDefinition,
-  status: number = 200,
+const buildDocumentInspectionResponse = (
+  documentRender: ReturnType<typeof buildDocumentRender>,
+  status: number,
 ): Response => {
-  const nonce = createNonce();
-  const documentRender = buildDocumentRender(appState, page, nonce);
-
   return new Response(JSON.stringify(documentRender, null, 2), {
     status,
     headers: {
@@ -124,41 +45,29 @@ const renderDocumentInspectionResponse = (
   });
 };
 
-const renderErrorIntent = (
-  req: Request,
-  intent: ErrorRenderIntent,
-  appState: AppState,
-): Response => {
+const buildErrorDocument = (intent: ErrorRenderIntent, appState: AppState) => {
   const status = resolveRenderStatus(intent);
   const errorPage = appState.getErrorPageByStatus(status);
 
-  const response = renderDocumentInspectionResponse(
-    req,
-    appState,
-    errorPage,
-    status,
-  );
+  const nonce = createNonce();
+  const documentRender = buildDocumentRender(appState, errorPage, nonce);
+
+  const response = buildDocumentInspectionResponse(documentRender, status);
 
   if (intent.kind !== "gone") {
-    return response;
+    return { response, documentRender };
   }
 
   const headers = new Headers(response.headers);
   headers.set("x-runtime-policy", "gone");
 
-  return new Response(response.body, {
-    status: response.status,
-    headers,
-  });
-};
-
-const applyResponsePolicies = (
-  _req: Request,
-  _env: Env,
-  _appState: AppState,
-  response: Response,
-): Response => {
-  return response;
+  return {
+    response: new Response(response.body, {
+      status: response.status,
+      headers,
+    }),
+    documentRender,
+  };
 };
 
 /* -------------------------------------------------------------------------- */
@@ -172,49 +81,73 @@ export const handleRequest = async (
   appState: AppState,
 ): Promise<Response> => {
   try {
-    const preRoutingOutcome = runPreRoutingStage(req, env, ctx, appState);
+    const outcome = orchestrateRequestPolicies(req, env, ctx, appState);
 
-    if (preRoutingOutcome.type === "direct-response") {
-      return applyResponsePolicies(
-        req,
+    /* ---------------- direct responses (redirect, canonical, method) -------- */
+
+    if (outcome.type === "direct-response") {
+      const context: ResponsePolicyContext = {
+        response: outcome.response,
+        responseKind: "direct",
+        status: outcome.response.status,
         env,
-        appState,
-        preRoutingOutcome.response,
-      );
+      };
+
+      return orchestrateResponsePolicies(context, appState);
     }
 
-    if (preRoutingOutcome.type === "render-error") {
-      return applyResponsePolicies(
-        req,
-        env,
+    /* ---------------- rendered error responses ------------------------------ */
+
+    if (outcome.type === "render-error") {
+      const { response, documentRender } = buildErrorDocument(
+        outcome.intent,
         appState,
-        renderErrorIntent(req, preRoutingOutcome.intent, appState),
       );
+
+      const context: ResponsePolicyContext = {
+        response,
+        responseKind: "document",
+        status: response.status,
+        documentRender,
+        env,
+      };
+
+      return orchestrateResponsePolicies(context, appState);
     }
 
-    const routingOutcome = runRoutingStage(req, appState);
+    /* ---------------- rendered page response -------------------------------- */
 
-    if (routingOutcome.kind === "not-found") {
-      return applyResponsePolicies(
-        req,
-        env,
-        appState,
-        renderErrorIntent(req, { kind: "not-found" }, appState),
-      );
-    }
+    const nonce = createNonce();
+    const documentRender = buildDocumentRender(appState, outcome.page, nonce);
 
-    return applyResponsePolicies(
-      req,
-      env,
-      appState,
-      renderDocumentInspectionResponse(req, appState, routingOutcome.page),
+    const response = buildDocumentInspectionResponse(
+      documentRender,
+      outcome.status,
     );
-  } catch (_error) {
-    return applyResponsePolicies(
-      req,
+
+    const context: ResponsePolicyContext = {
+      response,
+      responseKind: "document",
+      status: response.status,
+      documentRender,
       env,
+    };
+
+    return orchestrateResponsePolicies(context, appState);
+  } catch {
+    const { response, documentRender } = buildErrorDocument(
+      { kind: "failure" },
       appState,
-      renderErrorIntent(req, { kind: "failure" }, appState),
     );
+
+    const context: ResponsePolicyContext = {
+      response,
+      responseKind: "document",
+      status: response.status,
+      documentRender,
+      env,
+    };
+
+    return orchestrateResponsePolicies(context, appState);
   }
 };
