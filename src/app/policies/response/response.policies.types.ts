@@ -22,3 +22,8 @@ export type NonDocumentResponsePolicyContext = {
 export type ResponsePolicyContext =
   | DocumentResponsePolicyContext
   | NonDocumentResponsePolicyContext;
+
+export type DocumentResponsePolicyContextInternal = Extract<
+  ResponsePolicyContext,
+  { responseKind: "document" }
+>;

@@ -58,6 +58,13 @@ export const buildDocumentRender = (
       svgs: Object.freeze([...assets.svgs]),
     }),
     structuredData,
+    robots: Object.freeze({
+      allowIndex: page.config.robots.allowIndex,
+      allowFollow: page.config.robots.allowFollow,
+      noarchive: page.config.robots.noarchive,
+      nosnippet: page.config.robots.nosnippet,
+      noimageindex: page.config.robots.noimageindex,
+    }),
   };
 
   return Object.freeze(documentRender);

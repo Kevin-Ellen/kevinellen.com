@@ -10,6 +10,7 @@ import type {
   PageId,
   PageKind,
   PageRenderMode,
+  PageRobotsConfig,
 } from "@app/pages/page.definition";
 
 export type DocumentRenderSecurity = {
@@ -54,4 +55,5 @@ export type DocumentRenderContext = {
   content: PageContent;
   assets: DocumentRenderAssets;
   structuredData: readonly StructuredDataNode[];
+  robots: PageRobotsConfig;
 };

@@ -106,6 +106,13 @@ describe("buildDocumentRender", () => {
         svgs: [],
         structuredData: [],
       },
+      robots: {
+        allowIndex: true,
+        allowFollow: true,
+        noarchive: false,
+        nosnippet: false,
+        noimageindex: false,
+      },
     }) as PageDefinition;
 
   const createMockStructuredData = (): readonly StructuredDataNode[] =>
@@ -221,6 +228,13 @@ describe("buildDocumentRender", () => {
           itemListElement: [],
         },
       ],
+      robots: {
+        allowIndex: true,
+        allowFollow: true,
+        noarchive: false,
+        nosnippet: false,
+        noimageindex: false,
+      },
     });
   });
 

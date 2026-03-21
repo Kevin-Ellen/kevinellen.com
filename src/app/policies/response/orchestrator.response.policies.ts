@@ -3,21 +3,36 @@
 import type { AppState } from "@app/appState/appState";
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 
-/**
- * Response orchestration stage.
- *
- * Currently pass-through.
- *
- * Future responsibilities:
- * - security headers (CSP, HSTS, etc)
- * - SEO environment policy (noindex)
- * - caching policy
- * - content-type enforcement
- * - resource classification handling
- */
+import { applyBaseResponsePolicies } from "@app/policies/response/base/apply.base.response.policies";
+import { applySecurityResponsePolicies } from "@app/policies/response/security/apply.security.response.policies";
+import { applyRobotsResponsePolicies } from "@app/policies/response/robots/apply.robots.response.policies";
+import { applyCspResponsePolicies } from "@app/policies/response/security/apply.csp.response.policies";
+
 export const orchestrateResponsePolicies = (
   context: ResponsePolicyContext,
   _appState: AppState,
 ): Response => {
-  return context.response;
+  let response = context.response;
+
+  response = applyBaseResponsePolicies({
+    ...context,
+    response,
+  });
+
+  response = applySecurityResponsePolicies({
+    ...context,
+    response,
+  });
+
+  response = applyRobotsResponsePolicies({
+    ...context,
+    response,
+  });
+
+  response = applyCspResponsePolicies({
+    ...context,
+    response,
+  });
+
+  return response;
 };
