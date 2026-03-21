@@ -2,7 +2,7 @@
 
 import type { AppState } from "@app/appState/appState";
 import type { PageDefinition } from "@app/pages/page.definition";
-import type { DocumentRender } from "@app/rendering/document/document.render.types";
+import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
 
 import { buildAssets } from "@app/rendering/document/assets/build.assets.document.rendering";
 import { buildCanonicalUrl } from "@app/rendering/document/canonical/build.canonical.document.rendering";
@@ -13,14 +13,14 @@ export const buildDocumentRender = (
   appState: AppState,
   page: PageDefinition,
   nonce: string,
-): DocumentRender => {
+): DocumentRenderContext => {
   const breadcrumbs = Object.freeze([...resolveBreadcrumbs(appState, page)]);
   const assets = buildAssets(appState, page);
   const structuredData = Object.freeze([
     ...buildStructuredData(appState, page),
   ]);
 
-  const documentRender: DocumentRender = {
+  const documentRender: DocumentRenderContext = {
     security: Object.freeze({
       nonce,
     }),

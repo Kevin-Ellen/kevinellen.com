@@ -45,7 +45,7 @@ export type DocumentRenderAssets = {
   svgs: readonly SvgAsset[];
 };
 
-export type DocumentRender = {
+export type DocumentRenderContext = {
   security: DocumentRenderSecurity;
   site: DocumentRenderSite;
   page: DocumentRenderPage;

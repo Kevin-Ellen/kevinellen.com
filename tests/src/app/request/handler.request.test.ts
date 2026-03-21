@@ -1,6 +1,6 @@
 // tests/src/app/request/handler.request.test.ts
 
-import type { DocumentRender } from "@app/rendering/document/document.render.types";
+import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
 
 import { AppState } from "@app/appState/appState";
 import { createTestAppSeed } from "@src/app/bootstrap/appSeed.test.create";
@@ -132,7 +132,7 @@ describe("handleRequest", () => {
       expect(response.headers.get("x-runtime-policy")).toBeNull();
       expect(response.headers.get("x-render-mode")).toBe("document-inspection");
 
-      const body = await getJsonBody<DocumentRender>(response);
+      const body = await getJsonBody<DocumentRenderContext>(response);
 
       expect(body).toMatchObject({
         security: {
