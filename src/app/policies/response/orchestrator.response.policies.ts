@@ -7,6 +7,7 @@ import { applyBaseResponsePolicies } from "@app/policies/response/base/apply.bas
 import { applySecurityResponsePolicies } from "@app/policies/response/security/apply.security.response.policies";
 import { applyRobotsResponsePolicies } from "@app/policies/response/robots/apply.robots.response.policies";
 import { applyCspResponsePolicies } from "@app/policies/response/security/apply.csp.response.policies";
+import { applyCachingResponsePolicies } from "@app/policies/response/caching/apply.caching.response.policies";
 
 export const orchestrateResponsePolicies = (
   context: ResponsePolicyContext,
@@ -30,6 +31,11 @@ export const orchestrateResponsePolicies = (
   });
 
   response = applyCspResponsePolicies({
+    ...context,
+    response,
+  });
+
+  response = applyCachingResponsePolicies({
     ...context,
     response,
   });

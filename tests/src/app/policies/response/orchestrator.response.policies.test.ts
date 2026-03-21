@@ -118,6 +118,7 @@ describe("orchestrateResponsePolicies", () => {
 
     expect(result.headers.get("x-robots-tag")).toBeNull();
     expect(result.headers.get("content-security-policy")).toBeNull();
+    expect(result.headers.get("cache-control")).toBeNull();
 
     expect(result.headers.get("x-test-header")).toBe("keep-me");
     expect(result.status).toBe(200);
@@ -151,6 +152,7 @@ describe("orchestrateResponsePolicies", () => {
       "style-src 'self' 'nonce-test-nonce'",
     );
     expect(result.headers.get("x-test-header")).toBe("keep-me");
+    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
   it("applies base, security, robots, and csp policies to document responses in stg", () => {
@@ -173,6 +175,7 @@ describe("orchestrateResponsePolicies", () => {
     expect(result.headers.get("content-security-policy")).toContain(
       "script-src 'self' 'nonce-test-nonce'",
     );
+    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
   it("applies base, security, and csp policies with no robots header for fully indexable prod document responses", () => {
@@ -193,6 +196,7 @@ describe("orchestrateResponsePolicies", () => {
     expect(result.headers.get("content-security-policy")).toContain(
       "script-src 'self' 'nonce-test-nonce'",
     );
+    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
   it("applies restrictive robots header for prod document responses when robots config requires it", () => {
@@ -213,6 +217,7 @@ describe("orchestrateResponsePolicies", () => {
     expect(result.headers.get("content-security-policy")).toContain(
       "script-src 'self' 'nonce-test-nonce'",
     );
+    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
   it("passes the updated response through the full policy chain", () => {
@@ -240,6 +245,7 @@ describe("orchestrateResponsePolicies", () => {
     expect(result.headers.get("content-security-policy")).toContain(
       "style-src 'self' 'nonce-abc123'",
     );
+    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 
   it("returns a new Response instance after orchestration for direct responses", () => {
@@ -254,5 +260,14 @@ describe("orchestrateResponsePolicies", () => {
     const result = orchestrateResponsePolicies(context, appState);
 
     expect(result).not.toBe(context.response);
+  });
+
+  it("applies caching policies last for document responses", () => {
+    const result = orchestrateResponsePolicies(
+      createDocumentContext({ APP_ENV: "dev" } as Env),
+      appState,
+    );
+
+    expect(result.headers.get("cache-control")).toBe("no-store");
   });
 });
