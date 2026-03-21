@@ -1,6 +1,6 @@
-// tests/src/app/policies/method/engine.method.test.ts
+// tests/src/app/policies/request/method/engine.method.test.ts
 
-import { evaluateMethodPolicy } from "@app/policies/method/engine.method";
+import { evaluateMethodPolicy } from "@app/policies/request/method/engine.method";
 
 describe("evaluateMethodPolicy", () => {
   const createRequest = (method: string): Request =>

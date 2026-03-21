@@ -1,4 +1,4 @@
-// src/app/policies/method/method.types.ts
+// src/app/policies/request/method/method.types.ts
 
 export type AllowedMethod = "GET" | "HEAD";
 

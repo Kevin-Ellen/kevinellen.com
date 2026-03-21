@@ -1,6 +1,6 @@
-// tests/src/app/policies/canonical/engine.canonical.test.ts
+// tests/src/app/policies/request/canonical/engine.canonical.test.ts
 
-import { evaluateCanonicalPolicy } from "@app/policies/canonical/engine.canonical";
+import { evaluateCanonicalPolicy } from "@app/policies/request/canonical/engine.canonical";
 
 describe("evaluateCanonicalPolicy", () => {
   const createRequest = (url: string): Request => new Request(url);

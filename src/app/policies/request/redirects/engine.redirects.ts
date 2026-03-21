@@ -1,8 +1,8 @@
-// src/app/policies/redirects/engine.redirects.ts
+// src/app/policies/request/redirects/engine.redirects.ts
 
 import type { PreRoutingOutcome } from "@app/request/request.types";
 
-import { redirectRules } from "@app/policies/redirects/rules.redirects";
+import { redirectRules } from "@app/policies/request/redirects/rules.redirects";
 import { getRequestPath } from "@src/app/request/request.utils";
 
 export const evaluateRedirectPolicy = (req: Request): PreRoutingOutcome => {

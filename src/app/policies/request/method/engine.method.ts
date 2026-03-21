@@ -1,7 +1,7 @@
-// src/app/policies/method/engine.method.ts
+// src/app/policies/request/method/engine.method.ts
 
 import type { PreRoutingOutcome } from "@app/request/request.types";
-import type { AllowedMethods } from "@app/policies/method/method.types";
+import type { AllowedMethods } from "@app/policies/request/method/method.types";
 
 const allowedMethods: AllowedMethods = ["GET", "HEAD"] as const;
 

@@ -1,4 +1,4 @@
-// src/app/policies/gone/gone.types.ts
+// src/app/policies/request/gone/gone.types.ts
 
 /**
  * Explicit request paths that are intentionally resolved as gone (410)

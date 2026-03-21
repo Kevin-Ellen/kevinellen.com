@@ -1,4 +1,4 @@
-// src/app/policies/redirects/redirects.types.ts
+// src/app/policies/request/redirects/redirects.types.ts
 
 export type PermanentRedirect = 301 | 308;
 export type TemporaryRedirect = 302 | 307;

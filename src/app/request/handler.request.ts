@@ -9,10 +9,10 @@ import type {
 
 import { routeRequest } from "@app/request/router.request";
 
-import { evaluateRedirectPolicy } from "@app/policies/redirects/engine.redirects";
-import { evaluateGonePolicy } from "@app/policies/gone/engine.gone";
-import { evaluateCanonicalPolicy } from "@app/policies/canonical/engine.canonical";
-import { evaluateMethodPolicy } from "../policies/method/engine.method";
+import { evaluateRedirectPolicy } from "@app/policies/request/redirects/engine.redirects";
+import { evaluateGonePolicy } from "@app/policies/request/gone/engine.gone";
+import { evaluateCanonicalPolicy } from "@app/policies/request/canonical/engine.canonical";
+import { evaluateMethodPolicy } from "@app/policies/request/method/engine.method";
 
 import { buildDocumentRender } from "@app/rendering/document/build.document";
 

@@ -7,28 +7,28 @@ import { createTestAppSeed } from "@src/app/bootstrap/appSeed.test.create";
 
 import { handleRequest } from "@app/request/handler.request";
 import { routeRequest } from "@app/request/router.request";
-import { evaluateRedirectPolicy } from "@app/policies/redirects/engine.redirects";
-import { evaluateGonePolicy } from "@app/policies/gone/engine.gone";
-import { evaluateCanonicalPolicy } from "@app/policies/canonical/engine.canonical";
-import { evaluateMethodPolicy } from "@app/policies/method/engine.method";
+import { evaluateRedirectPolicy } from "@app/policies/request/redirects/engine.redirects";
+import { evaluateGonePolicy } from "@app/policies/request/gone/engine.gone";
+import { evaluateCanonicalPolicy } from "@app/policies/request/canonical/engine.canonical";
+import { evaluateMethodPolicy } from "@app/policies/request/method/engine.method";
 
 jest.mock("@app/request/router.request", () => ({
   routeRequest: jest.fn(),
 }));
 
-jest.mock("@app/policies/redirects/engine.redirects", () => ({
+jest.mock("@app/policies/request/redirects/engine.redirects", () => ({
   evaluateRedirectPolicy: jest.fn(),
 }));
 
-jest.mock("@app/policies/gone/engine.gone", () => ({
+jest.mock("@app/policies/request/gone/engine.gone", () => ({
   evaluateGonePolicy: jest.fn(),
 }));
 
-jest.mock("@app/policies/canonical/engine.canonical", () => ({
+jest.mock("@app/policies/request/canonical/engine.canonical", () => ({
   evaluateCanonicalPolicy: jest.fn(),
 }));
 
-jest.mock("@app/policies/method/engine.method", () => ({
+jest.mock("@app/policies/request/method/engine.method", () => ({
   evaluateMethodPolicy: jest.fn(),
 }));
 

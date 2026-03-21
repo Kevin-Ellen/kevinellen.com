@@ -1,10 +1,10 @@
-// src/app/policies/canonical/engine.canonical.ts
+// src/app/policies/request/canonical/engine.canonical.ts
 
 import type { PreRoutingOutcome } from "@app/request/request.types";
 import type {
   CanonicalRedirectCode,
   CanonicalUrlParts,
-} from "@app/policies/canonical/canonical.types";
+} from "@app/policies/request/canonical/canonical.types";
 
 const CANONICAL_REDIRECT_STATUS: CanonicalRedirectCode = 308;
 

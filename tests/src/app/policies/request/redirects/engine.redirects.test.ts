@@ -1,9 +1,9 @@
-// tests/src/app/policies/redirects/engine.redirects.test.ts
+// tests/src/app/policies/request/redirects/engine.redirects.test.ts
 
 import type {
   RedirectCode,
   RedirectRule,
-} from "@app/policies/redirects/redirects.types";
+} from "@app/policies/request/redirects/redirects.types";
 
 type RedirectPolicyOutcome =
   | { type: "continue" }
@@ -28,11 +28,12 @@ describe("evaluateRedirectPolicy", () => {
   ): Promise<(req: Request) => RedirectPolicyOutcome> => {
     jest.resetModules();
 
-    jest.doMock("@app/policies/redirects/rules.redirects", () => ({
+    jest.doMock("@app/policies/request/redirects/rules.redirects", () => ({
       redirectRules: rules,
     }));
 
-    const module = await import("@app/policies/redirects/engine.redirects");
+    const module =
+      await import("@app/policies/request/redirects/engine.redirects");
 
     return module.evaluateRedirectPolicy as (
       req: Request,
@@ -61,7 +62,7 @@ describe("evaluateRedirectPolicy", () => {
   afterEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
-    jest.unmock("@app/policies/redirects/rules.redirects");
+    jest.unmock("@app/policies/request/redirects/rules.redirects");
   });
 
   it("returns continue when no redirect rule matches", async () => {

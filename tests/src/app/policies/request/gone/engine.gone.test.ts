@@ -1,6 +1,6 @@
-// tests/src/app/policies/gone/engine.gone.test.ts
+// tests/src/app/policies/request/gone/engine.gone.test.ts
 
-import type { GonePath } from "@app/policies/gone/gone.types";
+import type { GonePath } from "@app/policies/request/gone/gone.types";
 
 type GonePolicyOutcome =
   | { type: "continue" }
@@ -14,11 +14,11 @@ describe("evaluateGonePolicy", () => {
   ): Promise<(req: Request) => GonePolicyOutcome> => {
     jest.resetModules();
 
-    jest.doMock("@app/policies/gone/rules.gone", () => ({
+    jest.doMock("@app/policies/request/gone/rules.gone", () => ({
       goneRules: rules,
     }));
 
-    const module = await import("@app/policies/gone/engine.gone");
+    const module = await import("@app/policies/request/gone/engine.gone");
 
     return module.evaluateGonePolicy as (req: Request) => GonePolicyOutcome;
   };
@@ -26,7 +26,7 @@ describe("evaluateGonePolicy", () => {
   afterEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
-    jest.unmock("@app/policies/gone/rules.gone");
+    jest.unmock("@app/policies/request/gone/rules.gone");
   });
 
   it("returns continue when the request path is not explicitly gone", async () => {
