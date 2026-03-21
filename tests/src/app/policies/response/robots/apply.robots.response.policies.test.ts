@@ -27,9 +27,24 @@ describe("applyRobotsResponsePolicies", () => {
         siteName: "Test Site",
         siteUrl: "https://example.com",
         socialMedia: {
-          gitHub: "",
-          instagram: "",
-          linkedIn: "",
+          gitHub: {
+            id: "gitHub",
+            label: "GitHub",
+            href: "https://github.com/test",
+            iconId: "icon-github",
+          },
+          instagram: {
+            id: "instagram",
+            label: "Instagram",
+            href: "https://instagram.com/test",
+            iconId: "icon-instagram",
+          },
+          linkedIn: {
+            id: "linkedIn",
+            label: "LinkedIn",
+            href: "https://linkedin.com/in/test",
+            iconId: "icon-linkedin",
+          },
         },
       },
       page: {
@@ -52,7 +67,16 @@ describe("applyRobotsResponsePolicies", () => {
         ...overrides,
       },
       pageHead: {
+        navigation: {
+          primary: [],
+          social: [],
+        },
         breadcrumbs: [],
+      },
+      pageFooter: {
+        navigation: {
+          sections: [],
+        },
       },
       content: {
         head: {

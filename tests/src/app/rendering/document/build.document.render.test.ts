@@ -52,12 +52,54 @@ describe("buildDocumentRender", () => {
         siteName: "Kevin Ellen",
         siteUrl: "https://kevinellen.com",
         socialMedia: {
-          gitHub: "https://github.com/Kevin-Ellen",
-          instagram: "https://www.instagram.com/photography.mallard",
-          linkedIn: "https://www.linkedin.com/in/kevinellen/",
+          gitHub: {
+            id: "gitHub",
+            label: "GitHub",
+            href: "https://github.com/Kevin-Ellen",
+            iconId: "icon-github",
+          },
+          instagram: {
+            id: "instagram",
+            label: "Instagram",
+            href: "https://www.instagram.com/photography.mallard",
+            iconId: "icon-instagram",
+          },
+          linkedIn: {
+            id: "linkedIn",
+            label: "LinkedIn",
+            href: "https://www.linkedin.com/in/kevinellen/",
+            iconId: "icon-linkedin",
+          },
+        },
+        navigation: {
+          header: {
+            primary: ["home"],
+            social: ["gitHub", "instagram", "linkedIn"],
+          },
+          footer: {
+            sections: [
+              {
+                id: "site",
+                label: "Site",
+                items: ["home"],
+              },
+              {
+                id: "elsewhere",
+                label: "Elsewhere",
+                items: ["gitHub", "instagram", "linkedIn"],
+              },
+            ],
+          },
         },
       },
-    }) as AppState;
+      getPageById: (id: string) => {
+        if (id === "home") {
+          return createPage();
+        }
+
+        return null;
+      },
+    }) as unknown as AppState;
 
   const createPage = (): PageDefinition =>
     ({
@@ -106,13 +148,6 @@ describe("buildDocumentRender", () => {
         svgs: [],
         structuredData: [],
       },
-      robots: {
-        allowIndex: true,
-        allowFollow: true,
-        noarchive: false,
-        nosnippet: false,
-        noimageindex: false,
-      },
     }) as PageDefinition;
 
   const createMockStructuredData = (): readonly StructuredDataNode[] =>
@@ -147,7 +182,8 @@ describe("buildDocumentRender", () => {
       svgs: [
         {
           id: "icon-home",
-          path: '<symbol id="icon-home"></symbol>',
+          viewBox: "0 0 24 24",
+          content: "<path />",
         },
       ],
     });
@@ -169,9 +205,24 @@ describe("buildDocumentRender", () => {
         siteName: "Kevin Ellen",
         siteUrl: "https://kevinellen.com",
         socialMedia: {
-          gitHub: "https://github.com/Kevin-Ellen",
-          instagram: "https://www.instagram.com/photography.mallard",
-          linkedIn: "https://www.linkedin.com/in/kevinellen/",
+          gitHub: {
+            id: "gitHub",
+            label: "GitHub",
+            href: "https://github.com/Kevin-Ellen",
+            iconId: "icon-github",
+          },
+          instagram: {
+            id: "instagram",
+            label: "Instagram",
+            href: "https://www.instagram.com/photography.mallard",
+            iconId: "icon-instagram",
+          },
+          linkedIn: {
+            id: "linkedIn",
+            label: "LinkedIn",
+            href: "https://www.linkedin.com/in/kevinellen/",
+            iconId: "icon-linkedin",
+          },
         },
       },
       page: {
@@ -187,6 +238,39 @@ describe("buildDocumentRender", () => {
         canonicalUrl: "https://kevinellen.com/",
       },
       pageHead: {
+        navigation: {
+          primary: [
+            {
+              id: "home",
+              label: "Home",
+              href: "/",
+              isActive: true,
+            },
+          ],
+          social: [
+            {
+              id: "gitHub",
+              label: "GitHub",
+              href: "https://github.com/Kevin-Ellen",
+              isActive: false,
+              iconId: "icon-github",
+            },
+            {
+              id: "instagram",
+              label: "Instagram",
+              href: "https://www.instagram.com/photography.mallard",
+              isActive: false,
+              iconId: "icon-instagram",
+            },
+            {
+              id: "linkedIn",
+              label: "LinkedIn",
+              href: "https://www.linkedin.com/in/kevinellen/",
+              isActive: false,
+              iconId: "icon-linkedin",
+            },
+          ],
+        },
         breadcrumbs: [
           {
             id: "home",
@@ -194,6 +278,51 @@ describe("buildDocumentRender", () => {
             href: "/",
           },
         ],
+      },
+      pageFooter: {
+        navigation: {
+          sections: [
+            {
+              id: "site",
+              label: "Site",
+              items: [
+                {
+                  id: "home",
+                  label: "Home",
+                  href: "/",
+                  isActive: true,
+                },
+              ],
+            },
+            {
+              id: "elsewhere",
+              label: "Elsewhere",
+              items: [
+                {
+                  id: "gitHub",
+                  label: "GitHub",
+                  href: "https://github.com/Kevin-Ellen",
+                  isActive: false,
+                  iconId: "icon-github",
+                },
+                {
+                  id: "instagram",
+                  label: "Instagram",
+                  href: "https://www.instagram.com/photography.mallard",
+                  isActive: false,
+                  iconId: "icon-instagram",
+                },
+                {
+                  id: "linkedIn",
+                  label: "LinkedIn",
+                  href: "https://www.linkedin.com/in/kevinellen/",
+                  isActive: false,
+                  iconId: "icon-linkedin",
+                },
+              ],
+            },
+          ],
+        },
       },
       content: {
         head: {
@@ -217,7 +346,8 @@ describe("buildDocumentRender", () => {
         svgs: [
           {
             id: "icon-home",
-            path: '<symbol id="icon-home"></symbol>',
+            viewBox: "0 0 24 24",
+            content: "<path />",
           },
         ],
       },
@@ -298,7 +428,13 @@ describe("buildDocumentRender", () => {
     expect(Object.isFrozen(result.page)).toBe(true);
     expect(Object.isFrozen(result.seo)).toBe(true);
     expect(Object.isFrozen(result.pageHead)).toBe(true);
+    expect(Object.isFrozen(result.pageHead.navigation)).toBe(true);
+    expect(Object.isFrozen(result.pageHead.navigation.primary)).toBe(true);
+    expect(Object.isFrozen(result.pageHead.navigation.social)).toBe(true);
     expect(Object.isFrozen(result.pageHead.breadcrumbs)).toBe(true);
+    expect(Object.isFrozen(result.pageFooter)).toBe(true);
+    expect(Object.isFrozen(result.pageFooter.navigation)).toBe(true);
+    expect(Object.isFrozen(result.pageFooter.navigation.sections)).toBe(true);
     expect(Object.isFrozen(result.content)).toBe(true);
     expect(Object.isFrozen(result.content.head)).toBe(true);
     expect(Object.isFrozen(result.content.body)).toBe(true);
@@ -333,7 +469,8 @@ describe("buildDocumentRender", () => {
     const svgs = [
       {
         id: "icon-home",
-        path: '<symbol id="icon-home"></symbol>',
+        viewBox: "0 0 24 24",
+        content: "<path />",
       },
     ];
 

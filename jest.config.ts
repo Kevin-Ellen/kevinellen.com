@@ -15,6 +15,8 @@ const config: Config = {
   },
 
   moduleNameMapper: {
+    "\\.css\\?raw$": "<rootDir>/tests/mocks/rawCss.mock.ts",
+    "^@tests/(.*)$": "<rootDir>/tests/$1",
     "^@src/(.*)$": "<rootDir>/src/$1",
     "^@app/(.*)$": "<rootDir>/src/app/$1",
     "^@system/(.*)$": "<rootDir>/src/system/$1",

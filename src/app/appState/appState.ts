@@ -10,10 +10,12 @@ import type {
 import type { PageDefinition } from "@app/pages/page.definition";
 
 /**
- * AppState represents the raw, immutable application state
- * constructed at request start before repository indexing.
+ * AppState represents the immutable runtime application state
+ * constructed at request start.
  *
- * It must remain free of derived logic.
+ * It is agnostic to where that state originated from and should remain
+ * limited to storing the runtime state plus simple accessors.
+ * It must not take on render, policy, or orchestration logic.
  */
 export class AppState {
   readonly siteConfig: SiteConfig;
@@ -65,6 +67,10 @@ export class AppState {
 
   public getPageBySlug(slug: string): PageDefinition | null {
     return this.pages.all.find((page) => page.core.slug === slug) ?? null;
+  }
+
+  public getPageById(id: string): PageDefinition | null {
+    return this.pages.all.find((page) => page.core.id === id) ?? null;
   }
 
   public getErrorPageByStatus(status: ErrorPageStatus): PageDefinition {

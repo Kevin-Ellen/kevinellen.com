@@ -1,4 +1,5 @@
-import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
+// tests/src/app/request/handler.request.test.ts
+
 import type { RequestPolicyOutcome } from "@app/policies/request/request.policies.types";
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 
@@ -28,12 +29,20 @@ describe("handleRequest", () => {
   const createRequest = (path: string): Request =>
     new Request(`https://example.com${path}`);
 
-  const getJsonBody = async <T>(response: Response): Promise<T> =>
-    (await response.json()) as T;
+  const getTextBody = async (response: Response): Promise<string> =>
+    await response.text();
 
   const getFirstResponseContext = (): ResponsePolicyContext => {
     const call = mockedResponseOrchestrator.mock.calls[0];
     if (!call) throw new Error("Response orchestrator was not called");
+    return call[0];
+  };
+
+  const getNthResponseContext = (index: number): ResponsePolicyContext => {
+    const call = mockedResponseOrchestrator.mock.calls[index];
+    if (!call) {
+      throw new Error(`Response orchestrator was not called at index ${index}`);
+    }
     return call[0];
   };
 
@@ -53,12 +62,6 @@ describe("handleRequest", () => {
     const seed = await createTestAppSeed();
     appState = new AppState(seed);
   });
-
-  /*
-   --------------------------------------------------
-   DIRECT RESPONSE FLOW
-   --------------------------------------------------
-  */
 
   describe("direct response outcome", () => {
     it("returns direct response unchanged", async () => {
@@ -91,14 +94,8 @@ describe("handleRequest", () => {
     });
   });
 
-  /*
-   --------------------------------------------------
-   SUCCESSFUL DOCUMENT RENDER
-   --------------------------------------------------
-  */
-
   describe("render page outcome", () => {
-    it("renders document inspection payload", async () => {
+    it("renders HTML document response", async () => {
       const homePage = appState.getPageBySlug("/")!;
 
       mockedRequestOrchestrator.mockReturnValue({
@@ -115,15 +112,22 @@ describe("handleRequest", () => {
       );
 
       expect(response.status).toBe(200);
-      expect(response.headers.get("x-render-mode")).toBe("document-inspection");
+      expect(response.headers.get("x-render-mode")).toBe("document");
+      expect(response.headers.get("content-type")).toBe(
+        "text/html; charset=utf-8",
+      );
 
-      const body = await getJsonBody<DocumentRenderContext>(response);
-      expect(body.security.nonce).toBeDefined();
+      const body = await getTextBody(response);
+      expect(body).toContain("<!doctype html>");
+      expect(body).toContain("<html");
+      expect(body).toContain("<body");
 
       const ctx = getFirstResponseContext();
       assertDocumentContext(ctx);
 
       expect(ctx.documentRender).toBeDefined();
+      expect(ctx.documentRender.security.nonce).toBeDefined();
+      expect(ctx.responseFormat).toBe("html");
     });
 
     it("generates a new nonce per request", async () => {
@@ -135,31 +139,33 @@ describe("handleRequest", () => {
         status: 200,
       } satisfies RequestPolicyOutcome);
 
-      const r1 = await handleRequest(
-        createRequest("/"),
-        {} as Env,
-        {} as ExecutionContext,
-        appState,
-      );
-      const r2 = await handleRequest(
+      await handleRequest(
         createRequest("/"),
         {} as Env,
         {} as ExecutionContext,
         appState,
       );
 
-      const b1 = await getJsonBody<DocumentRenderContext>(r1);
-      const b2 = await getJsonBody<DocumentRenderContext>(r2);
+      await handleRequest(
+        createRequest("/"),
+        {} as Env,
+        {} as ExecutionContext,
+        appState,
+      );
 
-      expect(b1.security.nonce).not.toBe(b2.security.nonce);
+      const ctx1 = getNthResponseContext(0);
+      const ctx2 = getNthResponseContext(1);
+
+      assertDocumentContext(ctx1);
+      assertDocumentContext(ctx2);
+
+      expect(ctx1.documentRender.security.nonce).toBeDefined();
+      expect(ctx2.documentRender.security.nonce).toBeDefined();
+      expect(ctx1.documentRender.security.nonce).not.toBe(
+        ctx2.documentRender.security.nonce,
+      );
     });
   });
-
-  /*
-   --------------------------------------------------
-   ERROR RENDERING
-   --------------------------------------------------
-  */
 
   describe("render error outcome", () => {
     it("renders 404 correctly", async () => {
@@ -198,12 +204,6 @@ describe("handleRequest", () => {
       expect(response.headers.get("x-runtime-policy")).toBe("gone");
     });
   });
-
-  /*
-   --------------------------------------------------
-   HANDLER FAILURE SAFETY
-   --------------------------------------------------
-  */
 
   describe("unexpected failure flow", () => {
     it("renders 500 when request orchestration throws", async () => {

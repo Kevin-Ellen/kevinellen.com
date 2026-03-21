@@ -31,7 +31,8 @@ describe("AppState", () => {
     expect(() => {
       (appState.appAssets.svgs as unknown as unknown[]).push({
         id: "test",
-        markup: "<svg></svg>",
+        viewBox: "0 0 24 24",
+        content: "<path />",
       });
     }).toThrow();
 
@@ -180,5 +181,20 @@ describe("AppState", () => {
     const reconstructed = new AppState(appState.toJSON());
 
     expect(reconstructed.toJSON()).toEqual(appState.toJSON());
+  });
+
+  it("returns a page from pages.all when the id exists", async () => {
+    const appState = await createValidState();
+
+    const page = appState.getPageById("home");
+
+    expect(page).not.toBeNull();
+    expect(page?.core.id).toBe("home");
+  });
+
+  it("returns null when no page in pages.all matches the id", async () => {
+    const appState = await createValidState();
+
+    expect(appState.getPageById("does-not-exist")).toBeNull();
   });
 });

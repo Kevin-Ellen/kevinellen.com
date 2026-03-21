@@ -1,13 +1,13 @@
 // src/app/config/structuredData.config.ts
 
 import type { Person, WebSite, WithContext } from "schema-dts";
-import type { SocialMediaLinks } from "@app/config/site.config.types";
+import type { SocialMediaMap } from "@app/config/site.config.types";
 import type { StructuredDataNode } from "@app/config/structuredData.config.types";
 
 export const buildSiteStructuredData = (
-  socialMedia: SocialMediaLinks,
+  socialMedia: SocialMediaMap,
 ): StructuredDataNode[] => {
-  const sameAs = Object.values(socialMedia);
+  const sameAs: string[] = Object.values(socialMedia).map((item) => item.href);
 
   const structuredDataPerson = {
     "@context": "https://schema.org",

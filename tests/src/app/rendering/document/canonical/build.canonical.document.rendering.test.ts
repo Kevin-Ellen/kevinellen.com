@@ -11,12 +11,27 @@ const createAppState = (siteUrl: string): AppState =>
       siteName: "Kevin Ellen",
       siteUrl,
       socialMedia: {
-        gitHub: "https://github.com/Kevin-Ellen",
-        instagram: "https://www.instagram.com/photography.mallard",
-        linkedIn: "https://www.linkedin.com/in/kevinellen/",
+        gitHub: {
+          id: "gitHub",
+          label: "GitHub",
+          href: "https://github.com/Kevin-Ellen",
+          iconId: "icon-github",
+        },
+        instagram: {
+          id: "instagram",
+          label: "Instagram",
+          href: "https://www.instagram.com/photography.mallard",
+          iconId: "icon-instagram",
+        },
+        linkedIn: {
+          id: "linkedIn",
+          label: "LinkedIn",
+          href: "https://www.linkedin.com/in/kevinellen/",
+          iconId: "icon-linkedin",
+        },
       },
     },
-  }) as AppState;
+  }) as unknown as AppState;
 
 const createPage = (slug: string): PageDefinition =>
   ({

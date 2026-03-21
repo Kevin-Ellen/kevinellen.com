@@ -17,19 +17,34 @@ jest.mock(
 describe("buildStructuredData", () => {
   const mockedResolveBreadcrumbs = jest.mocked(resolveBreadcrumbs);
 
-  const createAppState = (siteUrl = "https://kevinellen.com"): AppState =>
+  const createAppState = (siteUrl: string): AppState =>
     ({
       siteConfig: {
         language: "en-GB",
         siteName: "Kevin Ellen",
         siteUrl,
         socialMedia: {
-          gitHub: "https://github.com/Kevin-Ellen",
-          instagram: "https://www.instagram.com/photography.mallard",
-          linkedIn: "https://www.linkedin.com/in/kevinellen/",
+          gitHub: {
+            id: "gitHub",
+            label: "GitHub",
+            href: "https://github.com/Kevin-Ellen",
+            iconId: "icon-github",
+          },
+          instagram: {
+            id: "instagram",
+            label: "Instagram",
+            href: "https://www.instagram.com/photography.mallard",
+            iconId: "icon-instagram",
+          },
+          linkedIn: {
+            id: "linkedIn",
+            label: "LinkedIn",
+            href: "https://www.linkedin.com/in/kevinellen/",
+            iconId: "icon-linkedin",
+          },
         },
       },
-    }) as AppState;
+    }) as unknown as AppState;
 
   const createPage = (
     structuredData: readonly StructuredDataNode[] = [],
@@ -93,7 +108,7 @@ describe("buildStructuredData", () => {
 
     mockedResolveBreadcrumbs.mockReturnValue([]);
 
-    const appState = createAppState();
+    const appState = createAppState("https://kevinellen.com/");
     const page = createPage([authoredNode]);
 
     const result = buildStructuredData(appState, page);
@@ -116,7 +131,7 @@ describe("buildStructuredData", () => {
       },
     ]);
 
-    const appState = createAppState();
+    const appState = createAppState("https://kevinellen.com/");
     const page = createPage([authoredNode]);
 
     const result = buildStructuredData(appState, page);
@@ -197,7 +212,7 @@ describe("buildStructuredData", () => {
       },
     ]);
 
-    const appState = createAppState();
+    const appState = createAppState("https://kevinellen.com/");
     const page = createPage();
 
     const result = buildStructuredData(appState, page);
@@ -245,7 +260,7 @@ describe("buildStructuredData", () => {
       },
     ]);
 
-    const appState = createAppState();
+    const appState = createAppState("https://kevinellen.com/");
     const page = createPage(authoredStructuredData);
 
     const result = buildStructuredData(appState, page);

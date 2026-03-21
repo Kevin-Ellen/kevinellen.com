@@ -8,6 +8,7 @@ import { orchestrateRequestPolicies } from "@app/policies/request/orchestrator.r
 import { orchestrateResponsePolicies } from "@app/policies/response/orchestrator.response.policies";
 
 import { buildDocumentRender } from "@app/rendering/document/build.document";
+import { renderDocument } from "@app/rendering/renderer/document.renderer";
 
 /* -------------------------------------------------------------------------- */
 /* Helpers                                                                    */
@@ -32,15 +33,17 @@ const resolveRenderStatus = (intent: ErrorRenderIntent): 404 | 410 | 500 => {
 /* Response builders                                                          */
 /* -------------------------------------------------------------------------- */
 
-const buildDocumentInspectionResponse = (
+const buildRenderedDocumentResponse = (
   documentRender: ReturnType<typeof buildDocumentRender>,
   status: number,
 ): Response => {
-  return new Response(JSON.stringify(documentRender, null, 2), {
+  const html = renderDocument(documentRender);
+
+  return new Response(html, {
     status,
     headers: {
-      "content-type": "application/json; charset=utf-8",
-      "x-render-mode": "document-inspection",
+      "content-type": "text/html; charset=utf-8",
+      "x-render-mode": "document",
     },
   });
 };
@@ -52,7 +55,7 @@ const buildErrorDocument = (intent: ErrorRenderIntent, appState: AppState) => {
   const nonce = createNonce();
   const documentRender = buildDocumentRender(appState, errorPage, nonce);
 
-  const response = buildDocumentInspectionResponse(documentRender, status);
+  const response = buildRenderedDocumentResponse(documentRender, status);
 
   if (intent.kind !== "gone") {
     return { response, documentRender };
@@ -83,8 +86,6 @@ export const handleRequest = async (
   try {
     const outcome = orchestrateRequestPolicies(req, env, ctx, appState);
 
-    /* ---------------- direct responses (redirect, canonical, method) -------- */
-
     if (outcome.type === "direct-response") {
       const context: ResponsePolicyContext = {
         response: outcome.response,
@@ -97,8 +98,6 @@ export const handleRequest = async (
       return orchestrateResponsePolicies(context, appState);
     }
 
-    /* ---------------- rendered error responses ------------------------------ */
-
     if (outcome.type === "render-error") {
       const { response, documentRender } = buildErrorDocument(
         outcome.intent,
@@ -108,7 +107,7 @@ export const handleRequest = async (
       const context: ResponsePolicyContext = {
         response,
         responseKind: "document",
-        responseFormat: "json",
+        responseFormat: "html",
         status: response.status,
         documentRender,
         env,
@@ -117,12 +116,10 @@ export const handleRequest = async (
       return orchestrateResponsePolicies(context, appState);
     }
 
-    /* ---------------- rendered page response -------------------------------- */
-
     const nonce = createNonce();
     const documentRender = buildDocumentRender(appState, outcome.page, nonce);
 
-    const response = buildDocumentInspectionResponse(
+    const response = buildRenderedDocumentResponse(
       documentRender,
       outcome.status,
     );
@@ -130,7 +127,7 @@ export const handleRequest = async (
     const context: ResponsePolicyContext = {
       response,
       responseKind: "document",
-      responseFormat: "json",
+      responseFormat: "html",
       status: response.status,
       documentRender,
       env,
@@ -146,7 +143,7 @@ export const handleRequest = async (
     const context: ResponsePolicyContext = {
       response,
       responseKind: "document",
-      responseFormat: "json",
+      responseFormat: "html",
       status: response.status,
       documentRender,
       env,

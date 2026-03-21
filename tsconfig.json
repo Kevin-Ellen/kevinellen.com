@@ -26,13 +26,14 @@
 
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"],
       "@generated/*": [".build/generated/*"],
       "@system/*": ["src/system/*"],
       "@resources/*": ["src/resources/*"],
       "@types-src/*": ["src/types/*"],
       "@config/*": ["src/app/config/*"],
-      "@app/*": ["src/app/*"]
+      "@app/*": ["src/app/*"],
+      "@tests/*": ["tests/*"],
+      "@src/*": ["src/*"]
     }
   },
   "include": [

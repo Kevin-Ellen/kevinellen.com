@@ -2,5 +2,6 @@
 
 export type SvgAsset = {
   id: string;
-  path: string;
+  viewBox: string;
+  content: string;
 };

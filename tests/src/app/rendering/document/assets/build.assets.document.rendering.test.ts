@@ -15,7 +15,8 @@ const createInlineScript = (id: string, content: string): ScriptAsset => ({
 
 const createSvg = (id: string): SvgAsset => ({
   id,
-  path: `<symbol id="${id}"></symbol>`,
+  viewBox: "0 0 24 24",
+  content: `<path d="${id}" />`,
 });
 
 const createPage = (
@@ -150,7 +151,8 @@ describe("buildAssets", () => {
     const globalSvg = createSvg("shared-icon");
     const pageSvg = {
       id: "shared-icon",
-      path: `<symbol id="shared-icon"><path /></symbol>`,
+      viewBox: "0 0 24 24",
+      content: `<path d="page" />`,
     } as SvgAsset;
 
     const appState = createAppState([], [globalSvg]);

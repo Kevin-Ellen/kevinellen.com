@@ -1,5 +1,3 @@
-// src/app/rendering/document/build.document.render.ts
-
 import type { AppState } from "@app/appState/appState";
 import type { PageDefinition } from "@app/pages/page.definition";
 import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
@@ -8,6 +6,9 @@ import { buildAssets } from "@app/rendering/document/assets/build.assets.documen
 import { buildCanonicalUrl } from "@app/rendering/document/canonical/build.canonical.document.rendering";
 import { resolveBreadcrumbs } from "@app/rendering/document/breadcrumbs/resolve.breadcrumbs.document.rendering";
 import { buildStructuredData } from "@app/rendering/document/structured-data/build.structured-data.document.rendering";
+
+import { buildHeaderNavigation } from "@app/rendering/document/navigation/build.header.navigation";
+import { buildFooterNavigation } from "@app/rendering/document/navigation/build.footer.navigation";
 
 export const buildDocumentRender = (
   appState: AppState,
@@ -20,30 +21,43 @@ export const buildDocumentRender = (
     ...buildStructuredData(appState, page),
   ]);
 
+  const headerNavigation = buildHeaderNavigation(appState, page);
+  const footerNavigation = buildFooterNavigation(appState, page);
+
   const documentRender: DocumentRenderContext = {
     security: Object.freeze({
       nonce,
     }),
+
     site: Object.freeze({
       language: appState.siteConfig.language,
       siteName: appState.siteConfig.siteName,
       siteUrl: appState.siteConfig.siteUrl,
       socialMedia: appState.siteConfig.socialMedia,
     }),
+
     page: Object.freeze({
       id: page.core.id,
       kind: page.core.kind,
       slug: page.core.slug,
       renderMode: page.core.renderMode,
     }),
+
     seo: Object.freeze({
       pageTitle: page.docHead.pageTitle,
       metaDescription: page.docHead.metaDescription,
       canonicalUrl: buildCanonicalUrl(appState, page),
     }),
+
     pageHead: Object.freeze({
+      navigation: headerNavigation,
       breadcrumbs,
     }),
+
+    pageFooter: Object.freeze({
+      navigation: footerNavigation,
+    }),
+
     content: Object.freeze({
       head: Object.freeze({
         eyebrow: page.content.head.eyebrow,
@@ -53,11 +67,14 @@ export const buildDocumentRender = (
       body: Object.freeze([...page.content.body]),
       footer: Object.freeze([...page.content.footer]),
     }),
+
     assets: Object.freeze({
       scripts: Object.freeze([...assets.scripts]),
       svgs: Object.freeze([...assets.svgs]),
     }),
+
     structuredData,
+
     robots: Object.freeze({
       allowIndex: page.config.robots.allowIndex,
       allowFollow: page.config.robots.allowFollow,
@@ -67,5 +84,6 @@ export const buildDocumentRender = (
     }),
   };
 
+  console.log(JSON.stringify(documentRender));
   return Object.freeze(documentRender);
 };
