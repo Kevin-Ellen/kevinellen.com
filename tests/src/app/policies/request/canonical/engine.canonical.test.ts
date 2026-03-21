@@ -1,4 +1,4 @@
-// tests/src/app/policies/request/canonical/engine.canonical.test.ts
+// tests/src/app/policies/canonical/engine.canonical.test.ts
 
 import { evaluateCanonicalPolicy } from "@app/policies/request/canonical/engine.canonical";
 
