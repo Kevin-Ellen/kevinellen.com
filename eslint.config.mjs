@@ -10,6 +10,7 @@ export default [
       "coverage/**",
       "node_modules/**",
       "worker-configuration.d.ts",
+      "src/xxx___app/**",
     ],
   },
 

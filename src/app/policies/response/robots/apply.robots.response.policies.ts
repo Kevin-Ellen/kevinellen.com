@@ -1,40 +1,33 @@
 // src/app/policies/response/robots/apply.robots.response.policies.ts
 
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
-import type { DocumentResponsePolicyContextInternal } from "@app/policies/response/response.policies.types";
 
-import { isNonProductionEnvironment } from "@app/runtime/environment.runtime";
+import { getRuntimeBehaviour } from "@utils/runtimeEnv.util";
 
-const NON_PROD_ROBOTS_DIRECTIVES =
+const NON_INDEXABLE_ROBOTS_DIRECTIVES =
   "noindex, nofollow, noarchive, nosnippet, noimageindex";
 
-const buildRobotsDirectives = (
-  context: DocumentResponsePolicyContextInternal,
+const resolveRobotsDirectives = (
+  context: ResponsePolicyContext,
 ): string | null => {
-  if (isNonProductionEnvironment(context.env)) {
-    return NON_PROD_ROBOTS_DIRECTIVES;
+  const runtime = getRuntimeBehaviour(context.appContext.getEnv());
+
+  if (!runtime.indexing) {
+    return NON_INDEXABLE_ROBOTS_DIRECTIVES;
   }
 
-  const directives: string[] = [];
-  const robots = context.documentRender.robots;
-
-  if (!robots.allowIndex) directives.push("noindex");
-  if (!robots.allowFollow) directives.push("nofollow");
-  if (robots.noarchive) directives.push("noarchive");
-  if (robots.nosnippet) directives.push("nosnippet");
-  if (robots.noimageindex) directives.push("noimageindex");
-
-  return directives.length > 0 ? directives.join(", ") : null;
+  const doc = context.appContext.getDocument();
+  return doc?.robots ?? null;
 };
 
 export const applyRobotsResponsePolicies = (
   context: ResponsePolicyContext,
 ): Response => {
-  if (context.responseKind !== "document") {
+  if (context.appContext.getResponseKind() !== "document") {
     return context.response;
   }
 
-  const directives = buildRobotsDirectives(context);
+  const directives = resolveRobotsDirectives(context);
 
   if (!directives) {
     return context.response;

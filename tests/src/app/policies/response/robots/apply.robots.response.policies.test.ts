@@ -1,234 +1,350 @@
 // tests/src/app/policies/response/robots/apply.robots.response.policies.test.ts
 
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
-import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
+import type {
+  ResponseFormat,
+  ResponseKind,
+} from "@app/appContext/appContext.types";
 
+import { AppContext } from "@app/appContext/appContext";
 import { applyRobotsResponsePolicies } from "@app/policies/response/robots/apply.robots.response.policies";
+import { getRuntimeBehaviour } from "@utils/runtimeEnv.util";
+
+jest.mock("@utils/runtimeEnv.util", () => ({
+  getRuntimeBehaviour: jest.fn(),
+}));
 
 describe("applyRobotsResponsePolicies", () => {
-  const createBaseResponse = (): Response =>
-    new Response("body", {
-      status: 200,
-      headers: {
-        "content-type": "text/html",
-        "x-test-header": "keep-me",
-      },
-    });
+  const mockedGetRuntimeBehaviour = jest.mocked(getRuntimeBehaviour);
 
-  const createDocumentRender = (
-    overrides?: Partial<DocumentRenderContext["robots"]>,
-  ): DocumentRenderContext =>
+  const createEnv = (): Env =>
     ({
-      security: {
-        nonce: "test-nonce",
-      },
-      site: {
-        language: "en-GB",
-        siteName: "Test Site",
-        siteUrl: "https://example.com",
-        socialMedia: {
-          gitHub: {
-            id: "gitHub",
-            label: "GitHub",
-            href: "https://github.com/test",
-            iconId: "icon-github",
-          },
-          instagram: {
-            id: "instagram",
-            label: "Instagram",
-            href: "https://instagram.com/test",
-            iconId: "icon-instagram",
-          },
-          linkedIn: {
-            id: "linkedIn",
-            label: "LinkedIn",
-            href: "https://linkedin.com/in/test",
-            iconId: "icon-linkedin",
-          },
-        },
-      },
-      page: {
-        id: "test-page",
-        kind: "static",
-        slug: "/test",
-        renderMode: "bundled",
-      },
-      seo: {
-        pageTitle: "Test Page",
-        metaDescription: "Test description",
-        canonicalUrl: "https://example.com/test",
-      },
-      robots: {
-        allowIndex: true,
-        allowFollow: true,
-        noarchive: false,
-        nosnippet: false,
-        noimageindex: false,
-        ...overrides,
-      },
-      pageHead: {
-        navigation: {
-          primary: [],
-          social: [],
-        },
-        breadcrumbs: [],
-      },
-      pageFooter: {
-        navigation: {
-          sections: [],
-        },
-      },
-      content: {
-        head: {
-          eyebrow: "Eyebrow",
-          title: "Title",
-          intro: "Intro",
-        },
-        body: [],
-        footer: [],
-      },
-      assets: {
-        scripts: [],
-        svgs: [],
-      },
-      structuredData: [],
-    }) as DocumentRenderContext;
+      APP_ENV: "dev",
+    }) as Env;
 
-  const createDocumentContext = (
-    env: Env,
-    robotsOverrides?: Partial<DocumentRenderContext["robots"]>,
-  ): ResponsePolicyContext => ({
-    response: createBaseResponse(),
-    responseKind: "document",
-    responseFormat: "json",
-    status: 200,
-    env,
-    documentRender: createDocumentRender(robotsOverrides),
+  const createAppContext = ({
+    responseKind = "document",
+    responseFormat = "html",
+    env = createEnv(),
+    document,
+  }: {
+    responseKind?: ResponseKind;
+    responseFormat?: ResponseFormat;
+    env?: Env;
+    document?: {
+      nonce?: string;
+      robots?: string;
+    };
+  } = {}): AppContext =>
+    new AppContext({
+      responseKind,
+      responseFormat,
+      env,
+      ...(document ? { document } : {}),
+    });
+
+  const createContext = ({
+    response = new Response("hello", {
+      status: 201,
+      statusText: "Created",
+      headers: {
+        "x-custom-header": "value",
+      },
+    }),
+    appContext = createAppContext(),
+  }: {
+    response?: Response;
+    appContext?: AppContext;
+  } = {}): ResponsePolicyContext => ({
+    response,
+    appContext,
   });
 
-  const createNonDocumentContext = (env: Env): ResponsePolicyContext => ({
-    response: createBaseResponse(),
-    responseKind: "direct",
-    responseFormat: "binary",
-    status: 200,
-    env,
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  /*
-   --------------------------------------------------
-   NON-DOCUMENT RESPONSES
-   --------------------------------------------------
-  */
+  describe("non-document responses", () => {
+    it.each(["direct", "asset", "resource"] as const)(
+      "returns the original response for %s responses",
+      (responseKind) => {
+        const response = new Response("hello", { status: 200 });
+        const context = createContext({
+          response,
+          appContext: createAppContext({
+            responseKind,
+          }),
+        });
 
-  it("returns unchanged response for non-document responses in dev", () => {
-    const ctx = createNonDocumentContext({ APP_ENV: "dev" } as Env);
-    const result = applyRobotsResponsePolicies(ctx);
+        const result = applyRobotsResponsePolicies(context);
 
-    expect(result.headers.get("x-robots-tag")).toBeNull();
-    expect(result.headers.get("x-test-header")).toBe("keep-me");
-  });
-
-  it("returns unchanged response for non-document responses in prod", () => {
-    const ctx = createNonDocumentContext({ APP_ENV: "prod" } as Env);
-    const result = applyRobotsResponsePolicies(ctx);
-
-    expect(result.headers.get("x-robots-tag")).toBeNull();
-    expect(result.headers.get("x-test-header")).toBe("keep-me");
-  });
-
-  /*
-   --------------------------------------------------
-   DOCUMENT RESPONSES — NON PROD
-   --------------------------------------------------
-  */
-
-  it("adds full restrictive robots header in dev", () => {
-    const ctx = createDocumentContext({ APP_ENV: "dev" } as Env);
-    const result = applyRobotsResponsePolicies(ctx);
-
-    expect(result.headers.get("x-robots-tag")).toBe(
-      "noindex, nofollow, noarchive, nosnippet, noimageindex",
-    );
-    expect(result.status).toBe(200);
-    expect(result.headers.get("x-test-header")).toBe("keep-me");
-  });
-
-  it("adds full restrictive robots header in stg", () => {
-    const ctx = createDocumentContext({ APP_ENV: "stg" } as Env);
-    const result = applyRobotsResponsePolicies(ctx);
-
-    expect(result.headers.get("x-robots-tag")).toBe(
-      "noindex, nofollow, noarchive, nosnippet, noimageindex",
+        expect(result).toBe(response);
+        expect(mockedGetRuntimeBehaviour).not.toHaveBeenCalled();
+      },
     );
   });
 
-  /*
-   --------------------------------------------------
-   DOCUMENT RESPONSES — PROD
-   --------------------------------------------------
-  */
+  describe("non-indexable runtime behaviour", () => {
+    it("reads runtime behaviour from the app context env", () => {
+      const env = createEnv();
 
-  it("does not add robots header in prod when page is fully indexable", () => {
-    const ctx = createDocumentContext({ APP_ENV: "prod" } as Env);
-    const result = applyRobotsResponsePolicies(ctx);
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: false,
+        public: false,
+        indexing: false,
+      });
 
-    expect(result.headers.get("x-robots-tag")).toBeNull();
-  });
+      const context = createContext({
+        appContext: createAppContext({ env }),
+      });
 
-  it("adds noindex in prod when allowIndex is false", () => {
-    const ctx = createDocumentContext({ APP_ENV: "prod" } as Env, {
-      allowIndex: false,
+      applyRobotsResponsePolicies(context);
+
+      expect(mockedGetRuntimeBehaviour).toHaveBeenCalledTimes(1);
+      expect(mockedGetRuntimeBehaviour).toHaveBeenCalledWith(env);
     });
-    const result = applyRobotsResponsePolicies(ctx);
 
-    expect(result.headers.get("x-robots-tag")).toBe("noindex");
-  });
+    it("sets strict non-indexable directives for document responses when runtime indexing is disabled", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: false,
+        public: false,
+        indexing: false,
+      });
 
-  it("adds nofollow in prod when allowFollow is false", () => {
-    const ctx = createDocumentContext({ APP_ENV: "prod" } as Env, {
-      allowFollow: false,
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result.headers.get("x-robots-tag")).toBe(
+        "noindex, nofollow, noarchive, nosnippet, noimageindex",
+      );
     });
-    const result = applyRobotsResponsePolicies(ctx);
 
-    expect(result.headers.get("x-robots-tag")).toBe("nofollow");
-  });
+    it("overrides document-level robots directives when runtime indexing is disabled", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: false,
+        public: false,
+        indexing: false,
+      });
 
-  it("adds combined restrictive directives in prod", () => {
-    const ctx = createDocumentContext({ APP_ENV: "prod" } as Env, {
-      allowIndex: false,
-      allowFollow: false,
-      noarchive: true,
-      nosnippet: true,
-      noimageindex: true,
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result.headers.get("x-robots-tag")).toBe(
+        "noindex, nofollow, noarchive, nosnippet, noimageindex",
+      );
+      expect(result.headers.get("x-robots-tag")).not.toBe("index, follow");
     });
-    const result = applyRobotsResponsePolicies(ctx);
-
-    expect(result.headers.get("x-robots-tag")).toBe(
-      "noindex, nofollow, noarchive, nosnippet, noimageindex",
-    );
   });
 
-  /*
-   --------------------------------------------------
-   IMMUTABILITY CONTRACT
-   --------------------------------------------------
-  */
+  describe("indexable runtime behaviour", () => {
+    it("sets x-robots-tag from the document robots directives when runtime indexing is enabled", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
 
-  it("returns a new Response instance when modifying headers", () => {
-    const ctx = createDocumentContext({ APP_ENV: "dev" } as Env);
-    const original = ctx.response;
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow, max-image-preview:large",
+          },
+        }),
+      });
 
-    const result = applyRobotsResponsePolicies(ctx);
+      const result = applyRobotsResponsePolicies(context);
 
-    expect(result).not.toBe(original);
+      expect(result.headers.get("x-robots-tag")).toBe(
+        "index, follow, max-image-preview:large",
+      );
+    });
+
+    it("returns the original response when runtime indexing is enabled and no document robots directives exist", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const response = new Response("hello", { status: 200 });
+
+      const context = createContext({
+        response,
+        appContext: createAppContext(),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result).toBe(response);
+    });
+
+    it("returns the original response when runtime indexing is enabled and document robots directives are undefined", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const response = new Response("hello", { status: 200 });
+
+      const context = createContext({
+        response,
+        appContext: createAppContext({
+          document: {},
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result).toBe(response);
+    });
   });
 
-  it("returns same Response instance when no change required", () => {
-    const ctx = createDocumentContext({ APP_ENV: "prod" } as Env);
-    const original = ctx.response;
+  describe("response rebuilding behaviour", () => {
+    it("preserves unrelated headers when adding x-robots-tag", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
 
-    const result = applyRobotsResponsePolicies(ctx);
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
 
-    expect(result).toBe(original);
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result.headers.get("x-custom-header")).toBe("value");
+    });
+
+    it("preserves status and statusText when rebuilding the response", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result.status).toBe(201);
+      expect(result.statusText).toBe("Created");
+    });
+
+    it("preserves the response body when rebuilding the response", async () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      await expect(result.text()).resolves.toBe("hello");
+    });
+
+    it("returns a new response instance when x-robots-tag is added", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const response = new Response("hello", { status: 200 });
+
+      const context = createContext({
+        response,
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result).not.toBe(response);
+    });
+
+    it("overwrites an existing x-robots-tag header when applying directives", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const response = new Response("hello", {
+        status: 200,
+        headers: {
+          "x-robots-tag": "noindex",
+        },
+      });
+
+      const context = createContext({
+        response,
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result.headers.get("x-robots-tag")).toBe("index, follow");
+    });
+
+    it("exposes x-robots-tag in a case-insensitive way", () => {
+      mockedGetRuntimeBehaviour.mockReturnValue({
+        canonical: true,
+        public: true,
+        indexing: true,
+      });
+
+      const context = createContext({
+        appContext: createAppContext({
+          document: {
+            robots: "index, follow",
+          },
+        }),
+      });
+
+      const result = applyRobotsResponsePolicies(context);
+
+      expect(result.headers.get("X-Robots-Tag")).toBe("index, follow");
+    });
   });
 });

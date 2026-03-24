@@ -1,41 +1,8 @@
 // src/app/policies/response/response.policies.types.ts
 
-import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
+import type { AppContext } from "@app/appContext/appContext";
 
-export type ResponseKind = "document" | "resource" | "asset" | "direct";
-
-export type ResponseFormat =
-  | "html"
-  | "json"
-  | "xml"
-  | "text"
-  | "ico"
-  | "woff2"
-  | "image"
-  | "binary";
-
-export type DocumentResponsePolicyContext = {
+export type ResponsePolicyContext = {
   response: Response;
-  responseKind: "document";
-  responseFormat: ResponseFormat;
-  status: number;
-  documentRender: DocumentRenderContext;
-  env: Env;
+  appContext: AppContext;
 };
-
-export type NonDocumentResponsePolicyContext = {
-  response: Response;
-  responseKind: "resource" | "asset" | "direct";
-  responseFormat: ResponseFormat;
-  status: number;
-  env: Env;
-};
-
-export type ResponsePolicyContext =
-  | DocumentResponsePolicyContext
-  | NonDocumentResponsePolicyContext;
-
-export type DocumentResponsePolicyContextInternal = Extract<
-  ResponsePolicyContext,
-  { responseKind: "document" }
->;

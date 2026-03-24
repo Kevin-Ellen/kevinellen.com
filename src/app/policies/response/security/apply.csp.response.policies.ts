@@ -1,22 +1,25 @@
 // src/app/policies/response/security/apply.csp.response.policies.ts
 
-import type {
-  ResponsePolicyContext,
-  DocumentResponsePolicyContextInternal,
-} from "@app/policies/response/response.policies.types";
+import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 
-const buildDocumentCsp = (
-  context: DocumentResponsePolicyContextInternal,
-): string => {
-  const nonce = context.documentRender.security.nonce;
+const buildDocumentCsp = (context: ResponsePolicyContext): string => {
+  const nonce = context.appContext.getDocument().nonce;
+
+  const scriptSrc = nonce
+    ? `script-src 'self' 'nonce-${nonce}'`
+    : "script-src 'self'";
+
+  const styleSrc = nonce
+    ? `style-src 'self' 'nonce-${nonce}'`
+    : "style-src 'self'";
 
   return [
     "default-src 'self'",
     "base-uri 'self'",
     "frame-ancestors 'none'",
     "object-src 'none'",
-    `script-src 'self' 'nonce-${nonce}'`,
-    `style-src 'self' 'nonce-${nonce}'`,
+    scriptSrc,
+    styleSrc,
     "img-src 'self' data: https:",
     "font-src 'self' https: data:",
     "connect-src 'self'",
@@ -28,7 +31,7 @@ const buildDocumentCsp = (
 export const applyCspResponsePolicies = (
   context: ResponsePolicyContext,
 ): Response => {
-  if (context.responseKind !== "document") {
+  if (context.appContext.getResponseKind() !== "document") {
     return context.response;
   }
 

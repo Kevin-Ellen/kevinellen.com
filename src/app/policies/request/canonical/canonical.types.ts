@@ -1,4 +1,4 @@
-// src/app/policies/camnonical/canonical.types.ts
+// src/app/policies/canonical/canonical.types.ts
 
 export type CanonicalRedirectCode = 308;
 

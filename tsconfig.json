@@ -26,13 +26,14 @@
 
     "baseUrl": ".",
     "paths": {
-      "@generated/*": [".build/generated/*"],
-      "@system/*": ["src/system/*"],
-      "@resources/*": ["src/resources/*"],
-      "@types-src/*": ["src/types/*"],
-      "@config/*": ["src/app/config/*"],
+      //   "@generated/*": [".build/generated/*"],
+      //   "@system/*": ["src/system/*"],
+      //   "@resources/*": ["src/resources/*"],
+      //   "@types-src/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"],
+      "@config/*": ["src/config/*"],
       "@app/*": ["src/app/*"],
-      "@tests/*": ["tests/*"],
+      //   "@tests/*": ["tests/*"],
       "@src/*": ["src/*"]
     }
   },
@@ -43,5 +44,5 @@
     "worker-configuration.d.ts",
     "src/app/assets/scripts/menuCondense.inline.script.js"
   ],
-  "exclude": ["dist", "coverage", "node_modules"]
+  "exclude": ["dist", "coverage", "node_modules", "src/xxx___app"]
 }

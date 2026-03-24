@@ -1,80 +1,270 @@
 // tests/src/app/policies/response/security/apply.security.response.policies.test.ts
 
-import { createDocumentRenderContext } from "@tests/helpers/create.documentRenderContext";
-
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
+import type {
+  ResponseFormat,
+  ResponseKind,
+} from "@app/appContext/appContext.types";
 
+import { AppContext } from "@app/appContext/appContext";
 import { applySecurityResponsePolicies } from "@app/policies/response/security/apply.security.response.policies";
+import { getRuntimeBehaviour } from "@utils/runtimeEnv.util";
+
+jest.mock("@utils/runtimeEnv.util", () => ({
+  getRuntimeBehaviour: jest.fn(),
+}));
 
 describe("applySecurityResponsePolicies", () => {
-  const createBaseResponse = (): Response =>
-    new Response("body", {
-      status: 200,
-      statusText: "OK",
+  const mockedGetRuntimeBehaviour = jest.mocked(getRuntimeBehaviour);
+
+  const createEnv = (): Env =>
+    ({
+      APP_ENV: "dev",
+    }) as Env;
+
+  const createAppContext = ({
+    responseKind = "document",
+    responseFormat = "html",
+    env = createEnv(),
+  }: {
+    responseKind?: ResponseKind;
+    responseFormat?: ResponseFormat;
+    env?: Env;
+  } = {}): AppContext =>
+    new AppContext({
+      responseKind,
+      responseFormat,
+      env,
+    });
+
+  const createContext = ({
+    response = new Response("hello", {
+      status: 201,
+      statusText: "Created",
       headers: {
-        "content-type": "text/html; charset=utf-8",
-        "x-test-header": "keep-me",
+        "x-custom-header": "value",
+      },
+    }),
+    appContext = createAppContext(),
+  }: {
+    response?: Response;
+    appContext?: AppContext;
+  } = {}): ResponsePolicyContext => ({
+    response,
+    appContext,
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("reads runtime behaviour from the app context env", () => {
+    const env = createEnv();
+
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: false,
+      public: false,
+      indexing: false,
+    });
+
+    const context = createContext({
+      appContext: createAppContext({ env }),
+    });
+
+    applySecurityResponsePolicies(context);
+
+    expect(mockedGetRuntimeBehaviour).toHaveBeenCalledTimes(1);
+    expect(mockedGetRuntimeBehaviour).toHaveBeenCalledWith(env);
+  });
+
+  it("always sets x-frame-options", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: false,
+      public: false,
+      indexing: false,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("x-frame-options")).toBe("DENY");
+  });
+
+  it("always sets cross-origin-opener-policy", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: false,
+      public: false,
+      indexing: false,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("cross-origin-opener-policy")).toBe(
+      "same-origin",
+    );
+  });
+
+  it("always sets cross-origin-resource-policy", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: false,
+      public: false,
+      indexing: false,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("cross-origin-resource-policy")).toBe(
+      "same-origin",
+    );
+  });
+
+  it("does not set cross-origin-embedder-policy when runtime is not public", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: false,
+      public: false,
+      indexing: false,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("cross-origin-embedder-policy")).toBeNull();
+  });
+
+  it("sets cross-origin-embedder-policy when runtime is public", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("cross-origin-embedder-policy")).toBe(
+      "require-corp",
+    );
+  });
+
+  it("preserves unrelated headers when rebuilding the response", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("x-custom-header")).toBe("value");
+  });
+
+  it("preserves status and statusText when rebuilding the response", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.status).toBe(201);
+    expect(result.statusText).toBe("Created");
+  });
+
+  it("preserves the response body when rebuilding the response", async () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    await expect(result.text()).resolves.toBe("hello");
+  });
+
+  it("returns a new response instance", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const response = new Response("hello", { status: 200 });
+
+    const context = createContext({ response });
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result).not.toBe(response);
+  });
+
+  it("overwrites existing security headers with enforced values", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const response = new Response("hello", {
+      status: 200,
+      headers: {
+        "x-frame-options": "SAMEORIGIN",
+        "cross-origin-opener-policy": "unsafe-none",
+        "cross-origin-resource-policy": "cross-origin",
+        "cross-origin-embedder-policy": "unsafe-none",
       },
     });
 
-  const createDirectContext = (): ResponsePolicyContext => ({
-    response: createBaseResponse(),
-    responseKind: "direct",
-    responseFormat: "binary",
-    status: 200,
-    env: { APP_ENV: "dev" } as Env,
-  });
+    const context = createContext({ response });
 
-  const createDocumentContext = (): ResponsePolicyContext => ({
-    response: createBaseResponse(),
-    responseKind: "document",
-    responseFormat: "json",
-    status: 200,
-    env: { APP_ENV: "dev" } as Env,
-    documentRender: createDocumentRenderContext(),
-  });
-
-  it("adds x-frame-options header", () => {
-    const result = applySecurityResponsePolicies(createDirectContext());
-
-    expect(result.headers.get("x-frame-options")).toBe("DENY");
-  });
-
-  it("adds cross-origin-opener-policy header", () => {
-    const result = applySecurityResponsePolicies(createDirectContext());
-
-    expect(result.headers.get("cross-origin-opener-policy")).toBe(
-      "same-origin",
-    );
-  });
-
-  it("preserves existing headers", () => {
-    const result = applySecurityResponsePolicies(createDirectContext());
-
-    expect(result.headers.get("x-test-header")).toBe("keep-me");
-    expect(result.headers.get("content-type")).toBe("text/html; charset=utf-8");
-  });
-
-  it("preserves status and statusText", () => {
-    const result = applySecurityResponsePolicies(createDirectContext());
-
-    expect(result.status).toBe(200);
-    expect(result.statusText).toBe("OK");
-  });
-
-  it("works for document responses", () => {
-    const result = applySecurityResponsePolicies(createDocumentContext());
-
-    expect(result.headers.get("x-frame-options")).toBe("DENY");
-    expect(result.headers.get("cross-origin-opener-policy")).toBe(
-      "same-origin",
-    );
-  });
-
-  it("returns a new Response instance", () => {
-    const context = createDirectContext();
     const result = applySecurityResponsePolicies(context);
 
-    expect(result).not.toBe(context.response);
+    expect(result.headers.get("x-frame-options")).toBe("DENY");
+    expect(result.headers.get("cross-origin-opener-policy")).toBe(
+      "same-origin",
+    );
+    expect(result.headers.get("cross-origin-resource-policy")).toBe(
+      "same-origin",
+    );
+    expect(result.headers.get("cross-origin-embedder-policy")).toBe(
+      "require-corp",
+    );
+  });
+
+  it("exposes security headers in a case-insensitive way", () => {
+    mockedGetRuntimeBehaviour.mockReturnValue({
+      canonical: true,
+      public: true,
+      indexing: true,
+    });
+
+    const context = createContext();
+
+    const result = applySecurityResponsePolicies(context);
+
+    expect(result.headers.get("X-Frame-Options")).toBe("DENY");
+    expect(result.headers.get("Cross-Origin-Opener-Policy")).toBe(
+      "same-origin",
+    );
+    expect(result.headers.get("Cross-Origin-Resource-Policy")).toBe(
+      "same-origin",
+    );
+    expect(result.headers.get("Cross-Origin-Embedder-Policy")).toBe(
+      "require-corp",
+    );
   });
 });

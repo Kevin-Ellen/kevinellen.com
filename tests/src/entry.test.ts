@@ -1,76 +1,108 @@
 // tests/src/entry.test.ts
 
-import { AppState } from "@app/appState/appState";
-import * as entryModule from "@src/entry";
-import { handleRequest } from "@app/request/handler.request";
+import entryModule, { onRequest } from "@src/entry";
 
-jest.mock("@app/request/handler.request", () => ({
+import { createAppState } from "@app/appState/create.appState";
+import { handleRequest } from "@app/request/request.handler";
+
+jest.mock("@app/appState/create.appState", () => ({
+  createAppState: jest.fn(),
+}));
+
+jest.mock("@app/request/request.handler", () => ({
   handleRequest: jest.fn(),
 }));
 
-describe("entry request boundary", () => {
+describe("entry", () => {
+  const mockedCreateAppState = jest.mocked(createAppState);
   const mockedHandleRequest = jest.mocked(handleRequest);
+
+  const createRequest = (): Request => new Request("https://kevinellen.com/");
+
+  const createEnv = (): Env =>
+    ({
+      APP_ENV: "dev",
+    }) as Env;
+
+  const createExecutionContext = (): ExecutionContext =>
+    ({}) as ExecutionContext;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("builds AppState once at request start and passes the same instance to handleRequest", async () => {
-    const expectedResponse = new Response("ok", { status: 200 });
-    const appState = {} as AppState;
+  describe("onRequest", () => {
+    it("creates app state once and passes it to handleRequest", async () => {
+      const req = createRequest();
+      const env = createEnv();
+      const ctx = createExecutionContext();
 
-    const buildAppStateSpy = jest
-      .spyOn(entryModule, "buildAppState")
-      .mockResolvedValue(appState);
+      const appState = { mocked: "state" } as never;
+      const response = new Response("ok", { status: 200 });
 
-    mockedHandleRequest.mockResolvedValue(expectedResponse);
+      mockedCreateAppState.mockReturnValue(appState);
+      mockedHandleRequest.mockResolvedValue(response);
 
-    const request = new Request("https://example.com/");
-    const env = {} as Env;
-    const ctx = {} as ExecutionContext;
+      const result = await onRequest(req, env, ctx);
 
-    const response = await entryModule.onRequest(request, env, ctx);
+      expect(mockedCreateAppState).toHaveBeenCalledTimes(1);
+      expect(mockedHandleRequest).toHaveBeenCalledTimes(1);
+      expect(mockedHandleRequest).toHaveBeenCalledWith(req, env, ctx, appState);
+      expect(result).toBe(response);
+    });
 
-    expect(buildAppStateSpy).toHaveBeenCalledTimes(1);
-    expect(mockedHandleRequest).toHaveBeenCalledTimes(1);
-    expect(mockedHandleRequest).toHaveBeenCalledWith(
-      request,
-      env,
-      ctx,
-      appState,
-    );
-    expect(response).toBe(expectedResponse);
+    it("returns the exact response from handleRequest", async () => {
+      const req = createRequest();
+      const env = createEnv();
+      const ctx = createExecutionContext();
+
+      const appState = { mocked: "state" } as never;
+      const response = new Response("created", { status: 201 });
+
+      mockedCreateAppState.mockReturnValue(appState);
+      mockedHandleRequest.mockResolvedValue(response);
+
+      const result = await onRequest(req, env, ctx);
+
+      expect(result).toBe(response);
+    });
+
+    it("does not swallow errors from handleRequest", async () => {
+      const req = createRequest();
+      const env = createEnv();
+      const ctx = createExecutionContext();
+
+      const appState = { mocked: "state" } as never;
+      const error = new Error("boom");
+
+      mockedCreateAppState.mockReturnValue(appState);
+      mockedHandleRequest.mockRejectedValue(error);
+
+      await expect(onRequest(req, env, ctx)).rejects.toThrow("boom");
+    });
+
+    it("does not call handleRequest when createAppState throws", async () => {
+      const req = createRequest();
+      const env = createEnv();
+      const ctx = createExecutionContext();
+
+      const error = new Error("app state failed");
+
+      mockedCreateAppState.mockImplementation(() => {
+        throw error;
+      });
+
+      await expect(onRequest(req, env, ctx)).rejects.toThrow(
+        "app state failed",
+      );
+
+      expect(mockedHandleRequest).not.toHaveBeenCalled();
+    });
   });
 
-  it("propagates buildAppState failures instead of hiding bootstrap errors", async () => {
-    const bootstrapError = new Error("Failed to build AppState");
-
-    jest.spyOn(entryModule, "buildAppState").mockRejectedValue(bootstrapError);
-
-    const request = new Request("https://example.com/");
-    const env = {} as Env;
-    const ctx = {} as ExecutionContext;
-
-    await expect(entryModule.onRequest(request, env, ctx)).rejects.toThrow(
-      "Failed to build AppState",
-    );
-
-    expect(mockedHandleRequest).not.toHaveBeenCalled();
-  });
-
-  it("propagates handleRequest failures instead of masking downstream errors", async () => {
-    const requestError = new Error("Request handling failed");
-    const appState = {} as AppState;
-
-    jest.spyOn(entryModule, "buildAppState").mockResolvedValue(appState);
-    mockedHandleRequest.mockRejectedValue(requestError);
-
-    const request = new Request("https://example.com/");
-    const env = {} as Env;
-    const ctx = {} as ExecutionContext;
-
-    await expect(entryModule.onRequest(request, env, ctx)).rejects.toThrow(
-      "Request handling failed",
-    );
+  describe("default export", () => {
+    it("maps fetch to onRequest", () => {
+      expect(entryModule.fetch).toBe(onRequest);
+    });
   });
 });

@@ -1,11 +1,9 @@
 // src/app/policies/response/content-type/apply.content-type.response.policies.ts
 
-import type {
-  ResponseFormat,
-  ResponsePolicyContext,
-} from "@app/policies/response/response.policies.types";
+import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
+import type { ResponseFormat } from "@app/appContext/appContext.types";
 
-const CONTENT_TYPES: Record<ResponseFormat, string | null> = {
+const MANAGED_CONTENT_TYPES: Record<ResponseFormat, string | null> = {
   html: "text/html; charset=utf-8",
   json: "application/json; charset=utf-8",
   xml: "application/xml; charset=utf-8",
@@ -19,7 +17,8 @@ const CONTENT_TYPES: Record<ResponseFormat, string | null> = {
 export const applyContentTypeResponsePolicies = (
   context: ResponsePolicyContext,
 ): Response => {
-  const contentType = CONTENT_TYPES[context.responseFormat];
+  const contentType =
+    MANAGED_CONTENT_TYPES[context.appContext.getResponseFormat()];
 
   if (!contentType) {
     return context.response;

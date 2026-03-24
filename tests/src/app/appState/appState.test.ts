@@ -1,200 +1,81 @@
-// tests/src/app/appState/appState.test.ts
+// tests/src/app/appState/appState.app.test.ts
+
+import type { AppStateSeed } from "@app/appState/appState.types";
 
 import { AppState } from "@app/appState/appState";
-import { createTestAppSeed } from "@app/bootstrap/appSeed.test.create";
-import { error404page } from "@app/pages/error/error.404.page";
+
+import { siteConfig } from "@config/site.config";
+import { navigationConfig } from "@config/navigation.config";
+import { socialConfig } from "@config/social.config";
+import { structuredDataConfig } from "@config/structured-data.config";
+import { assetsConfig } from "@config/assets.config";
+import { footerConfig } from "@config/footer.config";
+import { webManifestConfig } from "@config/webmanifest.config";
 
 describe("AppState", () => {
-  const createValidState = async (): Promise<AppState> => {
-    const appSeed = await createTestAppSeed();
-    return new AppState(appSeed);
-  };
-
-  it("keeps its container structure immutable after construction", async () => {
-    const appState = await createValidState();
-
-    expect(Object.isFrozen(appState)).toBe(true);
-    expect(Object.isFrozen(appState.appAssets)).toBe(true);
-    expect(Object.isFrozen(appState.appAssets.scripts)).toBe(true);
-    expect(Object.isFrozen(appState.appAssets.svgs)).toBe(true);
-    expect(Object.isFrozen(appState.pages)).toBe(true);
-    expect(Object.isFrozen(appState.pages.all)).toBe(true);
-    expect(Object.isFrozen(appState.pages.errors)).toBe(true);
-
-    expect(() => {
-      (appState.appAssets.scripts as unknown as unknown[]).push({
-        src: "/test.js",
-        location: "body-end",
-      });
-    }).toThrow();
-
-    expect(() => {
-      (appState.appAssets.svgs as unknown as unknown[]).push({
-        id: "test",
-        viewBox: "0 0 24 24",
-        content: "<path />",
-      });
-    }).toThrow();
-
-    expect(() => {
-      (appState.pages.all as unknown as unknown[]).push(error404page);
-    }).toThrow();
-
-    expect(() => {
-      (appState.pages.errors as Record<number, unknown>)[404] = null;
-    }).toThrow();
-
-    expect(() => {
-      (appState.pages as { all: unknown }).all = [];
-    }).toThrow();
-
-    expect(() => {
-      (appState as { pages: unknown }).pages = {};
-    }).toThrow();
+  const createSeed = (): AppStateSeed => ({
+    site: siteConfig,
+    navigation: navigationConfig,
+    social: socialConfig,
+    structuredData: structuredDataConfig,
+    assets: assetsConfig,
+    footer: footerConfig,
+    webmanifest: webManifestConfig,
   });
 
-  it("returns the raw AppState shape via toJSON", async () => {
-    const appState = await createValidState();
+  it("returns the seeded site config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(appState.toJSON()).toEqual({
-      siteConfig: appState.siteConfig,
-      appAssets: appState.appAssets,
-      pages: {
-        all: appState.pages.all,
-        errors: appState.pages.errors,
-      },
-    });
+    expect(appState.getSiteConfig()).toBe(seed.site);
   });
 
-  it("returns stable container references via toJSON", async () => {
-    const appState = await createValidState();
-    const json = appState.toJSON();
+  it("returns the seeded navigation config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(json.siteConfig).toBe(appState.siteConfig);
-    expect(json.appAssets).toBe(appState.appAssets);
-    expect(json.pages).toBe(appState.pages);
-    expect(json.pages.all).toBe(appState.pages.all);
-    expect(json.pages.errors).toBe(appState.pages.errors);
+    expect(appState.getNavigationConfig()).toBe(seed.navigation);
   });
 
-  it("returns the registered error page for a valid status", async () => {
-    const appSeed = await createTestAppSeed();
-    const appState = new AppState(appSeed);
+  it("returns the seeded social config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(appState.getErrorPageByStatus(404)).toBe(appSeed.pages.errors[404]);
-    expect(appState.getErrorPageByStatus(410)).toBe(appSeed.pages.errors[410]);
-    expect(appState.getErrorPageByStatus(500)).toBe(appSeed.pages.errors[500]);
+    expect(appState.getSocialConfig()).toBe(seed.social);
   });
 
-  it("throws when the 404 error page is missing", async () => {
-    const appState = await createValidState();
-    const validState = appState.toJSON();
+  it("returns the seeded structured data config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(() => {
-      new AppState({
-        ...validState,
-        pages: {
-          ...validState.pages,
-          errors: {
-            410: validState.pages.errors[410],
-            500: validState.pages.errors[500],
-          } as never,
-        },
-      });
-    }).toThrow(
-      "Invariant violation: 404 error page is not registered in AppState.",
-    );
+    expect(appState.getStructuredDataConfig()).toBe(seed.structuredData);
   });
 
-  it("throws when the 410 error page is missing", async () => {
-    const appState = await createValidState();
-    const validState = appState.toJSON();
+  it("returns the seeded assets config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(() => {
-      new AppState({
-        ...validState,
-        pages: {
-          ...validState.pages,
-          errors: {
-            404: validState.pages.errors[404],
-            500: validState.pages.errors[500],
-          } as never,
-        },
-      });
-    }).toThrow(
-      "Invariant violation: 410 error page is not registered in AppState.",
-    );
+    expect(appState.getAssetsConfig()).toBe(seed.assets);
   });
 
-  it("throws when the 500 error page is missing", async () => {
-    const appState = await createValidState();
-    const validState = appState.toJSON();
+  it("returns the seeded footer config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(() => {
-      new AppState({
-        ...validState,
-        pages: {
-          ...validState.pages,
-          errors: {
-            404: validState.pages.errors[404],
-            410: validState.pages.errors[410],
-          } as never,
-        },
-      });
-    }).toThrow(
-      "Invariant violation: 500 error page is not registered in AppState.",
-    );
+    expect(appState.getFooterConfig()).toBe(seed.footer);
   });
 
-  it("returns a page from pages.all when the slug exists", async () => {
-    const appState = await createValidState();
+  it("returns the seeded webmanifest config", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    const page = appState.getPageBySlug("/");
-
-    expect(page).toBe(appState.pages.all[0]);
+    expect(appState.getWebManifestConfig()).toBe(seed.webmanifest);
   });
 
-  it("returns null when no page in pages.all matches the slug", async () => {
-    const appState = await createValidState();
+  it("returns the original seed from toJSON", () => {
+    const seed = createSeed();
+    const appState = new AppState(seed);
 
-    expect(appState.getPageBySlug("/does-not-exist")).toBeNull();
-  });
-
-  it("keeps AppStateInit and AppState intentionally aligned", async () => {
-    const appState = await createValidState();
-    const json = appState.toJSON();
-
-    expect(json).toEqual({
-      siteConfig: appState.siteConfig,
-      appAssets: appState.appAssets,
-      pages: appState.pages,
-    });
-
-    expect(json.siteConfig).toBe(appState.siteConfig);
-    expect(json.appAssets).toBe(appState.appAssets);
-    expect(json.pages).toBe(appState.pages);
-  });
-
-  it("can reconstruct the same runtime shape from AppStateInit", async () => {
-    const appState = await createValidState();
-
-    const reconstructed = new AppState(appState.toJSON());
-
-    expect(reconstructed.toJSON()).toEqual(appState.toJSON());
-  });
-
-  it("returns a page from pages.all when the id exists", async () => {
-    const appState = await createValidState();
-
-    const page = appState.getPageById("home");
-
-    expect(page).not.toBeNull();
-    expect(page?.core.id).toBe("home");
-  });
-
-  it("returns null when no page in pages.all matches the id", async () => {
-    const appState = await createValidState();
-
-    expect(appState.getPageById("does-not-exist")).toBeNull();
+    expect(appState.toJSON()).toBe(seed);
   });
 });
