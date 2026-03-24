@@ -21,6 +21,10 @@ describe("AppState", () => {
     assets: assetsConfig,
     footer: footerConfig,
     webmanifest: webManifestConfig,
+    pages: {
+      public: [],
+      error: [],
+    },
   });
 
   it("returns the seeded site config", () => {
@@ -72,10 +76,29 @@ describe("AppState", () => {
     expect(appState.getWebManifestConfig()).toBe(seed.webmanifest);
   });
 
-  it("returns the original seed from toJSON", () => {
+  it("returns a serialisable state view from toJSON", () => {
     const seed = createSeed();
     const appState = new AppState(seed);
 
-    expect(appState.toJSON()).toBe(seed);
+    expect(appState.toJSON()).toEqual({
+      site: seed.site,
+      navigation: seed.navigation,
+      social: seed.social,
+      structuredData: seed.structuredData,
+      assets: seed.assets,
+      footer: seed.footer,
+      webmanifest: seed.webmanifest,
+      pages: {
+        public: {
+          all: [],
+          byId: {},
+          bySlug: {},
+        },
+        error: {
+          all: [],
+          byStatus: {},
+        },
+      },
+    });
   });
 });

@@ -11,6 +11,9 @@ import { assetsConfig } from "@config/assets.config";
 import { footerConfig } from "@config/footer.config";
 import { webManifestConfig } from "@config/webmanifest.config";
 
+import { REGISTRY_PUBLIC_PAGES } from "@app/pages/registry/public.registry.pages";
+import { REGISTRY_ERROR_PAGES } from "@app/pages/registry/error.registry.pages";
+
 const createSeed = (): AppStateSeed => {
   return {
     site: siteConfig,
@@ -20,6 +23,10 @@ const createSeed = (): AppStateSeed => {
     assets: assetsConfig,
     footer: footerConfig,
     webmanifest: webManifestConfig,
+    pages: {
+      public: REGISTRY_PUBLIC_PAGES,
+      error: REGISTRY_ERROR_PAGES,
+    },
   };
 };
 
