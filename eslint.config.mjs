@@ -11,6 +11,7 @@ export default [
       "node_modules/**",
       "worker-configuration.d.ts",
       "src/xxx___app/**",
+      "xxx___src/**",
     ],
   },
 

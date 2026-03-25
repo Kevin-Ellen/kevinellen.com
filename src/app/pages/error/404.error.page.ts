@@ -7,7 +7,6 @@ export const error404Page: ErrorPageDefinition = {
     id: "error-404",
     kind: "error",
     status: 404,
-    renderMode: "bundled",
     label: "Page not found",
   },
 
