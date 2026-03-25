@@ -1,4 +1,4 @@
-// tests/src/appState/create.appState.test.ts
+// tests/src/app/appState/create.appState.test.ts
 
 import { AppState } from "@app/appState/class.appState";
 import { createAppState } from "@app/appState/create.appState";
@@ -10,6 +10,8 @@ import { navigationConfig } from "@config/navigation.config";
 import { socialConfig } from "@config/social.config";
 import { structuredDataConfig } from "@config/structured-data.config";
 import { webManifestConfig } from "@config/webmanifest.config";
+import { REDIRECTS } from "@config/redirects.config";
+import { GONE_RULES } from "@config/gone.config";
 
 import { homePage } from "@app/pages/public/home.page";
 import { error404Page } from "@app/pages/error/404.error.page";
@@ -31,13 +33,8 @@ describe("createAppState", () => {
     expect(appState.getSocialConfig()).toBe(socialConfig);
     expect(appState.getStructuredDataConfig()).toBe(structuredDataConfig);
     expect(appState.getWebManifestConfig()).toBe(webManifestConfig);
-  });
-
-  it("wires the real pages into AppState", () => {
-    const appState = createAppState();
-
-    expect(appState.getPublicPages()).toEqual([homePage]);
-    expect(appState.getErrorPages()).toEqual([error404Page]);
+    expect(appState.getRedirectsConfig()).toStrictEqual(REDIRECTS);
+    expect(appState.getRedirectsConfig()).toStrictEqual(GONE_RULES);
   });
 
   it("supports lookups for the wired pages", () => {
@@ -61,8 +58,8 @@ describe("createAppState", () => {
     expect(Object.isFrozen(appState.getSocialConfig())).toBe(true);
     expect(Object.isFrozen(appState.getStructuredDataConfig())).toBe(true);
     expect(Object.isFrozen(appState.getWebManifestConfig())).toBe(true);
-    expect(Object.isFrozen(appState.getPublicPages())).toBe(true);
-    expect(Object.isFrozen(appState.getErrorPages())).toBe(true);
+    expect(Object.isFrozen(appState.getRedirectsConfig())).toBe(true);
+    expect(Object.isFrozen(appState.getGoneConfig())).toBe(true);
   });
 
   it("returns a frozen AppState instance", () => {

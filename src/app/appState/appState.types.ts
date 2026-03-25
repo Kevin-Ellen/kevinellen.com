@@ -4,6 +4,7 @@ import type {
   PageDefinition,
   ErrorPageDefinition,
 } from "@app/pages/page.definition";
+
 import type { AssetsConfig } from "@config/assets.config.types";
 import type { FooterConfig } from "@config/footer.config.types";
 import type { NavigationConfig } from "@config/navigation.config.types";
@@ -12,6 +13,8 @@ import type { SocialConfig } from "@config/social.config.types";
 import type { StructuredDataConfig } from "@config/structured-data.config.types";
 import type { WebManifestConfig } from "@config/webmanifest.config.types";
 import type { PageId, ErrorPageStatus } from "@app/pages/page.definition";
+import type { RedirectRule } from "@config/redirects.config.types";
+import type { GoneRule } from "@config/gone.config.types";
 
 export type AppStatePublicPages = readonly PageDefinition[];
 export type AppStateErrorPages = readonly ErrorPageDefinition[];
@@ -30,6 +33,8 @@ export type AppStateConfig = {
   structuredDataConfig: StructuredDataConfig;
   webManifestConfig: WebManifestConfig;
   pages: AppStatePages;
+  redirectsConfig: readonly RedirectRule[];
+  goneConfig: readonly GoneRule[];
 };
 
 export type AppStatePublicPageIndices = {

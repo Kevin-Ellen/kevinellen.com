@@ -13,6 +13,8 @@ import { navigationConfig } from "@config/navigation.config";
 import { socialConfig } from "@config/social.config";
 import { structuredDataConfig } from "@config/structured-data.config";
 import { webManifestConfig } from "@config/webmanifest.config";
+import { REDIRECTS } from "@config/redirects.config";
+import { GONE_RULES } from "@config/gone.config";
 
 export const createAppStateConfig = ({
   publicPages,
@@ -28,6 +30,8 @@ export const createAppStateConfig = ({
   socialConfig,
   structuredDataConfig,
   webManifestConfig,
+  redirectsConfig: REDIRECTS,
+  goneConfig: GONE_RULES,
   pages: {
     publicPages,
     errorPages,

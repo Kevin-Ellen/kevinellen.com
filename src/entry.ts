@@ -12,7 +12,7 @@ export const onRequest = async (
 
   // return handleRequest(req, env, ctx, appState);
 
-  return new Response(JSON.stringify(appState.getErrorPages()));
+  return new Response(JSON.stringify(appState.getErrorPageByStatus(404)));
 };
 
 export default {

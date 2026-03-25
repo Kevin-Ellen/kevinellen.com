@@ -3,8 +3,6 @@
 import type {
   AppStateConfig,
   AppStatePages,
-  AppStateErrorPages,
-  AppStatePublicPages,
   AppStatePageIndices,
 } from "@app/appState/appState.types";
 
@@ -21,6 +19,8 @@ import type {
   ErrorPageDefinition,
   ErrorPageStatus,
 } from "@app/pages/page.definition";
+import type { RedirectRule } from "@config/redirects.config.types";
+import type { GoneRule } from "@config/gone.config.types";
 
 export class AppState {
   private readonly siteConfig: SiteConfig;
@@ -32,6 +32,8 @@ export class AppState {
   private readonly webManifestConfig: WebManifestConfig;
   private readonly pages: AppStatePages;
   private readonly pageIndices: AppStatePageIndices;
+  private readonly redirectsConfig: readonly RedirectRule[];
+  private readonly goneConfig: readonly GoneRule[];
 
   public constructor(state: AppStateConfig) {
     this.siteConfig = state.siteConfig;
@@ -42,6 +44,8 @@ export class AppState {
     this.structuredDataConfig = state.structuredDataConfig;
     this.webManifestConfig = state.webManifestConfig;
     this.pages = state.pages;
+    this.redirectsConfig = state.redirectsConfig;
+    this.goneConfig = state.goneConfig;
 
     this.pageIndices = this.createPageIndices(state.pages);
 
@@ -121,12 +125,12 @@ export class AppState {
     return this.webManifestConfig;
   }
 
-  public getPublicPages(): AppStatePublicPages {
-    return this.pages.publicPages;
+  public getRedirectsConfig(): readonly RedirectRule[] {
+    return this.redirectsConfig;
   }
 
-  public getErrorPages(): AppStateErrorPages {
-    return this.pages.errorPages;
+  public getGoneConfig(): readonly GoneRule[] {
+    return this.goneConfig;
   }
 
   public getPublicPageById(id: PageId): PageDefinition | null {

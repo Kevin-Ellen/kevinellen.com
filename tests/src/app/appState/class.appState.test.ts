@@ -51,20 +51,8 @@ describe("AppState", () => {
         config.structuredDataConfig,
       );
       expect(appState.getWebManifestConfig()).toBe(config.webManifestConfig);
-    });
-  });
-
-  describe("page collection getters", () => {
-    it("returns the stored public and error pages", () => {
-      const config = createAppStateConfig({
-        publicPages: [homePage],
-        errorPages: [error404Page],
-      });
-
-      const appState = new AppState(config);
-
-      expect(appState.getPublicPages()).toBe(config.pages.publicPages);
-      expect(appState.getErrorPages()).toBe(config.pages.errorPages);
+      expect(appState.getRedirectsConfig()).toBe(config.redirectsConfig);
+      expect(appState.getGoneConfig()).toBe(config.goneConfig);
     });
   });
 
