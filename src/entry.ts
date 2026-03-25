@@ -1,16 +1,18 @@
 // src/entry.ts
 
 import { createAppState } from "@app/appState/create.appState";
-import { handleRequest } from "@app/request/request.handler";
 
 export const onRequest = async (
-  req: Request,
-  env: Env,
-  ctx: ExecutionContext,
+  _req: Request,
+  _env: Env,
+  _ctx: ExecutionContext,
 ): Promise<Response> => {
   const appState = createAppState();
+  // const appState = createAppState();
 
-  return handleRequest(req, env, ctx, appState);
+  // return handleRequest(req, env, ctx, appState);
+
+  return new Response(JSON.stringify(appState.getErrorPages()));
 };
 
 export default {

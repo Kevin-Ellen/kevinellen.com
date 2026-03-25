@@ -7,7 +7,6 @@ export const homePage: PageDefinition = {
     id: "home",
     kind: "home",
     slug: "/",
-    renderMode: "request-composed",
     label: "Home",
   },
 

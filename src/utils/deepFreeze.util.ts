@@ -1,9 +1,9 @@
 // src/utils/deepFreeze.util.ts
 
 export function deepFreeze<T>(obj: T): T {
-  if (obj === null || typeof obj !== "object") return obj;
-
-  Object.freeze(obj);
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
 
   for (const key of Object.getOwnPropertyNames(obj)) {
     const value = (obj as Record<string, unknown>)[key];
@@ -17,5 +17,5 @@ export function deepFreeze<T>(obj: T): T {
     }
   }
 
-  return obj;
+  return Object.freeze(obj);
 }

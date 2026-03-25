@@ -33,7 +33,7 @@
       "@utils/*": ["src/utils/*"],
       "@config/*": ["src/config/*"],
       "@app/*": ["src/app/*"],
-      //   "@tests/*": ["tests/*"],
+      "@tests/*": ["tests/*"],
       "@src/*": ["src/*"]
     }
   },

@@ -12,8 +12,6 @@ import type { PageStructuredDataNode } from "@config/structured-data.config.type
 
 export type PageId = string;
 
-export type PageRenderMode = "bundled" | "request-composed";
-
 export type PublicPageKind =
   | "home"
   | "static"
@@ -30,7 +28,6 @@ export type ErrorPageStatus = 404 | 410 | 500;
 
 export type BasePageDefinitionCore = {
   id: PageId;
-  renderMode: PageRenderMode;
   label: string;
 };
 
