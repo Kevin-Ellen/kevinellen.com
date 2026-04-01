@@ -6,6 +6,9 @@ import type {
   PageDefinition,
 } from "@app/pages/page.definition";
 
+import type { RedirectRule } from "@config/redirects.config.types";
+import type { GoneRule } from "@config/gone.config.types";
+
 import { siteConfig } from "@config/site.config";
 import { assetsConfig } from "@config/assets.config";
 import { footerConfig } from "@config/footer.config";
@@ -19,9 +22,13 @@ import { GONE_RULES } from "@config/gone.config";
 export const createAppStateConfig = ({
   publicPages,
   errorPages,
+  redirectsConfig = REDIRECTS,
+  goneConfig = GONE_RULES,
 }: {
   publicPages: readonly PageDefinition[];
   errorPages: readonly ErrorPageDefinition[];
+  redirectsConfig?: readonly RedirectRule[];
+  goneConfig?: readonly GoneRule[];
 }): AppStateConfig => ({
   siteConfig,
   assetsConfig,
@@ -30,8 +37,8 @@ export const createAppStateConfig = ({
   socialConfig,
   structuredDataConfig,
   webManifestConfig,
-  redirectsConfig: REDIRECTS,
-  goneConfig: GONE_RULES,
+  redirectsConfig,
+  goneConfig,
   pages: {
     publicPages,
     errorPages,

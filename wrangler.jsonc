@@ -27,6 +27,7 @@
       "name": "kevinellen-stg",
       "vars": {
         "APP_ENV": "stg",
+        "APP_HOST": "stg.kevinellen.com",
       },
       "kv_namespaces": [
         { "binding": "KV_CONTENT", "id": "9b41de8a3bdb4231b4c46a93216161a8" },
@@ -39,6 +40,7 @@
       "name": "kevinellen-prod",
       "vars": {
         "APP_ENV": "prod",
+        "APP_HOST": "kevinellen.com",
       },
       "kv_namespaces": [
         { "binding": "KV_CONTENT", "id": "8fdf1554689d4c708badf6c818ebf1da" },
