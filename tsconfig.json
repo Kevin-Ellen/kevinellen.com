@@ -24,17 +24,16 @@
 
     "esModuleInterop": true,
 
-    "baseUrl": ".",
     "paths": {
       //   "@generated/*": [".build/generated/*"],
       //   "@system/*": ["src/system/*"],
       //   "@resources/*": ["src/resources/*"],
       //   "@types-src/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"],
-      "@config/*": ["src/config/*"],
-      "@app/*": ["src/app/*"],
-      "@tests/*": ["tests/*"],
-      "@src/*": ["src/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@config/*": ["./src/config/*"],
+      "@app/*": ["./src/app/*"],
+      "@tests/*": ["./tests/*"],
+      "@src/*": ["./src/*"]
     }
   },
   "include": [

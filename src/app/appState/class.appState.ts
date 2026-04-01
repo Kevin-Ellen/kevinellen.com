@@ -133,6 +133,10 @@ export class AppState {
     return this.goneConfig;
   }
 
+  public getPublicPages(): readonly PageDefinition[] {
+    return this.pages.publicPages;
+  }
+
   public getPublicPageById(id: PageId): PageDefinition | null {
     return this.pageIndices.publicPages.byId.get(id) ?? null;
   }
