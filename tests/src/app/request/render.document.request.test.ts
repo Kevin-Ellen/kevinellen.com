@@ -26,7 +26,7 @@ type RenderDocumentInspectionPayload = {
       siteName: string;
       siteUrl: string;
     };
-    breadcrumbs: unknown[];
+    canonicalUrl: string | null;
     navigation: {
       header: {
         primary: unknown[];
@@ -35,6 +35,11 @@ type RenderDocumentInspectionPayload = {
       footer: {
         sections: unknown[];
       };
+    };
+    breadcrumbs: unknown[];
+    assets: {
+      scripts: unknown[];
+      svgs: unknown[];
     };
     structuredData: {
       person: unknown;
@@ -50,13 +55,12 @@ type RenderDocumentInspectionPayload = {
       body: unknown[];
       footer: string[];
     };
-    canonicalUrl: string | null;
   };
 };
 
 describe("renderDocumentRequest", () => {
   const env = {
-    APP_ENV: "prod",
+    APP_ENV: "dev",
     APP_HOST: "kevinellen.com",
   } as Env;
 
@@ -64,7 +68,7 @@ describe("renderDocumentRequest", () => {
   const appState = createAppState();
 
   it("returns a JSON inspection response for a page target", async () => {
-    const req = new Request("https://example.com/");
+    const req = new Request("https://example.com/?debug=document");
 
     const target: DocumentRenderTarget = {
       kind: "page",
@@ -91,7 +95,7 @@ describe("renderDocumentRequest", () => {
     expect(payload.type).toBe("document-inspection");
 
     expect(payload.request).toEqual({
-      url: "https://example.com/",
+      url: "https://example.com/?debug=document",
       method: "GET",
     });
 
@@ -111,13 +115,7 @@ describe("renderDocumentRequest", () => {
       siteUrl: appState.getSiteConfig().siteUrl,
     });
 
-    expect(payload.appContext.breadcrumbs).toEqual([
-      {
-        id: "home",
-        label: "Home",
-        href: "/",
-      },
-    ]);
+    expect(payload.appContext.canonicalUrl).toBe("https://kevinellen.com/");
 
     expect(payload.appContext.navigation.header.primary).toEqual([
       {
@@ -209,6 +207,54 @@ describe("renderDocumentRequest", () => {
       },
     ]);
 
+    expect(payload.appContext.breadcrumbs).toEqual([
+      {
+        id: "home",
+        label: "Home",
+        href: "/",
+      },
+    ]);
+
+    expect(payload.appContext.assets).toEqual({
+      scripts: [
+        {
+          id: "header-condense",
+          kind: "inline",
+          location: "footer",
+        },
+      ],
+      svgs: [
+        {
+          id: "icon-home",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "icon-github",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "icon-instagram",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "icon-linkedin",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "logo-rspb",
+          viewBox: "0 0 81 81",
+        },
+        {
+          id: "logo-national-trust",
+          viewBox: "0 0 48 48",
+        },
+        {
+          id: "logo-vogelbescherming-nederland",
+          viewBox: "0 0 829 392",
+        },
+      ],
+    });
+
     expect(payload.appContext.structuredData.person).toEqual({
       "@context": "https://schema.org",
       "@type": "Person",
@@ -280,12 +326,10 @@ describe("renderDocumentRequest", () => {
       ],
       footer: ["Homepage placeholder footer content."],
     });
-
-    expect(payload.appContext.canonicalUrl).toBe("https://kevinellen.com/");
   });
 
   it("returns a JSON inspection response for an error-page target", async () => {
-    const req = new Request("https://example.com/missing");
+    const req = new Request("https://example.com/missing?debug=document");
 
     const target: DocumentRenderTarget = {
       kind: "error-page",
@@ -312,7 +356,7 @@ describe("renderDocumentRequest", () => {
     expect(payload.type).toBe("document-inspection");
 
     expect(payload.request).toEqual({
-      url: "https://example.com/missing",
+      url: "https://example.com/missing?debug=document",
       method: "GET",
     });
 
@@ -331,7 +375,7 @@ describe("renderDocumentRequest", () => {
       siteUrl: appState.getSiteConfig().siteUrl,
     });
 
-    expect(payload.appContext.breadcrumbs).toEqual([]);
+    expect(payload.appContext.canonicalUrl).toBeNull();
 
     expect(payload.appContext.navigation.header.primary).toEqual([
       {
@@ -423,6 +467,48 @@ describe("renderDocumentRequest", () => {
       },
     ]);
 
+    expect(payload.appContext.breadcrumbs).toEqual([]);
+
+    expect(payload.appContext.assets).toEqual({
+      scripts: [
+        {
+          id: "header-condense",
+          kind: "inline",
+          location: "footer",
+        },
+      ],
+      svgs: [
+        {
+          id: "icon-home",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "icon-github",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "icon-instagram",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "icon-linkedin",
+          viewBox: "0 0 640 640",
+        },
+        {
+          id: "logo-rspb",
+          viewBox: "0 0 81 81",
+        },
+        {
+          id: "logo-national-trust",
+          viewBox: "0 0 48 48",
+        },
+        {
+          id: "logo-vogelbescherming-nederland",
+          viewBox: "0 0 829 392",
+        },
+      ],
+    });
+
     expect(payload.appContext.structuredData.person).toEqual({
       "@context": "https://schema.org",
       "@type": "Person",
@@ -485,7 +571,5 @@ describe("renderDocumentRequest", () => {
       ],
       footer: [],
     });
-
-    expect(payload.appContext.canonicalUrl).toBeNull();
   });
 });

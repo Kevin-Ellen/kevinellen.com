@@ -4,6 +4,8 @@ import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
 import { createAppContext } from "@app/appContext/create.appContext";
+import { shouldRenderDocumentInspection } from "@app/rendering/document/debug/should.render.document.inspection";
+import { renderDocumentInspectionResponse } from "@app/rendering/document/debug/render.document.inspection.response";
 
 export const renderDocumentRequest = async (
   req: Request,
@@ -13,6 +15,10 @@ export const renderDocumentRequest = async (
   target: DocumentRenderTarget,
 ): Promise<Response> => {
   const appContext = createAppContext(req, env, appState, target);
+
+  if (shouldRenderDocumentInspection(req, env)) {
+    return renderDocumentInspectionResponse(req, target, appContext);
+  }
 
   const debugPayload = {
     type: "document-inspection",
