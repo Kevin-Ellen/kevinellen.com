@@ -1,0 +1,426 @@
+// tests/src/app/request/render.document.request.test.ts
+
+import { renderDocumentRequest } from "@app/request/render.document.request";
+import { createAppState } from "@app/appState/create.appState";
+
+import type { DocumentRenderTarget } from "@app/request/request.document.types";
+
+type RenderDocumentInspectionPayload = {
+  type: "document-inspection";
+  request: {
+    url: string;
+    method: string;
+  };
+  target: {
+    kind: string;
+    status: number;
+    page: {
+      id: string;
+      label: string;
+      kind: string;
+      slug?: string;
+    };
+  };
+  appContext: {
+    site: {
+      siteName: string;
+      siteUrl: string;
+    };
+    breadcrumbs: unknown[];
+    navigation: {
+      header: {
+        primary: unknown[];
+        social: unknown[];
+      };
+      footer: {
+        sections: unknown[];
+      };
+    };
+    structuredData: {
+      person: unknown;
+      website: unknown;
+      page: unknown;
+    };
+  };
+};
+
+describe("renderDocumentRequest", () => {
+  const env = {
+    APP_ENV: "prod",
+    APP_HOST: "kevinellen.com",
+  } as Env;
+
+  const ctx = {} as ExecutionContext;
+  const appState = createAppState();
+
+  it("returns a JSON inspection response for a page target", async () => {
+    const req = new Request("https://example.com/");
+
+    const target: DocumentRenderTarget = {
+      kind: "page",
+      page: appState.getPublicPageById("home")!,
+      status: 200,
+    };
+
+    const response = await renderDocumentRequest(
+      req,
+      env,
+      ctx,
+      appState,
+      target,
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe(
+      "application/json; charset=utf-8",
+    );
+    expect(response.headers.get("x-render-mode")).toBe("document-inspection");
+
+    const payload = (await response.json()) as RenderDocumentInspectionPayload;
+
+    expect(payload.type).toBe("document-inspection");
+
+    expect(payload.request).toEqual({
+      url: "https://example.com/",
+      method: "GET",
+    });
+
+    expect(payload.target).toEqual({
+      kind: "page",
+      status: 200,
+      page: {
+        id: "home",
+        slug: "/",
+        label: "Home",
+        kind: "home",
+      },
+    });
+
+    expect(payload.appContext.site).toEqual({
+      siteName: appState.getSiteConfig().siteName,
+      siteUrl: appState.getSiteConfig().siteUrl,
+    });
+
+    expect(payload.appContext.breadcrumbs).toEqual([
+      {
+        id: "home",
+        label: "Home",
+        href: "/",
+      },
+    ]);
+
+    expect(payload.appContext.navigation.header.primary).toEqual([
+      {
+        kind: "page",
+        id: "home",
+        label: "Home",
+        href: "/",
+        isCurrent: true,
+        svgId: "icon-home",
+      },
+      {
+        kind: "page",
+        id: "journal",
+        label: "Journal",
+        href: "/journal",
+        isCurrent: false,
+      },
+    ]);
+
+    expect(payload.appContext.navigation.header.social).toEqual([
+      {
+        kind: "social",
+        id: "github",
+        label: "GitHub",
+        href: "https://github.com/Kevin-Ellen",
+        isCurrent: false,
+        svgId: "icon-github",
+      },
+      {
+        kind: "social",
+        id: "instagram",
+        label: "Instagram",
+        href: "https://www.instagram.com/photography.mallard",
+        isCurrent: false,
+        svgId: "icon-instagram",
+      },
+    ]);
+
+    expect(payload.appContext.navigation.footer.sections).toEqual([
+      {
+        id: "site",
+        label: "Site",
+        items: [
+          {
+            kind: "page",
+            id: "journal",
+            label: "Journal",
+            href: "/journal",
+            isCurrent: false,
+          },
+        ],
+      },
+      {
+        id: "practice",
+        label: "Practice",
+        items: [],
+      },
+      {
+        id: "elsewhere",
+        label: "Elsewhere",
+        items: [
+          {
+            kind: "social",
+            id: "github",
+            label: "GitHub",
+            href: "https://github.com/Kevin-Ellen",
+            isCurrent: false,
+          },
+          {
+            kind: "social",
+            id: "instagram",
+            label: "Instagram",
+            href: "https://www.instagram.com/photography.mallard",
+            isCurrent: false,
+          },
+          {
+            kind: "social",
+            id: "linkedin",
+            label: "LinkedIn",
+            href: "https://www.linkedin.com/in/kevinellen/",
+            isCurrent: false,
+          },
+        ],
+      },
+      {
+        id: "legal",
+        label: "Legal",
+        items: [],
+      },
+    ]);
+
+    expect(payload.appContext.structuredData.person).toEqual({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://kevinellen.com/about#person",
+      url: "https://kevinellen.com/about",
+      name: "Kevin Ellen",
+      jobTitle: "Technical SEO Manager",
+      description: "Hello world",
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Essex",
+        addressCountry: "GB",
+      },
+      knowsAbout: [
+        "Wildlife photography",
+        "Nature photography",
+        "Bird photography",
+        "Technical SEO",
+        "Web performance",
+        "Web architecture",
+        "Cloudflare Workers",
+        "Search engine optimisation",
+        "Digital publishing",
+      ],
+    });
+
+    expect(payload.appContext.structuredData.website).toEqual({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://kevinellen.com/#website",
+      url: "https://kevinellen.com/",
+      name: "Kevin Ellen",
+      description:
+        "Wildlife photography, field notes, and technical work exploring nature and digital publishing.",
+      inLanguage: "en-GB",
+      publisher: {
+        "@id": "https://kevinellen.com/about#person",
+      },
+    });
+
+    expect(payload.appContext.structuredData.page).toEqual([]);
+  });
+
+  it("returns a JSON inspection response for an error-page target", async () => {
+    const req = new Request("https://example.com/missing");
+
+    const target: DocumentRenderTarget = {
+      kind: "error-page",
+      page: appState.getErrorPageByStatus(404)!,
+      status: 404,
+    };
+
+    const response = await renderDocumentRequest(
+      req,
+      env,
+      ctx,
+      appState,
+      target,
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.headers.get("content-type")).toBe(
+      "application/json; charset=utf-8",
+    );
+    expect(response.headers.get("x-render-mode")).toBe("document-inspection");
+
+    const payload = (await response.json()) as RenderDocumentInspectionPayload;
+
+    expect(payload.type).toBe("document-inspection");
+
+    expect(payload.request).toEqual({
+      url: "https://example.com/missing",
+      method: "GET",
+    });
+
+    expect(payload.target).toEqual({
+      kind: "error-page",
+      status: 404,
+      page: {
+        id: "error-404",
+        label: "Page not found",
+        kind: "error",
+      },
+    });
+
+    expect(payload.appContext.site).toEqual({
+      siteName: appState.getSiteConfig().siteName,
+      siteUrl: appState.getSiteConfig().siteUrl,
+    });
+
+    expect(payload.appContext.breadcrumbs).toEqual([]);
+
+    expect(payload.appContext.navigation.header.primary).toEqual([
+      {
+        kind: "page",
+        id: "home",
+        label: "Home",
+        href: "/",
+        isCurrent: false,
+        svgId: "icon-home",
+      },
+      {
+        kind: "page",
+        id: "journal",
+        label: "Journal",
+        href: "/journal",
+        isCurrent: false,
+      },
+    ]);
+
+    expect(payload.appContext.navigation.header.social).toEqual([
+      {
+        kind: "social",
+        id: "github",
+        label: "GitHub",
+        href: "https://github.com/Kevin-Ellen",
+        isCurrent: false,
+        svgId: "icon-github",
+      },
+      {
+        kind: "social",
+        id: "instagram",
+        label: "Instagram",
+        href: "https://www.instagram.com/photography.mallard",
+        isCurrent: false,
+        svgId: "icon-instagram",
+      },
+    ]);
+
+    expect(payload.appContext.navigation.footer.sections).toEqual([
+      {
+        id: "site",
+        label: "Site",
+        items: [
+          {
+            kind: "page",
+            id: "journal",
+            label: "Journal",
+            href: "/journal",
+            isCurrent: false,
+          },
+        ],
+      },
+      {
+        id: "practice",
+        label: "Practice",
+        items: [],
+      },
+      {
+        id: "elsewhere",
+        label: "Elsewhere",
+        items: [
+          {
+            kind: "social",
+            id: "github",
+            label: "GitHub",
+            href: "https://github.com/Kevin-Ellen",
+            isCurrent: false,
+          },
+          {
+            kind: "social",
+            id: "instagram",
+            label: "Instagram",
+            href: "https://www.instagram.com/photography.mallard",
+            isCurrent: false,
+          },
+          {
+            kind: "social",
+            id: "linkedin",
+            label: "LinkedIn",
+            href: "https://www.linkedin.com/in/kevinellen/",
+            isCurrent: false,
+          },
+        ],
+      },
+      {
+        id: "legal",
+        label: "Legal",
+        items: [],
+      },
+    ]);
+
+    expect(payload.appContext.structuredData.person).toEqual({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://kevinellen.com/about#person",
+      url: "https://kevinellen.com/about",
+      name: "Kevin Ellen",
+      jobTitle: "Technical SEO Manager",
+      description: "Hello world",
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Essex",
+        addressCountry: "GB",
+      },
+      knowsAbout: [
+        "Wildlife photography",
+        "Nature photography",
+        "Bird photography",
+        "Technical SEO",
+        "Web performance",
+        "Web architecture",
+        "Cloudflare Workers",
+        "Search engine optimisation",
+        "Digital publishing",
+      ],
+    });
+
+    expect(payload.appContext.structuredData.website).toEqual({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://kevinellen.com/#website",
+      url: "https://kevinellen.com/",
+      name: "Kevin Ellen",
+      description:
+        "Wildlife photography, field notes, and technical work exploring nature and digital publishing.",
+      inLanguage: "en-GB",
+      publisher: {
+        "@id": "https://kevinellen.com/about#person",
+      },
+    });
+
+    expect(payload.appContext.structuredData.page).toBeNull();
+  });
+});

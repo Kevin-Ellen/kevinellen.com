@@ -5,6 +5,7 @@ import type {
   ScriptAssetConfig,
 } from "@config/assets.config.types";
 import type { PageStructuredDataNode } from "@config/structured-data.config.types";
+import type { PageContent } from "@app/pages/page.content.types";
 
 /* -------------------------------------------------------------------------- */
 /* Shared identity                                                            */
@@ -88,22 +89,6 @@ export type BreadcrumbTrail = readonly PageId[];
 
 export type PageNavigation = {
   breadcrumbs: BreadcrumbTrail;
-};
-
-/* -------------------------------------------------------------------------- */
-/* Page content                                                               */
-/* -------------------------------------------------------------------------- */
-
-export type PageContentHero = {
-  eyebrow: string;
-  title: string;
-  intro: string;
-};
-
-export type PageContent = {
-  head: PageContentHero;
-  body: readonly string[];
-  footer: readonly string[];
 };
 
 /* -------------------------------------------------------------------------- */

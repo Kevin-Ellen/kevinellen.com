@@ -3,5 +3,9 @@
 import type { PageDefinition } from "@app/pages/page.definition";
 
 import { homePage } from "@app/pages/public/home.page";
+import { journalPage } from "@app/pages/public/journal.page";
 
-export const REGISTRY_PUBLIC_PAGES: readonly PageDefinition[] = [homePage];
+export const REGISTRY_PUBLIC_PAGES: readonly PageDefinition[] = [
+  homePage,
+  journalPage,
+];

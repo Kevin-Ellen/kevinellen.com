@@ -2,7 +2,7 @@
 
 import type { RedirectStatusCode } from "@config/redirects.config.types";
 
-export type ErrorRenderIntent = "gone";
+export type ErrorRenderIntent = "gone" | "internal-error";
 
 export type RequestPolicyContinueOutcome = {
   kind: "continue";

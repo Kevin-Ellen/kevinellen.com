@@ -34,7 +34,7 @@ describe("createAppState", () => {
     expect(appState.getStructuredDataConfig()).toBe(structuredDataConfig);
     expect(appState.getWebManifestConfig()).toBe(webManifestConfig);
     expect(appState.getRedirectsConfig()).toStrictEqual(REDIRECTS);
-    expect(appState.getRedirectsConfig()).toStrictEqual(GONE_RULES);
+    expect(appState.getGoneConfig()).toStrictEqual(GONE_RULES);
   });
 
   it("supports lookups for the wired pages", () => {
