@@ -17,6 +17,8 @@ locals {
     journals = "${var.project_name}-journals-${var.instance_name}"
   }
 
+  app_host = var.instance_name == "prod" ? var.zone_name : "${var.instance_name}.${var.zone_name}"
+
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
     "www.${var.zone_name}/*"
@@ -66,6 +68,16 @@ resource "cloudflare_worker_version" "site" {
   ]
 
   bindings = [
+    {
+      type = "plain_text"
+      name = "APP_ENV"
+      text = var.instance_name
+    },
+    {
+      type = "plain_text"
+      name = "APP_HOST"
+      text = local.app_host
+    },
     {
       type         = "kv_namespace"
       name         = "KV_CONTENT"
