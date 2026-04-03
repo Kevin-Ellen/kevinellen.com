@@ -1,10 +1,6 @@
 // src/app/appState/create.appState.ts
 
 import type { AppStateConfig } from "@app/appState/appState.types";
-import type {
-  ErrorPageDefinition,
-  PageDefinition,
-} from "@app/pages/page.definition";
 
 import { AppState } from "@app/appState/class.appState";
 
@@ -17,14 +13,12 @@ import { navigationConfig } from "@config/navigation.config";
 import { socialConfig } from "@config/social.config";
 import { structuredDataConfig } from "@config/structured-data.config";
 import { webManifestConfig } from "@config/webmanifest.config";
-import { REDIRECTS } from "@config/redirects.config";
 
-import { homePage } from "@app/pages/public/home.page";
-import { error404Page } from "@app/pages/error/404.error.page";
+import { REDIRECTS } from "@config/redirects.config";
 import { GONE_RULES } from "@config/gone.config";
 
-const publicPages: readonly PageDefinition[] = [homePage];
-const errorPages: readonly ErrorPageDefinition[] = [error404Page];
+import { REGISTRY_PUBLIC_PAGES } from "@app/pages/registry/public.registry.pages";
+import { REGISTRY_ERROR_PAGES } from "@app/pages/registry/error.registry.pages";
 
 export const createAppState = (): AppState => {
   const state: AppStateConfig = {
@@ -38,8 +32,8 @@ export const createAppState = (): AppState => {
     redirectsConfig: REDIRECTS,
     goneConfig: GONE_RULES,
     pages: {
-      publicPages,
-      errorPages,
+      publicPages: REGISTRY_PUBLIC_PAGES,
+      errorPages: REGISTRY_ERROR_PAGES,
     },
   };
 

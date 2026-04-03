@@ -2,7 +2,7 @@
 
 import { evaluateCanonicalRequestResolution } from "@app/policies/request/resolution/evaluate.canonical.request.resolution";
 
-import type { RuntimeBehaviour } from "@app/runtime/get.runtime.behaviour";
+import type { RuntimeBehaviour } from "@app/runtime/runtime.types";
 
 describe("evaluateCanonicalRequestResolution", () => {
   const createRuntimeBehaviour = (

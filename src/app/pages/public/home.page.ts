@@ -44,8 +44,24 @@ export const homePage: PageDefinition = {
         "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
     },
     body: [
-      "Homepage placeholder body content.",
-      "This section will later introduce featured photography, journal entries, and technical work.",
+      {
+        kind: "paragraph",
+        inlines: [
+          {
+            kind: "text",
+            text: "Homepage placeholder body content.",
+          },
+        ],
+      },
+      {
+        kind: "paragraph",
+        inlines: [
+          {
+            kind: "text",
+            text: "This section will later introduce featured photography, journal entries, and technical work.",
+          },
+        ],
+      },
     ],
     footer: ["Homepage placeholder footer content."],
   },

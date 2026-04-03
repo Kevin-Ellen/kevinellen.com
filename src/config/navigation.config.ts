@@ -9,8 +9,8 @@ export const navigationConfig: NavigationConfig = deepFreeze({
     primary: [
       { kind: "page", id: "home", svgId: "icon-home" },
       { kind: "page", id: "journal" },
-      { kind: "page", id: "photos" },
-      { kind: "page", id: "about" },
+      // { kind: "page", id: "photos" },
+      // { kind: "page", id: "about" },
     ],
     social: [
       { kind: "social", id: "github", svgId: "icon-github" },
@@ -24,8 +24,8 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         label: "Site",
         items: [
           { kind: "page", id: "journal" },
-          { kind: "page", id: "photos" },
-          { kind: "page", id: "about" },
+          // { kind: "page", id: "photos" },
+          // { kind: "page", id: "about" },
         ],
       },
 
@@ -33,8 +33,8 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         id: "practice",
         label: "Practice",
         items: [
-          { kind: "page", id: "equipment" },
-          { kind: "page", id: "field-notes" },
+          // { kind: "page", id: "equipment" },
+          // { kind: "page", id: "field-notes" },
         ],
       },
 
@@ -52,10 +52,10 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         id: "legal",
         label: "Legal",
         items: [
-          { kind: "page", id: "privacy" },
-          { kind: "page", id: "terms" },
-          { kind: "page", id: "cookies" },
-          { kind: "page", id: "license" },
+          // { kind: "page", id: "privacy" },
+          // { kind: "page", id: "terms" },
+          // { kind: "page", id: "cookies" },
+          // { kind: "page", id: "license" },
         ],
       },
     ],

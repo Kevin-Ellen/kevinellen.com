@@ -1,13 +1,13 @@
-// src/app/pages/error/error-404.page.ts
+// src/app/pages/error/error-410.page.ts
 
 import type { ErrorPageDefinition } from "@app/pages/page.definition";
 
-export const error404Page: ErrorPageDefinition = {
+export const error410Page: ErrorPageDefinition = {
   core: {
-    id: "error-404",
+    id: "error-410",
     kind: "error",
-    status: 404,
-    label: "Page not found",
+    status: 410,
+    label: "Gone",
   },
 
   config: {
@@ -21,8 +21,8 @@ export const error404Page: ErrorPageDefinition = {
   },
 
   meta: {
-    pageTitle: "404 | Page not found | Kevin Ellen",
-    metaDescription: "The requested page could not be found.",
+    pageTitle: "410 | Page is gone | Kevin Ellen",
+    metaDescription: "The requested page does not exist anymore.",
   },
 
   navigation: {
@@ -31,10 +31,9 @@ export const error404Page: ErrorPageDefinition = {
 
   content: {
     head: {
-      eyebrow: "404",
-      title: "Page not found",
-      intro:
-        "The page you were looking for does not exist or is no longer available at this address.",
+      eyebrow: "410",
+      title: "Gone",
+      intro: "The page you were looking for does not exist anymore.",
     },
     body: [
       {
