@@ -9,6 +9,11 @@ import type { DocumentRenderTarget } from "@app/request/request.document.types";
 describe("createAppContext", () => {
   const appState = createAppState();
 
+  const env = {
+    APP_ENV: "prod",
+    APP_HOST: "kevinellen.com",
+  } as Env;
+
   it("returns an AppContext instance for a page target", () => {
     const req = new Request("https://example.com/");
 
@@ -18,7 +23,7 @@ describe("createAppContext", () => {
       status: 200,
     };
 
-    const appContext = createAppContext(req, appState, target);
+    const appContext = createAppContext(req, env, appState, target);
 
     expect(appContext).toBeInstanceOf(AppContext);
     expect(appContext.getRequest()).toBe(req);
@@ -173,6 +178,38 @@ describe("createAppContext", () => {
       scripts: expect.any(Array),
       svgs: expect.any(Array),
     });
+
+    expect(appContext.getContent()).toEqual({
+      head: {
+        eyebrow: "Kevin Ellen",
+        title: "Nature photography, writing, and technical architecture",
+        intro:
+          "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
+      },
+      body: [
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "Homepage placeholder body content.",
+            },
+          ],
+        },
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "This section will later introduce featured photography, journal entries, and technical work.",
+            },
+          ],
+        },
+      ],
+      footer: ["Homepage placeholder footer content."],
+    });
+
+    expect(appContext.getCanonicalUrl()).toBe("https://kevinellen.com/");
   });
 
   it("returns an AppContext instance for an error-page target", () => {
@@ -184,7 +221,7 @@ describe("createAppContext", () => {
       status: 404,
     };
 
-    const appContext = createAppContext(req, appState, target);
+    const appContext = createAppContext(req, env, appState, target);
 
     expect(appContext).toBeInstanceOf(AppContext);
     expect(appContext.getRequest()).toBe(req);
@@ -333,5 +370,28 @@ describe("createAppContext", () => {
       scripts: expect.any(Array),
       svgs: expect.any(Array),
     });
+
+    expect(appContext.getContent()).toEqual({
+      head: {
+        eyebrow: "404",
+        title: "Page not found",
+        intro:
+          "The page you were looking for does not exist or is no longer available at this address.",
+      },
+      body: [
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "Please check the URL, return to the homepage, or use the site navigation to continue browsing.",
+            },
+          ],
+        },
+      ],
+      footer: [],
+    });
+
+    expect(appContext.getCanonicalUrl()).toBeNull();
   });
 });

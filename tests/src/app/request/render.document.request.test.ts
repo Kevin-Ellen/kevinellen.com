@@ -41,6 +41,16 @@ type RenderDocumentInspectionPayload = {
       website: unknown;
       page: unknown;
     };
+    content: {
+      head: {
+        eyebrow: string;
+        title: string;
+        intro: string;
+      };
+      body: unknown[];
+      footer: string[];
+    };
+    canonicalUrl: string | null;
   };
 };
 
@@ -240,6 +250,38 @@ describe("renderDocumentRequest", () => {
     });
 
     expect(payload.appContext.structuredData.page).toEqual([]);
+
+    expect(payload.appContext.content).toEqual({
+      head: {
+        eyebrow: "Kevin Ellen",
+        title: "Nature photography, writing, and technical architecture",
+        intro:
+          "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
+      },
+      body: [
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "Homepage placeholder body content.",
+            },
+          ],
+        },
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "This section will later introduce featured photography, journal entries, and technical work.",
+            },
+          ],
+        },
+      ],
+      footer: ["Homepage placeholder footer content."],
+    });
+
+    expect(payload.appContext.canonicalUrl).toBe("https://kevinellen.com/");
   });
 
   it("returns a JSON inspection response for an error-page target", async () => {
@@ -422,5 +464,28 @@ describe("renderDocumentRequest", () => {
     });
 
     expect(payload.appContext.structuredData.page).toBeNull();
+
+    expect(payload.appContext.content).toEqual({
+      head: {
+        eyebrow: "404",
+        title: "Page not found",
+        intro:
+          "The page you were looking for does not exist or is no longer available at this address.",
+      },
+      body: [
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "Please check the URL, return to the homepage, or use the site navigation to continue browsing.",
+            },
+          ],
+        },
+      ],
+      footer: [],
+    });
+
+    expect(payload.appContext.canonicalUrl).toBeNull();
   });
 });

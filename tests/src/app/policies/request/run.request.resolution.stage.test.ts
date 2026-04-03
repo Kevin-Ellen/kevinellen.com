@@ -10,7 +10,7 @@ import { evaluateGonePathRequestResolution } from "@app/policies/request/resolut
 import { createAppState } from "@app/appState/create.appState";
 
 import type { RequestPolicyOutcome } from "@app/policies/request/request.policies.types";
-import type { RuntimeBehaviour } from "@app/runtime/get.runtime.behaviour";
+import type { RuntimeBehaviour } from "@app/runtime/runtime.types";
 
 jest.mock("@app/runtime/get.runtime.behaviour");
 jest.mock(

@@ -1,7 +1,7 @@
 // src/app/policies/request/resolution/evaluate.canonical.request.resolution.ts
 
 import type { CanonicalResult } from "@app/policies/request/request.policies.types";
-import type { RuntimeBehaviour } from "@app/runtime/get.runtime.behaviour";
+import type { RuntimeBehaviour } from "@app/runtime/runtime.types";
 
 export const evaluateCanonicalRequestResolution = (
   inputUrl: URL,

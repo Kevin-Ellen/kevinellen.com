@@ -10,7 +10,7 @@ import type { WithContext, Person, WebSite } from "schema-dts";
 describe("AppContext", () => {
   const appState = createAppState();
 
-  it("returns the stored request, site config, target, breadcrumbs, navigation, structured data and assets", () => {
+  it("returns the stored request, site config, target, breadcrumbs, navigation, structured data, assets, content and canonical url", () => {
     const request = new Request("https://example.com/");
 
     const target: DocumentRenderTarget = {
@@ -82,6 +82,27 @@ describe("AppContext", () => {
         scripts: [],
         svgs: [],
       },
+      content: {
+        head: {
+          eyebrow: "Kevin Ellen",
+          title: "Nature photography, writing, and technical architecture",
+          intro:
+            "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
+        },
+        body: [
+          {
+            kind: "paragraph",
+            inlines: [
+              {
+                kind: "text",
+                text: "Homepage placeholder body content.",
+              },
+            ],
+          },
+        ],
+        footer: ["Homepage placeholder footer content."],
+      },
+      canonicalUrl: "https://kevinellen.com/",
     };
 
     const appContext = new AppContext(config);
@@ -93,6 +114,8 @@ describe("AppContext", () => {
     expect(appContext.getNavigation()).toEqual(config.navigation);
     expect(appContext.getStructuredData()).toEqual(config.structuredData);
     expect(appContext.getAssets()).toEqual(config.assets);
+    expect(appContext.getContent()).toEqual(config.content);
+    expect(appContext.getCanonicalUrl()).toBe(config.canonicalUrl);
   });
 
   it("freezes the app context instance", () => {
@@ -152,6 +175,27 @@ describe("AppContext", () => {
         scripts: [],
         svgs: [],
       },
+      content: {
+        head: {
+          eyebrow: "404",
+          title: "Page not found",
+          intro:
+            "The page you were looking for does not exist or is no longer available at this address.",
+        },
+        body: [
+          {
+            kind: "paragraph",
+            inlines: [
+              {
+                kind: "text",
+                text: "Please check the URL, return to the homepage, or use the site navigation to continue browsing.",
+              },
+            ],
+          },
+        ],
+        footer: [],
+      },
+      canonicalUrl: null,
     });
 
     expect(Object.isFrozen(appContext)).toBe(true);

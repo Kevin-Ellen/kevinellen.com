@@ -1,12 +1,6 @@
-// src/app/runtime/get.runtime.behaviour.ts
+// src/app/runtime/get.runtime.behaviour
 
-export type RuntimeBehaviour = {
-  appEnv: Env["APP_ENV"];
-  canonical: boolean;
-  indexing: boolean;
-  public: boolean;
-  canonicalHost: string | null;
-};
+import type { RuntimeBehaviour } from "@app/runtime/runtime.types";
 
 const RUNTIME_BEHAVIOUR = {
   dev: {

@@ -7,12 +7,12 @@ import { createAppContext } from "@app/appContext/create.appContext";
 
 export const renderDocumentRequest = async (
   req: Request,
-  _env: Env,
+  env: Env,
   _ctx: ExecutionContext,
   appState: AppState,
   target: DocumentRenderTarget,
 ): Promise<Response> => {
-  const appContext = createAppContext(req, appState, target);
+  const appContext = createAppContext(req, env, appState, target);
 
   const debugPayload = {
     type: "document-inspection",
@@ -38,10 +38,12 @@ export const renderDocumentRequest = async (
         siteName: appContext.getSiteConfig().siteName,
         siteUrl: appContext.getSiteConfig().siteUrl,
       },
+      canonicalUrl: appContext.getCanonicalUrl(),
       navigation: appContext.getNavigation(),
       breadcrumbs: appContext.getBreadcrumbs(),
       // assets: appContext.getAssets(),
       structuredData: appContext.getStructuredData(),
+      content: appContext.getContent(),
     },
   };
 

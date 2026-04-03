@@ -3,14 +3,14 @@
 import type { Person, WebSite, WithContext } from "schema-dts";
 
 import type { SiteConfig } from "@config/site.config.types";
-import type { SvgAssetId } from "@config/assets.config.types";
+import type {
+  ScriptAssetConfig,
+  SvgAssetConfig,
+  SvgAssetId,
+} from "@config/assets.config.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 import type { PageId } from "@app/pages/page.definition";
 import type { SocialId } from "@config/social.config.types";
-import type {
-  SvgAssetConfig,
-  ScriptAssetConfig,
-} from "@config/assets.config.types";
 import type { PageStructuredDataDocument } from "@config/structured-data.config.types";
 
 export type AppContextBreadcrumb = {
@@ -71,12 +71,43 @@ export type AppContextStructuredData = {
   page: PageStructuredDataDocument | null;
 };
 
+export type AppContextCanonicalUrl = string | null;
+
+export type AppContextContentInline =
+  | {
+      kind: "text";
+      text: string;
+    }
+  | {
+      kind: "internal-link";
+      pageId: string;
+      label: string;
+      href: string;
+    };
+
+export type AppContextContentParagraph = {
+  kind: "paragraph";
+  inlines: readonly AppContextContentInline[];
+};
+
+export type AppContextContent = {
+  head: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+  };
+  body: readonly AppContextContentParagraph[];
+  footer: readonly string[];
+};
+
 export type AppContextConfig = {
   request: Request;
   siteConfig: SiteConfig;
+  canonicalUrl: AppContextCanonicalUrl;
   target: DocumentRenderTarget;
   breadcrumbs: readonly AppContextBreadcrumb[];
   navigation: AppContextNavigation;
   assets: AppContextAssets;
   structuredData: AppContextStructuredData;
+  content: AppContextContent;
 };
