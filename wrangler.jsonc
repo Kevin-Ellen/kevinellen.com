@@ -2,6 +2,9 @@
   "name": "kevinellen-com-dev",
   "main": "src/entry.ts",
   "compatibility_date": "2025-03-12",
+  "observability": {
+    "enabled": true,
+  },
   "rules": [
     { "type": "Text", "globs": ["**/*.css?raw"], "fallthrough": true },
     { "type": "Text", "globs": ["**/*.txt"], "fallthrough": true },
