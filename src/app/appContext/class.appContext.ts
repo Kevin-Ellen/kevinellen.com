@@ -8,6 +8,7 @@ import type {
   AppContextContent,
   AppContextNavigation,
   AppContextStructuredData,
+  AppContextSecurity,
 } from "@app/appContext/appContext.types";
 import type { SiteConfig } from "@config/site.config.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
@@ -22,6 +23,7 @@ export class AppContext {
   private readonly assets: AppContextAssets;
   private readonly structuredData: AppContextStructuredData;
   private readonly content: AppContextContent;
+  private readonly security: AppContextSecurity;
 
   public constructor(config: AppContextConfig) {
     this.request = config.request;
@@ -33,6 +35,7 @@ export class AppContext {
     this.assets = config.assets;
     this.structuredData = config.structuredData;
     this.content = config.content;
+    this.security = config.security;
 
     Object.freeze(this);
   }
@@ -71,5 +74,9 @@ export class AppContext {
 
   public getContent(): AppContextContent {
     return this.content;
+  }
+
+  public getSecurity(): AppContextSecurity {
+    return this.security;
   }
 }

@@ -1,7 +1,7 @@
 // tests/src/app/appContext/create.appContext.test.ts
 
-import { createAppContext } from "@app/appContext/create.appContext";
 import { AppContext } from "@app/appContext/class.appContext";
+import { createAppContext } from "@app/appContext/create.appContext";
 import { createAppState } from "@app/appState/create.appState";
 
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
@@ -210,6 +210,13 @@ describe("createAppContext", () => {
     });
 
     expect(appContext.getCanonicalUrl()).toBe("https://kevinellen.com/");
+
+    expect(appContext.getSecurity()).toEqual({
+      nonce: expect.any(String),
+    });
+    expect(appContext.getSecurity().nonce).not.toHaveLength(0);
+    expect(appContext.getSecurity().nonce).toMatch(/^[a-f0-9]+$/i);
+    expect(Object.isFrozen(appContext.getSecurity())).toBe(true);
   });
 
   it("returns an AppContext instance for an error-page target", () => {
@@ -393,5 +400,27 @@ describe("createAppContext", () => {
     });
 
     expect(appContext.getCanonicalUrl()).toBeNull();
+
+    expect(appContext.getSecurity()).toEqual({
+      nonce: expect.any(String),
+    });
+    expect(appContext.getSecurity().nonce).not.toHaveLength(0);
+    expect(appContext.getSecurity().nonce).toMatch(/^[a-f0-9]+$/i);
+    expect(Object.isFrozen(appContext.getSecurity())).toBe(true);
+  });
+
+  it("creates a unique nonce per app context", () => {
+    const req = new Request("https://example.com/");
+
+    const target: DocumentRenderTarget = {
+      kind: "page",
+      page: appState.getPublicPageById("home")!,
+      status: 200,
+    };
+
+    const first = createAppContext(req, env, appState, target);
+    const second = createAppContext(req, env, appState, target);
+
+    expect(first.getSecurity().nonce).not.toBe(second.getSecurity().nonce);
   });
 });

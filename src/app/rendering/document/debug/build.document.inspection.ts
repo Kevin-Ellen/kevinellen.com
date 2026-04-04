@@ -1,4 +1,4 @@
-// src/app/rendering/document/debug/build.documen.inspection.ts
+// src/app/rendering/document/debug/build.document.inspection.ts
 
 import type { AppContext } from "@app/appContext/class.appContext";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
@@ -58,6 +58,7 @@ export const buildDocumentInspection = (
       assets: buildInspectableAssets(appContext),
       structuredData: appContext.getStructuredData(),
       content: appContext.getContent(),
+      security: appContext.getSecurity(),
     },
   };
 };

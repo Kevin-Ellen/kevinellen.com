@@ -5,12 +5,12 @@ import { createAppState } from "@app/appState/create.appState";
 
 import type { AppContextConfig } from "@app/appContext/appContext.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
-import type { WithContext, Person, WebSite } from "schema-dts";
+import type { Person, WebSite, WithContext } from "schema-dts";
 
 describe("AppContext", () => {
   const appState = createAppState();
 
-  it("returns the stored request, site config, target, breadcrumbs, navigation, structured data, assets, content and canonical url", () => {
+  it("returns the stored request, site config, target, breadcrumbs, navigation, structured data, assets, content, canonical url and security", () => {
     const request = new Request("https://example.com/");
 
     const target: DocumentRenderTarget = {
@@ -21,6 +21,9 @@ describe("AppContext", () => {
 
     const config: AppContextConfig = {
       request,
+      security: {
+        nonce: "test-nonce",
+      },
       siteConfig: appState.getSiteConfig(),
       target,
       breadcrumbs: [
@@ -116,6 +119,9 @@ describe("AppContext", () => {
     expect(appContext.getAssets()).toEqual(config.assets);
     expect(appContext.getContent()).toEqual(config.content);
     expect(appContext.getCanonicalUrl()).toBe(config.canonicalUrl);
+    expect(appContext.getSecurity()).toEqual({
+      nonce: "test-nonce",
+    });
   });
 
   it("freezes the app context instance", () => {
@@ -129,6 +135,9 @@ describe("AppContext", () => {
 
     const appContext = new AppContext({
       request,
+      security: Object.freeze({
+        nonce: "test-nonce",
+      }),
       siteConfig: appState.getSiteConfig(),
       target,
       breadcrumbs: [],
@@ -199,5 +208,6 @@ describe("AppContext", () => {
     });
 
     expect(Object.isFrozen(appContext)).toBe(true);
+    expect(Object.isFrozen(appContext.getSecurity())).toBe(true);
   });
 });
