@@ -1,4 +1,4 @@
-// tests/src/app/rendering/document/shell/docEnd.render.shell.test.ts;
+// tests/src/app/rendering/document/shell/docClose.render.shell.test.ts
 
 import { createAppContext } from "@app/appContext/create.appContext";
 import { createAppState } from "@app/appState/create.appState";
@@ -8,7 +8,7 @@ import { renderDocClose } from "@app/rendering/document/shell/docClose.render.sh
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 import type { DocumentRenderContext } from "@app/rendering/document/document.render.types";
 
-describe("renderDocumentEnd", () => {
+describe("renderDocClose", () => {
   const appState = createAppState();
 
   const env = {
@@ -33,6 +33,24 @@ describe("renderDocumentEnd", () => {
     const documentRenderContext = createDocumentRenderContext();
 
     const html = renderDocClose(documentRenderContext);
+
+    expect(html).toContain('type="application/ld+json"');
+    expect(html).toContain('"@type":"Person"');
+    expect(html).toContain('"@type":"WebSite"');
+  });
+
+  it("renders site-level structured data when page structured data is null", () => {
+    const documentRenderContext = createDocumentRenderContext();
+
+    const contextWithoutPageStructuredData: DocumentRenderContext = {
+      ...documentRenderContext,
+      structuredData: {
+        ...documentRenderContext.structuredData,
+        page: null,
+      },
+    };
+
+    const html = renderDocClose(contextWithoutPageStructuredData);
 
     expect(html).toContain('type="application/ld+json"');
     expect(html).toContain('"@type":"Person"');
@@ -67,6 +85,61 @@ describe("renderDocumentEnd", () => {
     );
   });
 
+  it("omits footer scripts when no footer scripts exist", () => {
+    const documentRenderContext = createDocumentRenderContext();
+
+    const contextWithoutFooterScripts: DocumentRenderContext = {
+      ...documentRenderContext,
+      assets: {
+        ...documentRenderContext.assets,
+        footer: {
+          ...documentRenderContext.assets.footer,
+          scripts: [],
+        },
+      },
+    };
+
+    const html = renderDocClose(contextWithoutFooterScripts);
+
+    expect(html).not.toContain(
+      `<script nonce="${documentRenderContext.security.nonce}">`,
+    );
+  });
+
+  it("renders footer scripts in deterministic order", () => {
+    const documentRenderContext = createDocumentRenderContext();
+
+    const contextWithFooterScripts: DocumentRenderContext = {
+      ...documentRenderContext,
+      assets: {
+        ...documentRenderContext.assets,
+        footer: {
+          ...documentRenderContext.assets.footer,
+          scripts: [
+            {
+              id: "header-condense",
+              kind: "inline",
+              content: 'console.log("first");',
+              location: "footer",
+            },
+            {
+              id: "header-condense",
+              kind: "inline",
+              content: 'console.log("second");',
+              location: "footer",
+            },
+          ],
+        },
+      },
+    };
+
+    const html = renderDocClose(contextWithFooterScripts);
+
+    expect(html.indexOf('console.log("first");')).toBeLessThan(
+      html.indexOf('console.log("second");'),
+    );
+  });
+
   it("renders the svg sprite container", () => {
     const documentRenderContext = createDocumentRenderContext();
 
@@ -75,6 +148,58 @@ describe("renderDocumentEnd", () => {
     expect(html).toContain('<svg xmlns="http://www.w3.org/2000/svg"');
     expect(html).toContain('<symbol id="icon-home"');
     expect(html).toContain('<symbol id="logo-rspb"');
+  });
+
+  it("omits the svg sprite container when no footer svgs exist", () => {
+    const documentRenderContext = createDocumentRenderContext();
+
+    const contextWithoutFooterSvgs: DocumentRenderContext = {
+      ...documentRenderContext,
+      assets: {
+        ...documentRenderContext.assets,
+        footer: {
+          ...documentRenderContext.assets.footer,
+          svgs: [],
+        },
+      },
+    };
+
+    const html = renderDocClose(contextWithoutFooterSvgs);
+
+    expect(html).not.toContain('<svg xmlns="http://www.w3.org/2000/svg"');
+    expect(html).not.toContain("<symbol");
+  });
+
+  it("returns structured data and closing tags when footer scripts and footer svgs are empty", () => {
+    const documentRenderContext = createDocumentRenderContext();
+
+    const minimalContext: DocumentRenderContext = {
+      ...documentRenderContext,
+      structuredData: {
+        ...documentRenderContext.structuredData,
+        page: null,
+      },
+      assets: {
+        ...documentRenderContext.assets,
+        footer: {
+          ...documentRenderContext.assets.footer,
+          scripts: [],
+          svgs: [],
+        },
+      },
+    };
+
+    const html = renderDocClose(minimalContext);
+
+    expect(html).toContain('type="application/ld+json"');
+    expect(html).toContain('"@type":"Person"');
+    expect(html).toContain('"@type":"WebSite"');
+    expect(html).not.toContain(
+      `<script nonce="${documentRenderContext.security.nonce}">`,
+    );
+    expect(html).not.toContain('<svg xmlns="http://www.w3.org/2000/svg"');
+    expect(html).toContain("</body>");
+    expect(html).toContain("</html>");
   });
 
   it("closes the document", () => {

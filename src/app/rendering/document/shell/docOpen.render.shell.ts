@@ -12,24 +12,24 @@ export const renderDocOpen = (
 ): string => {
   const { site, metadata, security, assets } = documentRenderContext;
 
-  const canonicalLink = metadata.canonicalUrl
-    ? `<link rel="canonical" href="${escapeAttribute(metadata.canonicalUrl)}">`
-    : "";
-
-  const headerScripts = assets.header.scripts
-    .map((script) => renderScriptAsset(script, security.nonce))
-    .join("");
+  const headFragments = [
+    '<meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1">',
+    `<style nonce="${escapeAttribute(security.nonce)}">${css}</style>`,
+    `<title>${escapeHtmlContent(metadata.pageTitle)}</title>`,
+    `<meta name="description" content="${escapeAttribute(metadata.metaDescription)}">`,
+    metadata.canonicalUrl
+      ? `<link rel="canonical" href="${escapeAttribute(metadata.canonicalUrl)}">`
+      : "",
+    ...assets.header.scripts.map((script) =>
+      renderScriptAsset(script, security.nonce),
+    ),
+  ].filter((fragment) => fragment.length > 0);
 
   return `<!doctype html>
 <html lang="${escapeAttribute(site.language)}">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style nonce="${escapeAttribute(security.nonce)}">${css}</style>
-    <title>${escapeHtmlContent(metadata.pageTitle)}</title>
-    <meta name="description" content="${escapeAttribute(metadata.metaDescription)}">
-    ${canonicalLink}
-    ${headerScripts}
+    ${headFragments.join("\n    ")}
   </head>
   <body class="l-page">`;
 };
