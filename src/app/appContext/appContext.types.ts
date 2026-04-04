@@ -20,13 +20,20 @@ export type AppContextBreadcrumb = {
   href: string;
 };
 
+export type AppContextSvgIcon = {
+  id: SvgAssetId;
+  viewBox: string;
+  width: number;
+  height: number;
+};
+
 export type AppContextNavigationItem =
   | {
       kind: "page";
       id: PageId;
       label: string;
       href: string;
-      svgId?: SvgAssetId;
+      svgIcon?: AppContextSvgIcon;
       isCurrent: boolean;
     }
   | {
@@ -34,14 +41,14 @@ export type AppContextNavigationItem =
       id: SocialId;
       label: string;
       href: string;
-      svgId?: SvgAssetId;
+      svgIcon?: AppContextSvgIcon;
       isCurrent: false;
     }
   | {
       kind: "external";
       label: string;
       href: string;
-      svgId?: SvgAssetId;
+      svgIcon?: AppContextSvgIcon;
       isCurrent: false;
     };
 
@@ -78,6 +85,30 @@ export type AppContextSecurity = {
   nonce: string;
 };
 
+export type AppContextFooterAffiliation = {
+  id: string;
+  label: string;
+  href: string;
+  svgId: SvgAssetId;
+  viewBox: string;
+  width: number;
+  height: number;
+};
+
+export type AppContextFooterColophon = {
+  copyrightName: string;
+  copyrightYear: number;
+};
+
+export type AppContextFooter = {
+  affiliations: {
+    title: string;
+    description: string;
+    items: readonly AppContextFooterAffiliation[];
+  } | null;
+  colophon: AppContextFooterColophon | null;
+};
+
 export type AppContextConfig = {
   request: Request;
   security: AppContextSecurity;
@@ -87,6 +118,7 @@ export type AppContextConfig = {
   breadcrumbs: readonly AppContextBreadcrumb[];
   navigation: AppContextNavigation;
   assets: AppContextAssets;
+  footer: AppContextFooter;
   structuredData: AppContextStructuredData;
   content: Content;
 };

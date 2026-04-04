@@ -10,6 +10,14 @@ import type { Person, WebSite, WithContext } from "schema-dts";
 describe("AppContext", () => {
   const appState = createAppState();
 
+  const mockFooter = {
+    affiliations: null,
+    colophon: {
+      copyrightName: "Kevin Ellen",
+      copyrightYear: 2026,
+    },
+  };
+
   it("returns the stored request, site config, target, breadcrumbs, navigation, structured data, assets, content, canonical url and security", () => {
     const request = new Request("https://example.com/");
 
@@ -42,7 +50,12 @@ describe("AppContext", () => {
               label: "Home",
               href: "/",
               isCurrent: true,
-              svgId: "icon-home",
+              svgIcon: {
+                id: "icon-home",
+                viewBox: "0 0 24 24",
+                width: 24,
+                height: 24,
+              },
             },
           ],
           social: [],
@@ -51,6 +64,7 @@ describe("AppContext", () => {
           sections: [],
         },
       },
+      footer: mockFooter,
       structuredData: {
         person: {
           "@context": "https://schema.org",
@@ -115,6 +129,7 @@ describe("AppContext", () => {
     expect(appContext.getTarget()).toBe(target);
     expect(appContext.getBreadcrumbs()).toEqual(config.breadcrumbs);
     expect(appContext.getNavigation()).toEqual(config.navigation);
+    expect(appContext.getFooter()).toEqual(config.footer); // 👈 NEW
     expect(appContext.getStructuredData()).toEqual(config.structuredData);
     expect(appContext.getAssets()).toEqual(config.assets);
     expect(appContext.getContent()).toEqual(config.content);
@@ -150,6 +165,7 @@ describe("AppContext", () => {
           sections: [],
         },
       },
+      footer: mockFooter, // 👈 NEW
       structuredData: {
         person: {
           "@context": "https://schema.org",

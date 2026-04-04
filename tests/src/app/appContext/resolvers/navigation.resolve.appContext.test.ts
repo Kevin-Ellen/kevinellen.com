@@ -1,3 +1,5 @@
+// src/app/appContext/resolvers/navigation.resolve.appContext.test.ts
+
 import { resolveNavigationAppContext } from "@app/appContext/resolvers/navigation.resolve.appContext";
 import { AppState } from "@app/appState/class.appState";
 import { createAppState } from "@app/appState/create.appState";
@@ -17,7 +19,9 @@ describe("resolveNavigationAppContext", () => {
         label: "Home",
         href: "/",
         isCurrent: true,
-        svgId: "icon-home",
+        svgIcon: expect.objectContaining({
+          id: "icon-home",
+        }),
       },
       {
         kind: "page",
@@ -39,7 +43,9 @@ describe("resolveNavigationAppContext", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgId: "icon-github",
+        svgIcon: expect.objectContaining({
+          id: "icon-github",
+        }),
       },
       {
         kind: "social",
@@ -47,7 +53,9 @@ describe("resolveNavigationAppContext", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgId: "icon-instagram",
+        svgIcon: expect.objectContaining({
+          id: "icon-instagram",
+        }),
       },
     ]);
   });
@@ -62,7 +70,9 @@ describe("resolveNavigationAppContext", () => {
         label: "Home",
         href: "/",
         isCurrent: false,
-        svgId: "icon-home",
+        svgIcon: expect.objectContaining({
+          id: "icon-home",
+        }),
       },
       {
         kind: "page",
@@ -141,7 +151,9 @@ describe("resolveNavigationAppContext", () => {
         label: "Home",
         href: "/",
         isCurrent: false,
-        svgId: "icon-home",
+        svgIcon: expect.objectContaining({
+          id: "icon-home",
+        }),
       },
       {
         kind: "page",
@@ -225,7 +237,9 @@ describe("resolveNavigationAppContext", () => {
         href: "https://example.com",
         label: "External",
         isCurrent: false,
-        svgId: "icon-home",
+        svgIcon: expect.objectContaining({
+          id: "icon-home",
+        }),
       },
     ]);
   });
