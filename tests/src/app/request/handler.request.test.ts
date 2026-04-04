@@ -5,6 +5,7 @@ import { runRequestPolicies } from "@app/policies/request/run.request.policies";
 import { resolveErrorRenderIntent } from "@app/request/resolve.error.render.intent";
 import { routeDocumentRequest } from "@app/request/route.document.request";
 import { renderDocumentRequest } from "@app/request/render.document.request";
+import { runResponsePolicies } from "@app/policies/response/run.response.policies";
 
 import { createAppState } from "@app/appState/create.appState";
 
@@ -12,6 +13,7 @@ jest.mock("@app/policies/request/run.request.policies");
 jest.mock("@app/request/resolve.error.render.intent");
 jest.mock("@app/request/route.document.request");
 jest.mock("@app/request/render.document.request");
+jest.mock("@app/policies/response/run.response.policies");
 
 const mockRunRequestPolicies = runRequestPolicies as jest.MockedFunction<
   typeof runRequestPolicies
@@ -28,6 +30,10 @@ const mockRouteDocumentRequest = routeDocumentRequest as jest.MockedFunction<
 
 const mockRenderDocumentRequest = renderDocumentRequest as jest.MockedFunction<
   typeof renderDocumentRequest
+>;
+
+const mockRunResponsePolicies = runResponsePolicies as jest.MockedFunction<
+  typeof runResponsePolicies
 >;
 
 describe("handleRequest", () => {
@@ -57,6 +63,7 @@ describe("handleRequest", () => {
     expect(mockResolveErrorRenderIntent).not.toHaveBeenCalled();
     expect(mockRouteDocumentRequest).not.toHaveBeenCalled();
     expect(mockRenderDocumentRequest).not.toHaveBeenCalled();
+    expect(mockRunResponsePolicies).not.toHaveBeenCalled();
   });
 
   it("resolves and renders an error target when request policies return render-error", async () => {
@@ -66,7 +73,8 @@ describe("handleRequest", () => {
       page: appState.getErrorPageByStatus(410)!,
     };
 
-    const response = new Response("gone", { status: 410 });
+    const renderedResponse = new Response("gone", { status: 410 });
+    const finalResponse = new Response("gone-final", { status: 410 });
 
     mockRunRequestPolicies.mockReturnValue({
       kind: "render-error",
@@ -74,11 +82,19 @@ describe("handleRequest", () => {
     });
 
     mockResolveErrorRenderIntent.mockReturnValue(target);
-    mockRenderDocumentRequest.mockResolvedValue(response);
+
+    mockRenderDocumentRequest.mockResolvedValue({
+      response: renderedResponse,
+      security: {
+        nonce: "testnonce123",
+      },
+    });
+
+    mockRunResponsePolicies.mockReturnValue(finalResponse);
 
     const result = await handleRequest(req, env, ctx, appState);
 
-    expect(result).toBe(response);
+    expect(result).toBe(finalResponse);
     expect(mockResolveErrorRenderIntent).toHaveBeenCalledWith("gone", appState);
     expect(mockRouteDocumentRequest).not.toHaveBeenCalled();
     expect(mockRenderDocumentRequest).toHaveBeenCalledWith(
@@ -87,6 +103,16 @@ describe("handleRequest", () => {
       ctx,
       appState,
       target,
+    );
+    expect(mockRunResponsePolicies).toHaveBeenCalledWith(
+      req,
+      env,
+      appState,
+      target,
+      {
+        nonce: "testnonce123",
+      },
+      renderedResponse,
     );
   });
 
@@ -97,15 +123,24 @@ describe("handleRequest", () => {
       page: appState.getPublicPageById("home")!,
     };
 
-    const response = new Response("ok", { status: 200 });
+    const renderedResponse = new Response("ok", { status: 200 });
+    const finalResponse = new Response("ok-final", { status: 200 });
 
     mockRunRequestPolicies.mockReturnValue({ kind: "continue" });
     mockRouteDocumentRequest.mockReturnValue(target);
-    mockRenderDocumentRequest.mockResolvedValue(response);
+
+    mockRenderDocumentRequest.mockResolvedValue({
+      response: renderedResponse,
+      security: {
+        nonce: "testnonce123",
+      },
+    });
+
+    mockRunResponsePolicies.mockReturnValue(finalResponse);
 
     const result = await handleRequest(req, env, ctx, appState);
 
-    expect(result).toBe(response);
+    expect(result).toBe(finalResponse);
     expect(mockRouteDocumentRequest).toHaveBeenCalledWith(req, appState);
     expect(mockRenderDocumentRequest).toHaveBeenCalledWith(
       req,
@@ -113,6 +148,16 @@ describe("handleRequest", () => {
       ctx,
       appState,
       target,
+    );
+    expect(mockRunResponsePolicies).toHaveBeenCalledWith(
+      req,
+      env,
+      appState,
+      target,
+      {
+        nonce: "testnonce123",
+      },
+      renderedResponse,
     );
     expect(mockResolveErrorRenderIntent).not.toHaveBeenCalled();
   });

@@ -2,6 +2,7 @@
 
 import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
+import type { RenderedDocumentResult } from "@app/request/request.document.types";
 
 import { createAppContext } from "@app/appContext/create.appContext";
 import { buildDocumentRenderContext } from "@app/rendering/document/build.context.document.render";
@@ -15,21 +16,31 @@ export const renderDocumentRequest = async (
   _ctx: ExecutionContext,
   appState: AppState,
   target: DocumentRenderTarget,
-): Promise<Response> => {
+): Promise<RenderedDocumentResult> => {
   const appContext = createAppContext(req, env, appState, target);
 
   if (shouldRenderDocumentInspection(req, env)) {
-    return renderDocumentInspectionResponse(req, target, appContext);
+    return {
+      response: renderDocumentInspectionResponse(req, target, appContext),
+      security: {
+        nonce: appContext.getSecurity().nonce,
+      },
+    };
   }
 
   const documentRenderContext = buildDocumentRenderContext(appContext);
   const html = renderDocument(documentRenderContext);
 
-  return new Response(html, {
-    status: target.status,
-    headers: {
-      "content-type": "text/html; charset=utf-8",
-      "x-render-mode": "document",
+  return {
+    response: new Response(html, {
+      status: target.status,
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "x-render-mode": "document",
+      },
+    }),
+    security: {
+      nonce: appContext.getSecurity().nonce,
     },
-  });
+  };
 };

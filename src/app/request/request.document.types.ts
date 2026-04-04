@@ -16,3 +16,12 @@ export type DocumentRenderTarget =
       page: ErrorPageDefinition;
       status: 404 | 410 | 500;
     };
+
+export type RenderedDocumentSecurity = {
+  nonce: string;
+};
+
+export type RenderedDocumentResult = {
+  response: Response;
+  security: RenderedDocumentSecurity;
+};
