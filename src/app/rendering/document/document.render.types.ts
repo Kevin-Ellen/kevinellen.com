@@ -1,14 +1,14 @@
 // src/app/rendering/document/document.render.types.ts
 
 import type { Content } from "@app/content/content.types";
-import type { PageId } from "@app/pages/page.definition";
+import type { PageId } from "@shared-types/pages/page.definition";
 import type { SocialId } from "@config/social.config.types";
-import type { PageStructuredDataDocument } from "@config/structured-data.config.types";
+import type { PageStructuredDataDocument } from "@shared-types/config/structured-data.config.types";
 import type {
   ScriptAssetConfig,
   SvgAssetConfig,
   SvgAssetId,
-} from "@config/assets.config.types";
+} from "@shared-types/config/assets.config.types";
 import type { Person, WebSite, WithContext } from "schema-dts";
 
 export type DocumentRenderBreadcrumb = {

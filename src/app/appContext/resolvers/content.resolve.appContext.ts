@@ -10,7 +10,7 @@ import type {
   PageContent,
   PageContentInline,
   PageContentParagraph,
-} from "@app/pages/content/content.page.types";
+} from "@shared-types/pages/content/content.page.types";
 
 const resolveContentInlineAppContext = (
   inline: PageContentInline,

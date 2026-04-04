@@ -7,17 +7,20 @@ import { error404Page } from "@app/pages/error/404.error.page";
 
 import type {
   ErrorPageDefinition,
-  PageDefinition,
-} from "@app/pages/page.definition";
+  StandardPageDefinition,
+  PublicPageDefinitionCore,
+} from "@shared-types/pages/page.definition";
 
 import { createAppStateConfig } from "@tests/helpers/appState/create.config.appState";
 
+const standardHomePage = homePage as StandardPageDefinition;
+
 const createPublicPage = (
-  coreOverrides: Partial<PageDefinition["core"]>,
-): PageDefinition => ({
-  ...homePage,
+  coreOverrides: Partial<PublicPageDefinitionCore>,
+): StandardPageDefinition => ({
+  ...standardHomePage,
   core: {
-    ...homePage.core,
+    ...standardHomePage.core,
     ...coreOverrides,
   },
 });
@@ -36,7 +39,7 @@ describe("AppState", () => {
   describe("config getters", () => {
     it("returns the stored config domains", () => {
       const config = createAppStateConfig({
-        publicPages: [homePage],
+        publicPages: [standardHomePage],
         errorPages: [error404Page],
       });
 
@@ -102,7 +105,7 @@ describe("AppState", () => {
 
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [errorPage],
         }),
       );
@@ -119,7 +122,7 @@ describe("AppState", () => {
 
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [errorPage],
         }),
       );
@@ -130,7 +133,7 @@ describe("AppState", () => {
     it("returns null when a public page id does not exist", () => {
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [error404Page],
         }),
       );
@@ -141,7 +144,7 @@ describe("AppState", () => {
     it("returns null when a slug does not exist", () => {
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [error404Page],
         }),
       );
@@ -152,7 +155,7 @@ describe("AppState", () => {
     it("returns null when an error page id does not exist", () => {
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [error404Page],
         }),
       );
@@ -163,7 +166,7 @@ describe("AppState", () => {
     it("returns null when an error page status does not exist", () => {
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [error404Page],
         }),
       );
@@ -228,7 +231,7 @@ describe("AppState", () => {
         () =>
           new AppState(
             createAppStateConfig({
-              publicPages: [homePage],
+              publicPages: [standardHomePage],
               errorPages: [
                 createErrorPage({
                   id: "dup-error",
@@ -251,7 +254,7 @@ describe("AppState", () => {
         () =>
           new AppState(
             createAppStateConfig({
-              publicPages: [homePage],
+              publicPages: [standardHomePage],
               errorPages: [
                 createErrorPage({
                   id: "error-a",
@@ -274,7 +277,7 @@ describe("AppState", () => {
     it("freezes the app state instance", () => {
       const appState = new AppState(
         createAppStateConfig({
-          publicPages: [homePage],
+          publicPages: [standardHomePage],
           errorPages: [error404Page],
         }),
       );

@@ -1,47 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
+    "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ES2023"],
     "types": ["./worker-configuration.d.ts", "jest"],
-
+    "lib": ["ES2022", "DOM"],
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    "allowJs": false,
-    "checkJs": false,
-
     "noEmit": true,
     "isolatedModules": true,
-
-    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
-
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-
-    "esModuleInterop": true,
-
     "paths": {
-      //   "@generated/*": [".build/generated/*"],
-      //   "@system/*": ["src/system/*"],
-      //   "@resources/*": ["src/resources/*"],
-      //   "@types-src/*": ["src/types/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@config/*": ["./src/config/*"],
       "@app/*": ["./src/app/*"],
+      "@config/*": ["./src/config/*"],
+      "@utils/*": ["./src/utils/*"],
       "@tests/*": ["./tests/*"],
-      "@src/*": ["./src/*"]
+      "@shared-types/*": ["./packages/shared-types/src/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts",
-    "scripts/**/*.ts",
-    "worker-configuration.d.ts",
-    "src/app/assets/scripts/menuCondense.inline.script.js"
-  ],
-  "exclude": ["dist", "coverage", "node_modules", "src/xxx___app"]
+  "include": ["src", "tests", "packages", "worker-configuration.d.ts"]
 }

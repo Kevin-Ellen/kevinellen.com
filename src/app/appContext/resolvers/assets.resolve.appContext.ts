@@ -6,7 +6,7 @@ import type { DocumentRenderTarget } from "@app/request/request.document.types";
 import type {
   ScriptAssetConfig,
   SvgAssetConfig,
-} from "@config/assets.config.types";
+} from "@shared-types/config/assets.config.types";
 
 const mergeById = <T extends { id: string }>(
   globalItems: readonly T[],

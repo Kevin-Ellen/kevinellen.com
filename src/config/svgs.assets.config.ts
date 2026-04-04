@@ -1,6 +1,6 @@
 // src/config/svgs.assets.config.ts
 
-import type { SvgAssetConfig } from "@config/assets.config.types";
+import type { SvgAssetConfig } from "@shared-types/config/assets.config.types";
 
 export const appSvgs: readonly SvgAssetConfig[] = [
   {

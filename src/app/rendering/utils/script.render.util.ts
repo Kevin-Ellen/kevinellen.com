@@ -1,6 +1,6 @@
 // src/app/rendering/utils/script.render.util.ts
 
-import type { ScriptAssetConfig } from "@config/assets.config.types";
+import type { ScriptAssetConfig } from "@shared-types/config/assets.config.types";
 
 import { escapeAttribute } from "@utils/escapeContent.util";
 

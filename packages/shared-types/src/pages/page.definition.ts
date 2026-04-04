@@ -1,11 +1,11 @@
-// src/app/pages/page.definition.ts
+// packages/shared-types/src/pages/page.definition.ts
 
 import type {
   SvgAssetConfig,
   ScriptAssetConfig,
-} from "@config/assets.config.types";
-import type { PageStructuredDataNode } from "@config/structured-data.config.types";
-import type { PageContent } from "@app/pages/content/content.page.types";
+} from "@shared-types/config/assets.config.types";
+import type { PageStructuredDataNode } from "@shared-types/config/structured-data.config.types";
+import type { PageContent } from "@shared-types/pages/content/content.page.types";
 
 /* -------------------------------------------------------------------------- */
 /* Shared identity                                                            */
@@ -13,13 +13,7 @@ import type { PageContent } from "@app/pages/content/content.page.types";
 
 export type PageId = string;
 
-export type PublicPageKind =
-  | "home"
-  | "static"
-  | "listing"
-  | "article"
-  | "photo"
-  | "tag";
+export type StandardPublicPageKind = "home" | "static" | "listing" | "tag";
 
 export type ErrorPageStatus = 404 | 410 | 500;
 
@@ -33,7 +27,12 @@ export type BasePageDefinitionCore = {
 };
 
 export type PublicPageDefinitionCore = BasePageDefinitionCore & {
-  kind: PublicPageKind;
+  kind: StandardPublicPageKind;
+  slug: string;
+};
+
+export type ArticlePageDefinitionCore = BasePageDefinitionCore & {
+  kind: "article";
   slug: string;
 };
 
@@ -81,6 +80,11 @@ export type PageMeta = {
   metaDescription: string;
 };
 
+export type DatedPageMetadata = {
+  datePublished: string | null;
+  dateModified: string | null;
+};
+
 /* -------------------------------------------------------------------------- */
 /* Page navigation                                                            */
 /* -------------------------------------------------------------------------- */
@@ -123,12 +127,22 @@ export type BasePageDefinition<TCore, TConfig> = {
 /* Specialised page definitions                                               */
 /* -------------------------------------------------------------------------- */
 
-export type PageDefinition = BasePageDefinition<
+export type StandardPageDefinition = BasePageDefinition<
   PublicPageDefinitionCore,
   PublicPageDefinitionConfig
 > & {
   readonly structuredData: PageStructuredData;
 };
+
+export type ArticlePageDefinition = BasePageDefinition<
+  ArticlePageDefinitionCore,
+  PublicPageDefinitionConfig
+> & {
+  readonly dated: DatedPageMetadata;
+  readonly structuredData: PageStructuredData;
+};
+
+export type PageDefinition = StandardPageDefinition | ArticlePageDefinition;
 
 export type ErrorPageDefinition = BasePageDefinition<
   ErrorPageDefinitionCore,

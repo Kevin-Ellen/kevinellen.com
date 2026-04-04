@@ -1,6 +1,6 @@
 // src/app/pages/public/journal.page.ts
 
-import type { PageDefinition } from "@app/pages/page.definition";
+import type { PageDefinition } from "@shared-types/pages/page.definition";
 
 export const journalPage: PageDefinition = {
   core: {

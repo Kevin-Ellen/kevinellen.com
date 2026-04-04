@@ -1,6 +1,6 @@
 // src/config/assets.config.ts
 
-import type { AssetsConfig } from "./assets.config.types";
+import type { AssetsConfig } from "@shared-types/config/assets.config.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 import { appSvgs } from "@config/svgs.assets.config";

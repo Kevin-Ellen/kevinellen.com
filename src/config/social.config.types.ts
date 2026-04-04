@@ -1,6 +1,6 @@
 // src/config/social.config.types.ts
 
-import type { SvgAssetId } from "@config/assets.config.types";
+import type { SvgAssetId } from "@shared-types/config/assets.config.types";
 
 export type SocialId = "github" | "linkedin" | "instagram";
 export type IconId = string;

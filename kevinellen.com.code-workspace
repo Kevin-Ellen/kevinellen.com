@@ -2,11 +2,15 @@
   "folders": [{ "path": "." }],
   "settings": {
     "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
     "explorer.fileNesting.patterns": {
       "package.json": "package-lock.json,.nvmrc",
-      "tsconfig.json": "worker-configuration.d.ts",
+      "tsconfig.json": "tsconfig.base.json,tsconfig.app.json,worker-configuration.d.ts",
+      "eslint.config.mjs": ".eslintignore",
       "stylelint.config.mjs": ".stylelintignore",
-      ".prettierrc.json": ".prettierignore",
+      "prettierrc.json": ".prettierignore,.editorconfig,.gitignore,.gitattributes",
+      "wrangler.jsonc": ".dev.vars,.env,.env.*",
+      "jest.config.ts": "jest.setup.ts",
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

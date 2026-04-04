@@ -3,16 +3,19 @@
 import type {
   PageDefinition,
   ErrorPageDefinition,
-} from "@app/pages/page.definition";
+} from "@shared-types/pages/page.definition";
 
-import type { AssetsConfig } from "@config/assets.config.types";
+import type { AssetsConfig } from "@shared-types/config/assets.config.types";
 import type { FooterConfig } from "@config/footer.config.types";
 import type { NavigationConfig } from "@config/navigation.config.types";
 import type { SiteConfig } from "@config/site.config.types";
 import type { SocialConfig } from "@config/social.config.types";
-import type { StructuredDataConfig } from "@config/structured-data.config.types";
+import type { StructuredDataConfig } from "@shared-types/config/structured-data.config.types";
 import type { WebManifestConfig } from "@config/webmanifest.config.types";
-import type { PageId, ErrorPageStatus } from "@app/pages/page.definition";
+import type {
+  PageId,
+  ErrorPageStatus,
+} from "@shared-types/pages/page.definition";
 import type { RedirectRule } from "@config/redirects.config.types";
 import type { GoneRule } from "@config/gone.config.types";
 

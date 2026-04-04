@@ -3,7 +3,7 @@
 import type {
   ErrorPageDefinition,
   PageDefinition,
-} from "@app/pages/page.definition";
+} from "@shared-types/pages/page.definition";
 
 export type DocumentRenderTarget =
   | {

@@ -4,7 +4,7 @@ import type { AppStateConfig } from "@app/appState/appState.types";
 import type {
   ErrorPageDefinition,
   PageDefinition,
-} from "@app/pages/page.definition";
+} from "@shared-types/pages/page.definition";
 
 import type { RedirectRule } from "@config/redirects.config.types";
 import type { GoneRule } from "@config/gone.config.types";

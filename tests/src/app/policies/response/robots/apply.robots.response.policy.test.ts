@@ -6,7 +6,7 @@ import type { DocumentRenderTarget } from "@app/request/request.document.types";
 import type {
   ErrorPageDefinition,
   PageRobotsConfig,
-} from "@app/pages/page.definition";
+} from "@shared-types/pages/page.definition";
 
 import { createPageContentFixture } from "@tests/helpers/page.content.fixture";
 

@@ -1,6 +1,6 @@
 // src/config/structured-data.config.ts
 
-import type { StructuredDataConfig } from "@config/structured-data.config.types";
+import type { StructuredDataConfig } from "@shared-types/config/structured-data.config.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 

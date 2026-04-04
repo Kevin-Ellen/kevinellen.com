@@ -1,6 +1,6 @@
 // src/app/rendering/utils/svg.render.util.ts
 
-import type { SvgAssetConfig } from "@config/assets.config.types";
+import type { SvgAssetConfig } from "@shared-types/config/assets.config.types";
 
 import { escapeAttribute } from "@utils/escapeContent.util";
 

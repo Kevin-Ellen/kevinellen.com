@@ -1,6 +1,6 @@
 // src/config/scripts.assets.config.ts
 
-import type { ScriptAssetConfig } from "@config/assets.config.types";
+import type { ScriptAssetConfig } from "@shared-types/config/assets.config.types";
 
 export const appScripts: readonly ScriptAssetConfig[] = [
   {

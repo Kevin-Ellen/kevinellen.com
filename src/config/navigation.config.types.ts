@@ -1,8 +1,8 @@
 // src/config/navigation.config.types.ts
 
 import type { SocialId } from "@config/social.config.types";
-import type { SvgAssetId } from "@config/assets.config.types";
-import type { PageId } from "@app/pages/page.definition";
+import type { SvgAssetId } from "@shared-types/config/assets.config.types";
+import type { PageId } from "@shared-types/pages/page.definition";
 
 export type NavigationItem =
   | { kind: "page"; id: PageId; svgId?: SvgAssetId }

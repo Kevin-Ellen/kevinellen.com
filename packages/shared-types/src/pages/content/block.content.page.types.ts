@@ -1,6 +1,6 @@
 // src/app/pages/content/block.content.page.types.ts
 
-import type { PageContentInline } from "@app/pages/content/inline.content.page.types";
+import type { PageContentInline } from "@shared-types/pages/content/inline.content.page.types";
 
 export type PageContentHero = {
   eyebrow: string;

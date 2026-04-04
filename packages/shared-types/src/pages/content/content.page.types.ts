@@ -3,7 +3,7 @@
 import type {
   PageContentHero,
   PageContentParagraph,
-} from "@app/pages/content/block.content.page.types";
+} from "@shared-types/pages/content/block.content.page.types";
 
 export type PageContent = {
   head: PageContentHero;
@@ -14,7 +14,7 @@ export type PageContent = {
 export type {
   PageContentHero,
   PageContentParagraph,
-} from "@app/pages/content/block.content.page.types";
+} from "@shared-types/pages/content/block.content.page.types";
 
 export type {
   PageContentExternalLinkInline,
@@ -22,4 +22,4 @@ export type {
   PageContentInternalLinkInline,
   PageContentLinkInline,
   PageContentTextInline,
-} from "@app/pages/content/inline.content.page.types";
+} from "@shared-types/pages/content/inline.content.page.types";

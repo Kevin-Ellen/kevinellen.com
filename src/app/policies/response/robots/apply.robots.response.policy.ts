@@ -1,6 +1,6 @@
 // src/app/policies/response/robots/apply.robots.response.policy.ts
 
-import type { PageRobotsConfig } from "@app/pages/page.definition";
+import type { PageRobotsConfig } from "@shared-types/pages/page.definition";
 import type { ResponsePolicy } from "@app/policies/response/response.policies.types";
 
 const getNonProductionRobotsHeader = (): string => {

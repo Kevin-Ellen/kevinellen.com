@@ -5,7 +5,7 @@
 import { applyCspResponsePolicy } from "@app/policies/response/security/apply.csp.response.policy";
 import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
-import type { ErrorPageDefinition } from "@app/pages/page.definition";
+import type { ErrorPageDefinition } from "@shared-types/pages/page.definition";
 
 import { createPageContentFixture } from "@tests/helpers/page.content.fixture";
 

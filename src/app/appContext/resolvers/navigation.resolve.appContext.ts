@@ -7,9 +7,9 @@ import type {
   AppContextSvgIcon,
 } from "@app/appContext/appContext.types";
 import type { AppState } from "@app/appState/class.appState";
-import type { PageId } from "@app/pages/page.definition";
+import type { PageId } from "@shared-types/pages/page.definition";
 import type { NavigationItem } from "@config/navigation.config.types";
-import type { SvgAssetId } from "@config/assets.config.types";
+import type { SvgAssetId } from "@shared-types/config/assets.config.types";
 
 const getSvgDimensionsFromViewBox = (
   viewBox: string,
