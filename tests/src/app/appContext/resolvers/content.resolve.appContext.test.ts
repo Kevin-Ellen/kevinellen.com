@@ -3,7 +3,7 @@
 import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
 import { createAppState } from "@app/appState/create.appState";
 
-import type { PageContent } from "@app/pages/page.content.types";
+import type { PageContent } from "@app/pages/content/content.page.types";
 
 describe("resolveContentAppContext", () => {
   const appState = createAppState();
@@ -49,6 +49,68 @@ describe("resolveContentAppContext", () => {
         },
       ],
       footer: ["Footer text."],
+    });
+  });
+
+  it("passes through external-link inlines unchanged", () => {
+    const content: PageContent = {
+      head: {
+        eyebrow: "Test",
+        title: "External link content",
+        intro: "Testing external link resolution.",
+      },
+      body: [
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "Visit ",
+            },
+            {
+              kind: "external-link",
+              href: "https://example.com",
+              label: "Example",
+            },
+            {
+              kind: "text",
+              text: " for more.",
+            },
+          ],
+        },
+      ],
+      footer: [],
+    };
+
+    const result = resolveContentAppContext(content, appState);
+
+    expect(result).toEqual({
+      head: {
+        eyebrow: "Test",
+        title: "External link content",
+        intro: "Testing external link resolution.",
+      },
+      body: [
+        {
+          kind: "paragraph",
+          inlines: [
+            {
+              kind: "text",
+              text: "Visit ",
+            },
+            {
+              kind: "external-link",
+              href: "https://example.com",
+              label: "Example",
+            },
+            {
+              kind: "text",
+              text: " for more.",
+            },
+          ],
+        },
+      ],
+      footer: [],
     });
   });
 

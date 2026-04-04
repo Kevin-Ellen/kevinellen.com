@@ -47,7 +47,12 @@ describe("createAppContext", () => {
             label: "Home",
             href: "/",
             isCurrent: true,
-            svgId: "icon-home",
+            svgIcon: expect.objectContaining({
+              id: "icon-home",
+              viewBox: "0 0 640 640",
+              width: 640,
+              height: 640,
+            }),
           },
           {
             kind: "page",
@@ -64,7 +69,12 @@ describe("createAppContext", () => {
             label: "GitHub",
             href: "https://github.com/Kevin-Ellen",
             isCurrent: false,
-            svgId: "icon-github",
+            svgIcon: expect.objectContaining({
+              id: "icon-github",
+              viewBox: "0 0 640 640",
+              width: 640,
+              height: 640,
+            }),
           },
           {
             kind: "social",
@@ -72,7 +82,12 @@ describe("createAppContext", () => {
             label: "Instagram",
             href: "https://www.instagram.com/photography.mallard",
             isCurrent: false,
-            svgId: "icon-instagram",
+            svgIcon: expect.objectContaining({
+              id: "icon-instagram",
+              viewBox: "0 0 640 640",
+              width: 640,
+              height: 640,
+            }),
           },
         ],
       },
@@ -129,6 +144,47 @@ describe("createAppContext", () => {
             items: [],
           },
         ],
+      },
+    });
+
+    expect(appContext.getFooter()).toEqual({
+      affiliations: {
+        title: "Conservation",
+        description:
+          "Supporting organisations that protect habitats, species, and access to nature.",
+        items: [
+          {
+            id: "rspb",
+            label: "RSPB",
+            href: "https://www.rspb.org.uk/",
+            svgId: "logo-rspb",
+            viewBox: expect.any(String),
+            width: expect.any(Number),
+            height: expect.any(Number),
+          },
+          {
+            id: "national-trust",
+            label: "National Trust",
+            href: "https://www.nationaltrust.org.uk/",
+            svgId: "logo-national-trust",
+            viewBox: expect.any(String),
+            width: expect.any(Number),
+            height: expect.any(Number),
+          },
+          {
+            id: "vogelbescherming-nederland",
+            label: "Vogelbescherming Nederland",
+            href: "https://www.vogelbescherming.nl/",
+            svgId: "logo-vogelbescherming-nederland",
+            viewBox: expect.any(String),
+            width: expect.any(Number),
+            height: expect.any(Number),
+          },
+        ],
+      },
+      colophon: {
+        copyrightName: "Kevin Ellen",
+        copyrightYear: 2026,
       },
     });
 
@@ -246,7 +302,12 @@ describe("createAppContext", () => {
             label: "Home",
             href: "/",
             isCurrent: false,
-            svgId: "icon-home",
+            svgIcon: expect.objectContaining({
+              id: "icon-home",
+              viewBox: "0 0 640 640",
+              width: 640,
+              height: 640,
+            }),
           },
           {
             kind: "page",
@@ -263,7 +324,12 @@ describe("createAppContext", () => {
             label: "GitHub",
             href: "https://github.com/Kevin-Ellen",
             isCurrent: false,
-            svgId: "icon-github",
+            svgIcon: expect.objectContaining({
+              id: "icon-github",
+              viewBox: "0 0 640 640",
+              width: 640,
+              height: 640,
+            }),
           },
           {
             kind: "social",
@@ -271,7 +337,12 @@ describe("createAppContext", () => {
             label: "Instagram",
             href: "https://www.instagram.com/photography.mallard",
             isCurrent: false,
-            svgId: "icon-instagram",
+            svgIcon: expect.objectContaining({
+              id: "icon-instagram",
+              viewBox: "0 0 640 640",
+              width: 640,
+              height: 640,
+            }),
           },
         ],
       },
@@ -328,6 +399,47 @@ describe("createAppContext", () => {
             items: [],
           },
         ],
+      },
+    });
+
+    expect(appContext.getFooter()).toEqual({
+      affiliations: {
+        title: "Conservation",
+        description:
+          "Supporting organisations that protect habitats, species, and access to nature.",
+        items: [
+          {
+            id: "rspb",
+            label: "RSPB",
+            href: "https://www.rspb.org.uk/",
+            svgId: "logo-rspb",
+            viewBox: expect.any(String),
+            width: expect.any(Number),
+            height: expect.any(Number),
+          },
+          {
+            id: "national-trust",
+            label: "National Trust",
+            href: "https://www.nationaltrust.org.uk/",
+            svgId: "logo-national-trust",
+            viewBox: expect.any(String),
+            width: expect.any(Number),
+            height: expect.any(Number),
+          },
+          {
+            id: "vogelbescherming-nederland",
+            label: "Vogelbescherming Nederland",
+            href: "https://www.vogelbescherming.nl/",
+            svgId: "logo-vogelbescherming-nederland",
+            viewBox: expect.any(String),
+            width: expect.any(Number),
+            height: expect.any(Number),
+          },
+        ],
+      },
+      colophon: {
+        copyrightName: "Kevin Ellen",
+        copyrightYear: 2026,
       },
     });
 

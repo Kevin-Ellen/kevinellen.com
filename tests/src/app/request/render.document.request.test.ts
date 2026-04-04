@@ -55,6 +55,9 @@ type RenderDocumentInspectionPayload = {
       body: unknown[];
       footer: string[];
     };
+    security: {
+      nonce: string;
+    };
   };
 };
 
@@ -104,9 +107,9 @@ describe("renderDocumentRequest", () => {
       status: 200,
       page: {
         id: "home",
-        slug: "/",
         label: "Home",
         kind: "home",
+        slug: "/",
       },
     });
 
@@ -124,7 +127,12 @@ describe("renderDocumentRequest", () => {
         label: "Home",
         href: "/",
         isCurrent: true,
-        svgId: "icon-home",
+        svgIcon: expect.objectContaining({
+          id: "icon-home",
+          viewBox: "0 0 640 640",
+          width: 640,
+          height: 640,
+        }),
       },
       {
         kind: "page",
@@ -142,7 +150,12 @@ describe("renderDocumentRequest", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgId: "icon-github",
+        svgIcon: expect.objectContaining({
+          id: "icon-github",
+          viewBox: "0 0 640 640",
+          width: 640,
+          height: 640,
+        }),
       },
       {
         kind: "social",
@@ -150,7 +163,12 @@ describe("renderDocumentRequest", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgId: "icon-instagram",
+        svgIcon: expect.objectContaining({
+          id: "icon-instagram",
+          viewBox: "0 0 640 640",
+          width: 640,
+          height: 640,
+        }),
       },
     ]);
 
@@ -326,6 +344,8 @@ describe("renderDocumentRequest", () => {
       ],
       footer: ["Homepage placeholder footer content."],
     });
+
+    expect(payload.appContext.security.nonce).toEqual(expect.any(String));
   });
 
   it("returns a JSON inspection response for an error-page target", async () => {
@@ -384,7 +404,12 @@ describe("renderDocumentRequest", () => {
         label: "Home",
         href: "/",
         isCurrent: false,
-        svgId: "icon-home",
+        svgIcon: expect.objectContaining({
+          id: "icon-home",
+          viewBox: "0 0 640 640",
+          width: 640,
+          height: 640,
+        }),
       },
       {
         kind: "page",
@@ -402,7 +427,12 @@ describe("renderDocumentRequest", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgId: "icon-github",
+        svgIcon: expect.objectContaining({
+          id: "icon-github",
+          viewBox: "0 0 640 640",
+          width: 640,
+          height: 640,
+        }),
       },
       {
         kind: "social",
@@ -410,7 +440,12 @@ describe("renderDocumentRequest", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgId: "icon-instagram",
+        svgIcon: expect.objectContaining({
+          id: "icon-instagram",
+          viewBox: "0 0 640 640",
+          width: 640,
+          height: 640,
+        }),
       },
     ]);
 
@@ -571,5 +606,7 @@ describe("renderDocumentRequest", () => {
       ],
       footer: [],
     });
+
+    expect(payload.appContext.security.nonce).toEqual(expect.any(String));
   });
 });

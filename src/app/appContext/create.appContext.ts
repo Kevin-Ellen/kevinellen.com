@@ -10,6 +10,7 @@ import { resolveAssetsAppContext } from "@app/appContext/resolvers/assets.resolv
 import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/structured-data.resolve.appContext";
 import { resolveCanonicalUrlAppContext } from "@app/appContext/resolvers/canonical.resolve.appContext";
 import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
+import { resolveFooterAppContext } from "@app/appContext/resolvers/footer.resolve.appContext";
 
 const createNonce = (): string => crypto.randomUUID().replace(/-/g, "");
 
@@ -32,6 +33,7 @@ export const createAppContext = (
   const structuredData = resolveStructuredDataAppContext(appState, target);
   const canonicalUrl = resolveCanonicalUrlAppContext(env, appState, target);
   const content = resolveContentAppContext(target.page.content, appState);
+  const footer = resolveFooterAppContext(appState);
 
   const security = Object.freeze({
     nonce: createNonce(),
@@ -45,6 +47,7 @@ export const createAppContext = (
     breadcrumbs,
     navigation,
     assets,
+    footer,
     structuredData,
     content,
     security,

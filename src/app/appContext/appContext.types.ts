@@ -2,21 +2,29 @@
 
 import type { Person, WebSite, WithContext } from "schema-dts";
 
-import type { SiteConfig } from "@config/site.config.types";
+import type { DocumentRenderTarget } from "@app/request/request.document.types";
+import type { PageId } from "@app/pages/page.definition";
+import type { Content } from "@app/content/content.types";
 import type {
   ScriptAssetConfig,
   SvgAssetConfig,
   SvgAssetId,
 } from "@config/assets.config.types";
-import type { DocumentRenderTarget } from "@app/request/request.document.types";
-import type { PageId } from "@app/pages/page.definition";
-import type { SocialId } from "@config/social.config.types";
 import type { PageStructuredDataDocument } from "@config/structured-data.config.types";
+import type { SiteConfig } from "@config/site.config.types";
+import type { SocialId } from "@config/social.config.types";
 
 export type AppContextBreadcrumb = {
   id: PageId;
   label: string;
   href: string;
+};
+
+export type AppContextSvgIcon = {
+  id: SvgAssetId;
+  viewBox: string;
+  width: number;
+  height: number;
 };
 
 export type AppContextNavigationItem =
@@ -25,7 +33,7 @@ export type AppContextNavigationItem =
       id: PageId;
       label: string;
       href: string;
-      svgId?: SvgAssetId;
+      svgIcon?: AppContextSvgIcon;
       isCurrent: boolean;
     }
   | {
@@ -33,14 +41,14 @@ export type AppContextNavigationItem =
       id: SocialId;
       label: string;
       href: string;
-      svgId?: SvgAssetId;
+      svgIcon?: AppContextSvgIcon;
       isCurrent: false;
     }
   | {
       kind: "external";
       label: string;
       href: string;
-      svgId?: SvgAssetId;
+      svgIcon?: AppContextSvgIcon;
       isCurrent: false;
     };
 
@@ -73,35 +81,32 @@ export type AppContextStructuredData = {
 
 export type AppContextCanonicalUrl = string | null;
 
-export type AppContextContentInline =
-  | {
-      kind: "text";
-      text: string;
-    }
-  | {
-      kind: "internal-link";
-      pageId: string;
-      label: string;
-      href: string;
-    };
-
-export type AppContextContentParagraph = {
-  kind: "paragraph";
-  inlines: readonly AppContextContentInline[];
-};
-
-export type AppContextContent = {
-  head: {
-    eyebrow: string;
-    title: string;
-    intro: string;
-  };
-  body: readonly AppContextContentParagraph[];
-  footer: readonly string[];
-};
-
 export type AppContextSecurity = {
   nonce: string;
+};
+
+export type AppContextFooterAffiliation = {
+  id: string;
+  label: string;
+  href: string;
+  svgId: SvgAssetId;
+  viewBox: string;
+  width: number;
+  height: number;
+};
+
+export type AppContextFooterColophon = {
+  copyrightName: string;
+  copyrightYear: number;
+};
+
+export type AppContextFooter = {
+  affiliations: {
+    title: string;
+    description: string;
+    items: readonly AppContextFooterAffiliation[];
+  } | null;
+  colophon: AppContextFooterColophon | null;
 };
 
 export type AppContextConfig = {
@@ -113,6 +118,7 @@ export type AppContextConfig = {
   breadcrumbs: readonly AppContextBreadcrumb[];
   navigation: AppContextNavigation;
   assets: AppContextAssets;
+  footer: AppContextFooter;
   structuredData: AppContextStructuredData;
-  content: AppContextContent;
+  content: Content;
 };

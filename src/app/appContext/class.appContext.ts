@@ -5,11 +5,12 @@ import type {
   AppContextBreadcrumb,
   AppContextCanonicalUrl,
   AppContextConfig,
-  AppContextContent,
   AppContextNavigation,
   AppContextStructuredData,
   AppContextSecurity,
+  AppContextFooter,
 } from "@app/appContext/appContext.types";
+import type { Content } from "@app/content/content.types";
 import type { SiteConfig } from "@config/site.config.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
@@ -22,8 +23,9 @@ export class AppContext {
   private readonly navigation: AppContextNavigation;
   private readonly assets: AppContextAssets;
   private readonly structuredData: AppContextStructuredData;
-  private readonly content: AppContextContent;
+  private readonly content: Content;
   private readonly security: AppContextSecurity;
+  private readonly footer: AppContextFooter;
 
   public constructor(config: AppContextConfig) {
     this.request = config.request;
@@ -36,6 +38,7 @@ export class AppContext {
     this.structuredData = config.structuredData;
     this.content = config.content;
     this.security = config.security;
+    this.footer = config.footer;
 
     Object.freeze(this);
   }
@@ -72,11 +75,15 @@ export class AppContext {
     return this.structuredData;
   }
 
-  public getContent(): AppContextContent {
+  public getContent(): Content {
     return this.content;
   }
 
   public getSecurity(): AppContextSecurity {
     return this.security;
+  }
+
+  public getFooter(): AppContextFooter {
+    return this.footer;
   }
 }

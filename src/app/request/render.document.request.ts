@@ -4,8 +4,10 @@ import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
 import { createAppContext } from "@app/appContext/create.appContext";
-import { shouldRenderDocumentInspection } from "@app/rendering/document/debug/should.render.document.inspection";
+import { buildDocumentRenderContext } from "@app/rendering/document/build.context.document.render";
+import { renderDocument } from "@app/rendering/document/render.document";
 import { renderDocumentInspectionResponse } from "@app/rendering/document/debug/render.document.inspection.response";
+import { shouldRenderDocumentInspection } from "@app/rendering/document/debug/should.render.document.inspection";
 
 export const renderDocumentRequest = async (
   req: Request,
@@ -20,44 +22,14 @@ export const renderDocumentRequest = async (
     return renderDocumentInspectionResponse(req, target, appContext);
   }
 
-  const debugPayload = {
-    type: "document-inspection",
+  const documentRenderContext = buildDocumentRenderContext(appContext);
+  const html = renderDocument(documentRenderContext);
 
-    request: {
-      url: req.url,
-      method: req.method,
-    },
-
-    target: {
-      kind: target.kind,
-      status: target.status,
-      page: {
-        id: target.page.core.id,
-        slug: target.kind === "page" ? target.page.core.slug : undefined,
-        label: target.page.core.label,
-        kind: target.page.core.kind,
-      },
-    },
-
-    appContext: {
-      site: {
-        siteName: appContext.getSiteConfig().siteName,
-        siteUrl: appContext.getSiteConfig().siteUrl,
-      },
-      canonicalUrl: appContext.getCanonicalUrl(),
-      navigation: appContext.getNavigation(),
-      breadcrumbs: appContext.getBreadcrumbs(),
-      // assets: appContext.getAssets(),
-      structuredData: appContext.getStructuredData(),
-      content: appContext.getContent(),
-    },
-  };
-
-  return new Response(JSON.stringify(debugPayload, null, 2), {
+  return new Response(html, {
     status: target.status,
     headers: {
-      "content-type": "application/json; charset=utf-8",
-      "x-render-mode": "document-inspection",
+      "content-type": "text/html; charset=utf-8",
+      "x-render-mode": "document",
     },
   });
 };
