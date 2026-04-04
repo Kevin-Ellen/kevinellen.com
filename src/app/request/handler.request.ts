@@ -4,6 +4,7 @@ import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
 import { runRequestPolicies } from "@app/policies/request/run.request.policies";
+import { runResponsePolicies } from "@app/policies/response/run.response.policies";
 import { resolveErrorRenderIntent } from "@app/request/resolve.error.render.intent";
 import { routeDocumentRequest } from "@app/request/route.document.request";
 import { renderDocumentRequest } from "@app/request/render.document.request";
@@ -43,15 +44,58 @@ export const handleRequest = async (
         appState,
       );
 
-      return renderDocumentRequest(req, env, ctx, appState, target);
+      const rendered = await renderDocumentRequest(
+        req,
+        env,
+        ctx,
+        appState,
+        target,
+      );
+
+      return runResponsePolicies(
+        req,
+        env,
+        appState,
+        target,
+        rendered.security,
+        rendered.response,
+      );
     }
 
     const target = routeDocumentRequest(req, appState);
+    const rendered = await renderDocumentRequest(
+      req,
+      env,
+      ctx,
+      appState,
+      target,
+    );
 
-    return renderDocumentRequest(req, env, ctx, appState, target);
+    return runResponsePolicies(
+      req,
+      env,
+      appState,
+      target,
+      rendered.security,
+      rendered.response,
+    );
   } catch (_error) {
     const target = resolveInternalErrorTarget(appState);
+    const rendered = await renderDocumentRequest(
+      req,
+      env,
+      ctx,
+      appState,
+      target,
+    );
 
-    return renderDocumentRequest(req, env, ctx, appState, target);
+    return runResponsePolicies(
+      req,
+      env,
+      appState,
+      target,
+      rendered.security,
+      rendered.response,
+    );
   }
 };

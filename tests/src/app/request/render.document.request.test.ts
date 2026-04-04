@@ -79,13 +79,15 @@ describe("renderDocumentRequest", () => {
       status: 200,
     };
 
-    const response = await renderDocumentRequest(
+    const rendered = await renderDocumentRequest(
       req,
       env,
       ctx,
       appState,
       target,
     );
+
+    const response = rendered.response;
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toBe(
@@ -345,7 +347,8 @@ describe("renderDocumentRequest", () => {
       footer: ["Homepage placeholder footer content."],
     });
 
-    expect(payload.appContext.security.nonce).toEqual(expect.any(String));
+    expect(rendered.security.nonce).toEqual(expect.any(String));
+    expect(payload.appContext.security.nonce).toBe(rendered.security.nonce);
   });
 
   it("returns a JSON inspection response for an error-page target", async () => {
@@ -357,13 +360,15 @@ describe("renderDocumentRequest", () => {
       status: 404,
     };
 
-    const response = await renderDocumentRequest(
+    const rendered = await renderDocumentRequest(
       req,
       env,
       ctx,
       appState,
       target,
     );
+
+    const response = rendered.response;
 
     expect(response.status).toBe(404);
     expect(response.headers.get("content-type")).toBe(
@@ -607,6 +612,7 @@ describe("renderDocumentRequest", () => {
       footer: [],
     });
 
-    expect(payload.appContext.security.nonce).toEqual(expect.any(String));
+    expect(rendered.security.nonce).toEqual(expect.any(String));
+    expect(payload.appContext.security.nonce).toBe(rendered.security.nonce);
   });
 });

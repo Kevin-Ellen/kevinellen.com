@@ -15,5 +15,5 @@ export const renderSvgSprite = (svgs: readonly SvgAssetConfig[]): string => {
     })
     .join("");
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display: none;">${svgSymbols}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" hidden class="u-hidden-svg-sprite">${svgSymbols}</svg>`;
 };
