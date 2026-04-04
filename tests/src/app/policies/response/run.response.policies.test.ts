@@ -2,8 +2,10 @@
 
 import { runResponsePolicies } from "@app/policies/response/run.response.policies";
 import { runResponseStage } from "@app/policies/response/run.response.stage";
+import { applyCacheResponsePolicy } from "@app/policies/response/cache/apply.cache.response.policy";
 import { applyRobotsResponsePolicy } from "@app/policies/response/robots/apply.robots.response.policy";
 import { applyCspResponsePolicy } from "@app/policies/response/security/apply.csp.response.policy";
+import { applySecurityHeadersResponsePolicy } from "@app/policies/response/security/apply.security.headers.response.policy";
 
 jest.mock("@app/policies/response/run.response.stage", () => ({
   runResponseStage: jest.fn(),
@@ -48,7 +50,12 @@ describe("runResponsePolicies", () => {
         security,
       },
       response,
-      [applyRobotsResponsePolicy, applyCspResponsePolicy],
+      [
+        applyRobotsResponsePolicy,
+        applyCspResponsePolicy,
+        applySecurityHeadersResponsePolicy,
+        applyCacheResponsePolicy,
+      ],
     );
   });
 });
