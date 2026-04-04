@@ -5,11 +5,11 @@ import type {
   AppContextBreadcrumb,
   AppContextCanonicalUrl,
   AppContextConfig,
-  AppContextContent,
   AppContextNavigation,
   AppContextStructuredData,
   AppContextSecurity,
 } from "@app/appContext/appContext.types";
+import type { Content } from "@app/content/content.types";
 import type { SiteConfig } from "@config/site.config.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
@@ -22,7 +22,7 @@ export class AppContext {
   private readonly navigation: AppContextNavigation;
   private readonly assets: AppContextAssets;
   private readonly structuredData: AppContextStructuredData;
-  private readonly content: AppContextContent;
+  private readonly content: Content;
   private readonly security: AppContextSecurity;
 
   public constructor(config: AppContextConfig) {
@@ -72,7 +72,7 @@ export class AppContext {
     return this.structuredData;
   }
 
-  public getContent(): AppContextContent {
+  public getContent(): Content {
     return this.content;
   }
 

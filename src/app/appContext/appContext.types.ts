@@ -2,16 +2,17 @@
 
 import type { Person, WebSite, WithContext } from "schema-dts";
 
-import type { SiteConfig } from "@config/site.config.types";
+import type { DocumentRenderTarget } from "@app/request/request.document.types";
+import type { PageId } from "@app/pages/page.definition";
+import type { Content } from "@app/content/content.types";
 import type {
   ScriptAssetConfig,
   SvgAssetConfig,
   SvgAssetId,
 } from "@config/assets.config.types";
-import type { DocumentRenderTarget } from "@app/request/request.document.types";
-import type { PageId } from "@app/pages/page.definition";
-import type { SocialId } from "@config/social.config.types";
 import type { PageStructuredDataDocument } from "@config/structured-data.config.types";
+import type { SiteConfig } from "@config/site.config.types";
+import type { SocialId } from "@config/social.config.types";
 
 export type AppContextBreadcrumb = {
   id: PageId;
@@ -73,33 +74,6 @@ export type AppContextStructuredData = {
 
 export type AppContextCanonicalUrl = string | null;
 
-export type AppContextContentInline =
-  | {
-      kind: "text";
-      text: string;
-    }
-  | {
-      kind: "internal-link";
-      pageId: string;
-      label: string;
-      href: string;
-    };
-
-export type AppContextContentParagraph = {
-  kind: "paragraph";
-  inlines: readonly AppContextContentInline[];
-};
-
-export type AppContextContent = {
-  head: {
-    eyebrow: string;
-    title: string;
-    intro: string;
-  };
-  body: readonly AppContextContentParagraph[];
-  footer: readonly string[];
-};
-
 export type AppContextSecurity = {
   nonce: string;
 };
@@ -114,5 +88,5 @@ export type AppContextConfig = {
   navigation: AppContextNavigation;
   assets: AppContextAssets;
   structuredData: AppContextStructuredData;
-  content: AppContextContent;
+  content: Content;
 };

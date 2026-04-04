@@ -5,7 +5,7 @@ import type {
   ScriptAssetConfig,
 } from "@config/assets.config.types";
 import type { PageStructuredDataNode } from "@config/structured-data.config.types";
-import type { PageContent } from "@app/pages/page.content.types";
+import type { PageContent } from "@app/pages/content/content.page.types";
 
 /* -------------------------------------------------------------------------- */
 /* Shared identity                                                            */
