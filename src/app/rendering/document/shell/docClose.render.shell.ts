@@ -16,12 +16,17 @@ export const renderDocClose = (
     .join("");
 
   const structuredDataScripts = renderStructuredData(structuredData);
-
   const svgSprite = renderSvgSprite(assets.footer.svgs);
 
-  return `${footerScripts}
-    ${structuredDataScripts}
-    ${svgSprite}
-  </body>
-</html>`;
+  const closeFragments = [
+    footerScripts,
+    structuredDataScripts,
+    svgSprite,
+  ].filter((fragment) => fragment.length > 0);
+
+  if (closeFragments.length === 0) {
+    return "</body>\n</html>";
+  }
+
+  return `${closeFragments.join("\n")}\n</body>\n</html>`;
 };
