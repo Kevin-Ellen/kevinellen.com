@@ -100,8 +100,13 @@ export type AppContextContent = {
   footer: readonly string[];
 };
 
+export type AppContextSecurity = {
+  nonce: string;
+};
+
 export type AppContextConfig = {
   request: Request;
+  security: AppContextSecurity;
   siteConfig: SiteConfig;
   canonicalUrl: AppContextCanonicalUrl;
   target: DocumentRenderTarget;

@@ -11,6 +11,8 @@ import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/struc
 import { resolveCanonicalUrlAppContext } from "@app/appContext/resolvers/canonical.resolve.appContext";
 import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
 
+const createNonce = (): string => crypto.randomUUID().replace(/-/g, "");
+
 export const createAppContext = (
   req: Request,
   env: Env,
@@ -31,6 +33,10 @@ export const createAppContext = (
   const canonicalUrl = resolveCanonicalUrlAppContext(env, appState, target);
   const content = resolveContentAppContext(target.page.content, appState);
 
+  const security = Object.freeze({
+    nonce: createNonce(),
+  });
+
   return new AppContext({
     request: req,
     siteConfig: appState.getSiteConfig(),
@@ -41,5 +47,6 @@ export const createAppContext = (
     assets,
     structuredData,
     content,
+    security,
   });
 };
