@@ -13,6 +13,7 @@ locals {
   kv_namespaces = {
     photos   = "${var.project_name}-photos-${var.instance_name}"
     articles = "${var.project_name}-articles-${var.instance_name}"
+    journals = "${var.project_name}-journals-${var.instance_name}"
   }
 
   app_host = var.instance_name == "prod" ? var.zone_name : "${var.instance_name}.${var.zone_name}"
@@ -33,6 +34,11 @@ resource "cloudflare_workers_kv_namespace" "photos" {
 resource "cloudflare_workers_kv_namespace" "articles" {
   account_id = var.account_id
   title      = local.kv_namespaces.articles
+}
+
+resource "cloudflare_workers_kv_namespace" "journals" {
+  account_id = var.account_id
+  title      = local.kv_namespaces.journals
 }
 
 resource "cloudflare_worker" "site" {
@@ -75,6 +81,11 @@ resource "cloudflare_worker_version" "site" {
       type         = "kv_namespace"
       name         = "KV_ARTICLES"
       namespace_id = cloudflare_workers_kv_namespace.articles.id
+    },
+    {
+      type         = "kv_namespace"
+      name         = "KV_JOURNALS"
+      namespace_id = cloudflare_workers_kv_namespace.journals.id
     },
   ]
 }
