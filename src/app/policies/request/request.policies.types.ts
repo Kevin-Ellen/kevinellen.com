@@ -1,8 +1,10 @@
 // src/app/policies/request/request.policies.types.ts
 
-import type { RedirectStatusCode } from "@config/redirects.config.types";
+import type { ErrorPageStatus } from "@shared-types/content/pages/error/error.page.definition";
 
-export type ErrorRenderIntent = "gone" | "internal-error";
+export type ErrorRenderIntent = {
+  status: ErrorPageStatus;
+};
 
 export type RequestPolicyContinueOutcome = {
   kind: "continue";
@@ -13,12 +15,6 @@ export type RequestPolicyDirectResponseOutcome = {
   response: Response;
 };
 
-export type RequestPolicyRedirectOutcome = {
-  kind: "redirect";
-  location: string;
-  status: RedirectStatusCode;
-};
-
 export type RequestPolicyRenderErrorOutcome = {
   kind: "render-error";
   intent: ErrorRenderIntent;
@@ -27,14 +23,4 @@ export type RequestPolicyRenderErrorOutcome = {
 export type RequestPolicyOutcome =
   | RequestPolicyContinueOutcome
   | RequestPolicyDirectResponseOutcome
-  | RequestPolicyRedirectOutcome
   | RequestPolicyRenderErrorOutcome;
-
-export type CanonicalResult = {
-  url: URL;
-  changed: boolean;
-};
-
-export type RequestSystemStageOutcome =
-  | RequestPolicyContinueOutcome
-  | RequestPolicyDirectResponseOutcome;

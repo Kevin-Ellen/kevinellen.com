@@ -11,8 +11,7 @@ const buildSitemapUrl = (siteUrl: string): string => {
 };
 
 const getDisallowedPaths = (appState: AppState): string[] => {
-  return appState
-    .getPublicPages()
+  return appState.publicPages
     .filter((page) => page.config.robotsTxt.disallow)
     .map((page) => page.core.slug)
     .sort((a, b) => a.localeCompare(b));
@@ -27,7 +26,7 @@ export const buildRobotsTxtRequestSystem = (appState: AppState): string => {
     lines.push(`Disallow: ${path}`);
   }
 
-  lines.push(`Sitemap: ${buildSitemapUrl(appState.getSiteConfig().siteUrl)}`);
+  lines.push(`Sitemap: ${buildSitemapUrl(appState.site.siteUrl)}`);
 
   return joinRobotsTxtLines(lines);
 };

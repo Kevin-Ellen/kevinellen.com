@@ -3,22 +3,13 @@
 import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
-export const routeDocumentRequest = (
-  req: Request,
-  appState: AppState,
-): DocumentRenderTarget => {
-  const { pathname } = new URL(req.url);
+const getRequestPathname = (req: Request): string => {
+  const url = new URL(req.url);
 
-  const page = appState.getPageBySlug(pathname);
+  return url.pathname;
+};
 
-  if (page) {
-    return {
-      kind: "page",
-      page,
-      status: 200,
-    };
-  }
-
+const resolveNotFoundTarget = (appState: AppState): DocumentRenderTarget => {
   const notFoundPage = appState.getErrorPageByStatus(404);
 
   if (!notFoundPage) {
@@ -29,5 +20,23 @@ export const routeDocumentRequest = (
     kind: "error-page",
     page: notFoundPage,
     status: 404,
+  };
+};
+
+export const routeDocumentRequest = (
+  req: Request,
+  appState: AppState,
+): DocumentRenderTarget => {
+  const pathname = getRequestPathname(req);
+  const publicPage = appState.getPublicPageBySlug(pathname);
+
+  if (!publicPage) {
+    return resolveNotFoundTarget(appState);
+  }
+
+  return {
+    kind: "public-page",
+    page: publicPage,
+    status: 200,
   };
 };

@@ -45,12 +45,14 @@
       "**/*.tfstate": true,
       "**/*.tfstate.backup": true,
       "**/.build": true,
+      "**/.ds_store": true,
     },
     "search.exclude": {
       "**/node_modules": true,
       "**/.terraform": true,
       "**/.wrangler": true,
       "**/dist": true,
+      "**/.ds_store": true,
     },
   },
   "extensions": {

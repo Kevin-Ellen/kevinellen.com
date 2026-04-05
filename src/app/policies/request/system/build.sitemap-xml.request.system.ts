@@ -23,10 +23,9 @@ const buildAbsoluteUrl = (siteUrl: string, slug: string): string => {
 };
 
 const getSitemapUrls = (appState: AppState): string[] => {
-  const siteUrl = appState.getSiteConfig().siteUrl;
+  const siteUrl = appState.site.siteUrl;
 
-  return appState
-    .getPublicPages()
+  return appState.publicPages
     .filter((page) => page.config.sitemap.include)
     .map((page) => buildAbsoluteUrl(siteUrl, page.core.slug))
     .sort((a, b) => a.localeCompare(b));

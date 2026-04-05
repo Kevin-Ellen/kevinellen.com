@@ -7,7 +7,7 @@ export const evaluateGonePathRequestResolution = (
   pathname: string,
   appState: AppState,
 ): RequestPolicyOutcome => {
-  const goneConfig = appState.getGoneConfig();
+  const goneConfig = appState.gone;
 
   const isGone = goneConfig.some((rule) => rule.path === pathname);
 
@@ -17,6 +17,8 @@ export const evaluateGonePathRequestResolution = (
 
   return {
     kind: "render-error",
-    intent: "gone",
+    intent: {
+      status: 410,
+    },
   };
 };

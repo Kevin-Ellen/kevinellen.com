@@ -1,7 +1,7 @@
 // src/app/policies/request/system/evaluate.webmanifest.request.system.ts
 
 import type { AppState } from "@app/appState/class.appState";
-import type { RequestSystemStageOutcome } from "@app/policies/request/request.policies.types";
+import type { SystemOutcome } from "@app/policies/request/system/request.system.types";
 
 import { buildWebManifestSystem } from "@app/policies/request/system/build.webmanifest.request.system";
 
@@ -9,7 +9,7 @@ export const evaluateWebManifestRequestSystem = (
   req: Request,
   _env: Env,
   appState: AppState,
-): RequestSystemStageOutcome => {
+): SystemOutcome => {
   const { pathname } = new URL(req.url);
 
   if (pathname !== "/manifest.webmanifest") {

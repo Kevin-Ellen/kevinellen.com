@@ -1,13 +1,13 @@
 // src/app/policies/response/robots/apply.robots.response.policy.ts
 
-import type { PageRobotsConfig } from "@shared-types/pages/definitions/base.definition.page";
+import type { PageRobotsAuthored } from "@shared-types/content/pages/base.page.definition";
 import type { ResponsePolicy } from "@app/policies/response/response.policies.types";
 
 const getNonProductionRobotsHeader = (): string => {
   return "noindex, nofollow, noarchive, nosnippet, noimageindex";
 };
 
-const buildRobotsHeader = (robots: PageRobotsConfig): string => {
+const buildRobotsHeader = (robots: PageRobotsAuthored): string => {
   const directives: string[] = [
     robots.allowIndex ? "index" : "noindex",
     robots.allowFollow ? "follow" : "nofollow",
@@ -28,7 +28,7 @@ const buildRobotsHeader = (robots: PageRobotsConfig): string => {
   return directives.join(", ");
 };
 
-const resolveRobotsHeader = (env: Env, robots: PageRobotsConfig): string => {
+const resolveRobotsHeader = (env: Env, robots: PageRobotsAuthored): string => {
   if (env.APP_ENV !== "prod") {
     return getNonProductionRobotsHeader();
   }

@@ -1,7 +1,7 @@
 // src/app/policies/request/run.request.resolution.stage.ts
 
 import type { AppState } from "@app/appState/class.appState";
-import type { RequestPolicyOutcome } from "@app/policies/request/request.policies.types";
+import type { ResolutionOutcome } from "@app/policies/request/resolution/request.resolution.types";
 
 import { getRuntimeBehaviour } from "@app/runtime/get.runtime.behaviour";
 
@@ -13,7 +13,7 @@ export const runRequestResolutionStage = (
   request: Request,
   env: Env,
   appState: AppState,
-): RequestPolicyOutcome => {
+): ResolutionOutcome => {
   const runtime = getRuntimeBehaviour(env);
 
   const redirectOutcome = evaluateRedirectRequestResolution(request, appState);

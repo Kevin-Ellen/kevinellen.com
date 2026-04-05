@@ -20,8 +20,25 @@ export const runRequestPolicies = (
 
   const resolutionOutcome = runRequestResolutionStage(req, env, appState);
 
-  if (resolutionOutcome.kind !== "continue") {
+  if (resolutionOutcome.kind === "direct-response") {
     return resolutionOutcome;
+  }
+
+  if (resolutionOutcome.kind === "render-error") {
+    return resolutionOutcome;
+  }
+
+  if (resolutionOutcome.kind === "redirect") {
+    return {
+      kind: "direct-response",
+      response: new Response(null, {
+        status: resolutionOutcome.status,
+        headers: {
+          location: resolutionOutcome.location,
+          "x-runtime-policy": "canonical",
+        },
+      }),
+    };
   }
 
   const systemOutcome = runRequestSystemStage(req, env, appState);

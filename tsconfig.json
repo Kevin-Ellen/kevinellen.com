@@ -11,12 +11,17 @@
     "skipLibCheck": true,
     "paths": {
       "@app/*": ["./src/app/*"],
-      "@config/*": ["./src/config/*"],
+      "@config/*": ["./src/app/config/*"],
       "@utils/*": ["./src/utils/*"],
       "@tests/*": ["./tests/*"],
       "@shared-types/*": ["./packages/shared-types/src/*"],
       "@content-pipeline/*": ["./packages/content-pipeline/src/*"]
     }
   },
-  "include": ["src", "tests", "worker-configuration.d.ts"]
+  "include": [
+    "src",
+    "tests",
+    "worker-configuration.d.ts",
+    "packages/shared-types/src"
+  ]
 }

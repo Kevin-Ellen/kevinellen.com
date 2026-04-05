@@ -1,7 +1,7 @@
 // src/entry.ts
 
 import { createAppState } from "@app/appState/create.appState";
-import { handleRequest } from "@app/request/handler.request";
+import { requestHandler } from "@app/handlers/request.handler";
 
 export const onRequest = async (
   req: Request,
@@ -10,7 +10,7 @@ export const onRequest = async (
 ): Promise<Response> => {
   const appState = createAppState();
 
-  return handleRequest(req, env, ctx, appState);
+  return requestHandler(req, env, ctx, appState);
 };
 
 export default {

@@ -8,19 +8,15 @@ export const resolveErrorRenderIntent = (
   intent: ErrorRenderIntent,
   appState: AppState,
 ): DocumentRenderTarget => {
-  if (intent === "gone") {
-    const gonePage = appState.getErrorPageByStatus(410);
+  const errorPage = appState.getErrorPageByStatus(intent.status);
 
-    if (!gonePage) {
-      throw new Error("Missing 410 error page definition");
-    }
-
-    return {
-      kind: "error-page",
-      page: gonePage,
-      status: 410,
-    };
+  if (!errorPage) {
+    throw new Error(`Missing ${intent.status} error page definition`);
   }
 
-  throw new Error(`Unhandled error render intent: ${intent}`);
+  return {
+    kind: "error-page",
+    page: errorPage,
+    status: intent.status,
+  };
 };

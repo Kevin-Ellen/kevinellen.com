@@ -1,41 +1,82 @@
 // src/app/appState/create.appState.ts
 
-import type { AppStateConfig } from "@app/appState/appState.types";
-
 import { AppState } from "@app/appState/class.appState";
+import type {
+  AppConfig,
+  AppPagesState,
+  AppStateInput,
+} from "@app/appState/appState.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-import { siteConfig } from "@config/site.config";
-import { assetsConfig } from "@config/assets.config";
-import { footerConfig } from "@config/footer.config";
-import { navigationConfig } from "@config/navigation.config";
-import { socialConfig } from "@config/social.config";
-import { structuredDataConfig } from "@config/structured-data.config";
-import { webManifestConfig } from "@config/webmanifest.config";
+import { assetsConfig } from "@app/config/assets.config";
+import { footerConfig } from "@app/config/footer.config";
+import { GONE_RULES } from "@app/config/gone.config";
+import { navigationConfig } from "@app/config/navigation.config";
+import { REDIRECTS } from "@app/config/redirects.config";
+import { siteConfig } from "@app/config/site.config";
+import { socialConfig } from "@app/config/social.config";
+import { structuredDataConfig } from "@app/config/structured-data.config";
+import { webManifestConfig } from "@app/config/webmanifest.config";
+import { PAGE_REGISTRY } from "@app/content/pages/registry.pages";
 
-import { REDIRECTS } from "@config/redirects.config";
-import { GONE_RULES } from "@config/gone.config";
+const createUniqueMap = <K, V>(
+  items: readonly V[],
+  getKey: (item: V) => K,
+  label: string,
+): ReadonlyMap<K, V> => {
+  const map = new Map<K, V>();
 
-import { REGISTRY_PUBLIC_PAGES } from "@app/pages/registry/public.registry.pages";
-import { REGISTRY_ERROR_PAGES } from "@app/pages/registry/error.registry.pages";
+  for (const item of items) {
+    const key = getKey(item);
+
+    if (map.has(key)) {
+      throw new Error(`Duplicate ${label}: ${String(key)}`);
+    }
+
+    map.set(key, item);
+  }
+
+  return map;
+};
 
 export const createAppState = (): AppState => {
-  const state: AppStateConfig = {
-    siteConfig,
-    assetsConfig,
-    footerConfig,
-    navigationConfig,
-    socialConfig,
-    structuredDataConfig,
-    webManifestConfig,
-    redirectsConfig: REDIRECTS,
-    goneConfig: GONE_RULES,
-    pages: {
-      publicPages: REGISTRY_PUBLIC_PAGES,
-      errorPages: REGISTRY_ERROR_PAGES,
-    },
+  const config: AppConfig = deepFreeze({
+    assets: assetsConfig,
+    footer: footerConfig,
+    gone: GONE_RULES,
+    navigation: navigationConfig,
+    redirects: REDIRECTS,
+    site: siteConfig,
+    social: socialConfig,
+    structuredData: structuredDataConfig,
+    webManifest: webManifestConfig,
+  });
+
+  const pages: AppPagesState = {
+    public: PAGE_REGISTRY.public,
+    error: PAGE_REGISTRY.error,
+    publicById: createUniqueMap(
+      PAGE_REGISTRY.public,
+      (page) => page.core.id,
+      "public page id",
+    ),
+    publicBySlug: createUniqueMap(
+      PAGE_REGISTRY.public,
+      (page) => page.core.slug,
+      "public page slug",
+    ),
+    errorByStatus: createUniqueMap(
+      PAGE_REGISTRY.error,
+      (page) => page.core.status,
+      "error page status",
+    ),
   };
 
-  return new AppState(deepFreeze(state));
+  const appInput: AppStateInput = deepFreeze({
+    config,
+    pages,
+  });
+
+  return new AppState(appInput);
 };

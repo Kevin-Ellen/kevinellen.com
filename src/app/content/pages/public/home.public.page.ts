@@ -1,0 +1,77 @@
+// src/app/content/pages/public/home.public.page.ts
+
+// src/app/content/pages/public/home.public.page.ts
+
+import type { HomePageDefinition } from "@shared-types/content/pages/public/home.public.page.definition";
+
+export const homePage: HomePageDefinition = {
+  core: {
+    id: "home",
+    kind: "home",
+    slug: "/",
+    label: "Home",
+  },
+
+  config: {
+    robots: {
+      allowIndex: true,
+      allowFollow: true,
+      noarchive: false,
+      nosnippet: false,
+      noimageindex: false,
+    },
+    robotsTxt: {
+      disallow: false,
+    },
+    sitemap: {
+      include: true,
+    },
+  },
+
+  meta: {
+    pageTitle: "Kevin Ellen",
+    metaDescription:
+      "Nature photography, field notes, journal writing, and technical architecture.",
+  },
+
+  breadcrumbs: ["home"],
+
+  content: {
+    head: {
+      eyebrow: "Kevin Ellen",
+      title: "Nature photography, writing, and technical architecture",
+      intro:
+        "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
+    },
+
+    body: [
+      {
+        kind: "paragraph",
+        inlines: [
+          {
+            kind: "text",
+            text: "Homepage placeholder body content.",
+          },
+        ],
+      },
+      {
+        kind: "paragraph",
+        inlines: [
+          {
+            kind: "text",
+            text: "This section will later introduce featured photography, journal entries, and technical work.",
+          },
+        ],
+      },
+    ],
+
+    footer: ["Homepage placeholder footer content."],
+  },
+
+  assets: {
+    scripts: [],
+    svgs: [],
+  },
+
+  structuredData: [],
+};
