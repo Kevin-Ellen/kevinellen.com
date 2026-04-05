@@ -2,58 +2,75 @@
 
 import type { ArticlePageDefinition } from "@shared-types/pages/page.definition";
 
-export const createArticleTemplate = (): ArticlePageDefinition => ({
-  core: {
-    id: "",
-    label: "",
-    kind: "article",
-    slug: "",
-  },
+type CreateArticleTemplateOptions = {
+  slug?: string;
+  title?: string;
+  excerpt?: string;
+};
 
-  config: {
-    robots: {
-      allowIndex: true,
-      allowFollow: true,
-      noarchive: false,
-      nosnippet: false,
-      noimageindex: false,
+const DEFAULT_ARTICLE_SLUG = "untitled-article";
+const DEFAULT_ARTICLE_TITLE = "Untitled article";
+
+export const createArticleTemplate = ({
+  slug = DEFAULT_ARTICLE_SLUG,
+  title = DEFAULT_ARTICLE_TITLE,
+  excerpt = "",
+}: CreateArticleTemplateOptions = {}): ArticlePageDefinition => {
+  return {
+    core: {
+      id: `article:${slug}`,
+      label: title,
+      kind: "article",
+      slug,
     },
-    robotsTxt: {
-      disallow: false,
+
+    config: {
+      robots: {
+        allowIndex: false,
+        allowFollow: false,
+        noarchive: false,
+        nosnippet: false,
+        noimageindex: false,
+      },
+      robotsTxt: {
+        disallow: true,
+      },
+      sitemap: {
+        include: false,
+      },
     },
-    sitemap: {
-      include: true,
+
+    meta: {
+      pageTitle: title,
+      metaDescription: "",
     },
-  },
 
-  meta: {
-    pageTitle: "",
-    metaDescription: "",
-  },
-
-  dated: {
-    datePublished: null,
-    dateModified: null,
-  },
-
-  navigation: {
-    breadcrumbs: ["home"],
-  },
-
-  content: {
-    head: {
-      eyebrow: "",
-      title: "",
-      intro: "",
+    navigation: {
+      breadcrumbs: ["journal"],
     },
-    body: [],
-    footer: [],
-  },
 
-  assets: {
-    scripts: [],
-    svgs: [],
-  },
+    excerpt,
 
-  structuredData: [],
-});
+    dated: {
+      datePublished: null,
+      dateModified: null,
+    },
+
+    structuredData: [],
+
+    content: {
+      head: {
+        eyebrow: "Journal",
+        title,
+        intro: "",
+      },
+      body: [],
+      footer: [],
+    },
+
+    assets: {
+      scripts: [],
+      svgs: [],
+    },
+  } satisfies ArticlePageDefinition;
+};

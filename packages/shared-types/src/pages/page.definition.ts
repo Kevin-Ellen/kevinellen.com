@@ -140,6 +140,7 @@ export type ArticlePageDefinition = BasePageDefinition<
 > & {
   readonly dated: DatedPageMetadata;
   readonly structuredData: PageStructuredData;
+  readonly excerpt: string;
 };
 
 export type PageDefinition = StandardPageDefinition | ArticlePageDefinition;

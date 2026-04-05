@@ -17,5 +17,5 @@
       "@shared-types/*": ["./packages/shared-types/src/*"]
     }
   },
-  "include": ["src", "tests", "packages", "worker-configuration.d.ts"]
+  "include": ["src", "tests", "worker-configuration.d.ts"]
 }
