@@ -35,6 +35,22 @@ describe("renderPageHeader", () => {
     return renderPageHeader(documentRenderContext);
   };
 
+  it("renders the header branding", () => {
+    const target: DocumentRenderTarget = {
+      kind: "page",
+      page: appState.getPublicPageById("home")!,
+      status: 200,
+    };
+
+    const html = createHtml(target);
+
+    expect(html).toContain('class="l-header__brand"');
+    expect(html).toContain('href="/"');
+    expect(html).toContain('aria-label="Kevin Ellen home"');
+    expect(html).toContain('<use href="#logo-monogram-ke"></use>');
+    expect(html).toContain('class="l-header__brand-logo"');
+  });
+
   it("renders the primary navigation", () => {
     const target: DocumentRenderTarget = {
       kind: "page",
@@ -45,11 +61,10 @@ describe("renderPageHeader", () => {
     const html = createHtml(target);
 
     expect(html).toContain('class="l-header__primary"');
-    expect(html).toContain('href="/"');
     expect(html).toMatch(/>\s*Journal\s*</);
   });
 
-  it("renders primary navigation items in deterministic order", () => {
+  it("renders primary navigation items", () => {
     const target: DocumentRenderTarget = {
       kind: "page",
       page: appState.getPublicPageById("home")!,
@@ -58,33 +73,8 @@ describe("renderPageHeader", () => {
 
     const html = createHtml(target);
 
-    expect(html.indexOf('href="/"')).toBeLessThan(
-      html.indexOf('href="/journal"'),
-    );
-  });
-
-  it("renders the home icon via svg use", () => {
-    const target: DocumentRenderTarget = {
-      kind: "page",
-      page: appState.getPublicPageById("home")!,
-      status: 200,
-    };
-
-    const html = createHtml(target);
-
-    expect(html).toContain('<use href="#icon-home"></use>');
-  });
-
-  it("renders the home link with an aria-label when using the icon", () => {
-    const target: DocumentRenderTarget = {
-      kind: "page",
-      page: appState.getPublicPageById("home")!,
-      status: 200,
-    };
-
-    const html = createHtml(target);
-
-    expect(html).toContain('href="/" aria-current="page" aria-label="Home"');
+    expect(html).toContain('href="/journal"');
+    expect(html).toMatch(/>\s*Journal\s*</);
   });
 
   it("renders the social navigation icons", () => {
@@ -125,10 +115,10 @@ describe("renderPageHeader", () => {
 
     const contextWithoutSocialNav: DocumentRenderContext = {
       ...documentRenderContext,
-      navigation: {
-        ...documentRenderContext.navigation,
-        header: {
-          ...documentRenderContext.navigation.header,
+      pageHeader: {
+        ...documentRenderContext.pageHeader,
+        navigation: {
+          ...documentRenderContext.pageHeader.navigation,
           social: [],
         },
       },
@@ -177,18 +167,21 @@ describe("renderPageHeader", () => {
 
     const contextWithBreadcrumbs: DocumentRenderContext = {
       ...documentRenderContext,
-      breadcrumbs: [
-        {
-          id: "home",
-          label: "Home",
-          href: "/",
-        },
-        {
-          id: "journal",
-          label: "Journal",
-          href: "/journal",
-        },
-      ],
+      pageHeader: {
+        ...documentRenderContext.pageHeader,
+        breadcrumbs: [
+          {
+            id: "home",
+            label: "Home",
+            href: "/",
+          },
+          {
+            id: "journal",
+            label: "Journal",
+            href: "/journal",
+          },
+        ],
+      },
     };
 
     const html = createHtml(target, contextWithBreadcrumbs);
@@ -225,10 +218,10 @@ describe("renderPageHeader", () => {
 
     const escapedContext: DocumentRenderContext = {
       ...documentRenderContext,
-      navigation: {
-        ...documentRenderContext.navigation,
-        header: {
-          ...documentRenderContext.navigation.header,
+      pageHeader: {
+        ...documentRenderContext.pageHeader,
+        navigation: {
+          ...documentRenderContext.pageHeader.navigation,
           primary: [
             {
               kind: "external",
@@ -262,10 +255,10 @@ describe("renderPageHeader", () => {
 
     const escapedContext: DocumentRenderContext = {
       ...documentRenderContext,
-      navigation: {
-        ...documentRenderContext.navigation,
-        header: {
-          ...documentRenderContext.navigation.header,
+      pageHeader: {
+        ...documentRenderContext.pageHeader,
+        navigation: {
+          ...documentRenderContext.pageHeader.navigation,
           social: [
             {
               kind: "external",
@@ -302,18 +295,21 @@ describe("renderPageHeader", () => {
 
     const escapedContext: DocumentRenderContext = {
       ...documentRenderContext,
-      breadcrumbs: [
-        {
-          id: "crumb",
-          label: 'Crumb & <unsafe> "label"',
-          href: '/crumb?x="quoted"&y=<tag>',
-        },
-        {
-          id: "crumb",
-          label: 'Current & <unsafe> "label"',
-          href: "/current",
-        },
-      ],
+      pageHeader: {
+        ...documentRenderContext.pageHeader,
+        breadcrumbs: [
+          {
+            id: "home",
+            label: 'Crumb & <unsafe> "label"',
+            href: '/crumb?x="quoted"&y=<tag>',
+          },
+          {
+            id: "journal",
+            label: 'Current & <unsafe> "label"',
+            href: "/current",
+          },
+        ],
+      },
     };
 
     const html = createHtml(target, escapedContext);

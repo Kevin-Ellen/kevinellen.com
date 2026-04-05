@@ -8,4 +8,12 @@ export const siteConfig: SiteConfig = deepFreeze({
   siteName: "Kevin Ellen",
   siteUrl: "https://kevinellen.com",
   language: "en-GB",
+  headerBranding: {
+    homeHref: "/",
+    ariaLabel: "Kevin Ellen home",
+    logo: {
+      type: "inline-svg",
+      svg: "logo-monogram-ke",
+    },
+  },
 });

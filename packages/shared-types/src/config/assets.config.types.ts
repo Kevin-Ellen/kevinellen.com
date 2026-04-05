@@ -2,6 +2,7 @@
 
 export type ScriptAssetId = "header-condense";
 export type SvgAssetId =
+  | "logo-monogram-ke"
   | "icon-home"
   | "icon-github"
   | "icon-instagram"

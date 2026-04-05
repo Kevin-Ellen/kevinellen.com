@@ -20,11 +20,14 @@ export type AppContextBreadcrumb = {
   href: string;
 };
 
-export type AppContextSvgIcon = {
-  id: SvgAssetId;
-  viewBox: string;
-  width: number;
-  height: number;
+export type AppContextHeaderBranding = {
+  href: string;
+  ariaLabel: string;
+  logoSvgId: SvgAssetId;
+};
+
+export type AppContextBranding = {
+  header: AppContextHeaderBranding;
 };
 
 export type AppContextNavigationItem =
@@ -33,7 +36,7 @@ export type AppContextNavigationItem =
       id: PageId;
       label: string;
       href: string;
-      svgIcon?: AppContextSvgIcon;
+      svgIconId?: SvgAssetId;
       isCurrent: boolean;
     }
   | {
@@ -41,14 +44,14 @@ export type AppContextNavigationItem =
       id: SocialId;
       label: string;
       href: string;
-      svgIcon?: AppContextSvgIcon;
+      svgIconId?: SvgAssetId;
       isCurrent: false;
     }
   | {
       kind: "external";
       label: string;
       href: string;
-      svgIcon?: AppContextSvgIcon;
+      svgIconId?: SvgAssetId;
       isCurrent: false;
     };
 
@@ -90,9 +93,6 @@ export type AppContextFooterAffiliation = {
   label: string;
   href: string;
   svgId: SvgAssetId;
-  viewBox: string;
-  width: number;
-  height: number;
 };
 
 export type AppContextFooterColophon = {
@@ -117,6 +117,7 @@ export type AppContextConfig = {
   target: DocumentRenderTarget;
   breadcrumbs: readonly AppContextBreadcrumb[];
   navigation: AppContextNavigation;
+  branding: AppContextBranding;
   assets: AppContextAssets;
   footer: AppContextFooter;
   structuredData: AppContextStructuredData;

@@ -3,6 +3,7 @@
 import type {
   AppContextAssets,
   AppContextBreadcrumb,
+  AppContextBranding,
   AppContextCanonicalUrl,
   AppContextConfig,
   AppContextNavigation,
@@ -26,6 +27,7 @@ export class AppContext {
   private readonly content: Content;
   private readonly security: AppContextSecurity;
   private readonly footer: AppContextFooter;
+  private readonly branding: AppContextBranding;
 
   public constructor(config: AppContextConfig) {
     this.request = config.request;
@@ -39,6 +41,7 @@ export class AppContext {
     this.content = config.content;
     this.security = config.security;
     this.footer = config.footer;
+    this.branding = config.branding;
 
     Object.freeze(this);
   }
@@ -85,5 +88,9 @@ export class AppContext {
 
   public getFooter(): AppContextFooter {
     return this.footer;
+  }
+
+  public getBranding(): AppContextBranding {
+    return this.branding;
   }
 }

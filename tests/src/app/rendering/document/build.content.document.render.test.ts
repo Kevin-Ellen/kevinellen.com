@@ -45,27 +45,21 @@ describe("buildDocumentRenderContext", () => {
     expect(result.metadata.canonicalUrl).toBe("https://kevinellen.com/");
   });
 
-  it("maps navigation header items", () => {
-    expect(result.navigation.header.primary.length).toBeGreaterThan(0);
-
-    const home = result.navigation.header.primary.find(
-      (item) => item.kind === "page" && item.id === "home",
-    );
-
-    expect(home).toBeDefined();
-    expect(home?.href).toBe("/");
-    expect(home?.isCurrent).toBe(true);
-    expect(home?.svgIcon).toEqual(
-      expect.objectContaining({
-        id: "icon-home",
+  it("maps page header branding", () => {
+    expect(result.pageHeader.branding).toEqual({
+      href: "/",
+      ariaLabel: "Kevin Ellen home",
+      logo: {
+        id: "logo-monogram-ke",
         width: expect.any(Number),
         height: expect.any(Number),
-      }),
-    );
+        className: "l-header__brand-logo",
+      },
+    });
   });
 
-  it("maps breadcrumbs correctly", () => {
-    expect(result.breadcrumbs).toEqual([
+  it("maps page header breadcrumbs correctly", () => {
+    expect(result.pageHeader.breadcrumbs).toEqual([
       {
         id: "home",
         label: "Home",
