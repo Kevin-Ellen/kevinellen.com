@@ -22,6 +22,7 @@
   "kv_namespaces": [
     { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
     { "binding": "KV_ARTICLES", "id": "773d0f0582124523aa5e933023bc14a6" },
+    { "binding": "KV_JOURNALS", "id": "3efdd60966574a53b9e3f2d9a6685344" },
   ],
   "env": {
     "stg": {
@@ -33,6 +34,7 @@
       "kv_namespaces": [
         { "binding": "KV_PHOTOS", "id": "19bdbb6c476f4602914ad95c5727efcd" },
         { "binding": "KV_ARTICLES", "id": "108ed7ebbd144f17b34f0763984eda51" },
+        { "binding": "KV_JOURNALS", "id": "477467e56bff44aea5a8f869728d1e47" },
       ],
     },
     "prod": {
