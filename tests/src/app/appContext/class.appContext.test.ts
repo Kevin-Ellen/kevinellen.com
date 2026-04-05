@@ -3,7 +3,10 @@
 import { AppContext } from "@app/appContext/class.appContext";
 import { createAppState } from "@app/appState/create.appState";
 
-import type { AppContextConfig } from "@app/appContext/appContext.types";
+import type {
+  AppContextConfig,
+  AppContextBranding,
+} from "@app/appContext/appContext.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 import type { Person, WebSite, WithContext } from "schema-dts";
 
@@ -18,7 +21,15 @@ describe("AppContext", () => {
     },
   };
 
-  it("returns the stored request, site config, target, breadcrumbs, navigation, structured data, assets, content, canonical url and security", () => {
+  const mockBranding: AppContextBranding = {
+    header: {
+      href: "/",
+      ariaLabel: "Kevin Ellen home",
+      logoSvgId: "logo-monogram-ke",
+    },
+  };
+
+  it("returns the stored request, site config, target, breadcrumbs, navigation, branding, structured data, assets, content, canonical url and security", () => {
     const request = new Request("https://example.com/");
 
     const target: DocumentRenderTarget = {
@@ -50,12 +61,7 @@ describe("AppContext", () => {
               label: "Home",
               href: "/",
               isCurrent: true,
-              svgIcon: {
-                id: "icon-home",
-                viewBox: "0 0 24 24",
-                width: 24,
-                height: 24,
-              },
+              svgIconId: "icon-home",
             },
           ],
           social: [],
@@ -64,6 +70,7 @@ describe("AppContext", () => {
           sections: [],
         },
       },
+      branding: mockBranding,
       footer: mockFooter,
       structuredData: {
         person: {
@@ -129,7 +136,8 @@ describe("AppContext", () => {
     expect(appContext.getTarget()).toBe(target);
     expect(appContext.getBreadcrumbs()).toEqual(config.breadcrumbs);
     expect(appContext.getNavigation()).toEqual(config.navigation);
-    expect(appContext.getFooter()).toEqual(config.footer); // 👈 NEW
+    expect(appContext.getBranding()).toEqual(config.branding);
+    expect(appContext.getFooter()).toEqual(config.footer);
     expect(appContext.getStructuredData()).toEqual(config.structuredData);
     expect(appContext.getAssets()).toEqual(config.assets);
     expect(appContext.getContent()).toEqual(config.content);
@@ -165,7 +173,8 @@ describe("AppContext", () => {
           sections: [],
         },
       },
-      footer: mockFooter, // 👈 NEW
+      branding: mockBranding,
+      footer: mockFooter,
       structuredData: {
         person: {
           "@context": "https://schema.org",

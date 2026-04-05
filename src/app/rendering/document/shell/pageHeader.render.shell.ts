@@ -7,22 +7,30 @@ import type {
 
 import { escapeAttribute, escapeHtmlContent } from "@utils/escapeContent.util";
 
-const renderSvgUse = (
-  item: DocumentRenderNavigationItem,
+const renderSvgUseById = (
+  svgId: string,
   className: string,
   label?: string,
 ): string => {
-  if (!item.svgIcon) {
-    return "";
-  }
-
   const ariaLabelAttribute = label
     ? ` aria-label="${escapeAttribute(label)}"`
     : ' aria-hidden="true"';
 
-  return `<svg class="${escapeAttribute(className)}"${ariaLabelAttribute} width="${item.svgIcon.width}" height="${item.svgIcon.height}">
-    <use href="#${escapeAttribute(item.svgIcon.id)}"></use>
+  return `<svg class="${escapeAttribute(className)}"${ariaLabelAttribute}>
+    <use href="#${escapeAttribute(svgId)}"></use>
   </svg>`;
+};
+
+const renderHeaderBranding = (
+  documentRenderContext: DocumentRenderContext,
+): string => {
+  const { branding } = documentRenderContext.pageHeader;
+
+  return `<a class="l-header__brand" href="${escapeAttribute(branding.href)}" aria-label="${escapeAttribute(branding.ariaLabel)}">
+    <svg class="${escapeAttribute(branding.logo.className)}" aria-hidden="true" width="${branding.logo.width}" height="${branding.logo.height}">
+      <use href="#${escapeAttribute(branding.logo.id)}"></use>
+    </svg>
+  </a>`;
 };
 
 const renderPrimaryNavItem = (item: DocumentRenderNavigationItem): string => {
@@ -31,12 +39,12 @@ const renderPrimaryNavItem = (item: DocumentRenderNavigationItem): string => {
   const itemModifierClass = isHome ? " l-header__item--home" : "";
 
   const content =
-    isHome && item.svgIcon
-      ? renderSvgUse(item, "l-header__icon", item.label)
+    isHome && item.svgIconId
+      ? renderSvgUseById(item.svgIconId, "l-header__icon", item.label)
       : escapeHtmlContent(item.label);
 
   const ariaLabelAttribute =
-    isHome && item.svgIcon
+    isHome && item.svgIconId
       ? ` aria-label="${escapeAttribute(item.label)}"`
       : "";
 
@@ -50,7 +58,7 @@ const renderPrimaryNavItem = (item: DocumentRenderNavigationItem): string => {
 const renderPrimaryNav = (
   documentRenderContext: DocumentRenderContext,
 ): string => {
-  const items = documentRenderContext.navigation.header.primary
+  const items = documentRenderContext.pageHeader.navigation.primary
     .map((item) => renderPrimaryNavItem(item))
     .join("");
 
@@ -62,8 +70,8 @@ const renderPrimaryNav = (
 };
 
 const renderSocialNavItem = (item: DocumentRenderNavigationItem): string => {
-  const content = item.svgIcon
-    ? renderSvgUse(item, "l-header__icon")
+  const content = item.svgIconId
+    ? renderSvgUseById(item.svgIconId, "l-header__icon")
     : `<span class="l-header__label">${escapeHtmlContent(item.label)}</span>`;
 
   return `<li class="l-header__item">
@@ -76,7 +84,7 @@ const renderSocialNavItem = (item: DocumentRenderNavigationItem): string => {
 const renderSocialNav = (
   documentRenderContext: DocumentRenderContext,
 ): string => {
-  const items = documentRenderContext.navigation.header.social
+  const items = documentRenderContext.pageHeader.navigation.social
     .map((item) => renderSocialNavItem(item))
     .join("");
 
@@ -94,7 +102,7 @@ const renderSocialNav = (
 const renderBreadcrumbs = (
   documentRenderContext: DocumentRenderContext,
 ): string => {
-  const { breadcrumbs } = documentRenderContext;
+  const { breadcrumbs } = documentRenderContext.pageHeader;
 
   if (!breadcrumbs.length) {
     return "";
@@ -128,10 +136,13 @@ export const renderPageHeader = (
 ): string => {
   return `<header class="l-header">
     <div class="l-page__frame">
-      <nav class="l-header__primary" aria-label="Primary">
-        ${renderPrimaryNav(documentRenderContext)}
-        ${renderSocialNav(documentRenderContext)}
-      </nav>
+      <div class="l-header__top">
+        ${renderHeaderBranding(documentRenderContext)}
+        <nav class="l-header__primary" aria-label="Primary">
+          ${renderPrimaryNav(documentRenderContext)}
+          ${renderSocialNav(documentRenderContext)}
+        </nav>
+      </div>
       ${renderBreadcrumbs(documentRenderContext)}
     </div>
   </header>

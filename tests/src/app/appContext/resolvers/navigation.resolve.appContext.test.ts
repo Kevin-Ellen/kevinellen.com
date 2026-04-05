@@ -15,16 +15,6 @@ describe("resolveNavigationAppContext", () => {
     expect(result.header.primary).toEqual([
       {
         kind: "page",
-        id: "home",
-        label: "Home",
-        href: "/",
-        isCurrent: true,
-        svgIcon: expect.objectContaining({
-          id: "icon-home",
-        }),
-      },
-      {
-        kind: "page",
         id: "journal",
         label: "Journal",
         href: "/journal",
@@ -43,9 +33,7 @@ describe("resolveNavigationAppContext", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgIcon: expect.objectContaining({
-          id: "icon-github",
-        }),
+        svgIconId: "icon-github",
       },
       {
         kind: "social",
@@ -53,9 +41,7 @@ describe("resolveNavigationAppContext", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgIcon: expect.objectContaining({
-          id: "icon-instagram",
-        }),
+        svgIconId: "icon-instagram",
       },
     ]);
   });
@@ -64,16 +50,6 @@ describe("resolveNavigationAppContext", () => {
     const result = resolveNavigationAppContext("journal", appState);
 
     expect(result.header.primary).toEqual([
-      {
-        kind: "page",
-        id: "home",
-        label: "Home",
-        href: "/",
-        isCurrent: false,
-        svgIcon: expect.objectContaining({
-          id: "icon-home",
-        }),
-      },
       {
         kind: "page",
         id: "journal",
@@ -145,16 +121,6 @@ describe("resolveNavigationAppContext", () => {
     const result = resolveNavigationAppContext(null, appState);
 
     expect(result.header.primary).toEqual([
-      {
-        kind: "page",
-        id: "home",
-        label: "Home",
-        href: "/",
-        isCurrent: false,
-        svgIcon: expect.objectContaining({
-          id: "icon-home",
-        }),
-      },
       {
         kind: "page",
         id: "journal",
@@ -237,9 +203,7 @@ describe("resolveNavigationAppContext", () => {
         href: "https://example.com",
         label: "External",
         isCurrent: false,
-        svgIcon: expect.objectContaining({
-          id: "icon-home",
-        }),
+        svgIconId: "icon-home",
       },
     ]);
   });

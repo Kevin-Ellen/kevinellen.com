@@ -17,11 +17,17 @@ export type DocumentRenderBreadcrumb = {
   href: string;
 };
 
-export type DocumentRenderSvgIcon = {
+export type DocumentRenderHeaderLogo = {
   id: SvgAssetId;
-  viewBox: string;
   width: number;
   height: number;
+  className: string;
+};
+
+export type DocumentRenderHeaderBranding = {
+  href: string;
+  ariaLabel: string;
+  logo: DocumentRenderHeaderLogo;
 };
 
 export type DocumentRenderNavigationItem =
@@ -30,7 +36,7 @@ export type DocumentRenderNavigationItem =
       id: PageId;
       label: string;
       href: string;
-      svgIcon?: DocumentRenderSvgIcon;
+      svgIconId?: SvgAssetId;
       isCurrent: boolean;
     }
   | {
@@ -38,20 +44,24 @@ export type DocumentRenderNavigationItem =
       id: SocialId;
       label: string;
       href: string;
-      svgIcon?: DocumentRenderSvgIcon;
+      svgIconId?: SvgAssetId;
       isCurrent: false;
     }
   | {
       kind: "external";
       label: string;
       href: string;
-      svgIcon?: DocumentRenderSvgIcon;
+      svgIconId?: SvgAssetId;
       isCurrent: false;
     };
 
-export type DocumentRenderHeaderNavigation = {
-  primary: readonly DocumentRenderNavigationItem[];
-  social: readonly DocumentRenderNavigationItem[];
+export type DocumentRenderPageHeader = {
+  branding: DocumentRenderHeaderBranding;
+  navigation: {
+    primary: readonly DocumentRenderNavigationItem[];
+    social: readonly DocumentRenderNavigationItem[];
+  };
+  breadcrumbs: readonly DocumentRenderBreadcrumb[];
 };
 
 export type DocumentRenderFooterNavigationItem = {
@@ -104,10 +114,7 @@ export type DocumentRenderContext = {
     pageTitle: string;
     metaDescription: string;
   };
-  navigation: {
-    header: DocumentRenderHeaderNavigation;
-  };
-  breadcrumbs: readonly DocumentRenderBreadcrumb[];
+  pageHeader: DocumentRenderPageHeader;
   content: Content;
   pageFooter: DocumentRenderPageFooter;
   structuredData: {

@@ -7,7 +7,6 @@ import { deepFreeze } from "@utils/deepFreeze.util";
 export const navigationConfig: NavigationConfig = deepFreeze({
   header: {
     primary: [
-      { kind: "page", id: "home", svgId: "icon-home" },
       { kind: "page", id: "journal" },
       // { kind: "page", id: "photos" },
       // { kind: "page", id: "about" },

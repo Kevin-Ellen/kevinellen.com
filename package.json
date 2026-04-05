@@ -21,6 +21,7 @@
     "watch:styles": "sass --watch src/styles/main.scss:.build/generated/styles.css --no-source-map",
     "lint:styles": "stylelint \"src/styles/**/*.scss\"",
     "lint:styles:fix": "stylelint \"src/styles/**/*.scss\" --fix",
+    "styles:watch": "sass --watch src/styles/main.scss:.build/generated/styles.css",
     "prepare": "husky"
   },
   "keywords": [],
