@@ -25,7 +25,7 @@ describe("AppContext", () => {
     header: {
       href: "/",
       ariaLabel: "Kevin Ellen home",
-      logoSvgId: "logo-monogram-ke",
+      svgId: "logo-monogram-ke",
     },
   };
 
@@ -61,7 +61,7 @@ describe("AppContext", () => {
               label: "Home",
               href: "/",
               isCurrent: true,
-              svgIconId: "icon-home",
+              svgId: "icon-home",
             },
           ],
           social: [],

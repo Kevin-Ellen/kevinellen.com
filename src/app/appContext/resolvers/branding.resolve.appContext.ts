@@ -12,7 +12,7 @@ export const resolveBrandingAppContext = (
     header: {
       href: headerBranding.homeHref,
       ariaLabel: headerBranding.ariaLabel,
-      logoSvgId: headerBranding.logo.svg,
+      svgId: headerBranding.logo.svg,
     },
   });
 };

@@ -36,7 +36,7 @@ export type DocumentRenderNavigationItem =
       id: PageId;
       label: string;
       href: string;
-      svgIconId?: SvgAssetId;
+      svgId?: SvgAssetId;
       isCurrent: boolean;
     }
   | {
@@ -44,14 +44,14 @@ export type DocumentRenderNavigationItem =
       id: SocialId;
       label: string;
       href: string;
-      svgIconId?: SvgAssetId;
+      svgId?: SvgAssetId;
       isCurrent: false;
     }
   | {
       kind: "external";
       label: string;
       href: string;
-      svgIconId?: SvgAssetId;
+      svgId?: SvgAssetId;
       isCurrent: false;
     };
 

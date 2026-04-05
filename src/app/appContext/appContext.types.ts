@@ -23,7 +23,7 @@ export type AppContextBreadcrumb = {
 export type AppContextHeaderBranding = {
   href: string;
   ariaLabel: string;
-  logoSvgId: SvgAssetId;
+  svgId: SvgAssetId;
 };
 
 export type AppContextBranding = {
@@ -36,7 +36,7 @@ export type AppContextNavigationItem =
       id: PageId;
       label: string;
       href: string;
-      svgIconId?: SvgAssetId;
+      svgId?: SvgAssetId;
       isCurrent: boolean;
     }
   | {
@@ -44,14 +44,14 @@ export type AppContextNavigationItem =
       id: SocialId;
       label: string;
       href: string;
-      svgIconId?: SvgAssetId;
+      svgId?: SvgAssetId;
       isCurrent: false;
     }
   | {
       kind: "external";
       label: string;
       href: string;
-      svgIconId?: SvgAssetId;
+      svgId?: SvgAssetId;
       isCurrent: false;
     };
 
