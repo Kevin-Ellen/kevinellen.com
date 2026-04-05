@@ -3,11 +3,13 @@
 import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
+import { createAppContext } from "@app/appContext/create.appContext";
 import { runRequestPolicies } from "@app/policies/request/run.request.policies";
 import { runResponsePolicies } from "@app/policies/response/run.response.policies";
 import { resolveErrorRenderIntent } from "@app/request/resolve.error.render.intent";
 import { routeDocumentRequest } from "@app/request/route.document.request";
 import { renderDocumentRequest } from "@app/request/render.document.request";
+import { createRenderContext } from "@app/renderContext/create.renderContext";
 
 const resolveInternalErrorTarget = (
   appState: AppState,
@@ -28,18 +30,20 @@ const resolveInternalErrorTarget = (
 const renderTargetResponse = async (
   req: Request,
   env: Env,
-  ctx: ExecutionContext,
+  _ctx: ExecutionContext,
   appState: AppState,
   target: DocumentRenderTarget,
 ): Promise<Response> => {
-  const rendered = await renderDocumentRequest(req, env, ctx, appState, target);
+  const appContext = createAppContext(req, env, appState, target);
+  const renderContext = createRenderContext(appContext);
+  const rendered = await renderDocumentRequest(renderContext);
 
   return runResponsePolicies(
     req,
     env,
     appState,
     target,
-    rendered.security,
+    renderContext.security,
     rendered.response,
   );
 };
@@ -57,16 +61,13 @@ export const requestHandler = async (
       return requestPolicyOutcome.response;
     }
 
+    let target: DocumentRenderTarget;
+
     if (requestPolicyOutcome.kind === "render-error") {
-      const target = resolveErrorRenderIntent(
-        requestPolicyOutcome.intent,
-        appState,
-      );
-
-      return renderTargetResponse(req, env, ctx, appState, target);
+      target = resolveErrorRenderIntent(requestPolicyOutcome.intent, appState);
+    } else {
+      target = routeDocumentRequest(req, appState);
     }
-
-    const target = routeDocumentRequest(req, appState);
 
     return renderTargetResponse(req, env, ctx, appState, target);
   } catch (_error) {

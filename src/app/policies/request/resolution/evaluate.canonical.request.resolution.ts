@@ -16,7 +16,7 @@ export const evaluateCanonicalRequestResolution = (
   /* -------------------------------------------------------------------------- */
 
   if (
-    runtime.canonical &&
+    runtime.canonicalRedirect &&
     runtime.canonicalHost &&
     url.hostname !== runtime.canonicalHost
   ) {

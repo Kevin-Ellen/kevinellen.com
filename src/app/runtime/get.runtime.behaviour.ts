@@ -4,17 +4,17 @@ import type { RuntimeBehaviour } from "@app/runtime/runtime.types";
 
 const RUNTIME_BEHAVIOUR = {
   dev: {
-    canonical: false,
+    canonicalRedirect: false,
     indexing: false,
     public: false,
   },
   stg: {
-    canonical: true,
+    canonicalRedirect: true,
     indexing: false,
     public: true,
   },
   prod: {
-    canonical: true,
+    canonicalRedirect: true,
     indexing: true,
     public: true,
   },
@@ -39,9 +39,9 @@ export const getRuntimeBehaviour = (env: Env): RuntimeBehaviour => {
 
   return {
     appEnv,
-    canonical: behaviour.canonical,
+    canonicalRedirect: behaviour.canonicalRedirect,
     indexing: behaviour.indexing,
     public: behaviour.public,
-    canonicalHost: env.APP_HOST ?? null,
+    canonicalHost: env.APP_HOST,
   };
 };
