@@ -1,13 +1,24 @@
 // src/app/renderContext/renderContext.types.ts
 
-export type RenderContextPage = {
-  id: string;
-  kind: string;
-  label: string;
+import type {
+  AppContextBreadcrumb,
+  AppContextMetadata,
+  AppContextNavigation,
+  AppContextPage,
+} from "@app/appContext/appContext.types";
+
+export type RenderContextDocument = {
+  status: number;
+  language: string;
+  siteName: string;
 };
 
-export type RenderContextMetadata = {
-  canonicalUrl: string | null;
+export type RenderContextPage = {
+  id: AppContextPage["core"]["id"];
+  kind: AppContextPage["core"]["kind"];
+  label: string;
+  title: string;
+  description: string;
 };
 
 export type RenderContextSecurity = {
@@ -15,15 +26,19 @@ export type RenderContextSecurity = {
 };
 
 export type RenderContextInput = {
-  status: number;
+  document: RenderContextDocument;
   page: RenderContextPage;
-  metadata: RenderContextMetadata;
+  metadata: AppContextMetadata;
+  breadcrumbs: readonly AppContextBreadcrumb[];
+  navigation: AppContextNavigation;
   security: RenderContextSecurity;
 };
 
 export type RenderContextInspect = {
-  status: number;
+  document: RenderContextDocument;
   page: RenderContextPage;
-  metadata: RenderContextMetadata;
+  metadata: AppContextMetadata;
+  breadcrumbs: readonly AppContextBreadcrumb[];
+  navigation: AppContextNavigation;
   security: RenderContextSecurity;
 };

@@ -25,6 +25,7 @@ export const createAppContext = (
         method: req.method,
         pathname: url.pathname,
       },
+      site: appState.site,
       target,
       page: target.page,
       metadata: {

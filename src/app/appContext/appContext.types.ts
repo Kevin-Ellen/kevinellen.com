@@ -3,6 +3,7 @@
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
 import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
+import { SiteConfig } from "@app/config/site.config.types";
 
 export type AppContextPage = PublicPage | ErrorPage;
 
@@ -76,6 +77,7 @@ export type AppContextInput = {
   metadata: AppContextMetadata;
   breadcrumbs: readonly AppContextBreadcrumb[];
   navigation: AppContextNavigation;
+  site: SiteConfig;
 };
 
 export type AppContextInspect = {
@@ -97,4 +99,5 @@ export type AppContextInspect = {
   metadata: AppContextMetadata;
   breadcrumbs: readonly AppContextBreadcrumb[];
   navigation: AppContextNavigation;
+  site: SiteConfig;
 };

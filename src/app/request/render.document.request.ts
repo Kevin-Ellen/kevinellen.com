@@ -11,7 +11,7 @@ export const renderDocumentRequest = async (
 ): Promise<RenderDocumentResult> => {
   return {
     response: new Response(JSON.stringify(renderContext.inspect(), null, 2), {
-      status: renderContext.status,
+      status: renderContext.document.status,
       headers: {
         "content-type": "application/json; charset=utf-8",
       },
