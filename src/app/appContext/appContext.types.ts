@@ -3,7 +3,7 @@
 import type { Person, WebSite, WithContext } from "schema-dts";
 
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
-import type { PageId } from "@shared-types/pages/page.definition";
+import type { PageId } from "@shared-types/pages/definitions/base.definition.page";
 import type { Content } from "@app/content/content.types";
 import type {
   ScriptAssetConfig,

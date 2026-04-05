@@ -1,11 +1,10 @@
-// packages/shared-types/src/pages/page.definition.ts
+// packages/shared-types/src/pages/definitions/base.definition.page.ts
 
 import type {
-  SvgAssetConfig,
   ScriptAssetConfig,
-} from "@shared-types/config/assets.config.types";
-import type { PageStructuredDataNode } from "@shared-types/config/structured-data.config.types";
-import type { PageContent } from "@shared-types/pages/content/content.page.types";
+  SvgAssetConfig,
+} from "../../config/assets.config.types";
+import type { PageStructuredDataNode } from "../../config/structured-data.config.types";
 
 /* -------------------------------------------------------------------------- */
 /* Shared identity                                                            */
@@ -26,13 +25,8 @@ export type BasePageDefinitionCore = {
   label: string;
 };
 
-export type PublicPageDefinitionCore = BasePageDefinitionCore & {
+export type StandardPageDefinitionCore = BasePageDefinitionCore & {
   kind: StandardPublicPageKind;
-  slug: string;
-};
-
-export type ArticlePageDefinitionCore = BasePageDefinitionCore & {
-  kind: "article";
   slug: string;
 };
 
@@ -61,7 +55,7 @@ export type PageSitemapConfig = {
   include: boolean;
 };
 
-export type PublicPageDefinitionConfig = {
+export type StandardPageDefinitionConfig = {
   robots: PageRobotsConfig;
   robotsTxt: PageRobotsTxtConfig;
   sitemap: PageSitemapConfig;
@@ -114,38 +108,11 @@ export type PageStructuredData = readonly PageStructuredDataNode[];
 /* Shared authored page shape                                                 */
 /* -------------------------------------------------------------------------- */
 
-export type BasePageDefinition<TCore, TConfig> = {
+export type BasePageDefinition<TCore, TConfig, TContent> = {
   readonly core: TCore;
   readonly config: TConfig;
   readonly meta: PageMeta;
   readonly navigation: PageNavigation;
-  readonly content: PageContent;
+  readonly content: TContent;
   readonly assets: PageAssets;
 };
-
-/* -------------------------------------------------------------------------- */
-/* Specialised page definitions                                               */
-/* -------------------------------------------------------------------------- */
-
-export type StandardPageDefinition = BasePageDefinition<
-  PublicPageDefinitionCore,
-  PublicPageDefinitionConfig
-> & {
-  readonly structuredData: PageStructuredData;
-};
-
-export type ArticlePageDefinition = BasePageDefinition<
-  ArticlePageDefinitionCore,
-  PublicPageDefinitionConfig
-> & {
-  readonly dated: DatedPageMetadata;
-  readonly structuredData: PageStructuredData;
-  readonly excerpt: string;
-};
-
-export type PageDefinition = StandardPageDefinition | ArticlePageDefinition;
-
-export type ErrorPageDefinition = BasePageDefinition<
-  ErrorPageDefinitionCore,
-  ErrorPageDefinitionConfig
->;

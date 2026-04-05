@@ -1,6 +1,6 @@
 // test/helpers/page.content.fixture.ts
 
-import type { PageContent } from "@shared-types/pages/content/content.page.types";
+import type { PageContent } from "@shared-types/pages/content/shared.content.types";
 
 export const createPageContentFixture = (): PageContent => ({
   head: {

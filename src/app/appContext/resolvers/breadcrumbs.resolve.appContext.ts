@@ -2,7 +2,7 @@
 
 import type { AppState } from "@app/appState/class.appState";
 import type { AppContextBreadcrumb } from "@app/appContext/appContext.types";
-import type { BreadcrumbTrail } from "@shared-types/pages/page.definition";
+import type { BreadcrumbTrail } from "@shared-types/pages/definitions/base.definition.page";
 
 export const resolveBreadcrumbsAppContext = (
   breadcrumbIds: BreadcrumbTrail,

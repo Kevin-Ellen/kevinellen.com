@@ -1,10 +1,8 @@
 // tests/helpers/appState/create.config.appState.ts
 
 import type { AppStateConfig } from "@app/appState/appState.types";
-import type {
-  ErrorPageDefinition,
-  PageDefinition,
-} from "@shared-types/pages/page.definition";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
+import type { PublicPageDefinition } from "@shared-types/pages/definitions/public.definition.page";
 
 import type { RedirectRule } from "@config/redirects.config.types";
 import type { GoneRule } from "@config/gone.config.types";
@@ -25,7 +23,7 @@ export const createAppStateConfig = ({
   redirectsConfig = REDIRECTS,
   goneConfig = GONE_RULES,
 }: {
-  publicPages: readonly PageDefinition[];
+  publicPages: readonly PublicPageDefinition[];
   errorPages: readonly ErrorPageDefinition[];
   redirectsConfig?: readonly RedirectRule[];
   goneConfig?: readonly GoneRule[];

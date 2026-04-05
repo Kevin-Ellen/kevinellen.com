@@ -3,7 +3,7 @@
 import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
 import { createAppState } from "@app/appState/create.appState";
 
-import type { PageContent } from "@shared-types/pages/content/content.page.types";
+import type { PageContent } from "@shared-types/pages/content/shared.content.types";
 
 describe("resolveContentAppContext", () => {
   const appState = createAppState();

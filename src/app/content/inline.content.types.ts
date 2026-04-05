@@ -1,6 +1,6 @@
 // src/app/content/inline.content.page.types.ts
 
-import type { PageId } from "@shared-types/pages/page.definition";
+import type { PageId } from "@shared-types/pages/definitions/base.definition.page";
 
 export type ContentTextInline = {
   kind: "text";

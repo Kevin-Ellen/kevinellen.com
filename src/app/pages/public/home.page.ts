@@ -1,8 +1,8 @@
 // src/app/pages/public/home.page.ts
 
-import type { PageDefinition } from "@shared-types/pages/page.definition";
+import type { HomePageDefinition } from "@shared-types/pages/definitions/home.definition.page";
 
-export const homePage: PageDefinition = {
+export const homePage: HomePageDefinition = {
   core: {
     id: "home",
     kind: "home",

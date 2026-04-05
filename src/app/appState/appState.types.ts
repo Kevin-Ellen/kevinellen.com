@@ -1,25 +1,23 @@
 // src/app/appState/appState.types.ts
 
-import type {
-  PageDefinition,
-  ErrorPageDefinition,
-} from "@shared-types/pages/page.definition";
-
 import type { AssetsConfig } from "@shared-types/config/assets.config.types";
+import type { StructuredDataConfig } from "@shared-types/config/structured-data.config.types";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
+import type { PublicPageDefinition } from "@shared-types/pages/definitions/public.definition.page";
+import type {
+  ErrorPageStatus,
+  PageId,
+} from "@shared-types/pages/definitions/base.definition.page";
+
 import type { FooterConfig } from "@config/footer.config.types";
+import type { GoneRule } from "@config/gone.config.types";
 import type { NavigationConfig } from "@config/navigation.config.types";
+import type { RedirectRule } from "@config/redirects.config.types";
 import type { SiteConfig } from "@config/site.config.types";
 import type { SocialConfig } from "@config/social.config.types";
-import type { StructuredDataConfig } from "@shared-types/config/structured-data.config.types";
 import type { WebManifestConfig } from "@config/webmanifest.config.types";
-import type {
-  PageId,
-  ErrorPageStatus,
-} from "@shared-types/pages/page.definition";
-import type { RedirectRule } from "@config/redirects.config.types";
-import type { GoneRule } from "@config/gone.config.types";
 
-export type AppStatePublicPages = readonly PageDefinition[];
+export type AppStatePublicPages = readonly PublicPageDefinition[];
 export type AppStateErrorPages = readonly ErrorPageDefinition[];
 
 export type AppStatePages = {
@@ -41,8 +39,8 @@ export type AppStateConfig = {
 };
 
 export type AppStatePublicPageIndices = {
-  byId: ReadonlyMap<PageId, PageDefinition>;
-  bySlug: ReadonlyMap<string, PageDefinition>;
+  byId: ReadonlyMap<PageId, PublicPageDefinition>;
+  bySlug: ReadonlyMap<string, PublicPageDefinition>;
 };
 
 export type AppStateErrorPageIndices = {
@@ -54,3 +52,5 @@ export type AppStatePageIndices = {
   publicPages: AppStatePublicPageIndices;
   errorPages: AppStateErrorPageIndices;
 };
+
+export type AppStatePageDefinition = PublicPageDefinition | ErrorPageDefinition;

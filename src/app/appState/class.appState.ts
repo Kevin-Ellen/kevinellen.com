@@ -2,25 +2,25 @@
 
 import type {
   AppStateConfig,
-  AppStatePages,
   AppStatePageIndices,
+  AppStatePages,
 } from "@app/appState/appState.types";
 
-import type { SiteConfig } from "@config/site.config.types";
-import type { AssetsConfig } from "@shared-types/config/assets.config.types";
 import type { FooterConfig } from "@config/footer.config.types";
-import type { NavigationConfig } from "@config/navigation.config.types";
-import type { SocialConfig } from "@config/social.config.types";
-import type { StructuredDataConfig } from "@shared-types/config/structured-data.config.types";
-import type { WebManifestConfig } from "@config/webmanifest.config.types";
-import type {
-  PageId,
-  PageDefinition,
-  ErrorPageDefinition,
-  ErrorPageStatus,
-} from "@shared-types/pages/page.definition";
-import type { RedirectRule } from "@config/redirects.config.types";
 import type { GoneRule } from "@config/gone.config.types";
+import type { NavigationConfig } from "@config/navigation.config.types";
+import type { RedirectRule } from "@config/redirects.config.types";
+import type { SiteConfig } from "@config/site.config.types";
+import type { SocialConfig } from "@config/social.config.types";
+import type { WebManifestConfig } from "@config/webmanifest.config.types";
+import type { AssetsConfig } from "@shared-types/config/assets.config.types";
+import type { StructuredDataConfig } from "@shared-types/config/structured-data.config.types";
+import type {
+  ErrorPageStatus,
+  PageId,
+} from "@shared-types/pages/definitions/base.definition.page";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
+import type { PublicPageDefinition } from "@shared-types/pages/definitions/public.definition.page";
 
 export class AppState {
   private readonly siteConfig: SiteConfig;
@@ -53,8 +53,8 @@ export class AppState {
   }
 
   private createPageIndices(pages: AppStatePages): AppStatePageIndices {
-    const publicById = new Map<PageId, PageDefinition>();
-    const publicBySlug = new Map<string, PageDefinition>();
+    const publicById = new Map<PageId, PublicPageDefinition>();
+    const publicBySlug = new Map<string, PublicPageDefinition>();
 
     for (const page of pages.publicPages) {
       if (publicById.has(page.core.id)) {
@@ -133,15 +133,15 @@ export class AppState {
     return this.goneConfig;
   }
 
-  public getPublicPages(): readonly PageDefinition[] {
+  public getPublicPages(): readonly PublicPageDefinition[] {
     return this.pages.publicPages;
   }
 
-  public getPublicPageById(id: PageId): PageDefinition | null {
+  public getPublicPageById(id: PageId): PublicPageDefinition | null {
     return this.pageIndices.publicPages.byId.get(id) ?? null;
   }
 
-  public getPageBySlug(slug: string): PageDefinition | null {
+  public getPageBySlug(slug: string): PublicPageDefinition | null {
     return this.pageIndices.publicPages.bySlug.get(slug) ?? null;
   }
 

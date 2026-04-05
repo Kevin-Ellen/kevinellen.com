@@ -6,7 +6,7 @@ import type {
   AppContextNavigationItem,
 } from "@app/appContext/appContext.types";
 import type { AppState } from "@app/appState/class.appState";
-import type { PageId } from "@shared-types/pages/page.definition";
+import type { PageId } from "@shared-types/pages/definitions/base.definition.page";
 import type { NavigationItem } from "@config/navigation.config.types";
 
 const resolveNavigationItemAppContext = (

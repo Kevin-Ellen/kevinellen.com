@@ -2,7 +2,7 @@
 
 import type { SocialId } from "@config/social.config.types";
 import type { SvgAssetId } from "@shared-types/config/assets.config.types";
-import type { PageId } from "@shared-types/pages/page.definition";
+import type { PageId } from "@shared-types/pages/definitions/base.definition.page";
 
 export type NavigationItem =
   | { kind: "page"; id: PageId; svgId?: SvgAssetId }

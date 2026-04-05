@@ -1,6 +1,6 @@
 // src/app/pages/error/error-404.page.ts
 
-import type { ErrorPageDefinition } from "@shared-types/pages/page.definition";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
 
 export const error404Page: ErrorPageDefinition = {
   core: {

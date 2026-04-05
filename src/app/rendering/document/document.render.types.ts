@@ -1,7 +1,7 @@
 // src/app/rendering/document/document.render.types.ts
 
 import type { Content } from "@app/content/content.types";
-import type { PageId } from "@shared-types/pages/page.definition";
+import type { PageId } from "@shared-types/pages/definitions/base.definition.page";
 import type { SocialId } from "@config/social.config.types";
 import type { PageStructuredDataDocument } from "@shared-types/config/structured-data.config.types";
 import type {

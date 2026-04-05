@@ -1,11 +1,11 @@
-// src/app/pages/content/content.page.types.ts
+// packages/shared-types/src/pages/content/content.page.types.ts
 
 import type {
   PageContentHero,
   PageContentParagraph,
 } from "@shared-types/pages/content/block.content.page.types";
 
-export type PageContent = {
+export type StandardPageContent = {
   head: PageContentHero;
   body: readonly PageContentParagraph[];
   footer: readonly string[];

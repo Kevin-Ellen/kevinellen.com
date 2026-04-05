@@ -1,22 +1,19 @@
 // tests/src/app/appState/class.appState.test.ts
 
 import { AppState } from "@app/appState/class.appState";
-
-import { homePage } from "@app/pages/public/home.page";
 import { error404Page } from "@app/pages/error/404.error.page";
+import { homePage } from "@app/pages/public/home.page";
 
-import type {
-  ErrorPageDefinition,
-  StandardPageDefinition,
-  PublicPageDefinitionCore,
-} from "@shared-types/pages/page.definition";
+import type { StandardPageDefinitionCore } from "@shared-types/pages/definitions/base.definition.page";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
+import type { StandardPageDefinition } from "@shared-types/pages/definitions/public.definition.page";
 
 import { createAppStateConfig } from "@tests/helpers/appState/create.config.appState";
 
 const standardHomePage = homePage as StandardPageDefinition;
 
 const createPublicPage = (
-  coreOverrides: Partial<PublicPageDefinitionCore>,
+  coreOverrides: Partial<StandardPageDefinitionCore>,
 ): StandardPageDefinition => ({
   ...standardHomePage,
   core: {

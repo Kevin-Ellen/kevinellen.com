@@ -1,6 +1,6 @@
 // src/app/pages/registry/error.registry.pages.ts
 
-import type { ErrorPageDefinition } from "@shared-types/pages/page.definition";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
 
 import { error404Page } from "@app/pages/error/404.error.page";
 import { error410Page } from "@app/pages/error/410.error.page";

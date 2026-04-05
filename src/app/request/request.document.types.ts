@@ -1,14 +1,12 @@
 // src/app/request/request.document.types.ts
 
-import type {
-  ErrorPageDefinition,
-  PageDefinition,
-} from "@shared-types/pages/page.definition";
+import type { ErrorPageDefinition } from "@shared-types/pages/definitions/error.definition.page";
+import type { PublicPageDefinition } from "@shared-types/pages/definitions/public.definition.page";
 
 export type DocumentRenderTarget =
   | {
       kind: "page";
-      page: PageDefinition;
+      page: PublicPageDefinition;
       status: 200;
     }
   | {
