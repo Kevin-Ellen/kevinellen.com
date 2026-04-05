@@ -71,11 +71,11 @@ export const buildDocumentRenderContext = (
 
   const svgAssetsById = resolveSvgAssets(assets.svgs);
 
-  const brandingLogoSvg = svgAssetsById.get(branding.header.logoSvgId);
+  const brandingLogoSvg = svgAssetsById.get(branding.header.svgId);
 
   if (!brandingLogoSvg) {
     throw new Error(
-      `Missing header branding SVG asset for id: ${branding.header.logoSvgId}`,
+      `Missing header branding SVG asset for id: ${branding.header.svgId}`,
     );
   }
 

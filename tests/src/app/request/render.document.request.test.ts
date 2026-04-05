@@ -114,7 +114,7 @@ describe("renderDocumentRequest", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgIconId: "icon-github",
+        svgId: "icon-github",
       },
       {
         kind: "social",
@@ -122,7 +122,7 @@ describe("renderDocumentRequest", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgIconId: "icon-instagram",
+        svgId: "icon-instagram",
       },
     ]);
   });
@@ -165,7 +165,7 @@ describe("renderDocumentRequest", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgIconId: "icon-github",
+        svgId: "icon-github",
       },
       {
         kind: "social",
@@ -173,7 +173,7 @@ describe("renderDocumentRequest", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgIconId: "icon-instagram",
+        svgId: "icon-instagram",
       },
     ]);
   });

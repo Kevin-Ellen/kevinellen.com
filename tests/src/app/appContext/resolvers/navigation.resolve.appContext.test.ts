@@ -33,7 +33,7 @@ describe("resolveNavigationAppContext", () => {
         label: "GitHub",
         href: "https://github.com/Kevin-Ellen",
         isCurrent: false,
-        svgIconId: "icon-github",
+        svgId: "icon-github",
       },
       {
         kind: "social",
@@ -41,7 +41,7 @@ describe("resolveNavigationAppContext", () => {
         label: "Instagram",
         href: "https://www.instagram.com/photography.mallard",
         isCurrent: false,
-        svgIconId: "icon-instagram",
+        svgId: "icon-instagram",
       },
     ]);
   });
@@ -203,7 +203,7 @@ describe("resolveNavigationAppContext", () => {
         href: "https://example.com",
         label: "External",
         isCurrent: false,
-        svgIconId: "icon-home",
+        svgId: "icon-home",
       },
     ]);
   });

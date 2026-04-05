@@ -39,14 +39,12 @@ const renderPrimaryNavItem = (item: DocumentRenderNavigationItem): string => {
   const itemModifierClass = isHome ? " l-header__item--home" : "";
 
   const content =
-    isHome && item.svgIconId
-      ? renderSvgUseById(item.svgIconId, "l-header__icon", item.label)
+    isHome && item.svgId
+      ? renderSvgUseById(item.svgId, "l-header__icon", item.label)
       : escapeHtmlContent(item.label);
 
   const ariaLabelAttribute =
-    isHome && item.svgIconId
-      ? ` aria-label="${escapeAttribute(item.label)}"`
-      : "";
+    isHome && item.svgId ? ` aria-label="${escapeAttribute(item.label)}"` : "";
 
   return `<li class="l-header__item${itemModifierClass}">
     <a class="l-header__link" href="${escapeAttribute(item.href)}"${ariaCurrentAttribute}${ariaLabelAttribute}>
@@ -70,8 +68,8 @@ const renderPrimaryNav = (
 };
 
 const renderSocialNavItem = (item: DocumentRenderNavigationItem): string => {
-  const content = item.svgIconId
-    ? renderSvgUseById(item.svgIconId, "l-header__icon")
+  const content = item.svgId
+    ? renderSvgUseById(item.svgId, "l-header__icon")
     : `<span class="l-header__label">${escapeHtmlContent(item.label)}</span>`;
 
   return `<li class="l-header__item">

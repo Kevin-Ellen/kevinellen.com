@@ -56,7 +56,7 @@ describe("createAppContext", () => {
             label: "GitHub",
             href: "https://github.com/Kevin-Ellen",
             isCurrent: false,
-            svgIconId: "icon-github",
+            svgId: "icon-github",
           },
           {
             kind: "social",
@@ -64,7 +64,7 @@ describe("createAppContext", () => {
             label: "Instagram",
             href: "https://www.instagram.com/photography.mallard",
             isCurrent: false,
-            svgIconId: "icon-instagram",
+            svgId: "icon-instagram",
           },
         ],
       },
@@ -128,11 +128,10 @@ describe("createAppContext", () => {
       header: {
         href: "/",
         ariaLabel: "Kevin Ellen home",
-        logoSvgId: "logo-monogram-ke",
+        svgId: "logo-monogram-ke",
       },
     });
 
-    // ✅ FIXED FOOTER EXPECTATION
     expect(appContext.getFooter()).toEqual({
       affiliations: {
         title: "Conservation",
@@ -144,27 +143,18 @@ describe("createAppContext", () => {
             label: "RSPB",
             href: "https://www.rspb.org.uk/",
             svgId: "logo-rspb",
-            viewBox: "0 0 81 81",
-            width: 81,
-            height: 81,
           },
           {
             id: "national-trust",
             label: "National Trust",
             href: "https://www.nationaltrust.org.uk/",
             svgId: "logo-national-trust",
-            viewBox: "0 0 48 48",
-            width: 48,
-            height: 48,
           },
           {
             id: "vogelbescherming-nederland",
             label: "Vogelbescherming Nederland",
             href: "https://www.vogelbescherming.nl/",
             svgId: "logo-vogelbescherming-nederland",
-            viewBox: "0 0 829 392",
-            width: 829,
-            height: 392,
           },
         ],
       },
@@ -212,7 +202,6 @@ describe("createAppContext", () => {
 
     expect(appContext.getBreadcrumbs()).toEqual([]);
 
-    // ✅ SAME FIX HERE
     expect(appContext.getFooter()).toEqual({
       affiliations: {
         title: "Conservation",
@@ -224,27 +213,18 @@ describe("createAppContext", () => {
             label: "RSPB",
             href: "https://www.rspb.org.uk/",
             svgId: "logo-rspb",
-            viewBox: "0 0 81 81",
-            width: 81,
-            height: 81,
           },
           {
             id: "national-trust",
             label: "National Trust",
             href: "https://www.nationaltrust.org.uk/",
             svgId: "logo-national-trust",
-            viewBox: "0 0 48 48",
-            width: 48,
-            height: 48,
           },
           {
             id: "vogelbescherming-nederland",
             label: "Vogelbescherming Nederland",
             href: "https://www.vogelbescherming.nl/",
             svgId: "logo-vogelbescherming-nederland",
-            viewBox: "0 0 829 392",
-            width: 829,
-            height: 392,
           },
         ],
       },

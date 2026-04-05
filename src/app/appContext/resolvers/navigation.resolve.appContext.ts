@@ -27,7 +27,7 @@ const resolveNavigationItemAppContext = (
       label: page.core.label,
       href: page.core.slug,
       isCurrent: page.core.id === currentPageId,
-      ...(item.svgId ? { svgIconId: item.svgId } : {}),
+      ...(item.svgId ? { svgId: item.svgId } : {}),
     };
   }
 
@@ -44,7 +44,7 @@ const resolveNavigationItemAppContext = (
       label: social.label,
       href: social.href,
       isCurrent: false,
-      ...(item.svgId ? { svgIconId: item.svgId } : {}),
+      ...(item.svgId ? { svgId: item.svgId } : {}),
     };
   }
 
@@ -53,7 +53,7 @@ const resolveNavigationItemAppContext = (
     label: item.label,
     href: item.href,
     isCurrent: false,
-    ...(item.svgId ? { svgIconId: item.svgId } : {}),
+    ...(item.svgId ? { svgId: item.svgId } : {}),
   };
 };
 
