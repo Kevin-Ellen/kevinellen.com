@@ -1,5 +1,7 @@
 // src/app/renderContext/content/content.renderContext.types.ts
 
+import type { ContentInlineResolved } from "@app/renderContext/content/inline-content/inline-content.types";
+
 export type RenderContextPageHeadContent = {
   eyebrow: string;
   title: string;
@@ -27,12 +29,13 @@ export type RenderContextPageBodyContent = {
 
 export type RenderContextParagraphModule = {
   kind: "paragraph";
-  text: string;
+  content: readonly ContentInlineResolved[];
 };
 
 export type RenderContextQuoteModule = {
   kind: "quote";
   text: string;
+  id: string;
   attribution?: string;
 };
 

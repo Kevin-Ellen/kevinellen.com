@@ -12,7 +12,7 @@ const renderHeading = (
   if (!heading) return "";
 
   const tag = `h${heading.level}`;
-  const className = heading.visuallyHidden ? ` class="u-visually-hidden"` : "";
+  const className = heading.visuallyHidden ? ` class="u-sr-only"` : "";
 
   return `<${tag}${className}>${escapeHtmlContent(heading.text)}</${tag}>`;
 };
@@ -26,5 +26,8 @@ export const renderContentSection = (
     .map((module) => renderContentLeafModule(module))
     .join("");
 
-  return `<section class="m-content-section">${heading}${modules}</section>`;
+  if (section.modules.length === 1) {
+    return modules;
+  }
+  return `<section>${heading}${modules}</section>`;
 };

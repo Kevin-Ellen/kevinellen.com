@@ -4,7 +4,7 @@
 
 $font-family-body: families.$font-family-body;
 $font-family-heading: families.$font-family-heading;
-$font-family-quote: families.$font-family-heading;
+$font-family-blockquote: families.$font-family-heading;
 $font-family-caption: $font-family-body;
 $font-family-meta: $font-family-body;
 
@@ -78,8 +78,8 @@ $h4-spacing-top: spacing.$space-lg;
 $h5-spacing-top: spacing.$space-lg;
 $h6-spacing-top: spacing.$space-md;
 
-$blockquote-spacing-top: spacing.$space-xl;
-$blockquote-spacing-bottom: spacing.$space-xl;
+$blockquote-spacing-top: spacing.$space-2xl;
+$blockquote-spacing-bottom: spacing.$space-2xl;
 $blockquote-padding-inline: spacing.$space-lg;
 $blockquote-rule-width: 2px;
 

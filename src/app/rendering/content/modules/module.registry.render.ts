@@ -2,7 +2,7 @@
 
 import type { RenderContextContentModule } from "@app/renderContext/content/content.renderContext.types";
 
-import { paragraphRenderModule } from "@app/rendering/content/modules/paragraph/paragraph.render.module";
+import { renderParagraphModule } from "@app/rendering/content/modules/paragraph/paragraph.render.module";
 import { quoteRenderModule } from "@app/rendering/content/modules/quote/quote.render.module";
 
 type ModuleRenderer<TModule extends RenderContextContentModule> = (
@@ -16,6 +16,6 @@ type ModulesRegistry = {
 };
 
 export const MODULE_RENDERERS_REGISTRY: ModulesRegistry = {
-  paragraph: paragraphRenderModule,
+  paragraph: renderParagraphModule,
   quote: quoteRenderModule,
 };

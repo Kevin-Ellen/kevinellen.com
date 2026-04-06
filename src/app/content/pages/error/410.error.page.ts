@@ -48,7 +48,13 @@ export const goneErrorPage: BaseErrorPageDefinition<ErrorPageContentAuthored> =
           modules: [
             {
               kind: "paragraph",
-              text: "Unlike a missing page, this route has been intentionally retired and should not return.",
+              content: [
+                {
+                  kind: "text",
+                  value:
+                    "Unlike a missing page, this route has been intentionally retired and should not return.",
+                },
+              ],
             },
           ],
         },

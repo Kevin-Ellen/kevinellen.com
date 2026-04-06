@@ -48,8 +48,6 @@
 
     &:hover,
     &:focus-visible {
-      text-decoration: underline;
-      text-underline-offset: 0.16em;
       color: tokens.$colour-field-accent;
     }
   }
@@ -76,12 +74,22 @@
   &__logos {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
     gap: tokens.$space-lg tokens.$space-xl;
 
     @media (min-width: tokens.$bp-sm) {
       gap: tokens.$space-xl tokens.$space-2xl;
     }
+
+    a {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+  }
+
+  &__logo {
+    height: 75px;
+    width: auto;
   }
 
   &__icon {

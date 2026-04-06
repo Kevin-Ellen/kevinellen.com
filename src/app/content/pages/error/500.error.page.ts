@@ -47,7 +47,13 @@ export const internalErrorPage: BaseErrorPageDefinition<ErrorPageContentAuthored
           modules: [
             {
               kind: "paragraph",
-              text: "This is a server-side failure rather than a missing route. Please try again shortly.",
+              content: [
+                {
+                  kind: "text",
+                  value:
+                    "This is a server-side failure rather than a missing route. Please try again shortly.",
+                },
+              ],
             },
           ],
         },

@@ -21,6 +21,8 @@ export const resolvePageFooterRenderContext = (appContext: AppContext) => {
         items: section.items.map((item) => ({
           label: item.label,
           href: item.href,
+          isExternal: item.isExternal,
+          openInNewTab: item.openInNewTab,
         })),
       })),
     },

@@ -42,6 +42,8 @@ const resolveNavigationItem = (
       href: navPage.core.slug,
       isCurrent: currentPage.id === navPage.core.id,
       icon: resolveSvgReference(item.svgId),
+      isExternal: false,
+      openInNewTab: item.openInNewTab ?? false,
     };
   }
 
@@ -59,6 +61,8 @@ const resolveNavigationItem = (
       href: socialItem.href,
       isCurrent: false,
       icon: resolveSvgReference(item.svgId ?? socialItem.svgId),
+      isExternal: true,
+      openInNewTab: item.openInNewTab ?? true,
     };
   }
 
@@ -68,6 +72,8 @@ const resolveNavigationItem = (
     href: item.href,
     isCurrent: false,
     icon: resolveSvgReference(item.svgId),
+    isExternal: true,
+    openInNewTab: item.openInNewTab ?? true,
   };
 };
 

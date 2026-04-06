@@ -53,11 +53,23 @@ export const journalListingPage: JournalListingPageDefinition = {
         modules: [
           {
             kind: "paragraph",
-            text: "This listing page will later surface published journal entries from the content layer.",
+            content: [
+              {
+                kind: "text",
+                value:
+                  "This listing page will later surface published journal entries from the content layer.",
+              },
+            ],
           },
           {
             kind: "paragraph",
-            text: "For now, it acts as the first typed placeholder for the journal section.",
+            content: [
+              {
+                kind: "text",
+                value:
+                  "For now, it acts as the first typed placeholder for the journal section.",
+              },
+            ],
           },
         ],
       },

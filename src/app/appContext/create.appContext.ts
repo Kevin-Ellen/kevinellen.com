@@ -35,7 +35,7 @@ export const createAppContext = (
     ? resolveStructuredDataAppContext(appState, target.page, breadcrumbs)
     : [];
 
-  const content = resolveContentAppContext(target.page);
+  const content = resolveContentAppContext(target.page, appState);
 
   return new AppContext(
     deepFreeze({
