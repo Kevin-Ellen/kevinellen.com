@@ -12,6 +12,7 @@ test -n "${R2_ACCESS_KEY_ID:-}" || { echo "R2_ACCESS_KEY_ID is not set"; exit 1;
 test -n "${R2_SECRET_ACCESS_KEY:-}" || { echo "R2_SECRET_ACCESS_KEY is not set"; exit 1; }
 test -n "${TF_VAR_release_sha:-}" || { echo "TF_VAR_release_sha is not set"; exit 1; }
 test -n "${TF_VAR_release_key:-}" || { echo "TF_VAR_release_key is not set"; exit 1; }
+test -n "${TF_VAR_static_dir:-}" || { echo "TF_VAR_static_dir is not set"; exit 1; }
 
 RELEASE_SHA="${TF_VAR_release_sha}"
 ARTIFACT_KEY="${TF_VAR_release_key}"

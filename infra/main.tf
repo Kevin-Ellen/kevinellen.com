@@ -61,6 +61,11 @@ resource "cloudflare_worker_version" "site" {
     }
   ]
 
+  assets = {
+    directory = var.static_dir
+    binding   = "ASSETS"
+  }
+
   bindings = [
     {
       type = "plain_text"
