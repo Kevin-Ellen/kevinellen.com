@@ -1,15 +1,27 @@
 // src/app/appContext/resolvers/navigation.resolve.appContext.ts
 
-// src/app/appContext/resolvers/navigation.resolve.appContext.ts
-
 import type {
   AppContextFooterNavigationSection,
   AppContextNavigation,
   AppContextNavigationItem,
   AppContextPage,
+  AppContextSvgReference,
 } from "@app/appContext/appContext.types";
 import type { NavigationItem } from "@app/config/navigation.config.types";
 import type { AppState } from "@app/appState/class.appState";
+
+const resolveSvgReference = (
+  svgId: string | undefined,
+): AppContextSvgReference | undefined => {
+  if (!svgId) {
+    return undefined;
+  }
+
+  return {
+    type: "inline-svg",
+    id: svgId,
+  };
+};
 
 const resolveNavigationItem = (
   appState: AppState,
@@ -28,9 +40,8 @@ const resolveNavigationItem = (
       id: navPage.core.id,
       label: navPage.core.label,
       href: navPage.core.slug,
-      isCurrent:
-        "slug" in currentPage.core && currentPage.core.id === navPage.core.id,
-      svgId: item.svgId,
+      isCurrent: currentPage.id === navPage.core.id,
+      icon: resolveSvgReference(item.svgId),
     };
   }
 
@@ -47,7 +58,7 @@ const resolveNavigationItem = (
       label: socialItem.label,
       href: socialItem.href,
       isCurrent: false,
-      svgId: item.svgId ?? socialItem.svgId,
+      icon: resolveSvgReference(item.svgId ?? socialItem.svgId),
     };
   }
 
@@ -56,7 +67,7 @@ const resolveNavigationItem = (
     label: item.label,
     href: item.href,
     isCurrent: false,
-    svgId: item.svgId,
+    icon: resolveSvgReference(item.svgId),
   };
 };
 

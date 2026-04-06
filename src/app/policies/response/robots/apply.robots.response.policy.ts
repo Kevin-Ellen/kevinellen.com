@@ -1,13 +1,15 @@
 // src/app/policies/response/robots/apply.robots.response.policy.ts
 
-import type { PageRobotsAuthored } from "@shared-types/content/pages/base.page.definition";
-import type { ResponsePolicy } from "@app/policies/response/response.policies.types";
+import type {
+  ResponsePolicy,
+  ResponsePolicyRobots,
+} from "@app/policies/response/response.policies.types";
 
 const getNonProductionRobotsHeader = (): string => {
   return "noindex, nofollow, noarchive, nosnippet, noimageindex";
 };
 
-const buildRobotsHeader = (robots: PageRobotsAuthored): string => {
+const buildRobotsHeader = (robots: ResponsePolicyRobots): string => {
   const directives: string[] = [
     robots.allowIndex ? "index" : "noindex",
     robots.allowFollow ? "follow" : "nofollow",
@@ -28,7 +30,10 @@ const buildRobotsHeader = (robots: PageRobotsAuthored): string => {
   return directives.join(", ");
 };
 
-const resolveRobotsHeader = (env: Env, robots: PageRobotsAuthored): string => {
+const resolveRobotsHeader = (
+  env: Env,
+  robots: ResponsePolicyRobots,
+): string => {
   if (env.APP_ENV !== "prod") {
     return getNonProductionRobotsHeader();
   }
@@ -40,10 +45,7 @@ export const applyRobotsResponsePolicy: ResponsePolicy = (
   context,
   response,
 ): Response => {
-  const robotsHeader = resolveRobotsHeader(
-    context.env,
-    context.target.page.config.robots,
-  );
+  const robotsHeader = resolveRobotsHeader(context.env, context.robots);
 
   const headers = new Headers(response.headers);
   headers.set("x-robots-tag", robotsHeader);

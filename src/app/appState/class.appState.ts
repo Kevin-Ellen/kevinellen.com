@@ -9,6 +9,8 @@ import type {
 import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
 import type { ErrorPageStatus } from "@shared-types/content/pages/error/error.page.definition";
 import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
+import type { ScriptAssetAuthored } from "@shared-types/assets/script.asset.authored.types";
+import type { SvgAssetAuthored } from "@shared-types/assets/svg.asset.authored.types";
 
 export class AppState {
   public readonly config: AppConfig;
@@ -89,5 +91,15 @@ export class AppState {
 
   public getErrorPageByStatus(status: ErrorPageStatus): ErrorPage | null {
     return this.#errorByStatus.get(status) ?? null;
+  }
+
+  public getScriptAssetById(id: string): ScriptAssetAuthored | null {
+    return (
+      this.config.assets.scripts.find((script) => script.id === id) ?? null
+    );
+  }
+
+  public getSvgAssetById(id: string): SvgAssetAuthored | null {
+    return this.config.assets.svgs.find((svg) => svg.id === id) ?? null;
   }
 }

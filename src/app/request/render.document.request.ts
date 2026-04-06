@@ -2,6 +2,8 @@
 
 import type { RenderContext } from "@app/renderContext/class.renderContext";
 
+import { documentRender } from "@app/rendering/document.render";
+
 export type RenderDocumentResult = {
   response: Response;
 };
@@ -9,11 +11,13 @@ export type RenderDocumentResult = {
 export const renderDocumentRequest = async (
   renderContext: RenderContext,
 ): Promise<RenderDocumentResult> => {
+  const html = documentRender(renderContext);
+
   return {
-    response: new Response(JSON.stringify(renderContext.inspect(), null, 2), {
+    response: new Response(html, {
       status: renderContext.document.status,
       headers: {
-        "content-type": "application/json; charset=utf-8",
+        "content-type": "text/html; charset=utf-8",
       },
     }),
   };

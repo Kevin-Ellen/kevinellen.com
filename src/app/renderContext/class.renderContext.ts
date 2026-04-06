@@ -2,32 +2,38 @@
 
 import type {
   RenderContextDocument,
-  RenderContextInput,
-  RenderContextInspect,
+  RenderContextFooter,
+  RenderContextHead,
+  RenderContextMetadata,
+  RenderContextModel,
   RenderContextPage,
   RenderContextSecurity,
+  RenderContextHeader,
+  RenderContextPageFooter,
+  RenderContextStructuredData,
 } from "@app/renderContext/renderContext.types";
-import type {
-  AppContextBreadcrumb,
-  AppContextMetadata,
-  AppContextNavigation,
-} from "@app/appContext/appContext.types";
 
 export class RenderContext {
   readonly #document: RenderContextDocument;
   readonly #page: RenderContextPage;
-  readonly #metadata: AppContextMetadata;
-  readonly #breadcrumbs: readonly AppContextBreadcrumb[];
-  readonly #navigation: AppContextNavigation;
+  readonly #metadata: RenderContextMetadata;
+  readonly #head: RenderContextHead;
+  readonly #header: RenderContextHeader;
+  readonly #footer: RenderContextFooter;
   readonly #security: RenderContextSecurity;
+  readonly #pageFooter: RenderContextPageFooter;
+  readonly #structuredData: RenderContextStructuredData;
 
-  public constructor(input: RenderContextInput) {
+  public constructor(input: RenderContextModel) {
     this.#document = input.document;
     this.#page = input.page;
     this.#metadata = input.metadata;
-    this.#breadcrumbs = input.breadcrumbs;
-    this.#navigation = input.navigation;
+    this.#head = input.head;
+    this.#footer = input.footer;
     this.#security = input.security;
+    this.#header = input.header;
+    this.#pageFooter = input.pageFooter;
+    this.#structuredData = input.structuredData;
   }
 
   public get document(): RenderContextDocument {
@@ -38,30 +44,45 @@ export class RenderContext {
     return this.#page;
   }
 
-  public get metadata(): AppContextMetadata {
+  public get metadata(): RenderContextMetadata {
     return this.#metadata;
   }
 
-  public get breadcrumbs(): readonly AppContextBreadcrumb[] {
-    return this.#breadcrumbs;
+  public get head(): RenderContextHead {
+    return this.#head;
   }
 
-  public get navigation(): AppContextNavigation {
-    return this.#navigation;
+  public get footer(): RenderContextFooter {
+    return this.#footer;
   }
 
   public get security(): RenderContextSecurity {
     return this.#security;
   }
 
-  public inspect(): RenderContextInspect {
+  public get header(): RenderContextHeader {
+    return this.#header;
+  }
+
+  public get pageFooter(): RenderContextPageFooter {
+    return this.#pageFooter;
+  }
+
+  public get structuredData(): RenderContextStructuredData {
+    return this.#structuredData;
+  }
+
+  public inspect(): RenderContextModel {
     return {
       document: this.#document,
       page: this.#page,
       metadata: this.#metadata,
-      breadcrumbs: this.#breadcrumbs,
-      navigation: this.#navigation,
+      head: this.#head,
+      header: this.#header,
+      footer: this.#footer,
       security: this.#security,
+      pageFooter: this.#pageFooter,
+      structuredData: this.#structuredData,
     };
   }
 }

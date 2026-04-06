@@ -1,42 +1,49 @@
 // src/app/appContext/class.appContext.ts
 
-import type { SiteConfig } from "@config/site.config.types";
 import type {
+  AppContextAssets,
+  AppContextModel,
+  AppContextBranding,
   AppContextBreadcrumb,
-  AppContextInput,
-  AppContextInspect,
   AppContextMetadata,
   AppContextNavigation,
   AppContextPage,
   AppContextRequest,
+  AppContextSiteIdentity,
+  AppContextPageFooter,
+  AppContextStructuredDataItem,
 } from "@app/appContext/appContext.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
 export class AppContext {
   readonly #request: AppContextRequest;
-  readonly #site: SiteConfig;
   readonly #target: DocumentRenderTarget;
   readonly #page: AppContextPage;
   readonly #metadata: AppContextMetadata;
   readonly #breadcrumbs: readonly AppContextBreadcrumb[];
   readonly #navigation: AppContextNavigation;
+  readonly #branding: AppContextBranding;
+  readonly #siteIdentity: AppContextSiteIdentity;
+  readonly #assets: AppContextAssets;
+  readonly #pageFooter: AppContextPageFooter;
+  readonly #structuredData: readonly AppContextStructuredDataItem[];
 
-  public constructor(input: AppContextInput) {
+  public constructor(input: AppContextModel) {
     this.#request = input.request;
-    this.#site = input.site;
     this.#target = input.target;
     this.#page = input.page;
     this.#metadata = input.metadata;
     this.#breadcrumbs = input.breadcrumbs;
     this.#navigation = input.navigation;
+    this.#branding = input.branding;
+    this.#siteIdentity = input.siteIdentity;
+    this.#assets = input.assets;
+    this.#pageFooter = input.pageFooter;
+    this.#structuredData = input.structuredData;
   }
 
   public get request(): AppContextRequest {
     return this.#request;
-  }
-
-  public get site(): SiteConfig {
-    return this.#site;
   }
 
   public get target(): DocumentRenderTarget {
@@ -59,32 +66,23 @@ export class AppContext {
     return this.#navigation;
   }
 
-  public inspect(): AppContextInspect {
-    return {
-      request: this.#request,
-      site: {
-        siteName: this.#site.siteName,
-        siteUrl: this.#site.siteUrl,
-        language: this.#site.language,
-        headerBranding: this.#site.headerBranding,
-      },
-      target: {
-        kind: this.#target.kind,
-        status: this.#target.status,
-        page: {
-          id: this.#target.page.core.id,
-          kind: this.#target.page.core.kind,
-          label: this.#target.page.core.label,
-        },
-      },
-      page: {
-        id: this.#page.core.id,
-        kind: this.#page.core.kind,
-        label: this.#page.core.label,
-      },
-      metadata: this.#metadata,
-      breadcrumbs: this.#breadcrumbs,
-      navigation: this.#navigation,
-    };
+  public get branding(): AppContextBranding {
+    return this.#branding;
+  }
+
+  public get siteIdentity(): AppContextSiteIdentity {
+    return this.#siteIdentity;
+  }
+
+  public get assets(): AppContextAssets {
+    return this.#assets;
+  }
+
+  public get pageFooter(): AppContextPageFooter {
+    return this.#pageFooter;
+  }
+
+  public get structuredData(): readonly AppContextStructuredDataItem[] {
+    return this.#structuredData;
   }
 }

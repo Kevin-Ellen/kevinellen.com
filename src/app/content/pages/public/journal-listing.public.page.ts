@@ -1,6 +1,6 @@
 // src/app/content/pages/public/journal-listing.public.page.ts
 
-import type { JournalListingPageDefinition } from "@shared-types/content/pages/public/journal-listing.public.page.definition";
+import type { JournalListingPageDefinition } from "@shared-types/content/pages/public/journal-listing/journal-listing.public.page.definition";
 
 export const journalListingPage: JournalListingPageDefinition = {
   core: {

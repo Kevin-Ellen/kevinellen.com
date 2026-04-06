@@ -5,7 +5,7 @@ import type {
   BasePageDefinitionCore,
   PublicPageConfigAuthored,
 } from "@shared-types/content/pages/base.page.definition";
-import type { StructuredDataNodeAuthored } from "@shared-types/structured-data/structured-data.authored.types";
+import type { StructuredDataNodeAuthored } from "@shared-types/structured-data/structured-data.nodes.types";
 
 export type BasePublicPageDefinitionCore = BasePageDefinitionCore & {
   slug: string;

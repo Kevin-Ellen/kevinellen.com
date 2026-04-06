@@ -36,15 +36,14 @@ const renderTargetResponse = async (
 ): Promise<Response> => {
   const appContext = createAppContext(req, env, appState, target);
   const renderContext = createRenderContext(appContext);
-  const rendered = await renderDocumentRequest(renderContext);
+  const renderResult = await renderDocumentRequest(renderContext);
 
   return runResponsePolicies(
     req,
     env,
-    appState,
     target,
-    renderContext.security,
-    rendered.response,
+    renderContext,
+    renderResult.response,
   );
 };
 
@@ -61,13 +60,10 @@ export const requestHandler = async (
       return requestPolicyOutcome.response;
     }
 
-    let target: DocumentRenderTarget;
-
-    if (requestPolicyOutcome.kind === "render-error") {
-      target = resolveErrorRenderIntent(requestPolicyOutcome.intent, appState);
-    } else {
-      target = routeDocumentRequest(req, appState);
-    }
+    const target =
+      requestPolicyOutcome.kind === "render-error"
+        ? resolveErrorRenderIntent(requestPolicyOutcome.intent, appState)
+        : routeDocumentRequest(req, appState);
 
     return renderTargetResponse(req, env, ctx, appState, target);
   } catch (_error) {

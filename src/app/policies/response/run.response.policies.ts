@@ -1,6 +1,8 @@
-import type { AppState } from "@app/appState/class.appState";
+// src/app/policies/response/run.response.policies.ts
+
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
-import type { ResponsePolicySecurity } from "@app/policies/response/response.policies.types";
+import type { RenderContext } from "@app/renderContext/class.renderContext";
+import type { ResponsePolicyContext } from "@app/policies/response/response.policies.types";
 
 import { runResponseStage } from "@app/policies/response/run.response.stage";
 import { applyCacheResponsePolicy } from "@app/policies/response/cache/apply.cache.response.policy";
@@ -11,25 +13,30 @@ import { applySecurityHeadersResponsePolicy } from "@app/policies/response/secur
 export const runResponsePolicies = (
   req: Request,
   env: Env,
-  appState: AppState,
   target: DocumentRenderTarget,
-  security: ResponsePolicySecurity,
+  renderContext: RenderContext,
   response: Response,
 ): Response => {
-  return runResponseStage(
-    {
-      req,
-      env,
-      appState,
-      target,
-      security,
+  const responsePolicyContext: ResponsePolicyContext = {
+    req,
+    env,
+    status: target.status,
+    security: {
+      nonce: renderContext.security.nonce,
     },
-    response,
-    [
-      applyRobotsResponsePolicy,
-      applyCspResponsePolicy,
-      applySecurityHeadersResponsePolicy,
-      applyCacheResponsePolicy,
-    ],
-  );
+    robots: {
+      allowIndex: target.page.config.robots.allowIndex,
+      allowFollow: target.page.config.robots.allowFollow,
+      noarchive: target.page.config.robots.noarchive,
+      nosnippet: target.page.config.robots.nosnippet,
+      noimageindex: target.page.config.robots.noimageindex,
+    },
+  };
+
+  return runResponseStage(responsePolicyContext, response, [
+    applyRobotsResponsePolicy,
+    applyCspResponsePolicy,
+    applySecurityHeadersResponsePolicy,
+    applyCacheResponsePolicy,
+  ]);
 };
