@@ -10,7 +10,7 @@
     { "type": "Text", "globs": ["**/*.txt"], "fallthrough": true },
   ],
   "assets": {
-    "directory": "./static",
+    "directory": "./dist/static",
     "binding": "ASSETS",
   },
   "dev": {
