@@ -13,7 +13,6 @@ export const documentRender = (ctx: RenderContext): string => {
     docOpenRenderShell(ctx),
     pageHeadRenderShell(ctx),
     renderPageBody(ctx),
-    `<pre>${JSON.stringify(ctx.inspect(), null, 2)}</pre>`,
     pageFooterRenderShell(ctx),
     docCloseRenderShell(ctx),
   ].join("");

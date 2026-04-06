@@ -35,6 +35,7 @@ export const footerConfig: FooterConfig = deepFreeze({
       kind: "colophon",
       copyrightName: "Kevin Ellen",
       copyrightYear: 2026,
+      allRightsReserved: true,
     },
   ],
 });

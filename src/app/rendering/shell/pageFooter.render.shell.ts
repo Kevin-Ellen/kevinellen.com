@@ -93,8 +93,13 @@ const renderFooterColophon = (
     return "";
   }
 
+  const copyright = `© ${colophon.copyrightYear} ${colophon.copyrightName}`;
+  const allRightsReserved = colophon.allRightsReserved
+    ? ". All rights reserved."
+    : "";
+
   return `<div class="l-footer__meta">
-    <p>${escapeHtmlContent(colophon.copyright)}</p>
+    <p>${escapeHtmlContent(copyright + allRightsReserved)}</p>
   </div>`;
 };
 
