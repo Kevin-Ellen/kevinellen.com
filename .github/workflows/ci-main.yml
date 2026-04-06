@@ -168,7 +168,7 @@ jobs:
             cp -R dist/static/. "${PACKAGE_DIR}/static/"
           fi
 
-          cat > "${PACKAGE_DIR}/wrangler.deploy.json" <<EOF
+          cat > "${PACKAGE_DIR}/wrangler.jsonc" <<EOF
           {
             "main": "./worker/entry.js",
             "compatibility_date": "2025-03-12",
