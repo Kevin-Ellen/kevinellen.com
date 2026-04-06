@@ -6,10 +6,17 @@ import type { PublicPage } from "@shared-types/content/pages/public/public.page.
 import { homePage } from "@app/content/pages/public/home.public.page";
 import { journalListingPage } from "@app/content/pages/public/journal-listing.public.page";
 
+// About
 import { aboutPage } from "@app/content/pages/public/about/about.public.page";
-import { equipmentAboutPage } from "@app/content/pages//public/about/equipment.about.page";
-import { technologyAboutPage } from "@app/content/pages//public/about/technology.about.page";
+import { equipmentAboutPage } from "@app/content/pages/public/about/equipment.about.page";
+import { technologyAboutPage } from "@app/content/pages/public/about/technology.about.page";
 
+// Legal
+import { termsLegalPage } from "@app/content/pages/public/legal/terms.legal.page";
+import { licensingLegalPage } from "@app/content/pages/public/legal/licensing.legal.page";
+import { privacyLegalPage } from "@app/content/pages/public/legal/privacy.legal.page";
+
+// Errors
 import { notFoundErrorPage } from "@app/content/pages/error/404.error.page";
 import { goneErrorPage } from "@app/content/pages/error/410.error.page";
 import { internalErrorPage } from "@app/content/pages/error/500.error.page";
@@ -20,6 +27,9 @@ const PUBLIC_PAGES = [
   aboutPage,
   equipmentAboutPage,
   technologyAboutPage,
+  termsLegalPage,
+  licensingLegalPage,
+  privacyLegalPage,
 ];
 
 const ERROR_PAGES: readonly ErrorPage[] = [

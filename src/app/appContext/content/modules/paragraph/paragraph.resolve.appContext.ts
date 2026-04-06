@@ -1,6 +1,6 @@
 // src/app/appContext/content/modules/paragraph/paragraph.resolve.appContext.ts
 
-import type { AppContextParagraphModule } from "@app/appContext/content/content.appContext.types";
+import type { AppContextParagraphModule } from "@app/appContext/content/modules/paragraph/paragraph.module.appContext.types";
 import type { AppState } from "@app/appState/class.appState";
 import type { ParagraphModuleAuthored } from "@shared-types/content/modules/paragraph/paragraph.module.types";
 

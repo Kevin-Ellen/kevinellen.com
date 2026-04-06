@@ -99,6 +99,13 @@
   &__item {
     display: flex;
     align-items: center;
+    margin: 0;
+    line-height: normal;
+    column-gap: 0;
+
+    &::before {
+      content: "";
+    }
   }
 
   &__link {
@@ -150,10 +157,16 @@
     display: inline-flex;
     align-items: center;
     gap: tokens.$space-xs;
+    margin-bottom: 0;
+    line-height: normal;
 
     &:not(:last-child)::after {
       content: "/";
       color: inherit;
+    }
+
+    &::before {
+      content: "";
     }
   }
 

@@ -12,6 +12,29 @@ type LinkContentInlineResolved = {
   isExternal: boolean;
 };
 
+type EmphasisContentInlineResolved = {
+  kind: "emphasis";
+  content: readonly ContentInlineResolved[];
+};
+
+type StrongContentInlineResolved = {
+  kind: "strong";
+  content: readonly ContentInlineResolved[];
+};
+
+type CodeContentInlineResolved = {
+  kind: "code";
+  value: string;
+};
+
+type LineBreakContentInlineResolved = {
+  kind: "lineBreak";
+};
+
 export type ContentInlineResolved =
   | TextContentInlineResolved
-  | LinkContentInlineResolved;
+  | LinkContentInlineResolved
+  | EmphasisContentInlineResolved
+  | StrongContentInlineResolved
+  | CodeContentInlineResolved
+  | LineBreakContentInlineResolved;

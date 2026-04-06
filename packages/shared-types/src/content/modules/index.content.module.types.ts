@@ -2,7 +2,9 @@
 
 import type { ParagraphModuleAuthored } from "@shared-types/content/modules/paragraph/paragraph.module.types";
 import type { QuoteModuleAuthored } from "@shared-types/content/modules/quote/quote.module.types";
+import type { ListModuleAuthored } from "@shared-types/content/modules/list/list.module.types";
 
 export type ContentModuleAuthored =
   | ParagraphModuleAuthored
-  | QuoteModuleAuthored;
+  | QuoteModuleAuthored
+  | ListModuleAuthored;

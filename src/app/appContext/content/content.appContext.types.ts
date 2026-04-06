@@ -1,6 +1,8 @@
 // src/app/appContext/content/content.appContext.types.ts
 
-import { ContentInlineResolved } from "@app/appContext/content/inline-content/inline-content.types";
+import type { AppContextListModule } from "@app/appContext/content/modules/list/list.module.appContext.types";
+import type { AppContextParagraphModule } from "@app/appContext/content/modules/paragraph/paragraph.module.appContext.types";
+import type { AppContextQuoteModule } from "@app/appContext/content/modules/quote/quote.module.appContext.types";
 
 export type AppContextPageHeadContent = {
   eyebrow: string;
@@ -23,18 +25,7 @@ export type AppContextPageBodyContent = {
   sections: readonly AppContextContentSection[];
 };
 
-export type AppContextParagraphModule = {
-  kind: "paragraph";
-  content: readonly ContentInlineResolved[];
-};
-
-export type AppContextQuoteModule = {
-  kind: "quote";
-  text: string;
-  id: string;
-  attribution?: string;
-};
-
 export type AppContextContentModule =
   | AppContextParagraphModule
-  | AppContextQuoteModule;
+  | AppContextQuoteModule
+  | AppContextListModule;

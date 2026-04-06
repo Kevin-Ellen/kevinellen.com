@@ -26,7 +26,7 @@ export const renderContentSection = (
     .map((module) => renderContentLeafModule(module))
     .join("");
 
-  if (section.modules.length === 1) {
+  if (!section.heading && section.modules.length === 1) {
     return modules;
   }
   return `<section>${heading}${modules}</section>`;

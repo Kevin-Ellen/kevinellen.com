@@ -1,6 +1,8 @@
 // src/app/renderContext/content/content.renderContext.types.ts
 
-import type { ContentInlineResolved } from "@app/renderContext/content/inline-content/inline-content.types";
+import type { RenderContextParagraphModule } from "@app/renderContext/content/modules/paragraph/paragraph.module.renderContext.types";
+import type { RenderContextQuoteModule } from "@app/renderContext/content/modules/quote/quote.module.renderContext.types";
+import type { RenderContextListModule } from "@app/renderContext/content/modules/list/list.module.renderContext.types";
 
 export type RenderContextPageHeadContent = {
   eyebrow: string;
@@ -25,20 +27,7 @@ export type RenderContextPageBodyContent = {
   sections: readonly RenderContextContentSection[];
 };
 
-// ALL NEW MODULES BELOW
-
-export type RenderContextParagraphModule = {
-  kind: "paragraph";
-  content: readonly ContentInlineResolved[];
-};
-
-export type RenderContextQuoteModule = {
-  kind: "quote";
-  text: string;
-  id: string;
-  attribution?: string;
-};
-
 export type RenderContextContentModule =
   | RenderContextParagraphModule
-  | RenderContextQuoteModule;
+  | RenderContextQuoteModule
+  | RenderContextListModule;

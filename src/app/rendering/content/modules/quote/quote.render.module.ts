@@ -1,6 +1,6 @@
 // src/app/rendering/content/modules/quote/quote.render.module.ts
 
-import type { RenderContextQuoteModule } from "@app/renderContext/content/content.renderContext.types";
+import type { RenderContextQuoteModule } from "@app/renderContext/content/modules/quote/quote.module.renderContext.types";
 
 import { escapeHtmlContent } from "@app/rendering/utils/escapeContent.util";
 
