@@ -6,11 +6,13 @@ import type { PublicPage } from "@shared-types/content/pages/public/public.page.
 import { homePage } from "@app/content/pages/public/home.public.page";
 import { journalListingPage } from "@app/content/pages/public/journal-listing.public.page";
 
+import { aboutPage } from "@app/content/pages/public/about/about.public.page";
+
 import { notFoundErrorPage } from "@app/content/pages/error/404.error.page";
 import { goneErrorPage } from "@app/content/pages/error/410.error.page";
 import { internalErrorPage } from "@app/content/pages/error/500.error.page";
 
-const PUBLIC_PAGES = [homePage, journalListingPage];
+const PUBLIC_PAGES = [homePage, journalListingPage, aboutPage];
 
 const ERROR_PAGES: readonly ErrorPage[] = [
   notFoundErrorPage,

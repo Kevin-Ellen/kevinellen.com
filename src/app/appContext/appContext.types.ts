@@ -5,6 +5,7 @@ import type { ScriptAssetAuthored } from "@shared-types/assets/script.asset.auth
 import type { SvgAssetAuthored } from "@shared-types/assets/svg.asset.authored.types";
 import type { SvgAssetId } from "@shared-types/assets/id.asset.types";
 import type { StructuredDataNode } from "@shared-types/structured-data/structured-data.nodes.types";
+import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
 
 export type AppContextSvgReference = {
   type: "inline-svg";
@@ -144,4 +145,5 @@ export type AppContextModel = {
   assets: AppContextAssets;
   pageFooter: AppContextPageFooter;
   structuredData: readonly AppContextStructuredDataItem[];
+  content: AppContextPageBodyContent;
 };

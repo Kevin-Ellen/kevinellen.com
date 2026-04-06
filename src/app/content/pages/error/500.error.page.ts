@@ -38,10 +38,15 @@ export const internalErrorPage: BaseErrorPageDefinition<ErrorPageContentAuthored
 
       body: [
         {
-          kind: "paragraph",
-          inlines: [
+          kind: "contentSection",
+          heading: {
+            text: "Internal server error",
+            visuallyHidden: true,
+            level: 2,
+          },
+          modules: [
             {
-              kind: "text",
+              kind: "paragraph",
               text: "This is a server-side failure rather than a missing route. Please try again shortly.",
             },
           ],

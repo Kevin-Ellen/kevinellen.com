@@ -1,4 +1,4 @@
-// packages/shared-types/src/content/pages/public/journal-listing.public.page.definition.ts
+// packages/shared-types/src/content/pages/public/journal-listing/journal-listing.public.page.definition.ts
 
 import type {
   BasePublicPageDefinitionCore,

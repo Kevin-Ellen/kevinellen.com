@@ -46,26 +46,26 @@ export const homePage: HomePageDefinition = {
 
     body: [
       {
-        kind: "paragraph",
-        inlines: [
+        kind: "contentSection",
+        heading: {
+          text: "Introduction",
+          visuallyHidden: true,
+          level: 2,
+        },
+        modules: [
           {
-            kind: "text",
+            kind: "paragraph",
             text: "Homepage placeholder body content.",
           },
-        ],
-      },
-      {
-        kind: "paragraph",
-        inlines: [
           {
-            kind: "text",
+            kind: "paragraph",
             text: "This section will later introduce featured photography, journal entries, and technical work.",
           },
         ],
       },
     ],
 
-    footer: ["Homepage placeholder footer content."],
+    footer: [],
   },
 
   assets: {

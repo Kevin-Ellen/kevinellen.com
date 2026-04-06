@@ -7,6 +7,7 @@ import { RenderContext } from "@app/renderContext/class.renderContext";
 import { resolveSvgDimensionsFromViewBox } from "@app/renderContext/resolvers/dimensions.svg.asset.resolve.renderContext";
 import { resolveSvgReference } from "@app/renderContext/resolvers/reference.svg.asset.resolve.renderContext";
 import { resolvePageFooterRenderContext } from "@app/renderContext/resolvers/pageFooter.resolver.renderContext";
+import { resolveContentRenderContext } from "@app/renderContext/resolvers/content.resolve.renderContext";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
@@ -94,6 +95,7 @@ export const createRenderContext = (appContext: AppContext): RenderContext => {
       security: {
         nonce: createNonce(),
       },
+      content: resolveContentRenderContext(appContext.content),
     }),
   );
 };

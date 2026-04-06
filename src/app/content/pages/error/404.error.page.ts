@@ -38,10 +38,15 @@ export const notFoundErrorPage: BaseErrorPageDefinition<ErrorPageContentAuthored
 
       body: [
         {
-          kind: "paragraph",
-          inlines: [
+          kind: "contentSection",
+          heading: {
+            text: "Page not found",
+            visuallyHidden: true,
+            level: 2,
+          },
+          modules: [
             {
-              kind: "text",
+              kind: "paragraph",
               text: "The address may be incorrect, the page may have moved, or the link may be out of date.",
             },
           ],
