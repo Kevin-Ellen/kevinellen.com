@@ -40,6 +40,29 @@ export const resolveInlineContentAppContext = (
           href: item.href,
           isExternal: true,
         };
+
+      case "emphasis":
+        return {
+          kind: "emphasis",
+          content: resolveInlineContentAppContext(item.content, appState),
+        };
+
+      case "strong":
+        return {
+          kind: "strong",
+          content: resolveInlineContentAppContext(item.content, appState),
+        };
+
+      case "code":
+        return {
+          kind: "code",
+          value: item.value,
+        };
+
+      case "lineBreak":
+        return {
+          kind: "lineBreak",
+        };
     }
   });
 };

@@ -6,6 +6,7 @@ import type { ContentModuleAuthored } from "@shared-types/content/modules/index.
 
 import { resolveParagraphAppContext } from "@app/appContext/content/modules/paragraph/paragraph.resolve.appContext";
 import { resolveQuoteAppContext } from "@app/appContext/content/modules/quote/quote.resolve.appContext";
+import { resolveListAppContext } from "@app/appContext/content/modules/list/list.resolve.appContext";
 
 type ModuleResolver<TAuthoredModule extends ContentModuleAuthored> = (
   module: TAuthoredModule,
@@ -21,6 +22,7 @@ type ModulesRegistry = {
 export const CONTENT_MODULE_RESOLVERS_REGISTRY: ModulesRegistry = {
   paragraph: resolveParagraphAppContext,
   quote: resolveQuoteAppContext,
+  list: resolveListAppContext,
 };
 
 export const resolveContentModuleAppContext = <
