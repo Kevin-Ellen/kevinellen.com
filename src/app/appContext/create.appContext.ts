@@ -14,6 +14,7 @@ import { resolveSiteIdentityAppContext } from "@app/appContext/resolvers/siteIde
 import { resolveAssetsAppContext } from "@app/appContext/resolvers/asset.resolve.appContext";
 import { resolvePageFooterAppContext } from "@app/appContext/resolvers/pageFooter.resolve.appContext";
 import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/structured-data.resolve.appContext";
+import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
@@ -34,6 +35,8 @@ export const createAppContext = (
     ? resolveStructuredDataAppContext(appState, target.page, breadcrumbs)
     : [];
 
+  const content = resolveContentAppContext(target.page);
+
   return new AppContext(
     deepFreeze({
       request: {
@@ -51,6 +54,7 @@ export const createAppContext = (
       assets: resolveAssetsAppContext(appState, target),
       pageFooter: resolvePageFooterAppContext(appState),
       structuredData,
+      content,
     }),
   );
 };

@@ -1,21 +1,10 @@
-// packages/shared-types/src/content/pages/public/home.public.page.content.ts
+// packages/shared-types/src/content/pages/public/about/about.public.page.content.ts
 
-export type AboutPageHeadingAuthored = {
-  eyebrow: string;
-  title: string;
-  intro: string;
-};
-
-export type AboutPageParagraphAuthored = {
-  kind: "paragraph";
-  inlines: readonly {
-    kind: "text";
-    text: string;
-  }[];
-};
+import type { ContentSectionAuthored } from "@shared-types/content/content-section/content.section.module.types";
+import type { PageHeadAuthored } from "@shared-types/content/page-head/page.head.types";
 
 export type AboutPageContentAuthored = {
-  head: AboutPageHeadingAuthored;
-  body: readonly AboutPageParagraphAuthored[];
+  head: PageHeadAuthored;
+  body: readonly ContentSectionAuthored[];
   footer: readonly string[];
 };

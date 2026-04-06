@@ -3,6 +3,7 @@
 import type { ScriptAssetAuthored } from "@shared-types/assets/script.asset.authored.types";
 import type { SvgAssetId } from "@shared-types/assets/id.asset.types";
 import type { StructuredDataNode } from "@shared-types/structured-data/structured-data.nodes.types";
+import type { RenderContextPageBodyContent } from "@app/renderContext/content/content.renderContext.types";
 
 export type RenderContextSvgAsset = {
   id: SvgAssetId;
@@ -124,4 +125,5 @@ export type RenderContextModel = {
   footer: RenderContextFooter;
   structuredData: RenderContextStructuredData;
   security: RenderContextSecurity;
+  content: RenderContextPageBodyContent;
 };

@@ -1,21 +1,10 @@
-// packages/shared-types/src/content/pages/public/journal-listing.public.page.content.ts
+// packages/shared-types/src/content/pages/public/journal-listing/journal-listing.public.page.content.ts
 
-export type JournalListingPageHeadingAuthored = {
-  eyebrow: string;
-  title: string;
-  intro: string;
-};
-
-export type JournalListingPageParagraphAuthored = {
-  kind: "paragraph";
-  inlines: readonly {
-    kind: "text";
-    text: string;
-  }[];
-};
+import type { ContentSectionAuthored } from "@shared-types/content/content-section/content.section.module.types";
+import type { PageHeadAuthored } from "@shared-types/content/page-head/page.head.types";
 
 export type JournalListingPageContentAuthored = {
-  head: JournalListingPageHeadingAuthored;
-  body: readonly JournalListingPageParagraphAuthored[];
+  head: PageHeadAuthored;
+  body: readonly ContentSectionAuthored[];
   footer: readonly string[];
 };

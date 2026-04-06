@@ -39,10 +39,15 @@ export const goneErrorPage: BaseErrorPageDefinition<ErrorPageContentAuthored> =
 
       body: [
         {
-          kind: "paragraph",
-          inlines: [
+          kind: "contentSection",
+          heading: {
+            text: "Gone",
+            visuallyHidden: true,
+            level: 2,
+          },
+          modules: [
             {
-              kind: "text",
+              kind: "paragraph",
               text: "Unlike a missing page, this route has been intentionally retired and should not return.",
             },
           ],

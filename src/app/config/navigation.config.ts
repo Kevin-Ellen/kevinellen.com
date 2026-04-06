@@ -9,7 +9,7 @@ export const navigationConfig: NavigationConfig = deepFreeze({
     primary: [
       { kind: "page", id: "journal" },
       // { kind: "page", id: "photos" },
-      // { kind: "page", id: "about" },
+      { kind: "page", id: "about" },
     ],
     social: [
       { kind: "social", id: "github", svgId: "icon-github" },
@@ -24,7 +24,7 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         items: [
           { kind: "page", id: "journal" },
           // { kind: "page", id: "photos" },
-          // { kind: "page", id: "about" },
+          { kind: "page", id: "about" },
         ],
       },
 

@@ -1,4 +1,4 @@
-// packages/shared-types/src/content/pages/public/home.public.page.definition.ts
+// packages/shared-types/src/content/pages/public/about/about.public.page.definition.ts
 
 import type {
   BasePublicPageDefinitionCore,

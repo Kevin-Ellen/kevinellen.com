@@ -13,6 +13,7 @@ import type {
   AppContextPageFooter,
   AppContextStructuredDataItem,
 } from "@app/appContext/appContext.types";
+import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
 
 export class AppContext {
@@ -27,6 +28,7 @@ export class AppContext {
   readonly #assets: AppContextAssets;
   readonly #pageFooter: AppContextPageFooter;
   readonly #structuredData: readonly AppContextStructuredDataItem[];
+  readonly #content: AppContextPageBodyContent;
 
   public constructor(input: AppContextModel) {
     this.#request = input.request;
@@ -40,6 +42,7 @@ export class AppContext {
     this.#assets = input.assets;
     this.#pageFooter = input.pageFooter;
     this.#structuredData = input.structuredData;
+    this.#content = input.content;
   }
 
   public get request(): AppContextRequest {
@@ -84,5 +87,9 @@ export class AppContext {
 
   public get structuredData(): readonly AppContextStructuredDataItem[] {
     return this.#structuredData;
+  }
+
+  public get content(): AppContextPageBodyContent {
+    return this.#content;
   }
 }

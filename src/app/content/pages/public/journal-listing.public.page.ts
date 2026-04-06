@@ -44,26 +44,26 @@ export const journalListingPage: JournalListingPageDefinition = {
 
     body: [
       {
-        kind: "paragraph",
-        inlines: [
+        kind: "contentSection",
+        heading: {
+          text: "Journal overview",
+          visuallyHidden: true,
+          level: 2,
+        },
+        modules: [
           {
-            kind: "text",
+            kind: "paragraph",
             text: "This listing page will later surface published journal entries from the content layer.",
           },
-        ],
-      },
-      {
-        kind: "paragraph",
-        inlines: [
           {
-            kind: "text",
+            kind: "paragraph",
             text: "For now, it acts as the first typed placeholder for the journal section.",
           },
         ],
       },
     ],
 
-    footer: ["Journal listing placeholder footer content."],
+    footer: [],
   },
 
   assets: {
