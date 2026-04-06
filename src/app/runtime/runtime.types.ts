@@ -2,7 +2,7 @@
 
 export type RuntimeBehaviour = {
   appEnv: Env["APP_ENV"];
-  canonical: boolean;
+  canonicalRedirect: boolean;
   indexing: boolean;
   public: boolean;
   canonicalHost: string | null;

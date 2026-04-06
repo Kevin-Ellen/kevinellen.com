@@ -16,4 +16,17 @@ export const siteConfig: SiteConfig = deepFreeze({
       svg: "logo-monogram-ke",
     },
   },
+  assets: {
+    scripts: ["header-condense"],
+    svgs: [
+      "logo-monogram-ke",
+      "icon-home",
+      "icon-github",
+      "icon-instagram",
+      "icon-linkedin",
+      "logo-rspb",
+      "logo-national-trust",
+      "logo-vogelbescherming-nederland",
+    ],
+  },
 });

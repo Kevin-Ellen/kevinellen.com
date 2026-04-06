@@ -1,18 +1,25 @@
 // src/app/policies/response/response.policies.types.ts
 
-import type { AppState } from "@app/appState/class.appState";
-import type { DocumentRenderTarget } from "@app/request/request.document.types";
-
 export type ResponsePolicySecurity = {
   nonce: string;
+};
+
+export type ResponsePolicyRobots = {
+  allowIndex: boolean;
+  allowFollow: boolean;
+  noarchive: boolean;
+  nosnippet: boolean;
+  noimageindex: boolean;
 };
 
 export type ResponsePolicyContext = {
   req: Request;
   env: Env;
-  appState: AppState;
-  target: DocumentRenderTarget;
-  security: ResponsePolicySecurity;
+  status: number;
+  security: {
+    nonce: string;
+  };
+  robots: ResponsePolicyRobots;
 };
 
 export type ResponsePolicy = (

@@ -1,6 +1,7 @@
 // src/config/site.config.types.ts
 
 import { SvgAssetId } from "@shared-types/assets/id.asset.types";
+import type { SiteAssetReferences } from "@app/config/assets.config.types";
 
 export type HeaderBrandingConfig = {
   homeHref: string;
@@ -16,4 +17,5 @@ export type SiteConfig = {
   siteUrl: string;
   language: string;
   headerBranding: HeaderBrandingConfig;
+  assets: SiteAssetReferences;
 };

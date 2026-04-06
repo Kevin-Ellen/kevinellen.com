@@ -9,6 +9,7 @@
     "noEmit": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
     "paths": {
       "@app/*": ["./src/app/*"],
       "@config/*": ["./src/app/config/*"],

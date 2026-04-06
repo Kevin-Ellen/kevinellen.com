@@ -2,7 +2,7 @@
 
 // src/app/content/pages/public/home.public.page.ts
 
-import type { HomePageDefinition } from "@shared-types/content/pages/public/home.public.page.definition";
+import type { HomePageDefinition } from "@shared-types/content/pages/public/home/home.public.page.definition";
 
 export const homePage: HomePageDefinition = {
   core: {
