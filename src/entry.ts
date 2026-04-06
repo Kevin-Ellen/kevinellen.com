@@ -8,12 +8,6 @@ export const onRequest = async (
   env: Env,
   ctx: ExecutionContext,
 ): Promise<Response> => {
-  const url = new URL(req.url);
-
-  if (url.pathname.startsWith("/assets/")) {
-    return env.ASSETS.fetch(req);
-  }
-
   const appState = createAppState();
 
   return requestHandler(req, env, ctx, appState);
