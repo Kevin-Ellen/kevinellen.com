@@ -1,8 +1,9 @@
 @use "../tokens" as tokens;
 
-.m-article-heading {
+.m-heading {
   display: flex;
   flex-direction: column;
+  margin-top: tokens.$space-lg;
 
   &__eyebrow,
   &__title,
@@ -21,6 +22,7 @@
   }
 
   &__intro {
-    margin-top: tokens.$space-sm;
+    margin-block: tokens.$space-sm;
+    font-size: larger;
   }
 }

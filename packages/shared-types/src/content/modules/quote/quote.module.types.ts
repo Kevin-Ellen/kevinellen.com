@@ -2,6 +2,7 @@
 
 export type QuoteModuleAuthored = {
   kind: "quote";
+  id: string;
   text: string;
   attribution?: string;
 };

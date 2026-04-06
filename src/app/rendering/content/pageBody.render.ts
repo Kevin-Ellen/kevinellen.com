@@ -10,10 +10,10 @@ export const renderPageBody = (ctx: RenderContext): string => {
   const { content } = ctx;
 
   const head = `
-    <header class="m-page-intro">
-      <p class="m-page-intro__eyebrow">${escapeHtmlContent(content.head.eyebrow)}</p>
-      <h1 class="m-page-intro__title">${escapeHtmlContent(content.head.title)}</h1>
-      <p class="m-page-intro__intro">${escapeHtmlContent(content.head.intro)}</p>
+    <header class="m-heading">
+      <p class="m-heading__eyebrow">${escapeHtmlContent(content.head.eyebrow)}</p>
+      <h1 class="m-heading__title">${escapeHtmlContent(content.head.title)}</h1>
+      <p class="m-heading__intro">${escapeHtmlContent(content.head.intro)}</p>
     </header>
   `;
 

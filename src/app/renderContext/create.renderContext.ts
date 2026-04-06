@@ -53,6 +53,8 @@ export const createRenderContext = (appContext: AppContext): RenderContext => {
             label: item.label,
             href: item.href,
             isCurrent: item.isCurrent,
+            isExternal: item.isExternal,
+            openInNewTab: item.openInNewTab,
             icon: item.icon
               ? resolveSvgReference(appContext.assets.svgs, item.icon.id)
               : undefined,
@@ -63,6 +65,8 @@ export const createRenderContext = (appContext: AppContext): RenderContext => {
             label: item.label,
             href: item.href,
             isCurrent: item.isCurrent,
+            isExternal: item.isExternal,
+            openInNewTab: item.openInNewTab,
             icon: item.icon
               ? resolveSvgReference(appContext.assets.svgs, item.icon.id)
               : undefined,

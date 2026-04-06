@@ -47,7 +47,13 @@ export const notFoundErrorPage: BaseErrorPageDefinition<ErrorPageContentAuthored
           modules: [
             {
               kind: "paragraph",
-              text: "The address may be incorrect, the page may have moved, or the link may be out of date.",
+              content: [
+                {
+                  kind: "text",
+                  value:
+                    "The address may be incorrect, the page may have moved, or the link may be out of date.",
+                },
+              ],
             },
           ],
         },

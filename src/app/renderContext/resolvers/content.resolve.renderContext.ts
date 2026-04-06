@@ -3,6 +3,8 @@
 import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
 import type { RenderContextPageBodyContent } from "@app/renderContext/content/content.renderContext.types";
 
+import { resolveContentModuleRenderContext } from "@app/renderContext/content/modules/module.resolve.renderContext";
+
 export const resolveContentRenderContext = (
   content: AppContextPageBodyContent,
 ): RenderContextPageBodyContent => {
@@ -22,22 +24,7 @@ export const resolveContentRenderContext = (
             level: section.heading.level,
           }
         : undefined,
-      modules: section.modules.map((module) => {
-        switch (module.kind) {
-          case "paragraph":
-            return {
-              kind: "paragraph",
-              text: module.text,
-            };
-
-          case "quote":
-            return {
-              kind: "quote",
-              text: module.text,
-              attribution: module.attribution,
-            };
-        }
-      }),
+      modules: section.modules.map(resolveContentModuleRenderContext),
     })),
   };
 };

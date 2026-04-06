@@ -55,11 +55,19 @@ export const homePage: HomePageDefinition = {
         modules: [
           {
             kind: "paragraph",
-            text: "Homepage placeholder body content.",
+            content: [
+              { kind: "text", value: "Homepage placeholder body content." },
+            ],
           },
           {
             kind: "paragraph",
-            text: "This section will later introduce featured photography, journal entries, and technical work.",
+            content: [
+              {
+                kind: "text",
+                value:
+                  "This section will later introduce featured photography, journal entries, and technical work.",
+              },
+            ],
           },
         ],
       },

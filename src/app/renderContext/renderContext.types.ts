@@ -66,6 +66,8 @@ export type RenderContextNavigationItem = {
   label: string;
   href: string;
   isCurrent: boolean;
+  isExternal: boolean;
+  openInNewTab: boolean;
   icon?: RenderContextSvgReference;
 };
 
@@ -87,6 +89,8 @@ export type RenderContextHeader = {
 export type RenderContextFooterNavigationItem = {
   label: string;
   href: string;
+  isExternal: boolean;
+  openInNewTab: boolean;
 };
 
 export type RenderContextFooterNavigationSection = {

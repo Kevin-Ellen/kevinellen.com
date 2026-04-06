@@ -94,10 +94,13 @@ const renderSocialNavItem = (item: RenderContextNavigationItem): string => {
       )
     : `<span class="l-header__label">${escapeHtmlContent(item.label)}</span>`;
 
+  const target = item.isExternal ? ' target="_blank"' : "";
+  const rel = item.isExternal ? ' rel="noopener noreferrer"' : "";
+
   return `<li class="l-header__item">
     <a class="l-header__link" href="${escapeAttribute(
       item.href,
-    )}" aria-label="${escapeAttribute(item.label)}">
+    )}"${target}${rel} aria-label="${escapeAttribute(item.label)}">
       ${content}
     </a>
   </li>`;

@@ -88,33 +88,49 @@ strong {
   color: type.$colour-type-strong;
 }
 
-blockquote {
-  margin: type.$blockquote-spacing-top 0 type.$blockquote-spacing-bottom;
-  padding-inline-start: type.$blockquote-padding-inline;
+figure:has(blockquote) {
+  margin-block: type.$blockquote-spacing-top type.$blockquote-spacing-bottom;
   border-inline-start: type.$blockquote-rule-width solid
     type.$colour-rule-blockquote;
-  font-family: type.$font-family-quote;
-  font-weight: type.$font-weight-blockquote;
-  font-size: type.$font-size-blockquote;
-  line-height: type.$line-height-blockquote;
-  color: type.$colour-type-blockquote;
+  padding-inline-start: type.$blockquote-padding-inline;
+
+  blockquote {
+    font-family: type.$font-family-blockquote;
+    font-weight: type.$font-weight-blockquote;
+    font-size: type.$font-size-blockquote;
+    line-height: type.$line-height-blockquote;
+    color: type.$colour-type-blockquote;
+    max-inline-size: 36ch;
+  }
+
+  figcaption {
+    display: block;
+    margin-top: type.$blockquote-cite-spacing-top;
+    font-style: normal;
+    font-family: type.$font-family-body;
+    font-weight: type.$font-weight-blockquote-cite;
+    font-size: type.$font-size-blockquote-cite;
+    line-height: type.$line-height-blockquote-cite;
+    color: type.$colour-type-blockquote-cite;
+  }
+
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }
 
-blockquote > *:first-child {
-  margin-top: 0;
-}
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: type.$colour-rule-blockquote;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px;
 
-blockquote > *:last-child {
-  margin-bottom: 0;
-}
-
-blockquote cite {
-  display: block;
-  margin-top: type.$blockquote-cite-spacing-top;
-  font-style: normal;
-  font-family: type.$font-family-body;
-  font-weight: type.$font-weight-blockquote-cite;
-  font-size: type.$font-size-blockquote-cite;
-  line-height: type.$line-height-blockquote-cite;
-  color: type.$colour-type-blockquote-cite;
+  &:hover {
+    text-decoration-thickness: 3px;
+  }
 }

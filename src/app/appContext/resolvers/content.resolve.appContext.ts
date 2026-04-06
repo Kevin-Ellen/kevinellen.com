@@ -1,11 +1,15 @@
-// src/app/appContext/resolvers/content.resolve.appContext
+// src/app/appContext/resolvers/content.resolve.appContext.ts
 
 import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
-import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
+import type { AppState } from "@app/appState/class.appState";
 import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
+import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
+
+import { resolveContentModuleAppContext } from "@app/appContext/content/modules/module.resolve.appContext";
 
 export const resolveContentAppContext = (
   page: PublicPage | ErrorPage,
+  appState: AppState,
 ): AppContextPageBodyContent => {
   return {
     head: {
@@ -23,22 +27,9 @@ export const resolveContentAppContext = (
             level: section.heading.level,
           }
         : undefined,
-      modules: section.modules.map((module) => {
-        switch (module.kind) {
-          case "paragraph":
-            return {
-              kind: "paragraph",
-              text: module.text,
-            };
-
-          case "quote":
-            return {
-              kind: "quote",
-              text: module.text,
-              attribution: module.attribution,
-            };
-        }
-      }),
+      modules: section.modules.map((module) =>
+        resolveContentModuleAppContext(module, appState),
+      ),
     })),
   };
 };

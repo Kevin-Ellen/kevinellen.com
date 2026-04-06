@@ -12,8 +12,18 @@ export const navigationConfig: NavigationConfig = deepFreeze({
       { kind: "page", id: "about" },
     ],
     social: [
-      { kind: "social", id: "github", svgId: "icon-github" },
-      { kind: "social", id: "instagram", svgId: "icon-instagram" },
+      {
+        kind: "social",
+        id: "github",
+        svgId: "icon-github",
+        openInNewTab: true,
+      },
+      {
+        kind: "social",
+        id: "instagram",
+        svgId: "icon-instagram",
+        openInNewTab: true,
+      },
     ],
   },
   footer: {
@@ -32,7 +42,7 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         id: "practice",
         label: "Practice",
         items: [
-          // { kind: "page", id: "equipment" },
+          { kind: "page", id: "about-equipment" },
           // { kind: "page", id: "field-notes" },
         ],
       },
@@ -41,9 +51,9 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         id: "elsewhere",
         label: "Elsewhere",
         items: [
-          { kind: "social", id: "github" },
-          { kind: "social", id: "instagram" },
-          { kind: "social", id: "linkedin" },
+          { kind: "social", id: "github", openInNewTab: true },
+          { kind: "social", id: "instagram", openInNewTab: true },
+          { kind: "social", id: "linkedin", openInNewTab: true },
         ],
       },
 

@@ -51,6 +51,8 @@ type AppContextNavigationItemBase = {
   label: string;
   href: string;
   icon?: AppContextSvgReference;
+  isExternal: boolean;
+  openInNewTab: boolean;
 };
 
 export type AppContextNavigationPageItem = AppContextNavigationItemBase & {
