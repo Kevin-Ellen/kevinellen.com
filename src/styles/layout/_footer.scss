@@ -7,13 +7,11 @@
   padding-block: tokens.$space-3xl tokens.$space-xl;
 
   &__grid {
-    display: grid;
-    gap: tokens.$space-2xl;
-
-    @media (min-width: tokens.$bp-sm) {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: tokens.$space-3xl;
-    }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: tokens.$space-3xl;
+    margin-bottom: tokens.$space-2xl;
   }
 
   &__group {
@@ -31,6 +29,16 @@
     list-style: none;
     margin: 0;
     padding: 0;
+
+    li {
+      display: block;
+      align-items: start;
+      margin-bottom: 0;
+
+      &::before {
+        content: "";
+      }
+    }
   }
 
   &__list {

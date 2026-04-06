@@ -109,6 +109,7 @@ export type AppContextFooterColophonModule = {
   kind: "colophon";
   copyrightName: string;
   copyrightYear: number;
+  allRightsReserved: boolean;
 };
 
 export type AppContextFooterAffiliationItem = {

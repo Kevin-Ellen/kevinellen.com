@@ -115,7 +115,9 @@ export type RenderContextPageFooter = {
     items: readonly RenderContextPageFooterAffiliationItem[];
   } | null;
   colophon: {
-    copyright: string;
+    copyrightYear: number;
+    copyrightName: string;
+    allRightsReserved: boolean;
   } | null;
 };
 

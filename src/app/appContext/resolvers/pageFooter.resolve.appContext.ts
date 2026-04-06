@@ -25,6 +25,7 @@ const resolveFooterModule = (module: FooterModule): AppContextFooterModule => {
       kind: "colophon",
       copyrightName: module.copyrightName,
       copyrightYear: module.copyrightYear,
+      allRightsReserved: module.allRightsReserved,
     };
   }
 

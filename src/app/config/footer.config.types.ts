@@ -9,6 +9,7 @@ export type FooterModule =
       kind: "colophon";
       copyrightName: string;
       copyrightYear: number;
+      allRightsReserved: boolean;
     }
   | {
       kind: "affiliations";

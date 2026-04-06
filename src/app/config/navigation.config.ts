@@ -61,10 +61,9 @@ export const navigationConfig: NavigationConfig = deepFreeze({
         id: "legal",
         label: "Legal",
         items: [
-          // { kind: "page", id: "privacy" },
-          // { kind: "page", id: "terms" },
-          // { kind: "page", id: "cookies" },
-          // { kind: "page", id: "license" },
+          { kind: "page", id: "privacy" },
+          { kind: "page", id: "terms" },
+          { kind: "page", id: "licensing" },
         ],
       },
     ],

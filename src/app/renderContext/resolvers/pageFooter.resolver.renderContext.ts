@@ -39,7 +39,9 @@ export const resolvePageFooterRenderContext = (appContext: AppContext) => {
       : null,
     colophon: colophonModule
       ? {
-          copyright: `© ${colophonModule.copyrightYear} ${colophonModule.copyrightName}`,
+          copyrightYear: colophonModule.copyrightYear,
+          copyrightName: colophonModule.copyrightName,
+          allRightsReserved: colophonModule.allRightsReserved ?? false,
         }
       : null,
   };
