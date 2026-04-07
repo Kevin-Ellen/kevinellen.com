@@ -44,9 +44,8 @@ variable "subdomain" {
   type        = string
   description = "Subdomain to attach worker to"
 }
-variable "static_dir"{
+variable "static_dir" {
   description = "Directory for static assets"
-    type = string
-    default = null
+  type        = string
+  default     = "./static"
 }
-
