@@ -62,9 +62,19 @@ resource "cloudflare_worker_version" "site" {
   ]
 
   assets = {
-    directory = var.static_dir
-    binding   = "ASSETS"
+  directory = "./static"
+  type      = "assets"
+
+  config = {
+    html_handling      = "auto-trailing-slash"
+    not_found_handling = "404-page"
+
+    run_worker_first = [
+      "/favicon.ico",
+      "/apple-touch-icon.png",
+    ]
   }
+}
 
   bindings = [
     {
