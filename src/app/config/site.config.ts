@@ -8,6 +8,7 @@ export const siteConfig: SiteConfig = deepFreeze({
   siteName: "Kevin Ellen",
   siteUrl: "https://kevinellen.com",
   language: "en-GB",
+
   headerBranding: {
     homeHref: "/",
     ariaLabel: "Kevin Ellen home",
@@ -16,6 +17,28 @@ export const siteConfig: SiteConfig = deepFreeze({
       svg: "logo-monogram-ke",
     },
   },
+
+  icons: {
+    faviconIco: {
+      href: "/assets/icons/favicon.ico",
+    },
+    faviconSvg: {
+      href: "/assets/icons/ke-monogram-logo.svg",
+      type: "image/svg+xml",
+    },
+    faviconPng: {
+      href: "/assets/icons/favicon-96x96.png",
+      sizes: "96x96",
+      type: "image/png",
+    },
+    appleTouchIcon: {
+      href: "/apple-touch-icon.png",
+    },
+    manifest: {
+      href: "/manifest.webmanifest",
+    },
+  },
+
   assets: {
     scripts: ["header-condense"],
     svgs: [

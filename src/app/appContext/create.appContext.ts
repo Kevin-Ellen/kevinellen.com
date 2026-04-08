@@ -12,6 +12,7 @@ import { resolveNavigationAppContext } from "@app/appContext/resolvers/navigatio
 import { resolvePageAppContext } from "@app/appContext/resolvers/page.resolve.appContext";
 import { resolveSiteIdentityAppContext } from "@app/appContext/resolvers/siteIdentify.resolve.appContext";
 import { resolveAssetsAppContext } from "@app/appContext/resolvers/asset.resolve.appContext";
+import { resolveIconsAppContext } from "@app/appContext/resolvers/icons.resolve.appContext";
 import { resolvePageFooterAppContext } from "@app/appContext/resolvers/pageFooter.resolve.appContext";
 import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/structured-data.resolve.appContext";
 import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
@@ -51,6 +52,7 @@ export const createAppContext = (
       navigation: resolveNavigationAppContext(appState, page),
       branding: resolveBrandingAppContext(appState),
       siteIdentity: resolveSiteIdentityAppContext(appState),
+      icons: resolveIconsAppContext(appState),
       assets: resolveAssetsAppContext(appState, target),
       pageFooter: resolvePageFooterAppContext(appState),
       structuredData,

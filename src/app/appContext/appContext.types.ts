@@ -136,6 +136,27 @@ export type AppContextPageFooter = {
 
 export type AppContextStructuredDataItem = StructuredDataNode;
 
+export type AppContextHeadIcons = {
+  faviconIco: {
+    href: string;
+  };
+  faviconSvg?: {
+    href: string;
+    type: "image/svg+xml";
+  };
+  faviconPng?: {
+    href: string;
+    type: "image/png";
+    sizes: string;
+  };
+  appleTouchIcon: {
+    href: string;
+  };
+  manifest: {
+    href: string;
+  };
+};
+
 export type AppContextModel = {
   request: AppContextRequest;
   target: DocumentRenderTarget;
@@ -145,6 +166,7 @@ export type AppContextModel = {
   navigation: AppContextNavigation;
   branding: AppContextBranding;
   siteIdentity: AppContextSiteIdentity;
+  icons: AppContextHeadIcons;
   assets: AppContextAssets;
   pageFooter: AppContextPageFooter;
   structuredData: readonly AppContextStructuredDataItem[];
