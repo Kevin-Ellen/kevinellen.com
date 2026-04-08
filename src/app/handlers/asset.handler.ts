@@ -7,14 +7,18 @@ export const assetHandler = async (
   req: Request,
   env: Env,
   _ctx: ExecutionContext,
-): Promise<Response> => {
+): Promise<Response | null> => {
   const assetResolution = resolveAssetRequest(req);
 
   if (assetResolution.outcome !== "asset") {
-    return new Response("Not Found", { status: 404 });
+    return null;
   }
 
-  const response = await env.ASSETS.fetch(req);
+  const assetUrl = new URL(req.url);
+  assetUrl.pathname = assetResolution.asset.assetPath;
+
+  const assetRequest = new Request(assetUrl.toString(), req);
+  const response = await env.ASSETS.fetch(assetRequest);
 
   return applyAssetResponsePolicy(response, assetResolution.asset);
 };

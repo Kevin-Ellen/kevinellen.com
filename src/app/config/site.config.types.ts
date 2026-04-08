@@ -14,7 +14,7 @@ export type HeaderBrandingConfig = {
 
 export type SiteIconsConfig = {
   faviconIco: {
-    href: "/assets/icons/favicon.ico";
+    href: "/favicon.ico";
   };
   faviconSvg?: {
     href: `/assets/icons/${string}.svg`;
