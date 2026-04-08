@@ -2,10 +2,8 @@
 
 import type { AppState } from "@app/appState/class.appState";
 
-import { deepFreeze } from "@utils/deepFreeze.util";
-
 const toWebManifestSpec = (webManifest: AppState["webManifest"]) => {
-  return deepFreeze({
+  return {
     id: webManifest.id,
     name: webManifest.name,
     short_name: webManifest.shortName,
@@ -16,7 +14,7 @@ const toWebManifestSpec = (webManifest: AppState["webManifest"]) => {
     background_color: webManifest.backgroundColor,
     display: webManifest.display,
     icons: webManifest.icons,
-  });
+  };
 };
 
 export const buildWebManifestSystem = (appState: AppState): string => {
