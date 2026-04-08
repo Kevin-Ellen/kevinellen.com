@@ -2,6 +2,25 @@
 
 import type { AppState } from "@app/appState/class.appState";
 
+import { deepFreeze } from "@utils/deepFreeze.util";
+
+const toWebManifestSpec = (webManifest: AppState["webManifest"]) => {
+  return deepFreeze({
+    id: webManifest.id,
+    name: webManifest.name,
+    short_name: webManifest.shortName,
+    start_url: webManifest.startUrl,
+    scope: webManifest.scope,
+    description: webManifest.description,
+    theme_color: webManifest.themeColor,
+    background_color: webManifest.backgroundColor,
+    display: webManifest.display,
+    icons: webManifest.icons,
+  });
+};
+
 export const buildWebManifestSystem = (appState: AppState): string => {
-  return JSON.stringify(appState.webManifest, null, 2);
+  const manifest = toWebManifestSpec(appState.webManifest);
+
+  return JSON.stringify(manifest, null, 2);
 };
