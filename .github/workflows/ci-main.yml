@@ -66,6 +66,10 @@ jobs:
       run:
         working-directory: deployments/${{ matrix.environment }}
 
+    env:
+      TF_VAR_worker_script_path: /tmp/entry.js
+      TF_VAR_static_dir: /tmp/static
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -74,6 +78,13 @@ jobs:
         uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: 1.14.7
+
+      - name: Create placeholder artifact paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/static
+          touch /tmp/entry.js
 
       - name: Terraform fmt check
         run: terraform fmt -check -recursive ../../
