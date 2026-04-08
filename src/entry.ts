@@ -1,7 +1,6 @@
-// src/entry.ts
-
 import { createAppState } from "@app/appState/create.appState";
 import { requestHandler } from "@app/handlers/request.handler";
+import { assetHandler } from "@app/handlers/asset.handler";
 
 export const onRequest = async (
   req: Request,
@@ -11,7 +10,7 @@ export const onRequest = async (
   const url = new URL(req.url);
 
   if (url.pathname.startsWith("/assets/")) {
-    return env.ASSETS.fetch(new Request(url.toString()));
+    return assetHandler(req, env, ctx);
   }
 
   const appState = createAppState();
