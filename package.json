@@ -16,6 +16,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "format:tf": "terraform fmt -recursive .",
+    "format:tf:check": "terraform fmt -check -recursive .",
     "test": "jest --verbose",
     "dev": "wrangler types && wrangler dev --remote",
     "cf-typegen": "wrangler types && prettier worker-configuration.d.ts --write",
