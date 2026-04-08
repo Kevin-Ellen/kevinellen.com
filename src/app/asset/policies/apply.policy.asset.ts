@@ -21,6 +21,7 @@ export const applyAssetResponsePolicy = (
 ): Response => {
   const headers = new Headers(response.headers);
 
+  headers.set("content-type", asset.contentType);
   headers.set("cache-control", getCacheControlValue(asset));
   headers.set("x-content-type-options", "nosniff");
   headers.set("x-runtime-policy", "asset");
