@@ -5,13 +5,13 @@ import type { AssetRequest } from "@app/asset/request/request.asset.types";
 const getCacheControlValue = (asset: AssetRequest): string => {
   switch (asset.cacheProfile) {
     case "icon":
-      return "public, max-age=0, stale-while-revalidate=0";
+      return "public, max-age=86400, stale-while-revalidate=86400";
 
     case "font":
       return "public, max-age=31536000, immutable";
 
     case "image":
-      return "public, max-age=0, immutable"; //31536000
+      return "public, max-age=86400, stale-while-revalidate=86400";
   }
 };
 
