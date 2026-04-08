@@ -1,4 +1,4 @@
-# comment-7
+# deployments/stg/main.tf
 terraform {
   required_version = ">= 1.5.7, < 2.0.0"
 
@@ -22,6 +22,7 @@ module "site_app" {
   instance_name      = var.instance_name
   subdomain          = var.subdomain
   worker_script_path = var.worker_script_path
+  static_dir         = var.static_dir
   compatibility_date = var.compatibility_date
 
   release_sha = var.release_sha

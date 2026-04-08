@@ -22,6 +22,7 @@ module "site_app" {
   instance_name      = var.instance_name
   subdomain          = var.subdomain
   worker_script_path = var.worker_script_path
+  static_dir         = var.static_dir
   compatibility_date = var.compatibility_date
 
   release_sha = var.release_sha
