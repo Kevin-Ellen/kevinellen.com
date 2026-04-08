@@ -62,7 +62,7 @@ resource "cloudflare_worker_version" "site" {
   ]
 
   assets = {
-    directory = "./static"
+    directory = var.static_dir
     type      = "assets"
     config = {
       run_worker_first = [

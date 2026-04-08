@@ -48,5 +48,4 @@ variable "release_key" {
 variable "static_dir" {
   description = "Directory for static assets"
   type        = string
-  default     = "./static"
 }

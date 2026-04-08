@@ -12,6 +12,7 @@ test -n "${R2_ACCESS_KEY_ID:-}" || { echo "R2_ACCESS_KEY_ID is not set"; exit 1;
 test -n "${R2_SECRET_ACCESS_KEY:-}" || { echo "R2_SECRET_ACCESS_KEY is not set"; exit 1; }
 test -n "${TF_VAR_release_sha:-}" || { echo "TF_VAR_release_sha is not set"; exit 1; }
 test -n "${TF_VAR_release_key:-}" || { echo "TF_VAR_release_key is not set"; exit 1; }
+test -n "${TF_VAR_worker_script_path:-}" || { echo "TF_VAR_worker_script_path is not set"; exit 1; }
 test -n "${TF_VAR_static_dir:-}" || { echo "TF_VAR_static_dir is not set"; exit 1; }
 
 RELEASE_SHA="${TF_VAR_release_sha}"
@@ -82,17 +83,21 @@ tar -xzf "${BUNDLE_TAR}" -C "${EXTRACT_DIR}"
 echo "Listing extracted files"
 find "${EXTRACT_DIR}" -maxdepth 4 -type f | sort
 
-echo "Validating entry.js exists"
-test -f "${EXTRACT_DIR}/worker/entry.js"
-
-if [ -d "${EXTRACT_DIR}/static" ]; then
-  echo "Static directory found: ${EXTRACT_DIR}/static"
-  find "${EXTRACT_DIR}/static" -maxdepth 4 -type f | sort
+if [ -f "${TF_VAR_worker_script_path}" ]; then
+  echo "Worker entry found: ${TF_VAR_worker_script_path}"
 else
-  echo "No static directory present in release"
+  echo "Worker entry not found at expected path: ${TF_VAR_worker_script_path}"
+  exit 1
 fi
 
-export TF_VAR_worker_script_path="${EXTRACT_DIR}/worker/entry.js"
+if [ -d "${TF_VAR_static_dir}" ]; then
+  echo "Static directory found: ${TF_VAR_static_dir}"
+  find "${TF_VAR_static_dir}" -maxdepth 4 -type f | sort
+else
+  echo "Static directory not found at expected path: ${TF_VAR_static_dir}"
+  exit 1
+fi
+
 echo "Resolved worker script path: ${TF_VAR_worker_script_path}"
 
 echo "before_init hook completed successfully"
