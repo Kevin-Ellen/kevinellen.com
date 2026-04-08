@@ -12,6 +12,8 @@ import {
 
 const renderHeadIcons = (ctx: RenderContext): string[] => {
   const fragments = [
+    `<meta name="apple-mobile-web-app-title" content="${escapeAttribute(ctx.document.siteName)}">`,
+    `<meta name="application-name" content="${escapeAttribute(ctx.document.siteName)}">`,
     `<link rel="icon" href="${escapeAttribute(ctx.head.icons.faviconIco.href)}">`,
     `<link rel="apple-touch-icon" href="${escapeAttribute(ctx.head.icons.appleTouchIcon.href)}">`,
     `<link rel="manifest" href="${escapeAttribute(ctx.head.icons.manifest.href)}">`,

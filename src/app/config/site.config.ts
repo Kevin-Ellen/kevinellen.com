@@ -20,7 +20,7 @@ export const siteConfig: SiteConfig = deepFreeze({
 
   icons: {
     faviconIco: {
-      href: "/assets/icons/favicon.ico",
+      href: "/favicon.ico",
     },
     faviconSvg: {
       href: "/assets/icons/ke-monogram-logo.svg",

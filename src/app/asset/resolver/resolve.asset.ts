@@ -15,6 +15,12 @@ const ICON_FILE_NAMES = new Set<IconAssetFileName>([
   "web-app-manifest-512x512.png",
 ]);
 
+const ICON_ROOT_ALIASES: Record<string, `/assets/icons/${IconAssetFileName}`> =
+  {
+    "/favicon.ico": "/assets/icons/favicon.ico",
+    "/apple-touch-icon.png": "/assets/icons/apple-touch-icon.png",
+  };
+
 const getFileNameFromPath = (pathname: string): string => {
   const segments = pathname.split("/").filter(Boolean);
 
@@ -31,8 +37,11 @@ const getExtensionFromFileName = (fileName: string): string => {
   return fileName.slice(lastDotIndex + 1).toLowerCase();
 };
 
-const resolveIconAssetRequest = (pathname: string): AssetRequest | null => {
-  const fileName = getFileNameFromPath(pathname);
+const resolveIconAssetRequest = (
+  requestPath: string,
+  assetPath: `/assets/icons/${IconAssetFileName}`,
+): AssetRequest | null => {
+  const fileName = getFileNameFromPath(assetPath);
 
   if (!ICON_FILE_NAMES.has(fileName as IconAssetFileName)) {
     return null;
@@ -44,7 +53,11 @@ const resolveIconAssetRequest = (pathname: string): AssetRequest | null => {
     case "png":
       return {
         family: "icon",
-        pathname: pathname as `/assets/icons/${IconAssetFileName}`,
+        requestPath: requestPath as
+          | `/assets/icons/${IconAssetFileName}`
+          | "/favicon.ico"
+          | "/apple-touch-icon.png",
+        assetPath,
         fileName: fileName as IconAssetFileName,
         extension: "png",
         contentType: "image/png",
@@ -54,7 +67,11 @@ const resolveIconAssetRequest = (pathname: string): AssetRequest | null => {
     case "svg":
       return {
         family: "icon",
-        pathname: pathname as `/assets/icons/${IconAssetFileName}`,
+        requestPath: requestPath as
+          | `/assets/icons/${IconAssetFileName}`
+          | "/favicon.ico"
+          | "/apple-touch-icon.png",
+        assetPath,
         fileName: fileName as IconAssetFileName,
         extension: "svg",
         contentType: "image/svg+xml",
@@ -64,7 +81,11 @@ const resolveIconAssetRequest = (pathname: string): AssetRequest | null => {
     case "ico":
       return {
         family: "icon",
-        pathname: pathname as `/assets/icons/${IconAssetFileName}`,
+        requestPath: requestPath as
+          | `/assets/icons/${IconAssetFileName}`
+          | "/favicon.ico"
+          | "/apple-touch-icon.png",
+        assetPath,
         fileName: fileName as IconAssetFileName,
         extension: "ico",
         contentType: "image/x-icon",
@@ -85,7 +106,8 @@ const resolveFontAssetRequest = (pathname: string): AssetRequest | null => {
 
   return {
     family: "font",
-    pathname: pathname as `/assets/fonts/${string}.woff2`,
+    requestPath: pathname as `/assets/fonts/${string}.woff2`,
+    assetPath: pathname as `/assets/fonts/${string}.woff2`,
     fileName: fileName as `${string}.woff2`,
     extension: "woff2",
     contentType: "font/woff2",
@@ -101,7 +123,8 @@ const resolveImageAssetRequest = (pathname: string): AssetRequest | null => {
     case "png":
       return {
         family: "image",
-        pathname: pathname as `/assets/images/${string}`,
+        requestPath: pathname as `/assets/images/${string}`,
+        assetPath: pathname as `/assets/images/${string}`,
         fileName,
         extension: "png",
         contentType: "image/png",
@@ -112,9 +135,10 @@ const resolveImageAssetRequest = (pathname: string): AssetRequest | null => {
     case "jpeg":
       return {
         family: "image",
-        pathname: pathname as `/assets/images/${string}`,
+        requestPath: pathname as `/assets/images/${string}`,
+        assetPath: pathname as `/assets/images/${string}`,
         fileName,
-        extension: extension,
+        extension,
         contentType: "image/jpeg",
         cacheProfile: "image",
       };
@@ -122,7 +146,8 @@ const resolveImageAssetRequest = (pathname: string): AssetRequest | null => {
     case "webp":
       return {
         family: "image",
-        pathname: pathname as `/assets/images/${string}`,
+        requestPath: pathname as `/assets/images/${string}`,
+        assetPath: pathname as `/assets/images/${string}`,
         fileName,
         extension: "webp",
         contentType: "image/webp",
@@ -132,7 +157,8 @@ const resolveImageAssetRequest = (pathname: string): AssetRequest | null => {
     case "avif":
       return {
         family: "image",
-        pathname: pathname as `/assets/images/${string}`,
+        requestPath: pathname as `/assets/images/${string}`,
+        assetPath: pathname as `/assets/images/${string}`,
         fileName,
         extension: "avif",
         contentType: "image/avif",
@@ -148,14 +174,29 @@ export const resolveAssetRequest = (req: Request): AssetResolution => {
   const url = new URL(req.url);
   const { pathname } = url;
 
-  if (!pathname.startsWith("/assets/")) {
+  if (pathname in ICON_ROOT_ALIASES) {
+    const assetPath = ICON_ROOT_ALIASES[pathname];
+
+    const asset = resolveIconAssetRequest(pathname, assetPath);
+
+    if (!asset) {
+      return {
+        outcome: "unsupported-asset",
+        pathname,
+      };
+    }
+
     return {
-      outcome: "not-asset",
+      outcome: "asset",
+      asset,
     };
   }
 
   if (pathname.startsWith("/assets/icons/")) {
-    const asset = resolveIconAssetRequest(pathname);
+    const asset = resolveIconAssetRequest(
+      pathname,
+      pathname as `/assets/icons/${IconAssetFileName}`,
+    );
 
     if (!asset) {
       return {
@@ -203,7 +244,6 @@ export const resolveAssetRequest = (req: Request): AssetResolution => {
   }
 
   return {
-    outcome: "unsupported-asset",
-    pathname,
+    outcome: "not-asset",
   };
 };

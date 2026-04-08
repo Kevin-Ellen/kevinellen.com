@@ -1,4 +1,4 @@
-// src/app/policies/asset/request.asset.types.ts
+// src/app/asset/request/request.asset.types.ts
 
 export type IconAssetFileName =
   | "apple-touch-icon.png"
@@ -11,7 +11,11 @@ export type IconAssetFileName =
 export type AssetRequest =
   | {
       family: "icon";
-      pathname: `/assets/icons/${IconAssetFileName}`;
+      requestPath:
+        | `/assets/icons/${IconAssetFileName}`
+        | "/favicon.ico"
+        | "/apple-touch-icon.png";
+      assetPath: `/assets/icons/${IconAssetFileName}`;
       fileName: IconAssetFileName;
       extension: "png" | "svg" | "ico";
       contentType: "image/png" | "image/svg+xml" | "image/x-icon";
@@ -19,7 +23,8 @@ export type AssetRequest =
     }
   | {
       family: "font";
-      pathname: `/assets/fonts/${string}.woff2`;
+      requestPath: `/assets/fonts/${string}.woff2`;
+      assetPath: `/assets/fonts/${string}.woff2`;
       fileName: `${string}.woff2`;
       extension: "woff2";
       contentType: "font/woff2";
@@ -27,7 +32,8 @@ export type AssetRequest =
     }
   | {
       family: "image";
-      pathname: `/assets/images/${string}`;
+      requestPath: `/assets/images/${string}`;
+      assetPath: `/assets/images/${string}`;
       fileName: string;
       extension: "png" | "jpg" | "jpeg" | "webp" | "avif";
       contentType: "image/png" | "image/jpeg" | "image/webp" | "image/avif";
