@@ -64,7 +64,6 @@ resource "cloudflare_worker_version" "site" {
   assets = {
     directory = "./static"
     type      = "assets"
-
     config = {
       run_worker_first = [
         "/favicon.ico",
