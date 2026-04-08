@@ -84,6 +84,10 @@ resource "cloudflare_worker_version" "site" {
       text = local.app_host
     },
     {
+      type = "assets"
+      name = "ASSETS"
+    },
+    {
       type         = "kv_namespace"
       name         = "KV_PHOTOS"
       namespace_id = cloudflare_workers_kv_namespace.photos.id
