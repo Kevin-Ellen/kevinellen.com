@@ -36,6 +36,7 @@ export const createRenderContext = (appContext: AppContext): RenderContext => {
         scripts: appContext.assets.scripts.filter(
           (script) => script.location === "header",
         ),
+        icons: appContext.icons,
       },
       header: {
         branding: {

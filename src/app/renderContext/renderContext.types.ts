@@ -35,8 +35,30 @@ export type RenderContextSecurity = {
   nonce: string;
 };
 
+export type RenderContextHeadIcons = {
+  faviconIco: {
+    href: string;
+  };
+  faviconSvg?: {
+    href: string;
+    type: "image/svg+xml";
+  };
+  faviconPng?: {
+    href: string;
+    type: "image/png";
+    sizes: string;
+  };
+  appleTouchIcon: {
+    href: string;
+  };
+  manifest: {
+    href: string;
+  };
+};
+
 export type RenderContextHead = {
   scripts: readonly ScriptAssetAuthored[];
+  icons: RenderContextHeadIcons;
 };
 
 export type RenderContextFooter = {
