@@ -13,30 +13,16 @@ export const appScripts: readonly ScriptAssetAuthored[] = [
 
   if (!header || !sentinel) return;
 
-  let observer;
-  const triggerRatio = 1 / 3;
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      header.classList.toggle("is-condensed", !entry.isIntersecting);
+    },
+    {
+      threshold: 0,
+    }
+  );
 
-  const initObserver = () => {
-    if (observer) observer.disconnect();
-
-    const headerHeight = header.getBoundingClientRect().height;
-    const triggerOffset = headerHeight * triggerRatio;
-
-    observer = new IntersectionObserver(
-      ([entry]) => {
-        header.classList.toggle("is-condensed", !entry.isIntersecting);
-      },
-      {
-        threshold: 0,
-        rootMargin: \`-\${triggerOffset}px 0px 0px 0px\`,
-      }
-    );
-
-    observer.observe(sentinel);
-  };
-
-  initObserver();
-  window.addEventListener("resize", initObserver);
+  observer.observe(sentinel);
 })();
     `,
     location: "footer",

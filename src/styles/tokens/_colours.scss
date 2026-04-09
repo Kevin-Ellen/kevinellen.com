@@ -9,6 +9,7 @@ $colour-text: colour.$ink;
 $colour-text-inverse: colour.$porcelain;
 $colour-rule: colour.$silver;
 $colour-text-muted: color.mix($colour-text, $colour-surface, 80%);
+$colour-text-meta: colour.$ink;
 $colour-text-inverse-muted: color.mix(
   $colour-text-inverse,
   $colour-immersive,

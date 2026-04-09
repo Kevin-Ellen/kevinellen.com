@@ -8,6 +8,7 @@ import { resolveSvgDimensionsFromViewBox } from "@app/renderContext/resolvers/di
 import { resolveSvgReference } from "@app/renderContext/resolvers/reference.svg.asset.resolve.renderContext";
 import { resolvePageFooterRenderContext } from "@app/renderContext/resolvers/pageFooter.resolver.renderContext";
 import { resolveContentRenderContext } from "@app/renderContext/content/content.resolve.renderContext";
+import { resolvePhotosRenderContext } from "@app/renderContext/resolvers/photos.resolve.renderContext";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
@@ -18,6 +19,9 @@ const createNonce = (): string => {
 export const createRenderContext = (appContext: AppContext): RenderContext => {
   const renderableBreadcrumbs =
     appContext.breadcrumbs.length >= 2 ? appContext.breadcrumbs : [];
+
+  const photos = resolvePhotosRenderContext(appContext.photos);
+  const photosById = new Map(photos.map((photo) => [photo.id, photo]));
 
   return new RenderContext(
     deepFreeze({
@@ -100,8 +104,8 @@ export const createRenderContext = (appContext: AppContext): RenderContext => {
       security: {
         nonce: createNonce(),
       },
-      content: resolveContentRenderContext(appContext.content),
-      photos: appContext.photos,
+      content: resolveContentRenderContext(appContext.content, photosById),
+      photos,
     }),
   );
 };

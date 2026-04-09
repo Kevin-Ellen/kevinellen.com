@@ -22,15 +22,19 @@ export type RenderContextHeroSettingItem = {
   description?: string;
 };
 
+export type RenderContextHeroResponsiveImage = {
+  src: string;
+  srcset?: string;
+  sizes?: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type RenderContextHeroModule = {
   kind: "hero";
   immersive: boolean;
-  image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
+  image: RenderContextHeroResponsiveImage;
   caption: string;
   meta: readonly RenderContextHeroMetaItem[];
   settings: readonly RenderContextHeroSettingItem[];

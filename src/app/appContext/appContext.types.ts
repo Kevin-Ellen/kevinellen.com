@@ -159,7 +159,7 @@ export type AppContextHeadIcons = {
 
 export type AppContextPhotoId = string;
 
-export type PhotoVariant = "frame" | "content";
+export type AppContextPhotoVariant = "frame" | "content";
 
 export type AppContextPhoto = {
   id: AppContextPhotoId;
@@ -182,10 +182,11 @@ export type AppContextPhoto = {
     id: string;
     filename: string;
     uploadedAt: string;
-    variants: readonly PhotoVariant[];
-    urls: Record<PhotoVariant, string>;
+    variants: readonly AppContextPhotoVariant[];
+    urls: Record<AppContextPhotoVariant, string>;
   };
 };
+
 export type AppContextPhotoMetadataDefinition = {
   label: string;
   description?: string;

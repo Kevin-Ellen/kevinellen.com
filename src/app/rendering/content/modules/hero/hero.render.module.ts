@@ -82,11 +82,19 @@ const renderMetaGroup = (module: RenderContextHeroModule): string => {
 export const renderHeroModule = (module: RenderContextHeroModule): string => {
   const modifier = module.immersive ? " m-photo--immersive" : "";
 
+  const srcSetAttr = module.image.srcset
+    ? ` srcset="${escapeAttribute(module.image.srcset)}"`
+    : "";
+
+  const sizesAttr = module.image.sizes
+    ? ` sizes="${escapeAttribute(module.image.sizes)}"`
+    : "";
+
   return `
     <figure class="m-photo${modifier}">
       <img
         class="m-photo__object"
-        src="${escapeAttribute(module.image.src)}"
+        src="${escapeAttribute(module.image.src)}"${srcSetAttr}${sizesAttr}
         alt="${escapeAttribute(module.image.alt)}"
         width="${module.image.width}"
         height="${module.image.height}"

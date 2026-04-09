@@ -1,13 +1,13 @@
-// src/app/renderContext/content/content.resolve.renderContext.ts
-
 import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
 import type { RenderContextPageBodyContent } from "@app/renderContext/content/content.renderContext.types";
+import type { RenderContextPhoto } from "@app/renderContext/renderContext.types";
 
 import { resolveContentModuleRenderContext } from "@app/renderContext/content/modules/module.resolve.renderContext";
 import { resolveJournalEntryFooterRenderContext } from "@app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.resolve.renderContext";
 
 export const resolveContentRenderContext = (
   content: AppContextPageBodyContent,
+  photosById: ReadonlyMap<string, RenderContextPhoto>,
 ): RenderContextPageBodyContent => {
   return {
     head: {
@@ -25,7 +25,9 @@ export const resolveContentRenderContext = (
             level: section.heading.level,
           }
         : undefined,
-      modules: section.modules.map(resolveContentModuleRenderContext),
+      modules: section.modules.map((module) =>
+        resolveContentModuleRenderContext(module, { photosById }),
+      ),
     })),
 
     footer: content.footer

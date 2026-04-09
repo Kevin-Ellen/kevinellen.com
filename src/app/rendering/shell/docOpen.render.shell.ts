@@ -10,6 +10,30 @@ import {
   escapeHtmlContent,
 } from "@app/rendering/utils/escapeContent.util";
 
+const preload = [
+  `<link
+  rel="preload"
+  href="/static/assets/fonts/source-sans/sourcesans3-regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>`,
+  `<link
+  rel="preload"
+  href="/static/assets/fonts/source-sans/sourcesans3-semibold.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>`,
+  `<link
+  rel="preload"
+  href="/static/assets/fonts/source-serif/sourceserif4-regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>`,
+];
+
 const renderHeadIcons = (ctx: RenderContext): string[] => {
   const fragments = [
     `<meta name="apple-mobile-web-app-title" content="${escapeAttribute(ctx.document.siteName)}">`,
@@ -37,6 +61,7 @@ const renderHeadIcons = (ctx: RenderContext): string[] => {
 export const docOpenRenderShell = (ctx: RenderContext): string => {
   const headFragments = [
     '<meta charset="utf-8">',
+    ...preload,
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     `<style nonce="${escapeAttribute(ctx.security.nonce)}">${css}</style>`,
     `<title>${escapeHtmlContent(ctx.metadata.title)}</title>`,
