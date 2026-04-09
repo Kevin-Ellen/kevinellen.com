@@ -13,21 +13,21 @@ import {
 const preload = [
   `<link
   rel="preload"
-  href="/static/assets/fonts/source-sans/sourcesans3-regular.woff2"
+  href="/assets/fonts/source-sans/sourcesans3-regular.woff2"
   as="font"
   type="font/woff2"
   crossorigin
 />`,
   `<link
   rel="preload"
-  href="/static/assets/fonts/source-sans/sourcesans3-semibold.woff2"
+  href="/assets/fonts/source-sans/sourcesans3-semibold.woff2"
   as="font"
   type="font/woff2"
   crossorigin
 />`,
   `<link
   rel="preload"
-  href="/static/assets/fonts/source-serif/sourceserif4-regular.woff2"
+  href="/assets/fonts/source-serif/sourceserif4-regular.woff2"
   as="font"
   type="font/woff2"
   crossorigin

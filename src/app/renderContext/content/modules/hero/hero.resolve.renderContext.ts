@@ -13,7 +13,7 @@ const buildVariantSourceUrl = (
   baseUrl: string,
   width: HeroImageWidth,
 ): string => {
-  return `${baseUrl}${String(width)}w`;
+  return `${baseUrl}${String(width)}`;
 };
 
 const buildSrcSet = (baseUrl: string): string => {
