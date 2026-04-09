@@ -3,6 +3,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import type { ContentCommandOptions } from "@content-pipeline/cli/command.options.types";
 import type { PhotoDraftEntry } from "@shared-types/uploads/photo.upload.types";
 
 import { getLatestPhotoDraftFolder } from "@content-pipeline/photos/helpers/get.latest.photo.draft.folder";
@@ -12,7 +13,9 @@ import { extractPhotoMetadata } from "@content-pipeline/photos/helpers/extract.p
 import { reverseGeocodePhotoLocation } from "@content-pipeline/photos/helpers/reverse.geocode.photo.location";
 import { renderPhotoDraftFile } from "@content-pipeline/photos/helpers/render.photo.draft.file";
 
-export const runStartPhotoCommand = async (): Promise<void> => {
+export const runStartPhotoCommand = async (
+  _options: ContentCommandOptions,
+): Promise<void> => {
   const draftFolderPath = await getLatestPhotoDraftFolder();
   const imagesFolderPath = path.join(draftFolderPath, "images");
 
@@ -115,5 +118,7 @@ export const runStartPhotoCommand = async (): Promise<void> => {
   console.log("\nNext steps:");
   console.log("1. Review the generated .photo.ts files");
   console.log("2. Add title, alt, commentary, and readableLocation");
-  console.log("3. Run: content photo upload\n");
+  console.log("3. Open the draft folder in your editor");
+  console.log(`   code ${draftFolderPath}`);
+  console.log("4. Run: content photo upload\n");
 };
