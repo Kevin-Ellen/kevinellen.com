@@ -23,6 +23,7 @@
     "src",
     "tests",
     "worker-configuration.d.ts",
-    "packages/shared-types/src"
+    "packages/shared-types/src",
+    "packages/shared-types/src/uploads"
   ]
 }
