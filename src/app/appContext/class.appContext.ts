@@ -13,6 +13,9 @@ import type {
   AppContextPageFooter,
   AppContextStructuredDataItem,
   AppContextHeadIcons,
+  AppContextPhoto,
+  AppContextPhotoId,
+  AppContextPhotoMetadataConfig,
 } from "@app/appContext/appContext.types";
 import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
@@ -31,6 +34,9 @@ export class AppContext {
   readonly #structuredData: readonly AppContextStructuredDataItem[];
   readonly #content: AppContextPageBodyContent;
   readonly #icons: AppContextHeadIcons;
+  readonly #photos: readonly AppContextPhoto[];
+  readonly #photosById: Map<AppContextPhotoId, AppContextPhoto>;
+  readonly #photoMetadata: AppContextPhotoMetadataConfig;
 
   public constructor(input: AppContextModel) {
     this.#request = input.request;
@@ -46,6 +52,10 @@ export class AppContext {
     this.#structuredData = input.structuredData;
     this.#content = input.content;
     this.#icons = input.icons;
+    this.#photos = input.photos;
+    this.#photoMetadata = input.photoMetadata;
+
+    this.#photosById = new Map(input.photos.map((photo) => [photo.id, photo]));
   }
 
   public get request(): AppContextRequest {
@@ -98,5 +108,23 @@ export class AppContext {
 
   public get icons(): AppContextHeadIcons {
     return this.#icons;
+  }
+
+  public get photos(): readonly AppContextPhoto[] {
+    return this.#photos;
+  }
+
+  public get photoMetadata(): AppContextPhotoMetadataConfig {
+    return this.#photoMetadata;
+  }
+
+  public getPhotoRecordById(id: AppContextPhotoId): AppContextPhoto {
+    const photo = this.#photosById.get(id);
+
+    if (!photo) {
+      throw new Error(`Photo "${id}" not found in AppContext.`);
+    }
+
+    return photo;
   }
 }

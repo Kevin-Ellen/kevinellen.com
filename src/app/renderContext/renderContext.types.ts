@@ -143,6 +143,31 @@ export type RenderContextPageFooter = {
   } | null;
 };
 
+export type RenderContextPhotoId = string;
+
+export type RenderContextPhoto = {
+  id: RenderContextPhotoId;
+  title: string;
+  alt: string;
+  commentary?: string;
+  readableLocation?: string;
+  capturedAt?: string;
+  cameraModel?: string;
+  lensModel?: string;
+  exposureTime?: number;
+  aperture?: number;
+  iso?: number;
+  focalLength?: number;
+  width: number;
+  height: number;
+  image: {
+    id: string;
+    filename: string;
+    uploadedAt: string;
+    variants: readonly string[];
+  };
+};
+
 export type RenderContextModel = {
   document: RenderContextDocument;
   page: RenderContextPage;
@@ -154,4 +179,5 @@ export type RenderContextModel = {
   structuredData: RenderContextStructuredData;
   security: RenderContextSecurity;
   content: RenderContextPageBodyContent;
+  photos: readonly RenderContextPhoto[];
 };

@@ -34,8 +34,8 @@ const renderTargetResponse = async (
   appState: AppState,
   target: DocumentRenderTarget,
 ): Promise<Response> => {
-  const appContext = createAppContext(req, env, appState, target);
-  const renderContext = createRenderContext(appContext);
+  const appContext = await createAppContext(req, env, appState, target);
+  const renderContext = await createRenderContext(appContext);
   const renderResult = await renderDocumentRequest(renderContext);
 
   return runResponsePolicies(

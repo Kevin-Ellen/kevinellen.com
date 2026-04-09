@@ -77,6 +77,10 @@ export class AppState {
     return this.config.webManifest;
   }
 
+  public get photoMetadata(): AppConfig["photoMetadata"] {
+    return this.config.photoMetadata;
+  }
+
   public get publicPages(): readonly PublicPage[] {
     return this.#pages.public;
   }

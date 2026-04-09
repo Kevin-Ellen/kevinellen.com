@@ -18,6 +18,8 @@ import { siteConfig } from "@app/config/site.config";
 import { socialConfig } from "@app/config/social.config";
 import { structuredDataConfig } from "@app/config/structured-data.config";
 import { webManifestConfig } from "@app/config/webmanifest.config";
+import { photoMetadataConfig } from "@app/config/metadata.photo.config";
+
 import { PAGE_REGISTRY } from "@app/content/pages/registry.pages";
 
 const createUniqueMap = <K, V>(
@@ -51,6 +53,7 @@ export const createAppState = (): AppState => {
     social: socialConfig,
     structuredData: structuredDataConfig,
     webManifest: webManifestConfig,
+    photoMetadata: photoMetadataConfig,
   });
 
   const pages: AppPagesState = {

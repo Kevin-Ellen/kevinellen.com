@@ -8,6 +8,7 @@ import type { TechnologyAboutPageDefinition } from "@shared-types/content/pages/
 import type { LicensingLegalPageDefinition } from "@shared-types/content/pages/public/legal-licensing/licensing.legal.public.page.definition";
 import type { PrivacyLegalPageDefinition } from "@shared-types/content/pages/public/legal-privacy/privacy.legal.public.page.definition";
 import type { TermsLegalPageDefinition } from "@shared-types/content/pages/public/legal-terms/terms.legal.public.page.definition";
+import type { JournalEntryPageDefinition } from "@shared-types/content/pages/public/journal-entry/journal-entry.public.page.definition";
 
 export type PublicPage =
   | HomePageDefinition
@@ -17,4 +18,5 @@ export type PublicPage =
   | TechnologyAboutPageDefinition
   | LicensingLegalPageDefinition
   | PrivacyLegalPageDefinition
-  | TermsLegalPageDefinition;
+  | TermsLegalPageDefinition
+  | JournalEntryPageDefinition;

@@ -29,5 +29,5 @@ export const renderContentSection = (
   if (!section.heading && section.modules.length === 1) {
     return modules;
   }
-  return `<section>${heading}${modules}</section>`;
+  return `<section class="l-content">${heading}${modules}</section>`;
 };

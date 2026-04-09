@@ -1,12 +1,12 @@
 // src/app/appContext/content/modules/quote/quote.resolve.appContext.ts
 
 import type { AppContextQuoteModule } from "@app/appContext/content/modules/quote/quote.module.appContext.types";
-import type { AppState } from "@app/appState/class.appState";
 import type { QuoteModuleAuthored } from "@shared-types/content/modules/quote/quote.module.types";
+import type { AppContextModuleResolverDependencies } from "@app/appContext/content/modules/module.registry.appContext";
 
 export const resolveQuoteAppContext = (
   module: QuoteModuleAuthored,
-  _appState: AppState,
+  _dependencies: AppContextModuleResolverDependencies,
 ): AppContextQuoteModule => {
   return {
     kind: "quote",

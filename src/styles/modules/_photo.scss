@@ -6,7 +6,7 @@
   padding-block: tokens.$space-2xl;
 
   @media (min-width: tokens.$bp-sm) {
-    padding-inline: tokens.$space-3xl;
+    padding-inline: tokens.$space-2xl;
   }
 
   &--immersive {
@@ -15,29 +15,31 @@
 
   &__object {
     box-sizing: border-box;
+    display: block;
     width: 100%;
     height: auto;
     border: 1px solid tokens.$colour-rule;
   }
 
   &__annotation {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: tokens.$space-lg;
     margin-top: tokens.$space-md;
-    padding-inline: tokens.$space-md;
+    padding-inline: 0;
+    justify-content: space-between;
 
     @media (min-width: tokens.$bp-sm) {
-      display: grid;
-      grid-template-columns: minmax(16rem, 40ch) minmax(12rem, 18rem);
-      justify-content: space-between;
+      grid-template-columns: minmax(20rem, 44ch) minmax(16rem, 24rem);
+      column-gap: tokens.$space-2xl;
       align-items: start;
-      padding-inline: tokens.$space-xl;
+      padding-inline: 0;
     }
   }
 
   &__caption {
     margin: 0;
-    max-width: 40ch;
+    max-width: 44ch;
     font-family: tokens.$font-family-caption;
     font-weight: tokens.$font-weight-caption;
     font-size: tokens.$font-size-caption;
@@ -50,10 +52,19 @@
     }
   }
 
+  &__meta-group {
+    display: grid;
+    row-gap: tokens.$space-lg;
+    justify-items: start;
+
+    @media (min-width: tokens.$bp-sm) {
+      justify-items: end;
+    }
+  }
+
   &__meta {
-    display: flex;
-    flex-direction: column;
-    row-gap: tokens.$space-xs;
+    display: grid;
+    row-gap: tokens.$space-sm;
     margin: 0;
     font-family: tokens.$font-family-meta;
     font-weight: tokens.$font-weight-meta;
@@ -69,19 +80,22 @@
     .m-photo--immersive & {
       color: tokens.$colour-type-meta-inverse;
     }
+
+    &--settings {
+      gap: tokens.$space-md 1rem;
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
 
   &__meta-item {
     display: grid;
-    column-gap: tokens.$space-sm;
-    align-items: start;
-
-    @media (min-width: tokens.$bp-sm) {
-      justify-content: end;
-    }
+    row-gap: tokens.$space-2xs;
+    margin: 0;
   }
 
   &__meta-term {
+    margin: 0;
     font-size: tokens.$font-size-meta-term;
     font-weight: tokens.$font-weight-meta-term;
     line-height: tokens.$line-height-meta-term;

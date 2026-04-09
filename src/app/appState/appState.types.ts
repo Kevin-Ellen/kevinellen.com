@@ -9,6 +9,7 @@ import type { SiteConfig } from "@app/config/site.config.types";
 import type { SocialConfig } from "@app/config/social.config.types";
 import type { StructuredDataConfig } from "@app/config/structured-data.config.types";
 import type { WebManifestConfig } from "@app/config/webmanifest.config.types";
+import type { PhotoMetadataConfig } from "@app/config/metadata.photo.config.types";
 
 import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
 import type { ErrorPageStatus } from "@shared-types/content/pages/error/error.page.definition";
@@ -24,6 +25,7 @@ export type AppConfig = {
   social: SocialConfig;
   structuredData: StructuredDataConfig;
   webManifest: WebManifestConfig;
+  photoMetadata: PhotoMetadataConfig;
 };
 
 export type AppPagesState = {

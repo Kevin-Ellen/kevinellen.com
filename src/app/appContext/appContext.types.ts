@@ -157,6 +157,44 @@ export type AppContextHeadIcons = {
   };
 };
 
+export type AppContextPhotoId = string;
+
+export type AppContextPhoto = {
+  id: AppContextPhotoId;
+  title: string;
+  alt: string;
+  commentary: string;
+  readableLocation?: string;
+  capturedAt?: string;
+  cameraModel?: string;
+  lensModel?: string;
+  exposureTime?: number;
+  aperture?: number;
+  iso?: number;
+  focalLength?: number;
+  width: number;
+  height: number;
+  image: {
+    id: string;
+    filename: string;
+    uploadedAt: string;
+    variants: readonly string[];
+  };
+};
+
+export type AppContextPhotoMetadataDefinition = {
+  label: string;
+  description?: string;
+};
+
+export type AppContextPhotoMetadataConfig = {
+  location: AppContextPhotoMetadataDefinition;
+  shutterSpeed: AppContextPhotoMetadataDefinition;
+  aperture: AppContextPhotoMetadataDefinition;
+  focalLength: AppContextPhotoMetadataDefinition;
+  iso: AppContextPhotoMetadataDefinition;
+};
+
 export type AppContextModel = {
   request: AppContextRequest;
   target: DocumentRenderTarget;
@@ -171,4 +209,6 @@ export type AppContextModel = {
   pageFooter: AppContextPageFooter;
   structuredData: readonly AppContextStructuredDataItem[];
   content: AppContextPageBodyContent;
+  photos: readonly AppContextPhoto[];
+  photoMetadata: AppContextPhotoMetadataConfig;
 };
