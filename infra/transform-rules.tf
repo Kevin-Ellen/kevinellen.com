@@ -7,7 +7,7 @@ resource "cloudflare_ruleset" "photo_path_rewrite" {
   rules = [
     {
       ref         = "photo_rewrite"
-      description = "Rewrite /photo/<image-id>/<variant> to Cloudflare Images delivery path"
+      description = "Rewrite /photo/<image-id>.<variant> to Cloudflare Images"
       enabled     = true
 
       expression = "starts_with(http.request.uri.path, \"/photo/\")"
@@ -17,7 +17,7 @@ resource "cloudflare_ruleset" "photo_path_rewrite" {
       action_parameters = {
         uri = {
           path = {
-            expression = "concat(\"/cdn-cgi/imagedelivery/${var.images_delivery_hash}\", substring(http.request.uri.path, 6))"
+            expression = "concat(\"/cdn-cgi/imagedelivery/${var.images_delivery_hash}/\", regex_replace(http.request.uri.path, \"^/photo/([^\\.]+)\\.([^\\.]+)$\", \"\\1/\\2\"))"
           }
         }
       }
