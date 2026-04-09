@@ -15,7 +15,7 @@ const resolvePhotoVariantUrl = (
   imageId: string,
   variant: PhotoVariant,
 ): string => {
-  return `/photo/${imageId}.${variant}`;
+  return `/photo/${imageId}/${variant}`;
 };
 
 const mapPhotoRecordToAppContextPhoto = (
