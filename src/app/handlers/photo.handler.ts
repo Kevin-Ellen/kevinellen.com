@@ -28,7 +28,7 @@ export const photoHandler = async (
 ): Promise<Response | null> => {
   const route = matchPhotoPath(pathname);
 
-  if (!env.CF_ACCOUNT_ID) {
+  if (!env.CF_IMAGES_DELIVERY_HASH) {
     throw new Error("Photo: CF Account ID not set");
   }
 
@@ -37,7 +37,7 @@ export const photoHandler = async (
   }
 
   const imageUrl = buildCloudflareImageUrl(
-    env.CF_ACCOUNT_ID,
+    env.CF_IMAGES_DELIVERY_HASH,
     route.imageId,
     route.variant,
   );

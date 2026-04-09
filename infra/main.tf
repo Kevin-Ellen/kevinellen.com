@@ -88,6 +88,11 @@ resource "cloudflare_worker_version" "site" {
       name = "ASSETS"
     },
     {
+      type = "plain_text"
+      name = "CF_IMAGES_DELIVERY_HASH"
+      text = var.images_delivery_hash
+    },
+    {
       type         = "kv_namespace"
       name         = "KV_PHOTOS"
       namespace_id = cloudflare_workers_kv_namespace.photos.id
