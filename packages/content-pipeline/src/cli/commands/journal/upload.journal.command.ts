@@ -1,18 +1,17 @@
-// packages/content-pipeline/src/cli/commands/photo/upload.photo.command.ts
+// packages/content-pipeline/src/cli/commands/journal/upload.journal.command.ts
 
 import path from "node:path";
 
 import type { PhotoDraftEntry } from "@shared-types/uploads/photo.upload.types";
 
-import type { ContentCommandOptions } from "@content-pipeline/cli/command.options.types";
-import { loadContentPipelineEnv } from "@content-pipeline/cli/config/load.content.pipeline.env";
+import type { ContentPipelineEnvironment } from "@content-pipeline/config/content.pipeline.environment.types";
+import { loadContentPipelineEnv } from "@content-pipeline/config/load.content.pipeline.env";
 import { writeCloudflareKv } from "@content-pipeline/photos/clients/write.cloudflare.kv";
 import { uploadCloudflareImage } from "@content-pipeline/photos/clients/upload.cloudflare.image";
 import { archiveUploadedPhotoDraft } from "@content-pipeline/photos/helpers/archive.uploaded.photo.draft";
 import { loadPhotoDrafts } from "@content-pipeline/photos/helpers/load.photo.draft";
 import { prepareCloudflareUploadImage } from "@content-pipeline/photos/helpers/prepare.cloudflare.upload.image";
 import { validatePhotoDrafts } from "@content-pipeline/photos/helpers/validate.photo.draft";
-import { validateContentPipelineEnv } from "@content-pipeline/cli/config/validate.content.pipeline.env";
 
 type PublishedPhotoRecord = PhotoDraftEntry & {
   image: {
@@ -33,11 +32,10 @@ const buildPublishedPhotoRecord = (
   };
 };
 
-export const runUploadPhotoCommand = async ({
-  environment,
-}: ContentCommandOptions): Promise<void> => {
-  validateContentPipelineEnv(environment);
-  const env = loadContentPipelineEnv(environment);
+export const runUploadPhotoCommand = async (
+  environment: ContentPipelineEnvironment,
+): Promise<void> => {
+  const env = loadContentPipelineEnv();
 
   const { draftFolderPath, drafts } = await loadPhotoDrafts();
 
@@ -109,15 +107,7 @@ export const runUploadPhotoCommand = async ({
   );
 
   console.log("\nPhoto upload complete");
-
-  console.log("\nSummary:");
-  console.log(`• Environment: ${environment}`);
-  console.log(`• Uploaded: ${uploadedCount} photo(s)`);
-  console.log(`• KV namespace: ${env.cloudflareKvPhotosNamespaceId}`);
-  console.log(`• Archived draft: ${archivedDraftPath}`);
-
-  console.log("\nNext:");
-  console.log("1. Verify images in Cloudflare Images");
-  console.log("2. Verify KV records (photo:{slug})");
-  console.log("3. View on site if applicable\n");
+  console.log(`→ Environment: ${environment}`);
+  console.log(`→ Uploaded: ${uploadedCount}`);
+  console.log(`→ Archived draft: ${archivedDraftPath}\n`);
 };
