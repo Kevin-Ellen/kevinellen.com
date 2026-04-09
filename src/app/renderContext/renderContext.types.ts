@@ -4,6 +4,7 @@ import type { ScriptAssetAuthored } from "@shared-types/assets/script.asset.auth
 import type { SvgAssetId } from "@shared-types/assets/id.asset.types";
 import type { StructuredDataNode } from "@shared-types/structured-data/structured-data.nodes.types";
 import type { RenderContextPageBodyContent } from "@app/renderContext/content/content.renderContext.types";
+import type { PhotoVariant } from "@app/appContext/appContext.types";
 
 export type RenderContextSvgAsset = {
   id: SvgAssetId;
@@ -146,10 +147,10 @@ export type RenderContextPageFooter = {
 export type RenderContextPhotoId = string;
 
 export type RenderContextPhoto = {
-  id: RenderContextPhotoId;
+  id: string;
   title: string;
   alt: string;
-  commentary?: string;
+  commentary: string;
   readableLocation?: string;
   capturedAt?: string;
   cameraModel?: string;
@@ -158,13 +159,16 @@ export type RenderContextPhoto = {
   aperture?: number;
   iso?: number;
   focalLength?: number;
-  width: number;
-  height: number;
+  intrinsic: {
+    width: number;
+    height: number;
+  };
   image: {
     id: string;
     filename: string;
     uploadedAt: string;
-    variants: readonly string[];
+    variants: readonly PhotoVariant[];
+    urls: Record<PhotoVariant, string>;
   };
 };
 
