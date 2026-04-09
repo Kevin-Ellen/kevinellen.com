@@ -8,6 +8,7 @@ import { runResponseStage } from "@app/policies/response/run.response.stage";
 import { applyCacheResponsePolicy } from "@app/policies/response/cache/apply.cache.response.policy";
 import { applyRobotsResponsePolicy } from "@app/policies/response/robots/apply.robots.response.policy";
 import { applyCspResponsePolicy } from "@app/policies/response/security/apply.csp.response.policy";
+import { applyTrustedTypesReportOnlyResponsePolicy } from "@app/policies/response/security/apply.trusted.types.report.only.response.policy";
 import { applySecurityHeadersResponsePolicy } from "@app/policies/response/security/apply.security.headers.response.policy";
 
 export const runResponsePolicies = (
@@ -36,6 +37,7 @@ export const runResponsePolicies = (
   return runResponseStage(responsePolicyContext, response, [
     applyRobotsResponsePolicy,
     applyCspResponsePolicy,
+    applyTrustedTypesReportOnlyResponsePolicy,
     applySecurityHeadersResponsePolicy,
     applyCacheResponsePolicy,
   ]);
