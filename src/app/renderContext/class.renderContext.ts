@@ -11,6 +11,7 @@ import type {
   RenderContextHeader,
   RenderContextPageFooter,
   RenderContextStructuredData,
+  RenderContextPhoto,
 } from "@app/renderContext/renderContext.types";
 import type { RenderContextPageBodyContent } from "@app/renderContext/content/content.renderContext.types";
 
@@ -25,6 +26,7 @@ export class RenderContext {
   readonly #pageFooter: RenderContextPageFooter;
   readonly #structuredData: RenderContextStructuredData;
   readonly #content: RenderContextPageBodyContent;
+  readonly #photos: readonly RenderContextPhoto[];
 
   public constructor(input: RenderContextModel) {
     this.#document = input.document;
@@ -37,6 +39,7 @@ export class RenderContext {
     this.#pageFooter = input.pageFooter;
     this.#structuredData = input.structuredData;
     this.#content = input.content;
+    this.#photos = input.photos;
   }
 
   public get document(): RenderContextDocument {
@@ -91,6 +94,7 @@ export class RenderContext {
       pageFooter: this.#pageFooter,
       structuredData: this.#structuredData,
       content: this.#content,
+      photos: this.#photos,
     };
   }
 }

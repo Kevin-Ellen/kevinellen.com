@@ -1,9 +1,10 @@
-// src/app/renderContext/resolvers/content.resolve.renderContext.ts
+// src/app/renderContext/content/content.resolve.renderContext.ts
 
 import type { AppContextPageBodyContent } from "@app/appContext/content/content.appContext.types";
 import type { RenderContextPageBodyContent } from "@app/renderContext/content/content.renderContext.types";
 
 import { resolveContentModuleRenderContext } from "@app/renderContext/content/modules/module.resolve.renderContext";
+import { resolveJournalEntryFooterRenderContext } from "@app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.resolve.renderContext";
 
 export const resolveContentRenderContext = (
   content: AppContextPageBodyContent,
@@ -26,5 +27,9 @@ export const resolveContentRenderContext = (
         : undefined,
       modules: section.modules.map(resolveContentModuleRenderContext),
     })),
+
+    footer: content.footer
+      ? resolveJournalEntryFooterRenderContext(content.footer)
+      : undefined,
   };
 };

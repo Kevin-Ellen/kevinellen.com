@@ -2,6 +2,10 @@
 
 import type { AppState } from "@app/appState/class.appState";
 import type { DocumentRenderTarget } from "@app/request/request.document.types";
+import type {
+  AppContextPhoto,
+  AppContextPhotoId,
+} from "@app/appContext/appContext.types";
 
 import { AppContext } from "@app/appContext/class.appContext";
 import { isPublicPage } from "@app/appContext/guards/isPublicPage.guard.appContext";
@@ -15,16 +19,17 @@ import { resolveAssetsAppContext } from "@app/appContext/resolvers/asset.resolve
 import { resolveIconsAppContext } from "@app/appContext/resolvers/icons.resolve.appContext";
 import { resolvePageFooterAppContext } from "@app/appContext/resolvers/pageFooter.resolve.appContext";
 import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/structured-data.resolve.appContext";
-import { resolveContentAppContext } from "@app/appContext/resolvers/content.resolve.appContext";
+import { resolveContentAppContext } from "@app/appContext/content/content.resolve.appContext";
+import { resolvePhotosAppContext } from "@app/appContext/resolvers/photo/resolve.photo.appContext";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const createAppContext = (
+export const createAppContext = async (
   req: Request,
   env: Env,
   appState: AppState,
   target: DocumentRenderTarget,
-): AppContext => {
+): Promise<AppContext> => {
   const url = new URL(req.url);
   const page = resolvePageAppContext(target.page);
 
@@ -36,7 +41,29 @@ export const createAppContext = (
     ? resolveStructuredDataAppContext(appState, target.page, breadcrumbs)
     : [];
 
-  const content = resolveContentAppContext(target.page, appState);
+  const photos = await resolvePhotosAppContext(env, target.page);
+
+  const photosById = new Map<AppContextPhotoId, AppContextPhoto>(
+    photos.map((photo) => [photo.id, photo]),
+  );
+
+  const getPhotoRecordById = (id: AppContextPhotoId): AppContextPhoto => {
+    const photo = photosById.get(id);
+
+    if (!photo) {
+      throw new Error(
+        `Photo "${id}" not found while resolving AppContext content.`,
+      );
+    }
+
+    return photo;
+  };
+
+  const content = resolveContentAppContext(
+    target.page,
+    appState,
+    getPhotoRecordById,
+  );
 
   return new AppContext(
     deepFreeze({
@@ -57,6 +84,8 @@ export const createAppContext = (
       pageFooter: resolvePageFooterAppContext(appState),
       structuredData,
       content,
+      photos,
+      photoMetadata: appState.photoMetadata,
     }),
   );
 };
