@@ -2,7 +2,7 @@
 
 import path from "node:path";
 
-import type { PhotoDraftEntry } from "@shared-types/photos/photo.draft.types";
+import type { PhotoDraftEntry } from "@shared-types/uploads/photo.upload.types";
 
 import type { ContentPipelineEnvironment } from "@content-pipeline/config/content.pipeline.environment.types";
 import { loadContentPipelineEnv } from "@content-pipeline/config/load.content.pipeline.env";

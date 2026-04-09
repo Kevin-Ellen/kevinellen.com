@@ -3,7 +3,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import type { PhotoDraftEntry } from "@shared-types/photos/photo.draft.types";
+import type { PhotoDraftEntry } from "@shared-types/uploads/photo.upload.types";
 
 import { getLatestPhotoDraftFolder } from "@content-pipeline/photos/helpers/get.latest.photo.draft.folder";
 import { scanImagesFolder } from "@content-pipeline/photos/helpers/scan.images.folder";
