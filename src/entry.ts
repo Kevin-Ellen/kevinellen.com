@@ -3,6 +3,7 @@
 import { createAppState } from "@app/appState/create.appState";
 import { requestHandler } from "@app/handlers/request.handler";
 import { assetHandler } from "@app/handlers/asset.handler";
+import { photoHandler } from "@app/handlers/photo.handler";
 
 const isAssetRequest = (pathname: string): boolean => {
   return (
@@ -24,6 +25,14 @@ export const onRequest = async (
 
     if (assetResponse) {
       return assetResponse;
+    }
+  }
+
+  if (url.pathname.startsWith("/photo/")) {
+    const photoResponse = await photoHandler(env, url.pathname);
+
+    if (photoResponse) {
+      return photoResponse;
     }
   }
 
