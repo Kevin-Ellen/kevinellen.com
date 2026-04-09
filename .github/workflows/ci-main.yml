@@ -69,6 +69,7 @@ jobs:
     env:
       TF_VAR_worker_script_path: /tmp/entry.js
       TF_VAR_static_dir: /tmp/static
+      TF_VAR_images_delivery_hash: ${{ secrets.CF_IMAGES_DELIVERY_HASH }}
 
     steps:
       - name: Check out repository

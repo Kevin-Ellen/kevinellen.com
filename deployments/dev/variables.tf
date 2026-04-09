@@ -48,3 +48,8 @@ variable "static_dir" {
   description = "Directory for static assets"
   type        = string
 }
+
+variable "images_delivery_hash" {
+  type        = string
+  description = "Cloudflare Images delivery hash"
+}

@@ -159,6 +159,8 @@ export type AppContextHeadIcons = {
 
 export type AppContextPhotoId = string;
 
+export type PhotoVariant = "frame" | "content";
+
 export type AppContextPhoto = {
   id: AppContextPhotoId;
   title: string;
@@ -172,16 +174,18 @@ export type AppContextPhoto = {
   aperture?: number;
   iso?: number;
   focalLength?: number;
-  width: number;
-  height: number;
+  intrinsic: {
+    width: number;
+    height: number;
+  };
   image: {
     id: string;
     filename: string;
     uploadedAt: string;
-    variants: readonly string[];
+    variants: readonly PhotoVariant[];
+    urls: Record<PhotoVariant, string>;
   };
 };
-
 export type AppContextPhotoMetadataDefinition = {
   label: string;
   description?: string;

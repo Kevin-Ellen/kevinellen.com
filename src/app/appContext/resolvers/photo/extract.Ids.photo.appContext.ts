@@ -1,4 +1,4 @@
-// src/app/appContext/resolvers/photo/extract.photoIds.appContext.ts
+// src/app/appContext/resolvers/photo/extract.Ids.photo.appContext.ts
 
 import type { AppContextPhotoId } from "@app/appContext/appContext.types";
 import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";

@@ -27,4 +27,6 @@ module "site_app" {
 
   release_sha = var.release_sha
   release_key = var.release_key
+
+  images_delivery_hash = var.images_delivery_hash
 }

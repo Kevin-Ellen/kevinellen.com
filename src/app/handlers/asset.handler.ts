@@ -19,13 +19,6 @@ export const assetHandler = async (
 
   const assetRequest = new Request(assetUrl.toString(), req);
 
-  // return new Response("asset handler reached", {
-  //   status: 200,
-  //   headers: {
-  //     "x-runtime-policy": "asset-handler-hit",
-  //   },
-  // });
-
   const response = await env.ASSETS.fetch(assetRequest);
 
   return applyAssetResponsePolicy(response, assetResolution.asset);
