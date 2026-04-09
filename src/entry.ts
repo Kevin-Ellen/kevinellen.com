@@ -1,3 +1,5 @@
+// src/entry.ts
+
 import { createAppState } from "@app/appState/create.appState";
 import { requestHandler } from "@app/handlers/request.handler";
 import { assetHandler } from "@app/handlers/asset.handler";

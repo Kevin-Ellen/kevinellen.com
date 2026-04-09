@@ -63,6 +63,7 @@ export const createAppContext = async (
     target.page,
     appState,
     getPhotoRecordById,
+    photos,
   );
 
   return new AppContext(

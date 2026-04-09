@@ -94,13 +94,6 @@ export const resolveHeroAppContext = (
   dependencies: AppContextModuleResolverDependencies,
 ): AppContextHeroModule => {
   const photo = dependencies.getPhotoRecordById(module.photoId);
-  const variantSrc = photo.image.variants[0];
-
-  if (!variantSrc) {
-    throw new Error(
-      `Hero photo "${photo.id}" has no renderable image variant.`,
-    );
-  }
 
   if (!photo.commentary) {
     throw new Error(
@@ -111,12 +104,7 @@ export const resolveHeroAppContext = (
   return {
     kind: "hero",
     immersive: module.immersive ?? false,
-    image: {
-      src: variantSrc,
-      alt: photo.alt,
-      width: photo.width,
-      height: photo.height,
-    },
+    photo,
     caption: photo.commentary,
     meta: buildMeta(photo.readableLocation, dependencies),
     settings: buildSettings(photo, dependencies),

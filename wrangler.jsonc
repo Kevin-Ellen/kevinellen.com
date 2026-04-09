@@ -19,6 +19,7 @@
   "vars": {
     "APP_ENV": "dev",
     "APP_HOST": "dev.kevinellen.com",
+    "CF_ACCOUNT_ID": "y5zCV0xCeMBwfDh5UGa7tw",
   },
   "kv_namespaces": [
     { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },

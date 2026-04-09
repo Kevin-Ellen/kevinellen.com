@@ -1,5 +1,7 @@
 // src/app/appContext/content/modules/hero/hero.module.appContext.types.ts
 
+import { AppContextPhoto } from "@app/appContext/appContext.types";
+
 export type AppContextHeroMetaKey = "location";
 
 export type AppContextHeroMetaItem = {
@@ -25,12 +27,7 @@ export type AppContextHeroSettingItem = {
 export type AppContextHeroModule = {
   kind: "hero";
   immersive: boolean;
-  image: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
+  photo: AppContextPhoto;
   caption: string;
   meta: readonly AppContextHeroMetaItem[];
   settings: readonly AppContextHeroSettingItem[];

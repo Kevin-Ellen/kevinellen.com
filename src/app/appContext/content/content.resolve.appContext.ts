@@ -14,17 +14,13 @@ import { resolveJournalEntryFooterAppContext } from "@app/appContext/content/mod
 
 import { isPublicPage } from "@app/appContext/guards/isPublicPage.guard.appContext";
 import { isJournalEntryPage } from "@app/appContext/guards/isJournalEntryPage.guard.appContext";
-import { extractPhotoIdsAppContext } from "@app/appContext/resolvers/photo/extract.Ids.photo.appContext";
 
 export const resolveContentAppContext = (
   page: PublicPage | ErrorPage,
   appState: AppState,
   getPhotoRecordById: (id: AppContextPhotoId) => AppContextPhoto,
+  photos: readonly AppContextPhoto[],
 ): AppContextPageBodyContent => {
-  const pagePhotos = extractPhotoIdsAppContext(page).map((photoId) =>
-    getPhotoRecordById(photoId),
-  );
-
   return {
     head: {
       eyebrow: page.content.head.eyebrow,
@@ -51,7 +47,7 @@ export const resolveContentAppContext = (
 
     footer:
       isPublicPage(page) && isJournalEntryPage(page)
-        ? resolveJournalEntryFooterAppContext(page.content.footer, pagePhotos)
+        ? resolveJournalEntryFooterAppContext(page.content.footer, photos)
         : undefined,
   };
 };
