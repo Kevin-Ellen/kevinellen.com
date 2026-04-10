@@ -20,6 +20,21 @@ export const onRequest = async (
 ): Promise<Response> => {
   const url = new URL(req.url);
 
+  if (env.APP_ENV === "prod") {
+    return new Response(
+      JSON.stringify({
+        status: "bootstrapping",
+        message: "Production is not yet available.",
+      }),
+      {
+        status: 503,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+      },
+    );
+  }
+
   if (isAssetRequest(url.pathname)) {
     const assetResponse = await assetHandler(req, env, ctx);
 
