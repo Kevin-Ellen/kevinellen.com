@@ -11,11 +11,6 @@ terraform {
 
 provider "cloudflare" {}
 
-resource "cloudflare_workers_kv_namespace" "photos" {
-  account_id = var.account_id
-  title      = "${var.project_name}-photos"
-}
-
 module "site_app" {
   source = "../../infra"
 
@@ -31,6 +26,5 @@ module "site_app" {
   release_sha          = var.release_sha
   release_key          = var.release_key
   images_delivery_hash = var.images_delivery_hash
-
-  photos_namespace_id = cloudflare_workers_kv_namespace.photos.id
+  photos_namespace_id  = var.photos_namespace_id
 }

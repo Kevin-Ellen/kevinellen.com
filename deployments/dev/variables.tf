@@ -54,3 +54,7 @@ variable "images_delivery_hash" {
   description = "Cloudflare Images delivery hash"
 }
 
+variable "photos_namespace_id" {
+  type        = string
+  description = "Shared Cloudflare KV namespace ID for photo metadata."
+}
