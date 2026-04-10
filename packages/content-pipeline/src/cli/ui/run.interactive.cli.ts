@@ -24,6 +24,12 @@ export const runInteractiveCli = async (
       { value: "photo:create", label: "Photo: create draft" },
       { value: "photo:start", label: "Photo: start draft" },
       { value: "photo:upload", label: "Photo: upload draft" },
+      { value: "photo:status", label: "Photo: status" },
+
+      { value: "journal:create", label: "Journal: create draft" },
+      { value: "journal:start", label: "Journal: start draft" },
+      { value: "journal:upload", label: "Journal: upload draft" },
+
       { value: "exit", label: "Exit" },
     ],
   });

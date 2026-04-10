@@ -6,10 +6,15 @@ import { cancel, isCancel, select } from "@clack/prompts";
 
 import type { ContentCommandOptions } from "@content-pipeline/cli/command.options.types";
 import { parseCliArgs } from "@content-pipeline/cli/config/parse.args.cli";
+import { runCreateJournalCommand } from "@content-pipeline/cli/commands/journal/create.journal.command";
 import { runCreatePhotoCommand } from "@content-pipeline/cli/commands/photo/create.photo.command";
 import { runStartPhotoCommand } from "@content-pipeline/cli/commands/photo/start.photo.command";
 import { runUploadPhotoCommand } from "@content-pipeline/cli/commands/photo/upload.photo.command";
+import { runStatusPhotoCommand } from "@content-pipeline/cli/commands/photo/status.photo.command";
 import { runInteractiveCli } from "@content-pipeline/cli/ui/run.interactive.cli";
+
+import { runStartJournalCommand } from "@content-pipeline/cli/commands/journal/start.journal.command";
+import { runUploadJournalCommand } from "@content-pipeline/cli/commands/journal/upload.journal.command";
 
 dotenv.config();
 
@@ -20,6 +25,13 @@ const commandMap: Record<string, Record<string, ContentCommandHandler>> = {
     start: runStartPhotoCommand,
     create: runCreatePhotoCommand,
     upload: runUploadPhotoCommand,
+    status: runStatusPhotoCommand,
+  },
+
+  journal: {
+    create: runCreateJournalCommand,
+    start: runStartJournalCommand,
+    upload: runUploadJournalCommand,
   },
 };
 

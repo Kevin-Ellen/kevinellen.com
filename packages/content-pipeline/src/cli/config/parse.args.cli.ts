@@ -4,8 +4,8 @@ import type { ContentCliParsedArgs } from "@content-pipeline/cli/cli.types";
 
 import { resolveCliEnvironment } from "@content-pipeline/cli/config/resolve.environment.cli";
 
-const isEntity = (value: string | undefined): value is "photo" => {
-  return value === "photo";
+const isEntity = (value: string | undefined): value is "photo" | "journal" => {
+  return value === "photo" || value === "journal";
 };
 
 const isAction = (
@@ -45,7 +45,9 @@ export const parseCliArgs = (args: string[]): ContentCliParsedArgs => {
   }
 
   if (!isEntity(entity)) {
-    throw new Error(`Invalid entity "${entity}". Expected one of: "photo".`);
+    throw new Error(
+      `Invalid entity "${entity}". Expected one of: "photo" or "journal".`,
+    );
   }
 
   if (!isAction(action)) {
