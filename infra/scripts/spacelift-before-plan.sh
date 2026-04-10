@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 echo "hello world :)"
-
-#!/usr/bin/env bash
 set -euo pipefail
 
 echo "PWD=$(pwd)"
