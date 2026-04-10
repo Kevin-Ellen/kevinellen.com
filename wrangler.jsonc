@@ -34,6 +34,7 @@
         "APP_HOST": "stg.kevinellen.com",
       },
       "kv_namespaces": [
+        { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
         { "binding": "KV_NOTES", "id": "108ed7ebbd144f17b34f0763984eda51" },
         { "binding": "KV_JOURNALS", "id": "477467e56bff44aea5a8f869728d1e47" },
       ],
@@ -45,8 +46,9 @@
         "APP_HOST": "kevinellen.com",
       },
       "kv_namespaces": [
+        { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
         { "binding": "KV_NOTES", "id": "dbe14ff004e1470fb252d3d9b807e7f1" },
-        { "binding": "KV_JOURNALS", "id": "477467e56bff44aea5a8f869728d1e47" },
+        { "binding": "KV_JOURNALS", "id": "???" },
       ],
     },
   },
