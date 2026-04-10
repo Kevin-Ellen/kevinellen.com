@@ -10,21 +10,15 @@ terraform {
 locals {
   worker_name       = "${var.project_name}-${var.instance_name}"
   app_host          = var.instance_name == "prod" ? var.zone_name : "${var.instance_name}.${var.zone_name}"
-  photos_kv_title   = "${var.project_name}-photos"
   notes_kv_title    = "${var.project_name}-notes-${var.instance_name}"
   journals_kv_title = "${var.project_name}-journals-${var.instance_name}"
 
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
     "www.${var.zone_name}/*"
-    ] : [
+  ] : [
     "${var.instance_name}.${var.zone_name}/*"
   ]
-}
-
-resource "cloudflare_workers_kv_namespace" "photos" {
-  account_id = var.account_id
-  title      = local.photos_kv_title
 }
 
 resource "cloudflare_workers_kv_namespace" "notes" {
@@ -91,7 +85,7 @@ resource "cloudflare_worker_version" "site" {
     {
       type         = "kv_namespace"
       name         = "KV_PHOTOS"
-      namespace_id = cloudflare_workers_kv_namespace.photos.id
+      namespace_id = var.photos_namespace_id
     },
     {
       type         = "kv_namespace"

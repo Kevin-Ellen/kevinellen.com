@@ -22,9 +22,9 @@
     "CF_IMAGES_DELIVERY_HASH": "y5zCV0xCeMBwfDh5UGa7tw",
   },
   "kv_namespaces": [
-    // { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
-    // { "binding": "KV_NOTES", "id": "773d0f0582124523aa5e933023bc14a6" },
-    // { "binding": "KV_JOURNALS", "id": "3efdd60966574a53b9e3f2d9a6685344" },
+    { "binding": "KV_PHOTOS", "id": "003d7cb5827e483dac2ae4f39670b14e" },
+    { "binding": "KV_NOTES", "id": "38cf716b412743c29e0fe2e55a6980d1" },
+    { "binding": "KV_JOURNALS", "id": "86914177ca494d2cb4d41dc5a232ca3e" },
   ],
   "env": {
     "stg": {
@@ -34,9 +34,9 @@
         "APP_HOST": "stg.kevinellen.com",
       },
       "kv_namespaces": [
-        // { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
-        // { "binding": "KV_NOTES", "id": "108ed7ebbd144f17b34f0763984eda51" },
-        // { "binding": "KV_JOURNALS", "id": "477467e56bff44aea5a8f869728d1e47" },
+        { "binding": "KV_PHOTOS", "id": "003d7cb5827e483dac2ae4f39670b14e" },
+        { "binding": "KV_NOTES", "id": "ba1fd92397824535a35283ff28eae559" },
+        { "binding": "KV_JOURNALS", "id": "8c677cfb2f7f4d0f9206ae3e290b1f8d" },
       ],
     },
     "prod": {
@@ -46,7 +46,7 @@
         "APP_HOST": "kevinellen.com",
       },
       "kv_namespaces": [
-        // { "binding": "KV_PHOTOS", "id": "d1e669cba9854eee8d68569082dd5e79" },
+        { "binding": "KV_PHOTOS", "id": "003d7cb5827e483dac2ae4f39670b14e" },
         // { "binding": "KV_NOTES", "id": "dbe14ff004e1470fb252d3d9b807e7f1" },
         // { "binding": "KV_JOURNALS", "id": "???" },
       ],

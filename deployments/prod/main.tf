@@ -25,6 +25,8 @@ module "site_app" {
   static_dir         = var.static_dir
   compatibility_date = var.compatibility_date
 
+  photos_namespace_id = var.photos_namespace_id
+
   release_sha = var.release_sha
   release_key = var.release_key
 

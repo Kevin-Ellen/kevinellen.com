@@ -53,3 +53,4 @@ variable "images_delivery_hash" {
   type        = string
   description = "Cloudflare Images delivery hash"
 }
+
