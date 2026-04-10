@@ -21,6 +21,7 @@ import { webManifestConfig } from "@app/config/webmanifest.config";
 import { photoMetadataConfig } from "@app/config/metadata.photo.config";
 
 import { PAGE_REGISTRY } from "@app/content/pages/registry.pages";
+import { loadJournalPagesFromKV } from "@app/content/loaders/journal.loader";
 
 const createUniqueMap = <K, V>(
   items: readonly V[],
@@ -42,7 +43,14 @@ const createUniqueMap = <K, V>(
   return map;
 };
 
-export const createAppState = (): AppState => {
+export const createAppState = async (env: Env): Promise<AppState> => {
+  if (!env.KV_JOURNALS) {
+    throw new Error("createAppState: No KV_JOURNALS present0");
+  }
+  const journalPages = await loadJournalPagesFromKV(env.KV_JOURNALS);
+
+  const publicPages = [...PAGE_REGISTRY.public, ...journalPages];
+
   const config: AppConfig = deepFreeze({
     assets: assetsConfig,
     footer: footerConfig,
@@ -57,15 +65,15 @@ export const createAppState = (): AppState => {
   });
 
   const pages: AppPagesState = {
-    public: PAGE_REGISTRY.public,
+    public: publicPages,
     error: PAGE_REGISTRY.error,
     publicById: createUniqueMap(
-      PAGE_REGISTRY.public,
+      publicPages,
       (page) => page.core.id,
       "public page id",
     ),
     publicBySlug: createUniqueMap(
-      PAGE_REGISTRY.public,
+      publicPages,
       (page) => page.core.slug,
       "public page slug",
     ),
