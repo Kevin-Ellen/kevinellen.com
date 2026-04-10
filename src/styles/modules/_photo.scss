@@ -1,0 +1,109 @@
+@use "../tokens" as tokens;
+
+.m-photo {
+  background: tokens.$colour-surface-strong;
+  padding-inline: tokens.$space-sm;
+  padding-block: tokens.$space-2xl;
+
+  @media (min-width: tokens.$bp-sm) {
+    padding-inline: tokens.$space-2xl;
+  }
+
+  &--immersive {
+    background: tokens.$colour-immersive;
+  }
+
+  &__object {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid tokens.$colour-rule;
+  }
+
+  &__annotation {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: tokens.$space-lg;
+    margin-top: tokens.$space-md;
+    padding-inline: 0;
+    justify-content: space-between;
+
+    @media (min-width: tokens.$bp-sm) {
+      grid-template-columns: minmax(20rem, 44ch) minmax(16rem, 24rem);
+      column-gap: tokens.$space-2xl;
+      align-items: start;
+      padding-inline: 0;
+    }
+  }
+
+  &__caption {
+    margin: 0;
+    max-width: 44ch;
+    font-family: tokens.$font-family-caption;
+    font-weight: tokens.$font-weight-caption;
+    font-size: tokens.$font-size-caption;
+    line-height: tokens.$line-height-caption;
+    color: tokens.$colour-type-caption;
+    text-align: left;
+
+    .m-photo--immersive & {
+      color: tokens.$colour-type-caption-inverse;
+    }
+  }
+
+  &__meta-group {
+    display: grid;
+    row-gap: tokens.$space-lg;
+    justify-items: start;
+
+    @media (min-width: tokens.$bp-sm) {
+      justify-items: end;
+    }
+  }
+
+  &__meta {
+    display: grid;
+    row-gap: tokens.$space-sm;
+    margin: 0;
+    font-family: tokens.$font-family-meta;
+    font-weight: tokens.$font-weight-meta;
+    font-size: tokens.$font-size-meta;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-type-meta;
+    text-align: left;
+
+    @media (min-width: tokens.$bp-sm) {
+      text-align: right;
+    }
+
+    .m-photo--immersive & {
+      color: tokens.$colour-type-meta-inverse;
+    }
+
+    &--settings {
+      gap: tokens.$space-md 1rem;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__meta-item {
+    display: grid;
+    row-gap: tokens.$space-2xs;
+    margin: 0;
+  }
+
+  &__meta-term {
+    margin: 0;
+    font-size: tokens.$font-size-meta-term;
+    font-weight: tokens.$font-weight-meta-term;
+    line-height: tokens.$line-height-meta-term;
+    opacity: tokens.$meta-term-opacity;
+  }
+
+  &__meta-detail {
+    margin: 0;
+    font-weight: tokens.$font-weight-meta-detail;
+  }
+}

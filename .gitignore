@@ -1,3 +1,5 @@
+/content-pipeline/
+
 # =========================
 # Node
 # =========================
@@ -15,6 +17,7 @@ build/
 coverage/
 .tmp/
 .cache/
+.build/
 
 # =========================
 # Cloudflare
@@ -64,6 +67,7 @@ __snapshots__/
 # Misc
 # =========================
 *.tsbuildinfo
+__html-test/
 
 # =========================
 # ALLOWS

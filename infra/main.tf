@@ -8,14 +8,10 @@ terraform {
 }
 
 locals {
-  worker_name = "${var.project_name}-${var.instance_name}"
-
-  kv_namespaces = {
-    content  = "${var.project_name}-content-${var.instance_name}"
-    photos   = "${var.project_name}-photos-${var.instance_name}"
-    articles = "${var.project_name}-articles-${var.instance_name}"
-    journals = "${var.project_name}-journals-${var.instance_name}"
-  }
+  worker_name       = "${var.project_name}-${var.instance_name}"
+  app_host          = var.instance_name == "prod" ? var.zone_name : "${var.instance_name}.${var.zone_name}"
+  notes_kv_title    = "${var.project_name}-notes-${var.instance_name}"
+  journals_kv_title = "${var.project_name}-journals-${var.instance_name}"
 
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
@@ -25,24 +21,14 @@ locals {
   ]
 }
 
-resource "cloudflare_workers_kv_namespace" "content" {
+resource "cloudflare_workers_kv_namespace" "notes" {
   account_id = var.account_id
-  title      = local.kv_namespaces.content
-}
-
-resource "cloudflare_workers_kv_namespace" "photos" {
-  account_id = var.account_id
-  title      = local.kv_namespaces.photos
-}
-
-resource "cloudflare_workers_kv_namespace" "articles" {
-  account_id = var.account_id
-  title      = local.kv_namespaces.articles
+  title      = local.notes_kv_title
 }
 
 resource "cloudflare_workers_kv_namespace" "journals" {
   account_id = var.account_id
-  title      = local.kv_namespaces.journals
+  title      = local.journals_kv_title
 }
 
 resource "cloudflare_worker" "site" {
@@ -65,27 +51,52 @@ resource "cloudflare_worker_version" "site" {
     }
   ]
 
+  assets = {
+    directory = var.static_dir
+    type      = "assets"
+    config = {
+      run_worker_first = [
+        "/favicon.ico",
+        "/apple-touch-icon.png",
+      ]
+    }
+  }
+
   bindings = [
     {
-      type         = "kv_namespace"
-      name         = "KV_CONTENT"
-      namespace_id = cloudflare_workers_kv_namespace.content.id
+      type = "plain_text"
+      name = "APP_ENV"
+      text = var.instance_name
+    },
+    {
+      type = "plain_text"
+      name = "APP_HOST"
+      text = local.app_host
+    },
+    {
+      type = "assets"
+      name = "ASSETS"
+    },
+    {
+      type = "plain_text"
+      name = "CF_IMAGES_DELIVERY_HASH"
+      text = var.images_delivery_hash
     },
     {
       type         = "kv_namespace"
       name         = "KV_PHOTOS"
-      namespace_id = cloudflare_workers_kv_namespace.photos.id
+      namespace_id = var.photos_namespace_id
     },
     {
       type         = "kv_namespace"
-      name         = "KV_ARTICLES"
-      namespace_id = cloudflare_workers_kv_namespace.articles.id
+      name         = "KV_NOTES"
+      namespace_id = cloudflare_workers_kv_namespace.notes.id
     },
     {
       type         = "kv_namespace"
       name         = "KV_JOURNALS"
       namespace_id = cloudflare_workers_kv_namespace.journals.id
-    }
+    },
   ]
 }
 
@@ -94,10 +105,12 @@ resource "cloudflare_workers_deployment" "site" {
   script_name = local.worker_name
   strategy    = "percentage"
 
-  versions = [{
-    version_id = cloudflare_worker_version.site.id
-    percentage = 100
-  }]
+  versions = [
+    {
+      version_id = cloudflare_worker_version.site.id
+      percentage = 100
+    }
+  ]
 }
 
 resource "cloudflare_workers_route" "site" {

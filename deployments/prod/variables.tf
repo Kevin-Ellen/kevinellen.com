@@ -45,3 +45,16 @@ variable "subdomain" {
   description = "Subdomain to attach worker to"
   default     = null
 }
+variable "static_dir" {
+  description = "Directory for static assets"
+  type        = string
+}
+
+variable "images_delivery_hash" {
+  type        = string
+  description = "Cloudflare Images delivery hash"
+}
+
+variable "photos_namespace_id" {
+  type = string
+}

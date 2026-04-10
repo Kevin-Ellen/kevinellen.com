@@ -18,29 +18,34 @@ variable "instance_name" {
   type = string
 }
 
+variable "subdomain" {
+  type = string
+}
+
 variable "compatibility_date" {
   type = string
 }
 
-variable "subdomain" {
-  type        = string
-  description = "Subdomain to attach worker to"
-  default     = null
+variable "worker_script_path" {
+  type = string
 }
 
-variable "worker_script_path" {
-  description = "Absolute or relative path to the Worker entry bundle on disk."
-  type        = string
+variable "static_dir" {
+  type = string
+}
+
+variable "images_delivery_hash" {
+  type = string
 }
 
 variable "release_sha" {
-  description = "Git SHA of the release artifact being deployed."
-  type        = string
-  default     = null
+  type = string
 }
 
 variable "release_key" {
-  description = "Artifact storage key for the release bundle being deployed."
-  type        = string
-  default     = null
+  type = string
+}
+
+variable "photos_namespace_id" {
+  type = string
 }

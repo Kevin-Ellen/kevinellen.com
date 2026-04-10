@@ -98,7 +98,8 @@ jobs:
                   \"environment\": [
                     { \"key\": \"TF_VAR_release_sha\", \"value\": \"${RELEASE_SHA}\" },
                     { \"key\": \"TF_VAR_release_key\", \"value\": \"${RELEASE_KEY}\" },
-                    { \"key\": \"TF_VAR_worker_script_path\", \"value\": \"/mnt/workspace/.artifact/releases/${RELEASE_SHA}/entry.js\" }
+                    { \"key\": \"TF_VAR_worker_script_path\", \"value\": \"/mnt/workspace/.artifact/releases/${RELEASE_SHA}/worker/entry.js\" },
+                    { \"key\": \"TF_VAR_static_dir\", \"value\": \"/mnt/workspace/.artifact/releases/${RELEASE_SHA}/static\"}
                   ]
                 }
               }

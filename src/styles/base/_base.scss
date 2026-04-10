@@ -1,0 +1,116 @@
+@use "../tokens" as tokens;
+
+html {
+  font-size: 100%;
+}
+
+body {
+  line-height: 1.5;
+  background: tokens.$colour-page;
+  color: tokens.$colour-text;
+}
+
+main {
+  display: block;
+}
+
+article,
+section,
+header,
+footer,
+figure,
+figcaption {
+  display: block;
+}
+
+figure:has(blockquote) {
+  margin-block: tokens.$blockquote-spacing-top tokens.$blockquote-spacing-bottom;
+  border-inline-start: tokens.$blockquote-rule-width solid
+    tokens.$colour-rule-blockquote;
+  padding-inline-start: tokens.$blockquote-padding-inline;
+
+  blockquote {
+    font-family: tokens.$font-family-blockquote;
+    font-weight: tokens.$font-weight-blockquote;
+    font-size: tokens.$font-size-blockquote;
+    line-height: tokens.$line-height-blockquote;
+    color: tokens.$colour-type-blockquote;
+    max-inline-size: 36ch;
+  }
+
+  figcaption {
+    display: block;
+    margin-top: tokens.$blockquote-cite-spacing-top;
+    font-style: normal;
+    font-family: tokens.$font-family-body;
+    font-weight: tokens.$font-weight-blockquote-cite;
+    font-size: tokens.$font-size-blockquote-cite;
+    line-height: tokens.$line-height-blockquote-cite;
+    color: tokens.$colour-type-blockquote-cite;
+  }
+
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: tokens.$colour-rule-blockquote;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px;
+
+  &:hover {
+    text-decoration-thickness: 3px;
+  }
+}
+
+ol,
+ul {
+  margin: tokens.$space-sm 0 tokens.$paragraph-spacing tokens.$space-sm;
+  padding: 0;
+}
+
+ul li,
+ol li {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  column-gap: tokens.$space-sm;
+  align-items: start;
+  margin-bottom: tokens.$space-sm;
+  line-height: tokens.$line-height-body;
+}
+
+ul li:last-child,
+ol li:last-child {
+  margin-bottom: 0;
+}
+
+ul li::before {
+  content: "–";
+  display: block;
+  color: tokens.$colour-type-blockquote-cite;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+ol {
+  counter-reset: item;
+}
+
+ol li {
+  counter-increment: item;
+}
+
+ol li::before {
+  content: counter(item) ".";
+  display: block;
+  color: tokens.$colour-type-blockquote-cite;
+  font-weight: tokens.$font-weight-strong;
+  line-height: 1.4;
+}

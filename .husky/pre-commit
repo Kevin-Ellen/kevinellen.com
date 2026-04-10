@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+npm run format &&
+npm run format:tf &&
+npm run lint &&
+npm run lint:styles

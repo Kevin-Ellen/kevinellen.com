@@ -25,7 +25,7 @@ variable "worker_script_path" {
 
 variable "release_sha" {
   type        = string
-  description = "Git SHA of the release artifact."
+  description = "Git SHA of the release artifact"
   default     = null
 }
 
@@ -43,4 +43,18 @@ variable "instance_name" {
 variable "subdomain" {
   type        = string
   description = "Subdomain to attach worker to"
+}
+variable "static_dir" {
+  description = "Directory for static assets"
+  type        = string
+}
+
+variable "images_delivery_hash" {
+  type        = string
+  description = "Cloudflare Images delivery hash"
+}
+
+variable "photos_namespace_id" {
+  type        = string
+  description = "Shared Cloudflare KV namespace ID for photo metadata."
 }

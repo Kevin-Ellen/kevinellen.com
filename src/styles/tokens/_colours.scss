@@ -1,0 +1,19 @@
+@use "sass:color";
+@use "colour-palette" as colour;
+
+$colour-page: colour.$alabaster-grey;
+$colour-surface: colour.$white-smoke;
+$colour-surface-strong: colour.$dust-grey;
+$colour-immersive: colour.$charcoal;
+$colour-text: colour.$ink;
+$colour-text-inverse: colour.$porcelain;
+$colour-rule: colour.$silver;
+$colour-text-muted: color.mix($colour-text, $colour-surface, 80%);
+$colour-text-meta: colour.$ink;
+$colour-text-inverse-muted: color.mix(
+  $colour-text-inverse,
+  $colour-immersive,
+  80%
+);
+$colour-field-accent: colour.$pine-teal;
+$colour-footer-bg: colour.$deep-woodland;
