@@ -36,7 +36,7 @@ export const onRequest = async (
     }
   }
 
-  const appState = createAppState();
+  const appState = await createAppState(env);
 
   return requestHandler(req, env, ctx, appState);
 };

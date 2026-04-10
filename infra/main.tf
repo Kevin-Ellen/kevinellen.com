@@ -8,15 +8,11 @@ terraform {
 }
 
 locals {
-  worker_name = "${var.project_name}-${var.instance_name}"
-
-  kv_namespaces = {
-    photos   = "${var.project_name}-photos-${var.instance_name}"
-    articles = "${var.project_name}-articles-${var.instance_name}"
-    journals = "${var.project_name}-journals-${var.instance_name}"
-  }
-
-  app_host = var.instance_name == "prod" ? var.zone_name : "${var.instance_name}.${var.zone_name}"
+  worker_name       = "${var.project_name}-${var.instance_name}"
+  app_host          = var.instance_name == "prod" ? var.zone_name : "${var.instance_name}.${var.zone_name}"
+  photos_kv_title   = "${var.project_name}-photos"
+  notes_kv_title    = "${var.project_name}-notes-${var.instance_name}"
+  journals_kv_title = "${var.project_name}-journals-${var.instance_name}"
 
   route_patterns = var.instance_name == "prod" ? [
     "${var.zone_name}/*",
@@ -28,17 +24,17 @@ locals {
 
 resource "cloudflare_workers_kv_namespace" "photos" {
   account_id = var.account_id
-  title      = local.kv_namespaces.photos
+  title      = local.photos_kv_title
 }
 
-resource "cloudflare_workers_kv_namespace" "articles" {
+resource "cloudflare_workers_kv_namespace" "notes" {
   account_id = var.account_id
-  title      = local.kv_namespaces.articles
+  title      = local.notes_kv_title
 }
 
 resource "cloudflare_workers_kv_namespace" "journals" {
   account_id = var.account_id
-  title      = local.kv_namespaces.journals
+  title      = local.journals_kv_title
 }
 
 resource "cloudflare_worker" "site" {
@@ -99,8 +95,8 @@ resource "cloudflare_worker_version" "site" {
     },
     {
       type         = "kv_namespace"
-      name         = "KV_ARTICLES"
-      namespace_id = cloudflare_workers_kv_namespace.articles.id
+      name         = "KV_NOTES"
+      namespace_id = cloudflare_workers_kv_namespace.notes.id
     },
     {
       type         = "kv_namespace"
@@ -115,10 +111,12 @@ resource "cloudflare_workers_deployment" "site" {
   script_name = local.worker_name
   strategy    = "percentage"
 
-  versions = [{
-    version_id = cloudflare_worker_version.site.id
-    percentage = 100
-  }]
+  versions = [
+    {
+      version_id = cloudflare_worker_version.site.id
+      percentage = 100
+    }
+  ]
 }
 
 resource "cloudflare_workers_route" "site" {
