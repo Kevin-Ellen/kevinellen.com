@@ -4,7 +4,7 @@
   &__frame {
     max-width: tokens.$width-frame;
     margin-inline: auto;
-    padding-top: tokens.$space-2xl;
+    padding-top: tokens.$space-lg;
     padding-inline: tokens.$space-lg;
 
     @media (min-width: tokens.$bp-sm) {

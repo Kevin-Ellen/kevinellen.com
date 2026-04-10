@@ -16,15 +16,15 @@
     padding-block: tokens.$space-xl tokens.$space-lg;
   }
 
+  .l-page__frame {
+    padding-top: 0;
+  }
+
   &.is-condensed {
     padding-block: tokens.$space-xs tokens.$space-2xs;
 
     .l-header__breadcrumb {
       margin-top: tokens.$space-2xs;
-    }
-
-    .l-page__frame {
-      padding-top: 0;
     }
 
     .l-header__brand-logo {
