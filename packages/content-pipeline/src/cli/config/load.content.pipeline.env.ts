@@ -7,6 +7,7 @@ type ContentPipelineEnv = {
   cloudflareImagesApiToken: string;
   cloudflareKvApiToken: string;
   cloudflareKvPhotosNamespaceId: string;
+  cloudflareKvJournalsNamespaceId: string;
 };
 
 const getEnvOrThrow = (key: string): string => {
@@ -43,6 +44,9 @@ export const loadContentPipelineEnv = (
     cloudflareKvApiToken: getEnvOrThrow(`${prefix}_CF_KV_API_TOKEN`),
     cloudflareKvPhotosNamespaceId: getEnvOrThrow(
       `${prefix}_CF_KV_PHOTOS_NAMESPACE_ID`,
+    ),
+    cloudflareKvJournalsNamespaceId: getEnvOrThrow(
+      `${prefix}_CF_KV_JOURNALS_NAMESPACE_ID`,
     ),
   };
 };

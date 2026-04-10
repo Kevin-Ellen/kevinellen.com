@@ -3,117 +3,122 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import type { PhotoDraftEntry } from "@shared-types/uploads/photo.upload.types";
+import type { ContentCommandOptions } from "@content-pipeline/cli/command.options.types";
 
-import { getLatestPhotoDraftFolder } from "@content-pipeline/photos/helpers/get.latest.photo.draft.folder";
-import { scanImagesFolder } from "@content-pipeline/photos/helpers/scan.images.folder";
-import { derivePhotoSlug } from "@content-pipeline/photos/helpers/derive.photo.slug";
-import { extractPhotoMetadata } from "@content-pipeline/photos/helpers/extract.photo.metadata";
-import { reverseGeocodePhotoLocation } from "@content-pipeline/photos/helpers/reverse.geocode.photo.location";
-import { renderPhotoDraftFile } from "@content-pipeline/photos/helpers/render.photo.draft.file";
+import { getLatestJournalDraftFolder } from "@content-pipeline/journal/helpers/get.latest.journal.draft.folder";
+import { generatePhotoDraftsForFolder } from "@content-pipeline/photos/helpers/generate.photo.drafts.for.folder";
 
-export const runStartPhotoCommand = async (): Promise<void> => {
-  const draftFolderPath = await getLatestPhotoDraftFolder();
-  const imagesFolderPath = path.join(draftFolderPath, "images");
-
-  const imageFilePaths = await scanImagesFolder(imagesFolderPath);
-
-  if (imageFilePaths.length === 0) {
-    throw new Error(`No supported image files found in: ${imagesFolderPath}`);
-  }
-
-  let createdCount = 0;
-  let skippedCount = 0;
-
-  for (const imageFilePath of imageFilePaths) {
-    const sourceFileName = path.basename(imageFilePath);
-    const slug = derivePhotoSlug(sourceFileName);
-    const draftFilePath = path.join(draftFolderPath, `${slug}.photo.ts`);
-
-    try {
-      await fs.access(draftFilePath);
-      skippedCount += 1;
-      continue;
-    } catch {
-      // file does not exist, continue
-    }
-
-    const extractedMetadata = await extractPhotoMetadata(imageFilePath);
-
-    let locationResolved = null;
-
-    if (
-      extractedMetadata.latitude !== null &&
-      extractedMetadata.longitude !== null
-    ) {
-      try {
-        locationResolved = await reverseGeocodePhotoLocation({
-          latitude: extractedMetadata.latitude,
-          longitude: extractedMetadata.longitude,
-        });
-      } catch (error: unknown) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Unknown reverse geocode error";
-
-        console.warn(
-          `Could not resolve location for ${sourceFileName}: ${message}`,
-        );
+const renderJournalDraftFile = (photoSlugs: string[]): string => {
+  const initialBody =
+    photoSlugs.length > 0
+      ? `[
+      {
+        kind: "contentSection",
+        modules: [
+          {
+            kind: "hero",
+            photoId: "${photoSlugs[0]}",
+            immersive: true
+          }
+        ]
       }
-    }
+    ]`
+      : "[]";
 
-    const photoDraftEntry: PhotoDraftEntry = {
-      slug,
-      sourceFileName,
+  return `/**
+ * Journal Entry Draft
+ *
+ * Rules:
+ * - id must be unique (used for KV + routing)
+ * - slug is derived automatically: /journal/{id}
+ * - content.body uses structured modules (see examples below)
+ * - photoSlugs will be available as photoId in modules
+ */
 
+export const journal = {
+  id: "hello-world",
+
+  meta: {
+    pageTitle: "",
+    metaDescription: "",
+  },
+
+  content: {
+    head: {
+      eyebrow: "Field Notes",
       title: "",
-      alt: "",
-      commentary: "",
-      readableLocation: "",
+      intro: "",
+    },
 
-      capturedAt: extractedMetadata.capturedAt,
+    /**
+     * Body structure
+     *
+     * Each section:
+     * {
+     *   kind: "contentSection",
+     *   heading?: { text: string, level: 2 | 3 },
+     *   modules: [...]
+     * }
+     *
+     * Example modules:
+     *
+     * Paragraph:
+     * {
+     *   kind: "paragraph",
+     *   content: [{ kind: "text", value: "..." }]
+     * }
+     *
+     * Hero image:
+     * {
+     *   kind: "hero",
+     *   photoId: "${photoSlugs[0] ?? "your-photo-id"}",
+     *   immersive: true
+     * }
+     *
+     * Quote:
+     * {
+     *   kind: "quote",
+     *   id: "unique-id",
+     *   text: "...",
+     *   attribution: "..."
+     * }
+     */
+    body: ${initialBody},
 
-      photographer: extractedMetadata.photographer,
-      copyright: extractedMetadata.copyright,
+    footer: {
+      tags: [],
+    },
+  },
 
-      cameraMake: extractedMetadata.cameraMake,
-      cameraModel: extractedMetadata.cameraModel,
-      lensModel: extractedMetadata.lensModel,
+  photoSlugs: ${JSON.stringify(photoSlugs, null, 2)},
+};
+`;
+};
 
-      exposureTime: extractedMetadata.exposureTime,
-      aperture: extractedMetadata.aperture,
-      iso: extractedMetadata.iso,
+export const runStartJournalCommand = async (
+  _options: ContentCommandOptions,
+): Promise<void> => {
+  const draftFolderPath = await getLatestJournalDraftFolder();
 
-      focalLength: extractedMetadata.focalLength,
-      focalLength35mm: extractedMetadata.focalLength35mm,
+  const { photoSlugs } = await generatePhotoDraftsForFolder(draftFolderPath);
 
-      meteringMode: extractedMetadata.meteringMode,
-      exposureMode: extractedMetadata.exposureMode,
-      whiteBalance: extractedMetadata.whiteBalance,
+  const journalFilePath = path.join(draftFolderPath, "entry.journal.ts");
 
-      width: extractedMetadata.width,
-      height: extractedMetadata.height,
-
-      latitude: extractedMetadata.latitude,
-      longitude: extractedMetadata.longitude,
-
-      locationResolved,
-    };
-
-    const draftFileContent = renderPhotoDraftFile(photoDraftEntry);
-
-    await fs.writeFile(draftFilePath, draftFileContent, "utf8");
-
-    createdCount += 1;
+  try {
+    await fs.access(journalFilePath);
+  } catch {
+    const journalContent = renderJournalDraftFile(photoSlugs);
+    await fs.writeFile(journalFilePath, journalContent, "utf8");
   }
 
-  console.log("\nPhoto draft start complete");
+  console.log("\nJournal draft start complete");
   console.log(`→ Draft folder: ${draftFolderPath}`);
-  console.log(`→ Created: ${createdCount}`);
-  console.log(`→ Skipped: ${skippedCount}`);
+  console.log(`→ Photos detected: ${photoSlugs.length}`);
+
   console.log("\nNext steps:");
-  console.log("1. Review the generated .photo.ts files");
-  console.log("2. Add title, alt, commentary, and readableLocation");
-  console.log("3. Run: content photo upload\n");
+  console.log("1. Complete entry.journal.ts");
+  console.log("2. Complete any .photo.ts files");
+  console.log("3. Open the draft folder in your editor");
+  console.log(`   code ${draftFolderPath}`);
+  console.log("4. Run: content journal upload\n");
 };

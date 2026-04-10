@@ -33,6 +33,7 @@ export const validateContentPipelineEnv = (
     `${prefix}_CF_IMAGES_API_TOKEN`,
     `${prefix}_CF_KV_API_TOKEN`,
     `${prefix}_CF_KV_PHOTOS_NAMESPACE_ID`,
+    `${prefix}_CF_KV_JOURNALS_NAMESPACE_ID`,
   ];
 
   const missingKeys = getMissingKeys(requiredKeys);

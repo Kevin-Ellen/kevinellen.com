@@ -4,7 +4,7 @@ import type { ContentPipelineEnvironment } from "@content-pipeline/cli/config/en
 
 export type ContentCliMode = "interactive" | "direct";
 
-export type ContentCliEntity = "photo";
+export type ContentCliEntity = "photo" | "journal";
 
 export type ContentCliAction = "start" | "create" | "upload" | "status";
 
