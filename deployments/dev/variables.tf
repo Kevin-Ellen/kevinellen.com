@@ -25,7 +25,7 @@ variable "worker_script_path" {
 
 variable "release_sha" {
   type        = string
-  description = "Git SHA of the release artifact."
+  description = "Git SHA of the release artifact"
   default     = null
 }
 
