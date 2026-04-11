@@ -1,35 +1,48 @@
 // packages/content-pipeline/src/cli/commands/photo/status.photo.command.ts
 
+import kleur from "kleur";
+
+import type { ContentCommandResult } from "@content-pipeline/cli/types/command.definition.types";
 import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
 
 import { getDraftKindStatus } from "@content-pipeline/drafts/helpers/get.workspace.status.helper";
 
 export const runStatusPhotoCommand = async (
   _options: ContentCommandOptions,
-): Promise<void> => {
+): Promise<ContentCommandResult> => {
   const status = await getDraftKindStatus("photo");
 
-  console.log("\nPhoto status");
+  console.log("\n" + kleur.bold("Photo status") + "\n");
 
+  console.log(kleur.yellow("📝 Draft"));
   if (status.latestDraft) {
-    console.log("\nLatest draft:");
-    console.log(`- id: ${status.latestDraft.id}`);
-    console.log(`- path: ${status.latestDraft.path}`);
-    console.log(`- images: ${status.latestDraft.imageCount}`);
-    console.log(`- draft files: ${status.latestDraft.draftFileCount}`);
+    console.log(`  • ${kleur.bold(status.latestDraft.id)}`);
+    console.log(
+      `    ${kleur.dim(
+        `images: ${status.latestDraft.imageCount} | drafts: ${status.latestDraft.draftFileCount}`,
+      )}`,
+    );
+    console.log(`    ${kleur.dim(status.latestDraft.path)}`);
   } else {
-    console.log("\nLatest draft: none");
+    console.log(kleur.dim("  none"));
   }
 
+  console.log("\n" + kleur.green("☁️  Uploaded"));
   if (status.latestUploaded) {
-    console.log("\nLatest uploaded:");
-    console.log(`- id: ${status.latestUploaded.id}`);
-    console.log(`- path: ${status.latestUploaded.path}`);
-    console.log(`- images: ${status.latestUploaded.imageCount}`);
-    console.log(`- draft files: ${status.latestUploaded.draftFileCount}`);
+    console.log(
+      `  ${kleur.green("✓")} ${kleur.bold(status.latestUploaded.id)}`,
+    );
+    console.log(
+      `    ${kleur.dim(
+        `images: ${status.latestUploaded.imageCount} | drafts: ${status.latestUploaded.draftFileCount}`,
+      )}`,
+    );
+    console.log(`    ${kleur.dim(status.latestUploaded.path)}`);
   } else {
-    console.log("\nLatest uploaded: none");
+    console.log(kleur.dim("  none"));
   }
 
   console.log();
+
+  return {};
 };

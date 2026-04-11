@@ -2,12 +2,13 @@
 
 import path from "node:path";
 
+import type { ContentCommandResult } from "@content-pipeline/cli/types/command.definition.types";
 import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
 
+import { moveDraftWorkspaceToUploaded } from "@content-pipeline/drafts/helpers/move.draft.workspace.to.uploaded.helper";
 import { resolveDraftWorkspaceById } from "@content-pipeline/drafts/helpers/resolve.draft.workspace.by.id.helper";
 import { resolveLatestDraftWorkspace } from "@content-pipeline/drafts/helpers/resolve.latest.draft.workspace.helper";
 import { uploadPhotoDraftFiles } from "@content-pipeline/photos/helpers/upload.photo.draft.files.helper";
-import { moveDraftWorkspaceToUploaded } from "@content-pipeline/drafts/helpers/move.draft.workspace.to.uploaded.helper";
 
 const resolvePhotoWorkspace = async (options: ContentCommandOptions) => {
   if (options.draftId) {
@@ -19,7 +20,7 @@ const resolvePhotoWorkspace = async (options: ContentCommandOptions) => {
 
 export const runUploadPhotoCommand = async (
   options: ContentCommandOptions,
-): Promise<void> => {
+): Promise<ContentCommandResult> => {
   const workspace = await resolvePhotoWorkspace(options);
 
   const uploadedPhotoDraftFiles = await uploadPhotoDraftFiles({
@@ -50,4 +51,8 @@ export const runUploadPhotoCommand = async (
   console.log(`- draft: ${workspace.draftId}`);
   console.log(`- total drafts uploaded: ${uploadedPhotoDraftFiles.length}`);
   console.log(`- moved to: ${uploadedWorkspacePath}\n`);
+
+  return {
+    workspace,
+  };
 };

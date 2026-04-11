@@ -2,12 +2,13 @@
 
 import path from "node:path";
 
+import type { ContentCommandResult } from "@content-pipeline/cli/types/command.definition.types";
 import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
 
 import { resolveDraftWorkspaceById } from "@content-pipeline/drafts/helpers/resolve.draft.workspace.by.id.helper";
 import { resolveLatestDraftWorkspace } from "@content-pipeline/drafts/helpers/resolve.latest.draft.workspace.helper";
-import { getDraftImageFiles } from "@content-pipeline/media/helpers/get.draft.image.files.helper";
 import { createPhotoDraftFiles } from "@content-pipeline/media/helpers/create.photo.draft.files.helper";
+import { getDraftImageFiles } from "@content-pipeline/media/helpers/get.draft.image.files.helper";
 
 const resolvePhotoWorkspace = async (options: ContentCommandOptions) => {
   if (options.draftId) {
@@ -19,7 +20,7 @@ const resolvePhotoWorkspace = async (options: ContentCommandOptions) => {
 
 export const runCreatePhotoCommand = async (
   options: ContentCommandOptions,
-): Promise<void> => {
+): Promise<ContentCommandResult> => {
   const workspace = await resolvePhotoWorkspace(options);
 
   const imageFiles = await getDraftImageFiles(workspace);
@@ -55,4 +56,8 @@ export const runCreatePhotoCommand = async (
   console.log(`   code ${workspace.draftPath}`);
   console.log("2. Fill in title, alt, commentary, and any adjustments");
   console.log("3. Run the upload command when ready\n");
+
+  return {
+    workspace,
+  };
 };
