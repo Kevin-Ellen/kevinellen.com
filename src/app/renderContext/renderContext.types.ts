@@ -162,21 +162,20 @@ export type RenderContextPhoto = {
   title: string;
   alt: string;
   commentary: string;
-  readableLocation?: string;
-  capturedAt?: string;
-  cameraModel?: string;
-  lensModel?: string;
-  exposureTime?: number;
-  aperture?: number;
-  iso?: number;
-  focalLength?: number;
+  readableLocation: string | null;
+  capturedAt: string | null;
+  cameraModel: string | null;
+  lensModel: string | null;
+  exposureTime: number | null;
+  aperture: number | null;
+  iso: number | null;
+  focalLength: number | null;
   intrinsic: {
     width: number;
     height: number;
   };
   image: {
     id: string;
-    filename: string;
     uploadedAt: string;
     sources: Partial<
       Record<

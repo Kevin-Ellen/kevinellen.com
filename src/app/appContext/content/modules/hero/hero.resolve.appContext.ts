@@ -106,7 +106,7 @@ export const resolveHeroAppContext = (
     immersive: module.immersive ?? false,
     photo,
     caption: photo.commentary,
-    meta: buildMeta(photo.readableLocation, dependencies),
+    meta: buildMeta(photo.readableLocation ?? undefined, dependencies),
     settings: buildSettings(photo, dependencies),
   };
 };

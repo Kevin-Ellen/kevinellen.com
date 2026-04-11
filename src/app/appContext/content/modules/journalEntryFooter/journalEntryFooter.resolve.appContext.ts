@@ -16,10 +16,12 @@ const buildFieldNotes = (
   photos: readonly AppContextPhoto[],
 ): AppContextJournalEntryFooterModule["fieldNotes"] => {
   const cameras = getUniqueDefinedValues(
-    photos.map((photo) => photo.cameraModel),
+    photos.map((photo) => photo.cameraModel ?? undefined),
   );
 
-  const lenses = getUniqueDefinedValues(photos.map((photo) => photo.lensModel));
+  const lenses = getUniqueDefinedValues(
+    photos.map((photo) => photo.lensModel ?? undefined),
+  );
 
   return [
     ...(cameras.length > 0

@@ -2,11 +2,11 @@
 
 import { cancel, intro, isCancel, outro, select } from "@clack/prompts";
 
-import type { ContentPipelineEnvironment } from "@content-pipeline/cli/config/environment.cli.types";
+import type { ContentPipelineEnvironment } from "@content-pipeline/config/types/content.pipeline.environment.types";
 import type {
   ContentCliAction,
   ContentCliEntity,
-} from "@content-pipeline/cli/cli.types";
+} from "@content-pipeline/cli/types/cli.types";
 
 export type InteractiveCliSelection = {
   entity: ContentCliEntity;
@@ -14,21 +14,18 @@ export type InteractiveCliSelection = {
 };
 
 export const runInteractiveCli = async (
-  environment: ContentPipelineEnvironment,
+  env: ContentPipelineEnvironment,
 ): Promise<InteractiveCliSelection | null> => {
-  intro(`Kevin Ellen Content Pipeline (${environment.toUpperCase()})`);
+  intro(`Kevin Ellen Content Pipeline (${env.toUpperCase()})`);
 
   const selection = await select({
     message: "What do you want to do?",
     options: [
-      { value: "photo:create", label: "Photo: create draft" },
       { value: "photo:start", label: "Photo: start draft" },
-      { value: "photo:upload", label: "Photo: upload draft" },
-      { value: "photo:status", label: "Photo: status" },
+      { value: "photo:create", label: "Photo: create draft(s)" },
 
-      { value: "journal:create", label: "Journal: create draft" },
       { value: "journal:start", label: "Journal: start draft" },
-      { value: "journal:upload", label: "Journal: upload draft" },
+      { value: "journal:create", label: "Journal: create draft" },
 
       { value: "exit", label: "Exit" },
     ],

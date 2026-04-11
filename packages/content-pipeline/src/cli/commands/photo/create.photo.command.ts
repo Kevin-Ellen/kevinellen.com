@@ -1,47 +1,58 @@
 // packages/content-pipeline/src/cli/commands/photo/create.photo.command.ts
 
-import fs from "node:fs/promises";
 import path from "node:path";
 
-import type { ContentCommandOptions } from "@content-pipeline/cli/command.options.types";
+import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
 
-const DRAFTS_ROOT = path.resolve(
-  process.cwd(),
-  "content-pipeline",
-  "photos",
-  "drafts",
-);
+import { resolveDraftWorkspaceById } from "@content-pipeline/drafts/helpers/resolve.draft.workspace.by.id.helper";
+import { resolveLatestDraftWorkspace } from "@content-pipeline/drafts/helpers/resolve.latest.draft.workspace.helper";
+import { getDraftImageFiles } from "@content-pipeline/media/helpers/get.draft.image.files.helper";
+import { createPhotoDraftFiles } from "@content-pipeline/media/helpers/create.photo.draft.files.helper";
 
-const formatTimestamp = (date: Date): string => {
-  return date
-    .toISOString()
-    .replace(/:/g, "-")
-    .replace(/\.\d{3}Z$/, "");
+const resolvePhotoWorkspace = async (options: ContentCommandOptions) => {
+  if (options.draftId) {
+    return resolveDraftWorkspaceById("photo", options.draftId);
+  }
+
+  return resolveLatestDraftWorkspace("photo");
 };
 
 export const runCreatePhotoCommand = async (
-  _options: ContentCommandOptions,
+  options: ContentCommandOptions,
 ): Promise<void> => {
-  const timestamp = formatTimestamp(new Date());
+  const workspace = await resolvePhotoWorkspace(options);
 
-  const draftPath = path.join(DRAFTS_ROOT, timestamp);
-  const imagesPath = path.join(draftPath, "images");
+  const imageFiles = await getDraftImageFiles(workspace);
 
-  // Guard: do not overwrite if somehow exists
-  try {
-    await fs.access(draftPath);
-    throw new Error(`Draft folder already exists: ${draftPath}`);
-  } catch {
-    // expected when folder does not exist
+  if (imageFiles.length === 0) {
+    throw new Error(`No image files found in: ${workspace.imagesPath}`);
   }
 
-  await fs.mkdir(imagesPath, { recursive: true });
+  const createdDraftFiles = await createPhotoDraftFiles(
+    workspace.draftPath,
+    imageFiles,
+  );
 
-  console.log("\nPhoto draft created");
-  console.log(`→ ${draftPath}`);
+  for (const createdDraftFile of createdDraftFiles) {
+    console.log(`Created: ${createdDraftFile.draftFileName}`);
+    console.log(
+      `- source image: ${path.basename(createdDraftFile.imageFilePath)}`,
+    );
+    console.log(`- id: ${createdDraftFile.entry.id}`);
+    console.log(`- capturedAt: ${createdDraftFile.entry.capturedAt ?? "null"}`);
+    console.log(`- camera: ${createdDraftFile.entry.cameraModel ?? "null"}`);
+    console.log(
+      `- location: ${createdDraftFile.entry.locationResolved?.displayName ?? "null"}\n`,
+    );
+  }
+
+  console.log("Photo draft files created");
+  console.log(`→ ${workspace.draftPath}`);
+  console.log(`- draft: ${workspace.draftId}`);
+  console.log(`- total: ${createdDraftFiles.length}`);
   console.log("\nNext steps:");
-  console.log("1. Add images to the images/ folder");
-  console.log("2. Run: content photo start");
-  console.log("3. Open the folder in your editor");
-  console.log(`   code ${draftPath}\n`);
+  console.log("1. Open the draft folder");
+  console.log(`   code ${workspace.draftPath}`);
+  console.log("2. Fill in title, alt, commentary, and any adjustments");
+  console.log("3. Run the upload command when ready\n");
 };

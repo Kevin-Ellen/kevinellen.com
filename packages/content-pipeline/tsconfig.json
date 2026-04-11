@@ -3,5 +3,6 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "include": ["src", "photos"]
+  "include": ["**/*.ts"],
+  "exclude": ["xx___src", "node_modules"]
 }

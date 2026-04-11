@@ -1,6 +1,6 @@
 // packages/content-pipeline/src/photos/helpers/render.photo.draft.file.ts
 
-import type { PhotoDraftEntry } from "@shared-types/photos/photo.draft.types";
+import type { PhotoDraftEntry } from "@content-pipeline/photos/types/photo.draft.entry.types";
 
 const renderString = (value: string): string => JSON.stringify(value);
 
@@ -10,35 +10,37 @@ const renderNullableString = (value: string | null): string =>
 const renderNullableNumber = (value: number | null): string =>
   value === null ? "null" : String(value);
 
-const indentBlock = (value: string, indent = 2): string => {
-  const padding = " ".repeat(indent);
-
-  return value
-    .split("\n")
-    .map((line) => `${padding}${line}`)
-    .join("\n");
-};
-
-const renderNullableObject = (
-  value: Record<string, unknown> | null,
-  indent = 2,
+const renderLocationResolved = (
+  value: PhotoDraftEntry["locationResolved"],
 ): string => {
   if (value === null) {
     return "null";
   }
 
-  return indentBlock(JSON.stringify(value, null, 2), indent);
+  return `{
+    name: ${renderNullableString(value.name)},
+    road: ${renderNullableString(value.road)},
+    village: ${renderNullableString(value.village)},
+    town: ${renderNullableString(value.town)},
+    city: ${renderNullableString(value.city)},
+    county: ${renderNullableString(value.county)},
+    state: ${renderNullableString(value.state)},
+    country: ${renderNullableString(value.country)},
+    countryCode: ${renderNullableString(value.countryCode)},
+    postcode: ${renderNullableString(value.postcode)},
+    displayName: ${renderNullableString(value.displayName)},
+  }`;
 };
 
 export const renderPhotoDraftFile = (
   photoDraftEntry: PhotoDraftEntry,
 ): string => {
-  return `export const photo = {
-  // --- identity ---
-  slug: ${renderString(photoDraftEntry.slug)},
+  return `import type { PhotoDraftEntry } from "@content-pipeline/photos/types/photo.draft.entry.types";
+
+export const photo = {
+  id: ${renderString(photoDraftEntry.id)},
   sourceFileName: ${renderString(photoDraftEntry.sourceFileName)},
 
-  // --- editorial ---
   title: ${renderString(photoDraftEntry.title)},
   alt: ${renderString(photoDraftEntry.alt)},
   commentary: ${renderString(photoDraftEntry.commentary)},
@@ -46,39 +48,32 @@ export const renderPhotoDraftFile = (
 
   capturedAt: ${renderNullableString(photoDraftEntry.capturedAt)},
 
-  // --- authorship ---
   photographer: ${renderNullableString(photoDraftEntry.photographer)},
   copyright: ${renderNullableString(photoDraftEntry.copyright)},
 
-  // --- equipment ---
   cameraMake: ${renderNullableString(photoDraftEntry.cameraMake)},
   cameraModel: ${renderNullableString(photoDraftEntry.cameraModel)},
   lensModel: ${renderNullableString(photoDraftEntry.lensModel)},
 
-  // --- exposure triangle ---
   exposureTime: ${renderNullableNumber(photoDraftEntry.exposureTime)},
   aperture: ${renderNullableNumber(photoDraftEntry.aperture)},
   iso: ${renderNullableNumber(photoDraftEntry.iso)},
 
-  // --- optics ---
   focalLength: ${renderNullableNumber(photoDraftEntry.focalLength)},
   focalLength35mm: ${renderNullableNumber(photoDraftEntry.focalLength35mm)},
 
-  // --- shooting context ---
   meteringMode: ${renderNullableString(photoDraftEntry.meteringMode)},
   exposureMode: ${renderNullableString(photoDraftEntry.exposureMode)},
   whiteBalance: ${renderNullableString(photoDraftEntry.whiteBalance)},
 
-  // --- dimensions ---
   width: ${renderNullableNumber(photoDraftEntry.width)},
   height: ${renderNullableNumber(photoDraftEntry.height)},
 
-  // --- location ---
   latitude: ${renderNullableNumber(photoDraftEntry.latitude)},
   longitude: ${renderNullableNumber(photoDraftEntry.longitude)},
 
-  // --- derived ---
-  locationResolved: ${renderNullableObject(photoDraftEntry.locationResolved)},
-};
+  locationResolved: ${renderLocationResolved(photoDraftEntry.locationResolved)},
+
+} satisfies PhotoDraftEntry;
 `;
 };

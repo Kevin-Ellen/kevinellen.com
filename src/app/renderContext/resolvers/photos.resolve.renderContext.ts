@@ -44,7 +44,12 @@ const validateVariant = (
 };
 
 const validatePhotoIntrinsic = (photo: AppContextPhoto): void => {
-  if (photo.intrinsic.width <= 0 || photo.intrinsic.height <= 0) {
+  if (
+    photo.intrinsic.width === null ||
+    photo.intrinsic.height === null ||
+    photo.intrinsic.width <= 0 ||
+    photo.intrinsic.height <= 0
+  ) {
     throw new Error(`Photo "${photo.id}" has invalid intrinsic dimensions.`);
   }
 };
@@ -55,10 +60,6 @@ const resolvePhotoSources = (
   const resolvedSources: Partial<RenderContextPhoto["image"]["sources"]> = {};
 
   for (const variant of PHOTO_VARIANT_ORDER) {
-    if (!photo.image.variants.includes(variant)) {
-      continue;
-    }
-
     validateVariant(photo, variant);
 
     resolvedSources[variant] = resolveVariantSources(photo.image.urls[variant]);
@@ -91,7 +92,6 @@ const resolvePhotoRenderContext = (
     },
     image: {
       id: photo.image.id,
-      filename: photo.image.filename,
       uploadedAt: photo.image.uploadedAt,
       sources: resolvePhotoSources(photo),
     },

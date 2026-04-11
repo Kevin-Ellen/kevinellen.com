@@ -6,7 +6,7 @@ import type {
 } from "@app/appContext/appContext.types";
 import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
 import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
-import type { PhotoRecord } from "@shared-types/photo/record.photo.type";
+import type { PhotoRecord } from "@shared-types/photo/record.photo.types";
 
 import { extractPhotoIdsAppContext } from "@app/appContext/resolvers/photo/extract.Ids.photo.appContext";
 import { getPhotoRecordByIds } from "@app/appContext/getters/photo/photo.record.getter.appContext";
@@ -21,8 +21,6 @@ const resolvePhotoVariantUrl = (
 const mapPhotoRecordToAppContextPhoto = (
   photo: PhotoRecord,
 ): AppContextPhoto => {
-  const variants: readonly AppContextPhotoVariant[] = photo.image.variants;
-
   return {
     id: photo.id,
     title: photo.title,
@@ -42,9 +40,7 @@ const mapPhotoRecordToAppContextPhoto = (
     },
     image: {
       id: photo.image.id,
-      filename: photo.image.filename,
       uploadedAt: photo.image.uploadedAt,
-      variants,
       urls: {
         frame: resolvePhotoVariantUrl(photo.image.id, "frame"),
         content: resolvePhotoVariantUrl(photo.image.id, "content"),

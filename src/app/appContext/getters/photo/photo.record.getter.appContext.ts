@@ -4,7 +4,7 @@ import type { AppContextPhotoId } from "@app/appContext/appContext.types";
 import type {
   PhotoKvRecord,
   PhotoRecord,
-} from "@shared-types/photo/record.photo.type";
+} from "@shared-types/photo/record.photo.types";
 
 export const getPhotoRecordByIds = async (
   env: Env,
@@ -23,7 +23,6 @@ export const getPhotoRecordByIds = async (
       const kvPhoto = photo as PhotoKvRecord;
 
       return {
-        id: photoId,
         ...kvPhoto,
       };
     }),

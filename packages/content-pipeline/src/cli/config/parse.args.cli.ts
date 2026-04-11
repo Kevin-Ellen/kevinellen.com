@@ -1,65 +1,67 @@
-// packages/content-pipeline/src/cli/config/parse.cli.args.ts
+// packages/content-pipeline/src/cli/config/parse.args.cli.ts
 
-import type { ContentCliParsedArgs } from "@content-pipeline/cli/cli.types";
+import type { ContentPipelineEnvironment } from "@content-pipeline/config/types/content.pipeline.environment.types";
+import type { ParsedCliArgs } from "@content-pipeline/cli/types/parsed.cli.args.types";
+import type {
+  ContentCliAction,
+  ContentCliEntity,
+} from "@content-pipeline/cli/types/cli.types";
 
-import { resolveCliEnvironment } from "@content-pipeline/cli/config/resolve.environment.cli";
-
-const isEntity = (value: string | undefined): value is "photo" | "journal" => {
-  return value === "photo" || value === "journal";
-};
-
-const isAction = (
+const isEnvironment = (
   value: string | undefined,
-): value is "start" | "create" | "upload" | "status" => {
-  return (
-    value === "start" ||
-    value === "create" ||
-    value === "upload" ||
-    value === "status"
-  );
+): value is ContentPipelineEnvironment => {
+  return value === "dev" || value === "stg" || value === "prod";
 };
 
-export const parseCliArgs = (args: string[]): ContentCliParsedArgs => {
-  const environment = resolveCliEnvironment(args);
+const getFlagValue = (args: string[], flagName: string): string | undefined => {
+  const flagIndex = args.indexOf(flagName);
+
+  if (flagIndex === -1) {
+    return undefined;
+  }
+
+  return args[flagIndex + 1];
+};
+
+export const parseCliArgs = (args: string[]): ParsedCliArgs => {
+  const envValue = getFlagValue(args, "--env");
+  const draftId = getFlagValue(args, "--draft-id");
+
+  const env: ContentPipelineEnvironment = isEnvironment(envValue)
+    ? envValue
+    : "prod";
 
   const positionalArgs = args.filter((arg, index) => {
-    if (arg === "--env") {
+    const previousArg = args[index - 1];
+
+    if (arg === "--env" || arg === "--draft-id") {
       return false;
     }
 
-    if (index > 0 && args[index - 1] === "--env") {
+    if (previousArg === "--env" || previousArg === "--draft-id") {
       return false;
     }
 
-    return !arg.startsWith("--");
+    return true;
   });
 
-  const entity = positionalArgs[0];
-  const action = positionalArgs[1];
-
-  if (!entity && !action) {
+  if (positionalArgs.length === 0) {
     return {
-      environment,
       mode: "interactive",
+      env,
     };
   }
 
-  if (!isEntity(entity)) {
-    throw new Error(
-      `Invalid entity "${entity}". Expected one of: "photo" or "journal".`,
-    );
-  }
-
-  if (!isAction(action)) {
-    throw new Error(
-      `Invalid action "${action}". Expected one of: "start", "create", "upload", or "status".`,
-    );
-  }
+  const [entity, action] = positionalArgs as [
+    ContentCliEntity?,
+    ContentCliAction?,
+  ];
 
   return {
-    environment,
     mode: "direct",
+    env,
     entity,
     action,
+    draftId,
   };
 };

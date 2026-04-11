@@ -1,31 +1,49 @@
-// packages/content-pipeline/src/config/load.content.pipeline.env.ts
+// packages/content-pipeline/src/config/load.content.pipeline.config.ts
 
-type ContentPipelineEnv = {
-  cloudflareAccountId: string;
-  cloudflareImagesApiToken: string;
-  cloudflareKvApiToken: string;
-  cloudflareKvPhotosNamespaceId: string;
+import type { ContentPipelineEnvironment } from "@content-pipeline/config/types/content.pipeline.environment.types";
+import type { ContentPipelineConfig } from "@content-pipeline/config/types/content.pipeline.config.types";
+
+const getEnvironmentPrefix = (env: ContentPipelineEnvironment): string => {
+  return `CONTENT_PIPELINE_${env.toUpperCase()}`;
 };
 
-const getEnvOrThrow = (key: string): string => {
-  const value = process.env[key];
+const getRequiredKeys = (
+  env: ContentPipelineEnvironment,
+): Record<keyof ContentPipelineConfig, string> => {
+  const prefix = getEnvironmentPrefix(env);
 
-  if (!value || value.trim().length === 0) {
-    throw new Error(`Missing required environment variable: ${key}`);
+  return {
+    cloudflareAccountId: `${prefix}_CF_ACCOUNT_ID`,
+    cloudflareImagesApiToken: `${prefix}_CF_IMAGES_API_TOKEN`,
+    cloudflareKvApiToken: `${prefix}_CF_KV_API_TOKEN`,
+    cloudflareKvPhotosNamespaceId: `${prefix}_CF_KV_PHOTOS_NAMESPACE_ID`,
+    cloudflareKvJournalsNamespaceId: `${prefix}_CF_KV_JOURNALS_NAMESPACE_ID`,
+  };
+};
+
+export const loadContentPipelineConfig = (
+  env: ContentPipelineEnvironment,
+): ContentPipelineConfig => {
+  const keys = getRequiredKeys(env);
+
+  const missingKeys = Object.values(keys).filter((key) => {
+    const value = process.env[key];
+    return !value || value.trim().length === 0;
+  });
+
+  if (missingKeys.length > 0) {
+    throw new Error(
+      `Missing required environment variables for ${env}: ${missingKeys.join(", ")}`,
+    );
   }
 
-  return value;
-};
-
-export const loadContentPipelineEnv = (): ContentPipelineEnv => {
   return {
-    cloudflareAccountId: getEnvOrThrow("CONTENT_PIPELINE_CF_ACCOUNT_ID"),
-    cloudflareImagesApiToken: getEnvOrThrow(
-      "CONTENT_PIPELINE_CF_IMAGES_API_TOKEN",
-    ),
-    cloudflareKvApiToken: getEnvOrThrow("CONTENT_PIPELINE_CF_KV_API_TOKEN"),
-    cloudflareKvPhotosNamespaceId: getEnvOrThrow(
-      "CONTENT_PIPELINE_CF_KV_PHOTOS_NAMESPACE_ID",
-    ),
+    cloudflareAccountId: process.env[keys.cloudflareAccountId]!,
+    cloudflareImagesApiToken: process.env[keys.cloudflareImagesApiToken]!,
+    cloudflareKvApiToken: process.env[keys.cloudflareKvApiToken]!,
+    cloudflareKvPhotosNamespaceId:
+      process.env[keys.cloudflareKvPhotosNamespaceId]!,
+    cloudflareKvJournalsNamespaceId:
+      process.env[keys.cloudflareKvJournalsNamespaceId]!,
   };
 };
