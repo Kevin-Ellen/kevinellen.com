@@ -8,6 +8,7 @@ export const resolveQuoteRenderContext = (
 ): RenderContextQuoteModule => {
   return {
     kind: "quote",
+    flow: "content",
     id: module.id,
     text: module.text,
     attribution: module.attribution,

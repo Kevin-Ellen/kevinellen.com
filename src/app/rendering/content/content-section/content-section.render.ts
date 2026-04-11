@@ -3,8 +3,12 @@
 import type { RenderContextContentSection } from "@app/renderContext/content/content.renderContext.types";
 
 import { renderContentLeafModule } from "@app/rendering/content/modules/module.render";
-
 import { escapeHtmlContent } from "@app/rendering/utils/escapeContent.util";
+
+type RenderedSectionItem = {
+  flow: "content" | "breakout";
+  html: string;
+};
 
 const renderHeading = (
   heading: RenderContextContentSection["heading"],
@@ -17,17 +21,64 @@ const renderHeading = (
   return `<${tag}${className}>${escapeHtmlContent(heading.text)}</${tag}>`;
 };
 
+const renderContentWrapper = (items: readonly string[]): string => {
+  return `<div class="l-content">${items.join("")}</div>`;
+};
+
+const renderSectionItems = (
+  section: RenderContextContentSection,
+): readonly RenderedSectionItem[] => {
+  const items: RenderedSectionItem[] = [];
+
+  if (section.heading) {
+    items.push({
+      flow: "content",
+      html: renderHeading(section.heading),
+    });
+  }
+
+  for (const module of section.modules) {
+    items.push({
+      flow: module.flow,
+      html: renderContentLeafModule(module),
+    });
+  }
+
+  return items;
+};
+
 export const renderContentSection = (
   section: RenderContextContentSection,
 ): string => {
-  const heading = renderHeading(section.heading);
+  const items = renderSectionItems(section);
 
-  const modules = section.modules
-    .map((module) => renderContentLeafModule(module))
-    .join("");
-
-  if (!section.heading && section.modules.length === 1) {
-    return modules;
+  if (items.length === 1 && !section.heading) {
+    return items[0].html;
   }
-  return `<section class="l-content">${heading}${modules}</section>`;
+
+  const renderedParts: string[] = [];
+  let contentBuffer: string[] = [];
+
+  const flushContentBuffer = (): void => {
+    if (contentBuffer.length === 0) {
+      return;
+    }
+
+    renderedParts.push(renderContentWrapper(contentBuffer));
+    contentBuffer = [];
+  };
+
+  for (const item of items) {
+    if (item.flow === "content") {
+      contentBuffer.push(item.html);
+      continue;
+    }
+
+    flushContentBuffer();
+    renderedParts.push(item.html);
+  }
+
+  flushContentBuffer();
+
+  return `<section>${renderedParts.join("")}</section>`;
 };

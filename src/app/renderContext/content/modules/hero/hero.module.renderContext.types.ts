@@ -1,5 +1,7 @@
 // src/app/renderContext/content/modules/hero/hero.module.renderContext.types.ts
 
+import type { RenderContextContentFlow } from "@app/renderContext/content/content.renderContext.types";
+
 export type RenderContextHeroMetaKey = "location";
 
 export type RenderContextHeroMetaItem = {
@@ -33,6 +35,7 @@ export type RenderContextHeroResponsiveImage = {
 
 export type RenderContextHeroModule = {
   kind: "hero";
+  flow: RenderContextContentFlow;
   immersive: boolean;
   image: RenderContextHeroResponsiveImage;
   caption: string;

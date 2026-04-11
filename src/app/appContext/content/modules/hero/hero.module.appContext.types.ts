@@ -4,6 +4,8 @@ import { AppContextPhoto } from "@app/appContext/appContext.types";
 
 export type AppContextHeroMetaKey = "location";
 
+export type AppContextContentFlow = "content" | "breakout";
+
 export type AppContextHeroMetaItem = {
   key: AppContextHeroMetaKey;
   label: string;
@@ -27,6 +29,7 @@ export type AppContextHeroSettingItem = {
 export type AppContextHeroModule = {
   kind: "hero";
   immersive: boolean;
+  flow: AppContextContentFlow;
   photo: AppContextPhoto;
   caption: string;
   meta: readonly AppContextHeroMetaItem[];

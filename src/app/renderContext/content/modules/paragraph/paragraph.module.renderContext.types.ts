@@ -4,5 +4,6 @@ import type { ContentInlineResolved } from "@app/renderContext/content/inline-co
 
 export type RenderContextParagraphModule = {
   kind: "paragraph";
+  flow: "content";
   content: readonly ContentInlineResolved[];
 };

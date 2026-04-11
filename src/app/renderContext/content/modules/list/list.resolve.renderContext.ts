@@ -10,6 +10,7 @@ export const resolveListRenderContext = (
 ): RenderContextListModule => {
   return {
     kind: "list",
+    flow: "content",
     style: module.style,
     items: module.items.map((item) => ({
       content: resolveInlineContentRenderContext(item.content),
