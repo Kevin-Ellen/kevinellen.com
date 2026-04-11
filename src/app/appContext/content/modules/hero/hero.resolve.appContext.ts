@@ -104,6 +104,7 @@ export const resolveHeroAppContext = (
   return {
     kind: "hero",
     immersive: module.immersive ?? false,
+    flow: module.flow ?? "content",
     photo,
     caption: photo.commentary,
     meta: buildMeta(photo.readableLocation ?? undefined, dependencies),

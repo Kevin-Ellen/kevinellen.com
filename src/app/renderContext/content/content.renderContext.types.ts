@@ -12,6 +12,8 @@ export type RenderContextPageHeadContent = {
   intro: string;
 };
 
+export type RenderContextContentFlow = "content" | "breakout";
+
 export type RenderContextContentSectionHeading = {
   text: string;
   visuallyHidden?: boolean;

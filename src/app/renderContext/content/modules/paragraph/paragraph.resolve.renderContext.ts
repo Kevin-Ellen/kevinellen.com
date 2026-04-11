@@ -10,6 +10,7 @@ export const resolveParagraphRenderContext = (
 ): RenderContextParagraphModule => {
   return {
     kind: "paragraph",
+    flow: "content",
     content: resolveInlineContentRenderContext(module.content),
   };
 };

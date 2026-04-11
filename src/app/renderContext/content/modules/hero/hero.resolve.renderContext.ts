@@ -45,6 +45,7 @@ export const resolveHeroRenderContext = (
 
   return {
     kind: "hero",
+    flow: module.flow,
     immersive: module.immersive,
     image: {
       src: pickDefaultSrc(frameBaseUrl),

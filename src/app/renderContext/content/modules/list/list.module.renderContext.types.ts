@@ -9,5 +9,6 @@ export type RenderContextListItem = {
 export type RenderContextListModule = {
   kind: "list";
   style: "unordered" | "ordered";
+  flow: "content";
   items: readonly RenderContextListItem[];
 };
