@@ -15,6 +15,8 @@ import { runCreateJournalCommand } from "@content-pipeline/cli/commands/journal/
 import { runStartJournalCommand } from "@content-pipeline/cli/commands/journal/start.journal.command";
 import { runUploadJournalCommand } from "@content-pipeline/cli/commands/journal/upload.journal.command";
 import { runStatusJournalCommand } from "@content-pipeline/cli/commands/journal/status.journal.command";
+import { runPullJournalCommand } from "@content-pipeline/cli/commands/journal/pull.journal.command";
+import { runReuploadJournalCommand } from "@content-pipeline/cli/commands/journal/reupload.journal.command";
 
 export const contentCommandRegistry: Partial<
   Record<
@@ -34,5 +36,7 @@ export const contentCommandRegistry: Partial<
     create: runCreateJournalCommand,
     upload: runUploadJournalCommand,
     status: runStatusJournalCommand,
+    pull: runPullJournalCommand,
+    reupload: runReuploadJournalCommand,
   },
 };

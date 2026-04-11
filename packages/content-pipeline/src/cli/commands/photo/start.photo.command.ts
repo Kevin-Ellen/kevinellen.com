@@ -1,13 +1,13 @@
 // packages/content-pipeline/src/cli/commands/photo/start.photo.command.ts
 
 import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
-import type { DraftWorkspace } from "@content-pipeline/drafts/types/draft.workspace.types";
+import type { ContentCommandResult } from "@content-pipeline/cli/types/command.definition.types";
 
 import { createDraftWorkspace } from "@content-pipeline/drafts/helpers/create.draft.workspace.helper";
 
 export const runStartPhotoCommand = async (
   _options: ContentCommandOptions,
-): Promise<DraftWorkspace> => {
+): Promise<ContentCommandResult> => {
   const workspace = await createDraftWorkspace("photo");
 
   console.log("\nPhoto draft workspace created");
@@ -18,5 +18,7 @@ export const runStartPhotoCommand = async (
   console.log("3. Open the draft folder in your editor");
   console.log(`   code ${workspace.draftPath}\n`);
 
-  return workspace;
+  return {
+    workspace,
+  };
 };

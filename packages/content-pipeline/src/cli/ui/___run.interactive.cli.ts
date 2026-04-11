@@ -26,6 +26,7 @@ export const runInteractiveCli = async (
 
       { value: "journal:start", label: "Journal: start draft" },
       { value: "journal:create", label: "Journal: create draft" },
+      { value: "journal:pull", label: "Pull published journal for editing" },
 
       { value: "exit", label: "Exit" },
     ],

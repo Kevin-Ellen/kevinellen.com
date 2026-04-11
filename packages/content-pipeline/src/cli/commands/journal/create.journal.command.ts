@@ -4,12 +4,13 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
+import type { ContentCommandResult } from "@content-pipeline/cli/types/command.definition.types";
 
 import { resolveDraftWorkspaceById } from "@content-pipeline/drafts/helpers/resolve.draft.workspace.by.id.helper";
 import { resolveLatestDraftWorkspace } from "@content-pipeline/drafts/helpers/resolve.latest.draft.workspace.helper";
+import { renderJournalDraftFile } from "@content-pipeline/journal/helpers/render.journal.draft.file";
 import { createPhotoDraftFiles } from "@content-pipeline/media/helpers/create.photo.draft.files.helper";
 import { getDraftImageFiles } from "@content-pipeline/media/helpers/get.draft.image.files.helper";
-import { renderJournalDraftFile } from "@content-pipeline/journal/helpers/render.journal.draft.file";
 
 const JOURNAL_DRAFT_FILE_NAME = "journal.draft.ts";
 
@@ -23,7 +24,7 @@ const resolveJournalWorkspace = async (options: ContentCommandOptions) => {
 
 export const runCreateJournalCommand = async (
   options: ContentCommandOptions,
-): Promise<void> => {
+): Promise<ContentCommandResult> => {
   const workspace = await resolveJournalWorkspace(options);
 
   const imageFiles = await getDraftImageFiles(workspace);
@@ -57,4 +58,8 @@ export const runCreateJournalCommand = async (
   console.log("2. Fill in the journal draft and refine the body/modules");
   console.log("3. Keep or remove unused photoIds during authoring");
   console.log("4. Run the upload command when ready\n");
+
+  return {
+    workspace,
+  };
 };

@@ -4,6 +4,8 @@ import type { JournalEntryPageDefinition } from "@shared-types/content/pages/pub
 import type { JournalDraft } from "@content-pipeline/journal/types/journal.draft.entry.types";
 import type { JournalKvRecord } from "@content-pipeline/journal/types/journal.kv.record.types";
 
+import { formatLocalDateTimeWithOffset } from "@content-pipeline/utils/format.local.date.time.with.offset.util";
+
 const REQUIRED_PLACEHOLDER = "__REQUIRED__";
 const DEFAULT_AUTHOR = "Kevin Ellen";
 
@@ -35,26 +37,6 @@ const getRequiredString = (
   }
 
   return value;
-};
-
-const pad = (value: number): string => String(value).padStart(2, "0");
-
-const formatLocalDateTimeWithOffset = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = pad(date.getMonth() + 1);
-  const day = pad(date.getDate());
-
-  const hours = pad(date.getHours());
-  const minutes = pad(date.getMinutes());
-  const seconds = pad(date.getSeconds());
-
-  const offsetMinutes = -date.getTimezoneOffset();
-  const sign = offsetMinutes >= 0 ? "+" : "-";
-  const absoluteOffsetMinutes = Math.abs(offsetMinutes);
-  const offsetHours = pad(Math.floor(absoluteOffsetMinutes / 60));
-  const offsetRemainingMinutes = pad(absoluteOffsetMinutes % 60);
-
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetRemainingMinutes}`;
 };
 
 export const createJournalKvRecord = (

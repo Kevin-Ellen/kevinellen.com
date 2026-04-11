@@ -100,6 +100,7 @@ export const renderHeroModule = (module: RenderContextHeroModule): string => {
         height="${module.image.height}"
         loading="eager"
         decoding="async"
+        fetchpriority=high
       />
 
       <figcaption class="m-photo__annotation">

@@ -2,16 +2,17 @@
 
 import path from "node:path";
 
+import type { ContentCommandResult } from "@content-pipeline/cli/types/command.definition.types";
 import type { ContentCommandOptions } from "@content-pipeline/cli/types/command.options.types";
 
 import { loadContentPipelineConfig } from "@content-pipeline/config/load.content.pipeline.env";
+import { moveDraftWorkspaceToUploaded } from "@content-pipeline/drafts/helpers/move.draft.workspace.to.uploaded.helper";
 import { resolveDraftWorkspaceById } from "@content-pipeline/drafts/helpers/resolve.draft.workspace.by.id.helper";
 import { resolveLatestDraftWorkspace } from "@content-pipeline/drafts/helpers/resolve.latest.draft.workspace.helper";
 import { createJournalKvRecord } from "@content-pipeline/journal/helpers/create.journal.kv.record.helper";
 import { readJournalDraft } from "@content-pipeline/journal/helpers/read.journal.draft.helper";
 import { putCloudflareKvJson } from "@content-pipeline/media/helpers/put.cloudflare.kv.json.helper";
 import { uploadPhotoDraftFiles } from "@content-pipeline/photos/helpers/upload.photo.draft.files.helper";
-import { moveDraftWorkspaceToUploaded } from "@content-pipeline/drafts/helpers/move.draft.workspace.to.uploaded.helper";
 
 const JOURNAL_DRAFT_FILE_NAME = "journal.draft.ts";
 
@@ -29,7 +30,7 @@ const resolveJournalWorkspace = async (options: ContentCommandOptions) => {
 
 export const runUploadJournalCommand = async (
   options: ContentCommandOptions,
-): Promise<void> => {
+): Promise<ContentCommandResult> => {
   const config = loadContentPipelineConfig(options.env);
   const workspace = await resolveJournalWorkspace(options);
 
@@ -60,4 +61,8 @@ export const runUploadJournalCommand = async (
   console.log(`- kv key: ${kvKey}`);
   console.log(`- photo drafts uploaded: ${uploadedPhotoDraftFiles.length}`);
   console.log(`- moved to: ${uploadedWorkspacePath}\n`);
+
+  return {
+    workspace,
+  };
 };
