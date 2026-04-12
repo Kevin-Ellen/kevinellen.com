@@ -1,47 +1,33 @@
 // src/entry.test.ts
 
 import { onRequest, default as entryModule } from "../../src/entry";
+import { requestOrchestrator } from "@request/request";
 
-import { createAppState } from "@app/appState/create.appState";
-import { requestHandler } from "@app/handlers/request.handler";
-
-jest.mock("@app/appState/create.appState", () => ({
-  createAppState: jest.fn(),
-}));
-
-jest.mock("@app/handlers/request.handler", () => ({
-  requestHandler: jest.fn(),
+jest.mock("@request/request", () => ({
+  orchestrateRequest: jest.fn(),
 }));
 
 describe("entry", () => {
-  const mockCreateAppState = createAppState as jest.MockedFunction<
-    typeof createAppState
-  >;
-
-  const mockRequestHandler = requestHandler as jest.MockedFunction<
-    typeof requestHandler
+  const mockOrchestrateRequest = requestOrchestrator as jest.MockedFunction<
+    typeof requestOrchestrator
   >;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("creates app state and passes it to requestHandler", async () => {
+  it("passes req, env and ctx to orchestrateRequest", async () => {
     const req = new Request("https://kevinellen.com/");
     const env = {} as Env;
     const ctx = {} as ExecutionContext;
-
-    const appState = { test: "app-state" };
     const response = new Response("ok", { status: 200 });
 
-    mockCreateAppState.mockReturnValue(appState as never);
-    mockRequestHandler.mockResolvedValue(response);
+    mockOrchestrateRequest.mockResolvedValue(response);
 
     const result = await onRequest(req, env, ctx);
 
-    expect(mockCreateAppState).toHaveBeenCalledTimes(1);
-    expect(mockRequestHandler).toHaveBeenCalledTimes(1);
-    expect(mockRequestHandler).toHaveBeenCalledWith(req, env, ctx, appState);
+    expect(mockOrchestrateRequest).toHaveBeenCalledTimes(1);
+    expect(mockOrchestrateRequest).toHaveBeenCalledWith(req, env, ctx);
     expect(result).toBe(response);
   });
 
