@@ -11,12 +11,13 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@app/*": ["./src/app/*"],
+      "@request/*": ["./src/app/request/*"],
       "@config/*": ["./src/app/config/*"],
       "@utils/*": ["./src/utils/*"],
       "@tests/*": ["./tests/*"],
       "@shared-types/*": ["./packages/shared-types/src/*"],
-      "@content-pipeline/*": ["./packages/content-pipeline/src/*"]
+      "@content-pipeline/*": ["./packages/content-pipeline/src/*"],
+      "@app/*": ["./src/app/*"]
     }
   },
   "include": [
@@ -25,5 +26,6 @@
     "worker-configuration.d.ts",
     "packages/shared-types/src",
     "packages/shared-types/src/uploads"
-  ]
+  ],
+  "exclude": ["__OLD"]
 }
