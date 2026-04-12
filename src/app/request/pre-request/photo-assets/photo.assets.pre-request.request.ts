@@ -34,5 +34,9 @@ export const photoAssetOrchestrator = async (
 
   const upstreamResponse = await fetch(imageUrl);
 
+  if (upstreamResponse.status === 404) {
+    return null;
+  }
+
   return photoAssetResponsePolicy(upstreamResponse);
 };

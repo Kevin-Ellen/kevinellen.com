@@ -4,7 +4,6 @@ export const photoAssetResponsePolicy = (response: Response): Response => {
   const headers = new Headers(response.headers);
 
   headers.set("cache-control", "public, max-age=31536000, immutable");
-
   headers.set("x-runtime-policy", "photo");
 
   return new Response(response.body, {
