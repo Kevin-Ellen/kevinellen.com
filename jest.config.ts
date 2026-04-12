@@ -17,10 +17,14 @@ const config: Config = {
   moduleNameMapper: {
     "\\.css\\?raw$": "<rootDir>/tests/mocks/rawCss.mock.ts",
     "^@tests/(.*)$": "<rootDir>/tests/$1",
-    "^@request/(.*)$": "<rootDir>/src/app/request/$1",
+    "^@request/(.*)$": "<rootDir>/src/request/$1",
+    "^@app-state/(.*)$": "<rootDir>/src/app-state/$1",
+    "^@shared-types/(.*)$": "<rootDir>/shared-types/$1",
+    "^@utils/(.*)$": "<rootDir>/src/utils/$1",
+    "^@pages/(.*)$": "<rootDir>/src/pages/$1",
     // "^@config/(.*)$": "<rootDir>/src/config/$1",
     // "^@src/(.*)$": "<rootDir>/src/$1",
-    // "^@utils/(.*)$": "<rootDir>/src/utils/$1",
+
     // "^@app/(.*)$": "<rootDir>/src/app/$1",
     // "^@system/(.*)$": "<rootDir>/src/system/$1",
     // "^@resources/(.*)$": "<rootDir>/src/resources/$1",

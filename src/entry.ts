@@ -1,4 +1,4 @@
-// src/app/entry.ts
+// src/entry.ts
 
 import { requestOrchestrator } from "@request/request";
 

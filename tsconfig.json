@@ -11,21 +11,28 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@request/*": ["./src/app/request/*"],
-      "@config/*": ["./src/app/config/*"],
+      "@shared-types/*": ["./shared-types/*"],
+      "@request/*": ["./src/request/*"],
+      "@app-state/*": ["./src/app-state/*"],
+      "@app-context/*": ["./src/app-context/*"],
+      "@app-render-context/*": ["./src/app-render-context/*"],
+
       "@utils/*": ["./src/utils/*"],
-      "@tests/*": ["./tests/*"],
-      "@shared-types/*": ["./packages/shared-types/src/*"],
-      "@content-pipeline/*": ["./packages/content-pipeline/src/*"],
-      "@app/*": ["./src/app/*"]
+      "@pages/*": ["./src/pages/*"]
+
+      // "@tests/*": ["./tests/*"],
+      // "@shared-types/*": ["./packages/shared-types/src/*"],
+      // "@content-pipeline/*": ["./packages/content-pipeline/src/*"],
+      // "@app/*": ["./src/app/*"]
     }
   },
   "include": [
     "src",
     "tests",
     "worker-configuration.d.ts",
-    "packages/shared-types/src",
-    "packages/shared-types/src/uploads"
+    // "packages/shared-types/src",
+    // "packages/shared-types/src/uploads",
+    "shared-types/"
   ],
   "exclude": ["__OLD"]
 }
