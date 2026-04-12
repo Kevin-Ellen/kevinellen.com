@@ -1,9 +1,16 @@
 // src/app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.module.renderContext.types.ts
 
-export type RenderContextJournalEntryFooterPublicationItem = {
-  label: string;
-  value: string;
-};
+export type RenderContextJournalEntryFooterPublicationItem =
+  | {
+      kind: "date";
+      label: string;
+      value: string; // ISO string
+    }
+  | {
+      kind: "text";
+      label: string;
+      value: string;
+    };
 
 export type RenderContextJournalEntryFooterFieldNotesItem = {
   label: string;

@@ -1,7 +1,10 @@
 // src/app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.resolve.renderContext.ts
 
 import type { AppContextJournalEntryFooterModule } from "@app/appContext/content/modules/journalEntryFooter/journalEntryFooter.module.appContext.types";
-import type { RenderContextJournalEntryFooterModule } from "@app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.module.renderContext.types";
+import type {
+  RenderContextJournalEntryFooterModule,
+  RenderContextJournalEntryFooterPublicationItem,
+} from "@app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.module.renderContext.types";
 
 const collapseRedundantPublicationItems = (
   items: readonly { label: string; value: string }[],
@@ -16,6 +19,25 @@ const collapseRedundantPublicationItems = (
   return items;
 };
 
+const mapPublicationItem = (item: {
+  label: string;
+  value: string;
+}): RenderContextJournalEntryFooterPublicationItem => {
+  if (item.label === "Published" || item.label === "Last update") {
+    return {
+      kind: "date",
+      label: item.label,
+      value: item.value,
+    };
+  }
+
+  return {
+    kind: "text",
+    label: item.label,
+    value: item.value,
+  };
+};
+
 export const resolveJournalEntryFooterRenderContext = (
   footer: AppContextJournalEntryFooterModule,
 ): RenderContextJournalEntryFooterModule => {
@@ -26,7 +48,7 @@ export const resolveJournalEntryFooterRenderContext = (
         label: item.label,
         value: item.value,
       })),
-    ),
+    ).map(mapPublicationItem),
     fieldNotes: footer.fieldNotes.map((item) => ({
       label: item.label,
       values: item.values,

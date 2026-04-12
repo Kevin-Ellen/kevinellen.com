@@ -37,7 +37,7 @@ export const resolveJournalListingRenderContext = (
   return {
     kind: "journalListing",
     flow: "content",
-    entries: module.entries.map(({ page, photo }) => {
+    entries: module.entries.map(({ page, photo }, index) => {
       const baseUrl = photo.image.urls.frame;
 
       if (!baseUrl) {
@@ -45,6 +45,11 @@ export const resolveJournalListingRenderContext = (
           `Journal listing photo "${photo.id}" is missing "frame" URL.`,
         );
       }
+
+      const isFeatured =
+        page.core.featuredIn?.some(
+          (featuredSetting) => featuredSetting.surface === "journal-listing",
+        ) || index === 0;
 
       const dimensions = normaliseDimensionsToBase(
         photo.intrinsic.width,
@@ -58,7 +63,7 @@ export const resolveJournalListingRenderContext = (
         title: page.core.label,
         intro: page.content.head.intro ?? "",
         publishedAt: getPublishedDate(page),
-        featuredIn: page.core.featuredIn ?? [],
+        isFeatured,
         photo: {
           src: pickDefaultSrc(baseUrl),
           srcset: buildSrcSet(baseUrl),

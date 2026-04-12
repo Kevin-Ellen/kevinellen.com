@@ -6,23 +6,24 @@ import {
   escapeAttribute,
   escapeHtmlContent,
 } from "@app/rendering/utils/escapeContent.util";
+import { formatDate } from "@app/rendering/utils/formatDate.util";
 
 export const renderJournalListingModule = (
   module: RenderContextJournalListingModule,
 ): string => {
   return `
-    <div class="m-journal-listing">
+    <div class="m-journalListing">
       ${module.entries
-        .map((entry, index) => {
-          const isFeatured = index === 0;
+        .map((entry) => {
+          const isFeatured = entry.isFeatured;
 
           return `
-            <article class="m-journal-listing__item ${
-              isFeatured ? "m-journal-listing__item--featured" : ""
+            <article class="m-journalListing__item ${
+              isFeatured ? "m-journalListing__item--featured" : ""
             }">
-              <a href="${escapeAttribute(entry.href)}" class="m-journal-listing__link">
+              <a href="${escapeAttribute(entry.href)}" class="m-journalListing__link">
 
-                <div class="m-journal-listing__media">
+                <div class="m-journalListing__media">
                   <img
                     src="${escapeAttribute(entry.photo.src)}"
                     ${
@@ -42,19 +43,21 @@ export const renderJournalListingModule = (
                   />
                 </div>
 
-                <div class="m-journal-listing__content">
-                  <p class="m-journal-listing__meta">
-                    ${escapeHtmlContent(entry.publishedAt)}
+                <div class="m-journalListing__content m-heading">
+                  <p class="m-journalListing__meta m-heading__eyebrow">
+                    <time datetime="${escapeAttribute(entry.publishedAt)}">
+                      ${escapeHtmlContent(formatDate(entry.publishedAt))}
+                    </time>
                   </p>
 
-                  <h2 class="m-journal-listing__title">
+                  <h3 class="m-journalListing__title m-heading__title">
                     ${escapeHtmlContent(entry.title)}
-                  </h2>
+                  </h3>
 
                   ${
                     isFeatured
                       ? `
-                    <p class="m-journal-listing__intro">
+                    <p class="m-journalListing__intro m-heading__intro">
                       ${escapeHtmlContent(entry.intro)}
                     </p>
                   `

@@ -1,6 +1,5 @@
 // src/app/renderContext/content/modules/journalListing/journalListing.module.renderContext.types.ts
 
-import { FeaturedSettings } from "@shared-types/content/pages/public/featured.public.page.types";
 import type { RenderContextResponsiveImage } from "@app/renderContext/content/modules/shared-types/images.modules.renderContext.types";
 
 export type RenderContextJournalListingEntry = {
@@ -10,7 +9,7 @@ export type RenderContextJournalListingEntry = {
   intro: string;
   publishedAt: string;
   photo: RenderContextResponsiveImage;
-  featuredIn: readonly FeaturedSettings[];
+  isFeatured: boolean;
 };
 
 export type RenderContextJournalListingModule = {
