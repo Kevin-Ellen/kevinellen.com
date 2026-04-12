@@ -12,6 +12,7 @@ import { resolveParagraphAppContext } from "@app/appContext/content/modules/para
 import { resolveQuoteAppContext } from "@app/appContext/content/modules/quote/quote.resolve.appContext";
 import { resolveListAppContext } from "@app/appContext/content/modules/list/list.resolve.appContext";
 import { resolveHeroAppContext } from "@app/appContext/content/modules/hero/hero.resolve.appContext";
+import { resolveJournalListingModule } from "@app/appContext/content/modules/journalListing/journalListing.resolve.appContext";
 
 export type AppContextModuleResolverDependencies = {
   appState: AppState;
@@ -47,4 +48,5 @@ export const CONTENT_MODULE_RESOLVERS_REGISTRY: ModulesRegistry = {
   quote: resolveQuoteAppContext,
   list: resolveListAppContext,
   hero: resolveHeroAppContext,
+  journalListing: resolveJournalListingModule,
 };

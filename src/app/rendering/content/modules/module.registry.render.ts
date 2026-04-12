@@ -6,6 +6,7 @@ import { renderParagraphModule } from "@app/rendering/content/modules/paragraph/
 import { quoteRenderModule } from "@app/rendering/content/modules/quote/quote.render.module";
 import { renderListModule } from "@app/rendering/content/modules/list/list.render.module";
 import { renderHeroModule } from "@app/rendering/content/modules/hero/hero.render.module";
+import { renderJournalListingModule } from "@app/rendering/content/modules/journalListing/journalListing.render.module";
 
 type ModuleRenderer<TModule extends RenderContextContentModule> = (
   module: TModule,
@@ -22,4 +23,5 @@ export const MODULE_RENDERERS_REGISTRY: ModulesRegistry = {
   quote: quoteRenderModule,
   list: renderListModule,
   hero: renderHeroModule,
+  journalListing: renderJournalListingModule,
 };

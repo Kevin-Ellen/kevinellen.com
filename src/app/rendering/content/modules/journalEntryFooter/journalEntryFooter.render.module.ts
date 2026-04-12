@@ -6,6 +6,7 @@ import {
   escapeAttribute,
   escapeHtmlContent,
 } from "@app/rendering/utils/escapeContent.util";
+import { formatDate } from "@app/rendering/utils/formatDate.util";
 
 const renderPublication = (
   publication: RenderContextJournalEntryFooterModule["publication"],
@@ -19,18 +20,25 @@ const renderPublication = (
       <h3 class="m-article-footer__heading">Publication</h3>
       <dl class="m-article-footer__list">
         ${publication
-          .map(
-            (item) => `
+          .map((item) => {
+            const renderedValue =
+              item.kind === "date"
+                ? `<time datetime="${escapeAttribute(item.value)}">${escapeHtmlContent(
+                    formatDate(item.value),
+                  )}</time>`
+                : escapeHtmlContent(item.value);
+
+            return `
           <div class="m-article-footer__item">
             <dt class="m-article-footer__label">
               ${escapeHtmlContent(item.label)}
             </dt>
             <dd class="m-article-footer__value">
-              ${escapeHtmlContent(item.value)}
+              ${renderedValue}
             </dd>
           </div>
-        `,
-          )
+        `;
+          })
           .join("")}
       </dl>
     </section>

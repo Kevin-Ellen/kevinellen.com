@@ -1,0 +1,71 @@
+@use "../tokens" as tokens;
+
+.m-journal-listing {
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    padding-block: tokens.$space-lg;
+    border-top: 1px solid tokens.$colour-rule;
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &--featured {
+      .m-journal-listing__link {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .m-journal-listing__title {
+        font-size: tokens.$font-size-h3;
+      }
+
+      .m-journal-listing__intro {
+        margin-top: tokens.$space-xs;
+      }
+
+      .m-journal-listing__content {
+        margin-top: tokens.$space-sm;
+      }
+    }
+  }
+
+  &__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+
+    @media (min-width: tokens.$bp-sm) {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: tokens.$space-md;
+      align-items: start;
+    }
+  }
+
+  &__media {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    align-self: center;
+    aspect-ratio: 4 / 3;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: tokens.$bp-sm) {
+      margin-top: 0;
+    }
+  }
+}

@@ -6,6 +6,8 @@ import type {
   AppContextPhoto,
   AppContextPhotoId,
 } from "@app/appContext/appContext.types";
+import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
+import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
 
 import { AppContext } from "@app/appContext/class.appContext";
 import { isPublicPage } from "@app/appContext/guards/isPublicPage.guard.appContext";
@@ -22,7 +24,40 @@ import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/struc
 import { resolveContentAppContext } from "@app/appContext/content/content.resolve.appContext";
 import { resolvePhotosAppContext } from "@app/appContext/resolvers/photo/resolve.photo.appContext";
 
+import { getHeroPhotoId } from "@app/appContext/helpers/heroPhoto.extract.helper.appContext";
+
 import { deepFreeze } from "@utils/deepFreeze.util";
+
+const collectPhotoIdsForTargetPage = (
+  appState: AppState,
+  target: DocumentRenderTarget,
+): readonly AppContextPhotoId[] => {
+  const found = new Set<AppContextPhotoId>();
+
+  const addPagePhotoIds = (page: PublicPage | ErrorPage): void => {
+    if (!("content" in page)) {
+      return;
+    }
+
+    for (const section of page.content.body) {
+      for (const module of section.modules) {
+        if (module.kind === "hero") {
+          found.add(module.photoId);
+        }
+      }
+    }
+  };
+
+  addPagePhotoIds(target.page);
+
+  if ("core" in target.page && target.page.core.kind === "journal-listing") {
+    for (const entry of appState.getJournalEntries()) {
+      found.add(getHeroPhotoId(entry));
+    }
+  }
+
+  return [...found];
+};
 
 export const createAppContext = async (
   req: Request,
@@ -41,7 +76,8 @@ export const createAppContext = async (
     ? resolveStructuredDataAppContext(appState, target.page, breadcrumbs)
     : [];
 
-  const photos = await resolvePhotosAppContext(env, target.page);
+  const photoIds = collectPhotoIdsForTargetPage(appState, target);
+  const photos = await resolvePhotosAppContext(env, photoIds);
 
   const photosById = new Map<AppContextPhotoId, AppContextPhoto>(
     photos.map((photo) => [photo.id, photo]),

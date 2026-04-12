@@ -2,6 +2,8 @@
 
 import type { JournalListingPageDefinition } from "@shared-types/content/pages/public/journal-listing/journal-listing.public.page.definition";
 
+const PAGE_SIZE = 10;
+
 export const journalListingPage: JournalListingPageDefinition = {
   core: {
     id: "journal",
@@ -46,30 +48,16 @@ export const journalListingPage: JournalListingPageDefinition = {
       {
         kind: "contentSection",
         heading: {
-          text: "Journal overview",
+          text: "Journal entries",
           visuallyHidden: true,
           level: 2,
         },
         modules: [
           {
-            kind: "paragraph",
-            content: [
-              {
-                kind: "text",
-                value:
-                  "This listing page will later surface published journal entries from the content layer.",
-              },
-            ],
-          },
-          {
-            kind: "paragraph",
-            content: [
-              {
-                kind: "text",
-                value:
-                  "For now, it acts as the first typed placeholder for the journal section.",
-              },
-            ],
+            kind: "journalListing",
+            pagination: {
+              pageSize: PAGE_SIZE,
+            },
           },
         ],
       },

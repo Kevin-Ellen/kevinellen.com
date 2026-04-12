@@ -1,6 +1,7 @@
 // src/app/renderContext/content/modules/hero/hero.module.renderContext.types.ts
 
 import type { RenderContextContentFlow } from "@app/renderContext/content/content.renderContext.types";
+import type { RenderContextResponsiveImage } from "@app/renderContext/content/modules/shared-types/images.modules.renderContext.types";
 
 export type RenderContextHeroMetaKey = "location";
 
@@ -24,20 +25,11 @@ export type RenderContextHeroSettingItem = {
   description?: string;
 };
 
-export type RenderContextHeroResponsiveImage = {
-  src: string;
-  srcset?: string;
-  sizes?: string;
-  alt: string;
-  width: number;
-  height: number;
-};
-
 export type RenderContextHeroModule = {
   kind: "hero";
   flow: RenderContextContentFlow;
   immersive: boolean;
-  image: RenderContextHeroResponsiveImage;
+  image: RenderContextResponsiveImage;
   caption: string;
   meta: readonly RenderContextHeroMetaItem[];
   settings: readonly RenderContextHeroSettingItem[];

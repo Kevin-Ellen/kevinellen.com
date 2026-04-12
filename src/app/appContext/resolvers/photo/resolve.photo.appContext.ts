@@ -4,11 +4,8 @@ import type {
   AppContextPhoto,
   AppContextPhotoVariant,
 } from "@app/appContext/appContext.types";
-import type { PublicPage } from "@shared-types/content/pages/public/public.page.union";
-import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
 import type { PhotoRecord } from "@shared-types/photo/record.photo.types";
 
-import { extractPhotoIdsAppContext } from "@app/appContext/resolvers/photo/extract.Ids.photo.appContext";
 import { getPhotoRecordByIds } from "@app/appContext/getters/photo/photo.record.getter.appContext";
 
 const resolvePhotoVariantUrl = (
@@ -51,10 +48,8 @@ const mapPhotoRecordToAppContextPhoto = (
 
 export const resolvePhotosAppContext = async (
   env: Env,
-  content: PublicPage | ErrorPage,
+  ids: readonly string[],
 ): Promise<readonly AppContextPhoto[]> => {
-  const ids = extractPhotoIdsAppContext(content);
-
   if (ids.length === 0) {
     return [];
   }
