@@ -12,18 +12,18 @@ export const renderJournalListingModule = (
   module: RenderContextJournalListingModule,
 ): string => {
   return `
-    <div class="m-journalListing">
+    <div class="m-journal-listing">
       ${module.entries
         .map((entry) => {
           const isFeatured = entry.isFeatured;
 
           return `
-            <article class="m-journalListing__item ${
-              isFeatured ? "m-journalListing__item--featured" : ""
+            <article class="m-journal-listing__item ${
+              isFeatured ? "m-journal-listing__item--featured" : ""
             }">
-              <a href="${escapeAttribute(entry.href)}" class="m-journalListing__link">
+              <a href="${escapeAttribute(entry.href)}" class="m-journal-listing__link">
 
-                <div class="m-journalListing__media">
+                <div class="m-journal-listing__media">
                   <img
                     src="${escapeAttribute(entry.photo.src)}"
                     ${
@@ -43,21 +43,21 @@ export const renderJournalListingModule = (
                   />
                 </div>
 
-                <div class="m-journalListing__content m-heading">
-                  <p class="m-journalListing__meta m-heading__eyebrow">
+                <div class="m-journal-listing__content m-heading">
+                  <p class="m-journal-listing__meta m-heading__eyebrow">
                     <time datetime="${escapeAttribute(entry.publishedAt)}">
                       ${escapeHtmlContent(formatDate(entry.publishedAt))}
                     </time>
                   </p>
 
-                  <h3 class="m-journalListing__title m-heading__title">
+                  <h3 class="m-journal-listing__title m-heading__title">
                     ${escapeHtmlContent(entry.title)}
                   </h3>
 
                   ${
                     isFeatured
                       ? `
-                    <p class="m-journalListing__intro m-heading__intro">
+                    <p class="m-journal-listing__intro m-heading__intro">
                       ${escapeHtmlContent(entry.intro)}
                     </p>
                   `
