@@ -22,7 +22,24 @@ import { resolveStructuredDataAppContext } from "@app/appContext/resolvers/struc
 import { resolveContentAppContext } from "@app/appContext/content/content.resolve.appContext";
 import { resolvePhotosAppContext } from "@app/appContext/resolvers/photo/resolve.photo.appContext";
 
+import { getHeroPhotoId } from "@app/appContext/helpers/heroPhoto.extract.helper.appContext";
+
 import { deepFreeze } from "@utils/deepFreeze.util";
+
+const collectPhotoIdsForTargetPage = (
+  appState: AppState,
+  target: DocumentRenderTarget,
+): readonly AppContextPhotoId[] => {
+  const found = new Set<AppContextPhotoId>();
+
+  if (target.page.core.kind === "journal-listing") {
+    for (const entry of appState.getJournalEntries()) {
+      found.add(getHeroPhotoId(entry));
+    }
+  }
+
+  return [...found];
+};
 
 export const createAppContext = async (
   req: Request,
@@ -41,7 +58,8 @@ export const createAppContext = async (
     ? resolveStructuredDataAppContext(appState, target.page, breadcrumbs)
     : [];
 
-  const photos = await resolvePhotosAppContext(env, target.page);
+  const photoIds = collectPhotoIdsForTargetPage(appState, target);
+  const photos = await resolvePhotosAppContext(env, photoIds);
 
   const photosById = new Map<AppContextPhotoId, AppContextPhoto>(
     photos.map((photo) => [photo.id, photo]),

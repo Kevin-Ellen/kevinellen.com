@@ -188,6 +188,10 @@ export type AppContextPhoto = {
   };
 };
 
+export type AppContextPagination = {
+  pageSize: number;
+};
+
 export type AppContextPhotoMetadataDefinition = {
   label: string;
   description?: string;

@@ -8,6 +8,7 @@ import { resolveParagraphRenderContext } from "@app/renderContext/content/module
 import { resolveQuoteRenderContext } from "@app/renderContext/content/modules/quote/quote.resolve.renderContext";
 import { resolveListRenderContext } from "@app/renderContext/content/modules/list/list.resolve.renderContext";
 import { resolveHeroRenderContext } from "@app/renderContext/content/modules/hero/hero.resolve.renderContext";
+import { resolveJournalListingRenderContext } from "@app/renderContext/content/modules/journalListing/journalListing.resolve.renderContext";
 
 type ModuleResolver<TAppModule extends AppContextContentModule> = (
   module: TAppModule,
@@ -25,4 +26,5 @@ export const CONTENT_MODULE_RESOLVERS_REGISTRY: ModulesRegistry = {
   quote: resolveQuoteRenderContext,
   list: resolveListRenderContext,
   hero: resolveHeroRenderContext,
+  journalListing: resolveJournalListingRenderContext,
 };

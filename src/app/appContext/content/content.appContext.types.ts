@@ -5,6 +5,7 @@ import type { AppContextParagraphModule } from "@app/appContext/content/modules/
 import type { AppContextQuoteModule } from "@app/appContext/content/modules/quote/quote.module.appContext.types";
 import type { AppContextHeroModule } from "@app/appContext/content/modules/hero/hero.module.appContext.types";
 import type { AppContextJournalEntryFooterModule } from "@app/appContext/content/modules/journalEntryFooter/journalEntryFooter.module.appContext.types";
+import type { AppContextJournalListingModule } from "@app/appContext/content/modules/journalListing/journalListing.module.appContext.types";
 
 export type AppContextPageHeadContent = {
   eyebrow: string;
@@ -32,4 +33,5 @@ export type AppContextContentModule =
   | AppContextParagraphModule
   | AppContextQuoteModule
   | AppContextListModule
-  | AppContextHeroModule;
+  | AppContextHeroModule
+  | AppContextJournalListingModule;

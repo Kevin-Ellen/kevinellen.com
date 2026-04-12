@@ -5,6 +5,7 @@ import type { RenderContextQuoteModule } from "@app/renderContext/content/module
 import type { RenderContextListModule } from "@app/renderContext/content/modules/list/list.module.renderContext.types";
 import type { RenderContextHeroModule } from "@app/renderContext/content/modules/hero/hero.module.renderContext.types";
 import type { RenderContextJournalEntryFooterModule } from "@app/renderContext/content/modules/journalEntryFooter/journalEntryFooter.module.renderContext.types";
+import type { RenderContextJournalListingModule } from "@app/renderContext/content/modules/journalListing/journalListing.module.renderContext.types";
 
 export type RenderContextPageHeadContent = {
   eyebrow: string;
@@ -36,4 +37,5 @@ export type RenderContextContentModule =
   | RenderContextParagraphModule
   | RenderContextQuoteModule
   | RenderContextListModule
-  | RenderContextHeroModule;
+  | RenderContextHeroModule
+  | RenderContextJournalListingModule;

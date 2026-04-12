@@ -1,6 +1,6 @@
 // src/app/appContext/content/modules/hero/hero.module.appContext.types.ts
 
-import { AppContextPhoto } from "@app/appContext/appContext.types";
+import type { AppContextPhoto } from "@app/appContext/appContext.types";
 
 export type AppContextHeroMetaKey = "location";
 

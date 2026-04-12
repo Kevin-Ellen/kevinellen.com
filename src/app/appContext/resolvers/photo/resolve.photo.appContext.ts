@@ -51,10 +51,8 @@ const mapPhotoRecordToAppContextPhoto = (
 
 export const resolvePhotosAppContext = async (
   env: Env,
-  content: PublicPage | ErrorPage,
+  ids: readonly string[],
 ): Promise<readonly AppContextPhoto[]> => {
-  const ids = extractPhotoIdsAppContext(content);
-
   if (ids.length === 0) {
     return [];
   }

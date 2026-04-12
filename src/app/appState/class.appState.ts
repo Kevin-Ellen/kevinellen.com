@@ -11,6 +11,7 @@ import type { ErrorPageStatus } from "@shared-types/content/pages/error/error.pa
 import type { ErrorPage } from "@shared-types/content/pages/error/error.page.union";
 import type { ScriptAssetAuthored } from "@shared-types/assets/script.asset.authored.types";
 import type { SvgAssetAuthored } from "@shared-types/assets/svg.asset.authored.types";
+import type { JournalEntryPageDefinition } from "@shared-types/content/pages/public/journal-entry/journal-entry.public.page.definition";
 
 export class AppState {
   public readonly config: AppConfig;
@@ -105,5 +106,12 @@ export class AppState {
 
   public getSvgAssetById(id: string): SvgAssetAuthored | null {
     return this.config.assets.svgs.find((svg) => svg.id === id) ?? null;
+  }
+
+  public getJournalEntries(): readonly JournalEntryPageDefinition[] {
+    return this.#pages.public.filter(
+      (page): page is JournalEntryPageDefinition =>
+        page.core.kind === "journal-entry",
+    );
   }
 }
