@@ -5,31 +5,25 @@ import type { SocialId } from "@shared-types/config/social/id.social.types";
 import type { PageIdPublic } from "@shared-types/pages/shared/id.shared.page.types";
 import type { LinkOpenBehaviour } from "@shared-types/links/shared.links.types";
 
-type AuthoredInternalLink = {
+export type AuthoredInternalLink = Readonly<{
   kind: "internal";
   id: PageIdPublic;
   svgId?: SvgAssetId;
   behaviour?: LinkOpenBehaviour;
-};
+}>;
 
-type AuthoredSocialLink = {
+export type AuthoredSocialLink = Readonly<{
   kind: "social";
   id: SocialId;
   svgId?: SvgAssetId;
-  behaviour?: {
-    openInNewTab: true;
-  };
-};
+}>;
 
-type AuthoredExternalLink = {
+export type AuthoredExternalLink = Readonly<{
   kind: "external";
   href: string;
-  label: string;
+  text: string;
   svgId?: SvgAssetId;
-  behaviour?: {
-    openInNewTab: true;
-  };
-};
+}>;
 
 export type AuthoredLink =
   | AuthoredInternalLink

@@ -43,7 +43,5 @@ export const authoredNotFoundErrorPage: AuthoredErrorPageDefinition =
           ],
         },
       ],
-
-      footer: ["Please return to the homepage and continue from there."],
     },
   });

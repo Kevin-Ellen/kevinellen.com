@@ -1,4 +1,4 @@
-// shared-types/pages/definitions/public/home/app-state.public.definition.page.types.ts
+// shared-types/pages/definitions/public/app-state.public.definition.page.types.ts
 
 // Home
 import type { AppStateHomePublicPage } from "@shared-types/pages/definitions/public/home/app-state.home.public.definition.page.types";
@@ -13,7 +13,7 @@ import type { AppStateTermsLegalPublicPage } from "@shared-types/pages/definitio
 import type { AppStatePrivacyLegalPublicPage } from "@shared-types/pages/definitions/public/legal/privacy/app-state.privacy.legal.public.definition.page.types";
 import type { AppStateLicensingLegalPublicPage } from "@shared-types/pages/definitions/public/legal/licensing/app-state.licensing.legal.public.definition.page.types";
 
-export type AppStatePublicPageDefintion =
+export type AppStatePublicPageDefinition =
   | AppStateHomePublicPage
   | AppStateAboutPublicPage
   | AppStateEquipmentAboutPublicPage

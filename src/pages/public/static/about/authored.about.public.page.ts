@@ -104,8 +104,11 @@ export const authoredAboutPage: AuthoredAboutPublicPage = deepFreeze({
               },
               {
                 kind: "internalLink",
-                pageId: "about-equipment",
-                text: "photography equipment page",
+                link: {
+                  kind: "internal",
+                  id: "about-equipment",
+                  text: "photography equipment page",
+                },
               },
               {
                 kind: "text",
@@ -164,8 +167,11 @@ export const authoredAboutPage: AuthoredAboutPublicPage = deepFreeze({
               },
               {
                 kind: "internalLink",
-                pageId: "about-technology",
-                text: "technology section",
+                link: {
+                  kind: "internal",
+                  id: "about-technology",
+                  text: "technology section",
+                },
               },
               {
                 kind: "text",
@@ -223,8 +229,11 @@ export const authoredAboutPage: AuthoredAboutPublicPage = deepFreeze({
               },
               {
                 kind: "internalLink",
-                pageId: "about-equipment",
-                text: "equipment page",
+                link: {
+                  kind: "internal",
+                  id: "about-equipment",
+                  text: "photography equipment page",
+                },
               },
               {
                 kind: "text",
@@ -232,8 +241,11 @@ export const authoredAboutPage: AuthoredAboutPublicPage = deepFreeze({
               },
               {
                 kind: "internalLink",
-                pageId: "about-technology",
-                text: "technology page",
+                link: {
+                  kind: "internal",
+                  id: "about-technology",
+                  text: "technology section",
+                },
               },
               {
                 kind: "text",

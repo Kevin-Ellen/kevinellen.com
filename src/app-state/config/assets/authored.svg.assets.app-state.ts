@@ -1,8 +1,8 @@
 // src/app-state/config/assets/authored.svg.assets.app-state.ts
 
-import type { AuthoredSvgAssets } from "@shared-types/assets/svg/authored.svg.assets.types";
+import type { AuthoredSvgAsset } from "@shared-types/assets/svg/authored.svg.assets.types";
 
-export const AUTHORED_SVG_ASSETS: AuthoredSvgAssets = [
+export const AUTHORED_SVG_ASSETS: readonly AuthoredSvgAsset[] = [
   {
     id: "logo-monogram-ke",
     viewBox: "0 0 4020 4020",

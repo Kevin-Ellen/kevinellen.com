@@ -45,7 +45,5 @@ export const authoredGoneErrorPage: AuthoredErrorPageDefinition = deepFreeze({
         ],
       },
     ],
-
-    footer: ["Please return to the homepage to continue browsing."],
   },
 });

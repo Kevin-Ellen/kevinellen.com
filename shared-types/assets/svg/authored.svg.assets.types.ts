@@ -2,10 +2,8 @@
 
 import type { SvgAssetId } from "@shared-types/assets/svg/id.svg.assets.types";
 
-export type AuthoredSvgAsset = {
+export type AuthoredSvgAsset = Readonly<{
   id: SvgAssetId;
   viewBox: string;
   content: string;
-};
-
-export type AuthoredSvgAssets = readonly AuthoredSvgAsset[];
+}>;

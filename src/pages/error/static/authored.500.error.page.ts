@@ -45,7 +45,5 @@ export const authoredInternalErrorPage: AuthoredErrorPageDefinition =
           ],
         },
       ],
-
-      footer: ["Please return to the homepage or try again in a moment."],
     },
   });

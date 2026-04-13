@@ -195,8 +195,11 @@ export const authoredTermsLegalPage: AuthoredTermsLegalPublicPage = deepFreeze({
               },
               {
                 kind: "internalLink",
-                pageId: "licensing",
-                text: "photo licensing page",
+                link: {
+                  kind: "internal",
+                  id: "licensing",
+                  text: "photo licensing page",
+                },
               },
               {
                 kind: "text",

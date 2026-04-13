@@ -1,8 +1,8 @@
 // src/app-state/config/assets/authored.scripts.assets.app-state.ts
 
-import type { AuthoredScriptAssets } from "@shared-types/assets/scripts/authored.scripts.assets.types";
+import type { AuthoredScriptAsset } from "@shared-types/assets/scripts/authored.scripts.assets.types";
 
-export const AUTHORED_SCRIPT_ASSETS: AuthoredScriptAssets = [
+export const AUTHORED_SCRIPT_ASSETS: readonly AuthoredScriptAsset[] = [
   {
     id: "header-condense",
     kind: "inline",

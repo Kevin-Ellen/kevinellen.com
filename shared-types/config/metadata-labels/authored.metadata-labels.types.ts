@@ -2,11 +2,11 @@
 
 import type { MetadataLabelId } from "@shared-types/config/metadata-labels/id.metadata-labels.types";
 
-export type AuthoredMetadataLabel = {
+export type AuthoredMetadataLabel = Readonly<{
   label: string;
   description?: string;
-};
+}>;
 
-export type AuthoredMetadataLabels = {
+export type AuthoredMetadataLabels = Readonly<{
   [K in MetadataLabelId]: AuthoredMetadataLabel;
-};
+}>;

@@ -1,6 +1,6 @@
 // src/app-state/resolve/webmanifest.resolve.app-state.ts
 
-import type { AppStateWebmanifest } from "@shared-types/config/webmanifest/app-state.webmanifest.types";
+import type { AppStateWebManifest } from "@shared-types/config/webmanifest/app-state.webmanifest.types";
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
 
 import { appStateWebManifestAuthored } from "@app-state/config/webmanifest/authored.webmanifest.app-state";
@@ -8,7 +8,7 @@ import { deepFreeze } from "@utils/deepFreeze.util";
 
 export const appStateResolveWebmanifest = (
   appStateSiteConfig: AppStateSiteConfig,
-): AppStateWebmanifest => {
+): AppStateWebManifest => {
   const startUrl = `${appStateSiteConfig.origin}${appStateSiteConfig.headerBranding.homeHref}`;
 
   return deepFreeze({

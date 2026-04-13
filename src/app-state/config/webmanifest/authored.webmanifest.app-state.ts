@@ -2,9 +2,9 @@
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-import type { WebManifestAuthored } from "@shared-types/config/webmanifest/authored.webmanifest.types";
+import type { AuthoredWebManifest } from "@shared-types/config/webmanifest/authored.webmanifest.types";
 
-export const appStateWebManifestAuthored: WebManifestAuthored = deepFreeze({
+export const appStateWebManifestAuthored: AuthoredWebManifest = deepFreeze({
   shortName: "KevinE",
   themeColor: "#1f2621",
   backgroundColor: "#1f2621",
