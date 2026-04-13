@@ -2,12 +2,6 @@
 
 import type { StaticAssetRequestResolver } from "@request/pre-request/static-assets/types/static-assets.pre-request.request.types";
 
-const getFileNameFromPathname = (pathname: string): string => {
-  const segments = pathname.split("/").filter(Boolean);
-
-  return segments[segments.length - 1] ?? "";
-};
-
 const getImageExtension = (
   fileName: string,
 ): "png" | "jpg" | "jpeg" | "webp" | "avif" | null => {
@@ -43,7 +37,7 @@ export const staticAssetResolverImage: StaticAssetRequestResolver = (
     return null;
   }
 
-  const fileName = getFileNameFromPathname(pathname);
+  const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
 
   const extension = getImageExtension(fileName);
 

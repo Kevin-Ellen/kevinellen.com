@@ -5,7 +5,7 @@ import type { PageId } from "@shared-types/pages/shared/id.shared.page.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const AuthoredFooterNavigation: AuthoredNavigation["footer"] =
+export const authoredFooterNavigation: AuthoredNavigation["footer"] =
   deepFreeze({
     sections: [
       {

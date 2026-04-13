@@ -1,4 +1,4 @@
-// src/app-state/resolve/global-footer.resolve.app-state.ts
+// src/app-state/resolve/page-content/global-footer.resolve.app-state.ts
 
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
 

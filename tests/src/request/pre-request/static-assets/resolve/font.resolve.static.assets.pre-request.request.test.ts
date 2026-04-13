@@ -43,4 +43,35 @@ describe("staticAssetResolverFont", () => {
 
     expect(result?.fileName).toBe("sourceserif4-variablefont_opsz_wght.woff2");
   });
+
+  it("returns null for an empty pathname", () => {
+    expect(staticAssetResolverFont("")).toBeNull();
+  });
+
+  it("returns null for the root pathname", () => {
+    expect(staticAssetResolverFont("/")).toBeNull();
+  });
+
+  it("returns null for a font directory path with no file name", () => {
+    expect(staticAssetResolverFont("/assets/fonts/source-sans/")).toBeNull();
+  });
+  it("returns null for a fonts path with no file name", () => {
+    expect(staticAssetResolverFont("/assets/fonts/")).toBeNull();
+  });
+  it("resolves any valid woff2 file under /assets/fonts", () => {
+    const result = staticAssetResolverFont("/assets/fonts/custom/font.woff2");
+
+    expect(result).not.toBeNull();
+    expect(result?.family).toBe("font");
+    expect(result?.fileName).toBe("font.woff2");
+    expect(result?.extension).toBe("woff2");
+    expect(result?.contentType).toBe("font/woff2");
+    expect(result?.cacheProfile).toBe("font");
+  });
+  it("resolves a minimal valid font path", () => {
+    const result = staticAssetResolverFont("/assets/fonts/a.woff2");
+
+    expect(result).not.toBeNull();
+    expect(result?.fileName).toBe("a.woff2");
+  });
 });

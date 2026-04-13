@@ -6,8 +6,7 @@ import type { AppStateQuoteBlockContentModule } from "@shared-types/page-content
 import type { AppStateHeroBlockContentModule } from "@shared-types/page-content/block/hero/app-state.hero.block.page-content.types";
 import type { AppStateJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-state.journal-listing.block.page-content.types";
 import type { AppStateContentSectionBlockContentModule } from "@shared-types/page-content/block/content-section/app-state.content-section.block.page-content.types";
-
-export type AppStateBlockContentModuleFlow = "content" | "breakout";
+import type { AppStatePreBlockContentModule } from "@shared-types/page-content/block/pre/app-state.pre.block.page-content.types";
 
 export type AppStateBlockContentModule =
   | AppStateParagraphBlockContentModule
@@ -15,4 +14,5 @@ export type AppStateBlockContentModule =
   | AppStateQuoteBlockContentModule
   | AppStateHeroBlockContentModule
   | AppStateJournalListingBlockContentModule
-  | AppStateContentSectionBlockContentModule;
+  | AppStateContentSectionBlockContentModule
+  | AppStatePreBlockContentModule;
