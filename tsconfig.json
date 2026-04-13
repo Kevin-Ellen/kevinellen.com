@@ -18,9 +18,9 @@
       "@app-render-context/*": ["./src/app-render-context/*"],
 
       "@utils/*": ["./src/utils/*"],
-      "@pages/*": ["./src/pages/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@tests/*": ["./tests/*"]
 
-      // "@tests/*": ["./tests/*"],
       // "@shared-types/*": ["./packages/shared-types/src/*"],
       // "@content-pipeline/*": ["./packages/content-pipeline/src/*"],
       // "@app/*": ["./src/app/*"]

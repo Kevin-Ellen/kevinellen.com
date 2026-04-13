@@ -22,22 +22,22 @@ type AppStateInlineContentResolverRegistry = {
   ) => AppStateInlineContent;
 };
 
-const appStateInlineContentResolverRegistry = {
-  text: appStateResolveTextInlineContent,
-  code: appStateResolveCodeInlineContent,
-  lineBreak: appStateResolveLineBreakInlineContent,
-  emphasis: appStateResolveEmphasisInlineContent,
-  strong: appStateResolveStrongInlineContent,
-  internalLink: appStateResolveInternalLinkInlineContent,
-  externalLink: appStateResolveExternalLinkInlineContent,
-} satisfies AppStateInlineContentResolverRegistry;
-
 const getAppStateInlineContentResolver = <
   TKind extends AuthoredInlineContentKind,
 >(
   kind: TKind,
 ): AppStateInlineContentResolverRegistry[TKind] => {
-  return appStateInlineContentResolverRegistry[kind];
+  const registry = {
+    text: appStateResolveTextInlineContent,
+    code: appStateResolveCodeInlineContent,
+    lineBreak: appStateResolveLineBreakInlineContent,
+    emphasis: appStateResolveEmphasisInlineContent,
+    strong: appStateResolveStrongInlineContent,
+    internalLink: appStateResolveInternalLinkInlineContent,
+    externalLink: appStateResolveExternalLinkInlineContent,
+  } satisfies AppStateInlineContentResolverRegistry;
+
+  return registry[kind];
 };
 
 export const appStateResolveInlineContent = <
@@ -46,6 +46,12 @@ export const appStateResolveInlineContent = <
   content: AuthoredInlineContentByKind<TKind>,
 ): AppStateInlineContent => {
   const resolver = getAppStateInlineContentResolver(content.kind);
+
+  if (!resolver) {
+    throw new Error(
+      `No AppState inline content resolver registered for kind: ${content.kind}`,
+    );
+  }
 
   return resolver(content);
 };

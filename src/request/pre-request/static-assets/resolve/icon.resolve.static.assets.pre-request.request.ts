@@ -12,8 +12,7 @@ import {
 
 const getFileNameFromPathname = (pathname: string): string => {
   const segments = pathname.split("/").filter(Boolean);
-
-  return segments[segments.length - 1] ?? "";
+  return segments[segments.length - 1];
 };
 
 const getExtensionFromFileName = (

@@ -7,5 +7,3 @@ export type BlockContentModulePagination = Readonly<{
 }>;
 
 export type BlockContentModuleListStyle = "unordered" | "ordered";
-
-export type lockContentModuleFlow = "content" | "breakout";

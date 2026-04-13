@@ -6,6 +6,7 @@ import type { AuthoredQuoteBlockContentModule } from "@shared-types/page-content
 import type { AuthoredHeroBlockContentModule } from "@shared-types/page-content/block/hero/authored.hero.block.page-content.types";
 import type { AuthoredJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/authored.journal-listing.block.page-content.types";
 import type { AuthoredContentSectionBlockContentModule } from "@shared-types/page-content/block/content-section/authored.content-section.block.page-content.types";
+import type { AuthoredPreBlockContentModule } from "@shared-types/page-content/block/pre/authored.pre.block.page-content.types";
 
 export type AuthoredBlockContentModule =
   | AuthoredParagraphBlockContentModule
@@ -13,4 +14,5 @@ export type AuthoredBlockContentModule =
   | AuthoredQuoteBlockContentModule
   | AuthoredHeroBlockContentModule
   | AuthoredJournalListingBlockContentModule
-  | AuthoredContentSectionBlockContentModule;
+  | AuthoredContentSectionBlockContentModule
+  | AuthoredPreBlockContentModule;

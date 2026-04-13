@@ -8,6 +8,7 @@ import { appStateResolveListBlockContentModule } from "@app-state/resolve/page-c
 import { appStateResolveQuoteBlockContentModule } from "@app-state/resolve/page-content/block/quote.resolve.app-state";
 import { appStateResolveHeroBlockContentModule } from "@app-state/resolve/page-content/block/hero.resolve.app-state";
 import { appStateResolveJournalListingBlockContentModule } from "@app-state/resolve/page-content/block/journal-listing.resolve.app-state";
+import { appStateResolvePreBlockContentModule } from "@app-state/resolve/page-content/block/pre.resolve.app-state";
 import { appStateResolveContentSectionBlockContentModule } from "@app-state/resolve/page-content/block/content-section.resolve.app-state";
 
 type AuthoredBlockContentModuleKind = AuthoredBlockContentModule["kind"];
@@ -22,21 +23,22 @@ type AppStateBlockContentModuleResolverRegistry = {
   ) => AppStateBlockContentModule;
 };
 
-const appStateBlockContentModuleResolverRegistry = {
-  paragraph: appStateResolveParagraphBlockContentModule,
-  list: appStateResolveListBlockContentModule,
-  quote: appStateResolveQuoteBlockContentModule,
-  hero: appStateResolveHeroBlockContentModule,
-  journalListing: appStateResolveJournalListingBlockContentModule,
-  contentSection: appStateResolveContentSectionBlockContentModule,
-} satisfies AppStateBlockContentModuleResolverRegistry;
-
 const getAppStateBlockContentModuleResolver = <
   TKind extends AuthoredBlockContentModuleKind,
 >(
   kind: TKind,
 ): AppStateBlockContentModuleResolverRegistry[TKind] => {
-  return appStateBlockContentModuleResolverRegistry[kind];
+  const registry = {
+    paragraph: appStateResolveParagraphBlockContentModule,
+    list: appStateResolveListBlockContentModule,
+    quote: appStateResolveQuoteBlockContentModule,
+    hero: appStateResolveHeroBlockContentModule,
+    journalListing: appStateResolveJournalListingBlockContentModule,
+    pre: appStateResolvePreBlockContentModule,
+    contentSection: appStateResolveContentSectionBlockContentModule,
+  } satisfies AppStateBlockContentModuleResolverRegistry;
+
+  return registry[kind];
 };
 
 export const appStateResolveBlockContentModule = <
@@ -45,6 +47,12 @@ export const appStateResolveBlockContentModule = <
   module: AuthoredBlockContentModuleByKind<TKind>,
 ): AppStateBlockContentModule => {
   const resolver = getAppStateBlockContentModuleResolver(module.kind);
+
+  if (!resolver) {
+    throw new Error(
+      `No AppState block content resolver registered for kind: ${module.kind}`,
+    );
+  }
 
   return resolver(module);
 };

@@ -2,11 +2,7 @@
 
 import type { StaticAssetRequestResolver } from "@request/pre-request/static-assets/types/static-assets.pre-request.request.types";
 
-const getFileNameFromPathname = (pathname: string): string => {
-  const segments = pathname.split("/").filter(Boolean);
-
-  return segments[segments.length - 1] ?? "";
-};
+// import { getFileNameFromPathname } from "@utils/fileNameFromPath.util";
 
 export const staticAssetResolverFont: StaticAssetRequestResolver = (
   pathname,
@@ -15,7 +11,8 @@ export const staticAssetResolverFont: StaticAssetRequestResolver = (
     return null;
   }
 
-  const fileName = getFileNameFromPathname(pathname);
+  // const fileName = getFileNameFromPathname(pathname);
+  const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
 
   if (!fileName.endsWith(".woff2")) {
     return null;
