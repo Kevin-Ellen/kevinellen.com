@@ -1,9 +1,9 @@
-// shared-types/config/system/app-state.system.types.ts
+// shared-types/config/system/authored.system.types.ts
 
-import type { GoneRules } from "./gone-rules.system.types";
-import type { RedirectRules } from "./redirect-rules.system.types";
+import type { SystemGoneRule } from "@shared-types/config/system/gone-rules.system.types";
+import type { SystemRedirectRule } from "@shared-types/config/system/redirect-rules.system.types";
 
-export type AuthoredSystem = {
-  redirectRules: RedirectRules;
-  goneRules: GoneRules;
-};
+export type AuthoredSystem = Readonly<{
+  redirectRules: readonly SystemRedirectRule[];
+  goneRules: readonly SystemGoneRule[];
+}>;

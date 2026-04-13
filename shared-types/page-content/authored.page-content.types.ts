@@ -1,0 +1,10 @@
+// shared-types/page-content/authored.page-content.types.ts
+
+import type { AuthoredPageContentHead } from "@shared-types/page-content/site/content-head/authored.content-head.page-content.types";
+import type { AuthoredBlockContentModule } from "@shared-types/page-content/block/authored.block.page-content.types";
+
+export type AuthoredPageContent = Readonly<{
+  head: AuthoredPageContentHead;
+  body: readonly AuthoredBlockContentModule[];
+  footer?: readonly AuthoredBlockContentModule[];
+}>;

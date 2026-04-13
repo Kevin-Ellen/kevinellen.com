@@ -1,6 +1,6 @@
 // src/app-state/config/metadata-labels/authored.metadata-labels.app-state.ts
 
-import { AuthoredMetadataLabels } from "@shared-types/config/metadata-labels/authored.metadata-labels.types";
+import type { AuthoredMetadataLabels } from "@shared-types/config/metadata-labels/authored.metadata-labels.types";
 import { deepFreeze } from "@utils/deepFreeze.util";
 
 export const appStateMetadataLabelsAuthored: AuthoredMetadataLabels =

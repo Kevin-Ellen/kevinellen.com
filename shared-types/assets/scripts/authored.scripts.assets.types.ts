@@ -1,25 +1,24 @@
 // shared-types/assets/scripts/authored.scripts.assets.ts
 
 import type { ScriptAssetId } from "@shared-types/assets/scripts/id.scripts.assets.types";
+import type { ScriptAssetLoading } from "@shared-types/assets/scripts/shared.scripts.assets.types";
 
-type ScriptAssetLoading =
-  | { loading?: undefined }
-  | { loading: "defer" }
-  | { loading: "async" };
+export type AuthoredExternalScriptAsset = Readonly<
+  {
+    kind: "external";
+    src: string;
+    id: ScriptAssetId;
+    location: "header" | "footer";
+  } & ScriptAssetLoading
+>;
+
+export type AuthoredInternalScriptAsset = Readonly<{
+  kind: "inline";
+  content: string;
+  id: ScriptAssetId;
+  location: "header" | "footer";
+}>;
 
 export type AuthoredScriptAsset =
-  | ({
-      kind: "external";
-      src: string;
-    } & ScriptAssetLoading & {
-        id: ScriptAssetId;
-        location: "header" | "footer";
-      })
-  | {
-      kind: "inline";
-      content: string;
-      id: ScriptAssetId;
-      location: "header" | "footer";
-    };
-
-export type AuthoredScriptAssets = readonly AuthoredScriptAsset[];
+  | AuthoredExternalScriptAsset
+  | AuthoredInternalScriptAsset;

@@ -1,4 +1,4 @@
-// shared-types/content/pages/shared/app-state.robots.shared.page.types.ts
+// shared-types/pages/shared/authored.robots.shared.page.types.ts
 
 export type AuthoredPageRobotsDirectives = Readonly<{
   allowIndex?: boolean;

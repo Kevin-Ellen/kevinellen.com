@@ -1,11 +1,13 @@
 // src/app-state/resolve/global-footer.resolve.app-state.ts
 
-import { appStateGlobalFooterAuthored } from "@app-state/config/global-footer/authored.global-footer.app-state";
-import { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
+import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
+
 import type {
   AppStateGlobalFooter,
   AppStateGlobalFooterColophon,
-} from "@shared-types/modules/global-footer/app-state.global-footer.module.types";
+} from "@shared-types/page-content/site/global-footer/app-state.global-footer.page-content.types";
+
+import { appStateGlobalFooterAuthored } from "@app-state/config/global-footer/authored.global-footer.app-state";
 
 const resolveColophon = (
   siteConfig: AppStateSiteConfig,

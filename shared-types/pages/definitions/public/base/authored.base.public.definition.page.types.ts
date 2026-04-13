@@ -1,16 +1,13 @@
-// shared-types/pages/definitions/authored.base.public.definition.page.types.ts
+// shared-types/pages/definitions/public/base/authored.base.public.definition.page.types.ts
 
-import type { BasePageDefinition } from "@shared-types/pages/definitions/base.definition.page.types";
+import type { AuthoredBasePageDefinition } from "@shared-types/pages/definitions/authored.base.definition.page.types";
 import type { PublicPageKind } from "@shared-types/pages/public/kind.public.page.types";
 import type { AuthoredAssets } from "@shared-types/pages/shared/assets/authored.assets.shared.page.types";
 import type { AuthoredPageRobotsDirectives } from "@shared-types/pages/shared/authored.robots.shared.page.types";
 import type { PageIdPublic } from "@shared-types/pages/shared/id.shared.page.types";
-import { AuthoredStructuredDataEntry } from "@shared-types/structured-data/authored.structured-data.types";
+import type { AuthoredStructuredDataEntry } from "@shared-types/structured-data/authored.structured-data.types";
 
-export type AuthoredBasePublicPageDefinition = Omit<
-  BasePageDefinition,
-  "id"
-> & {
+type AuthoredBasePublicPageDefinitionSpecialisedFields = Readonly<{
   id: PageIdPublic;
   kind: PublicPageKind;
   slug: `/${string}` | "/";
@@ -19,4 +16,8 @@ export type AuthoredBasePublicPageDefinition = Omit<
   assets?: AuthoredAssets;
   breadcrumbs?: readonly PageIdPublic[];
   structuredData?: readonly AuthoredStructuredDataEntry[];
-};
+}>;
+
+export type AuthoredBasePublicPageDefinition = Readonly<
+  AuthoredBasePageDefinition & AuthoredBasePublicPageDefinitionSpecialisedFields
+>;

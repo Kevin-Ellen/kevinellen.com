@@ -12,14 +12,16 @@ export default [
       "worker-configuration.d.ts",
       "src/xxx___app/**",
       "xxx___src/**",
+      "__OLD/**",
+      "tests/**",
+      "packages/**",
     ],
   },
 
   js.configs.recommended,
-  ...tseslint.configs.recommended,
 
   {
-    files: ["scripts/**/*.mjs"],
+    files: ["scripts/**/*.mjs", "eslint.config.mjs"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
@@ -32,11 +34,25 @@ export default [
 
   {
     files: ["**/*.{ts,mts,cts}"],
+    ...tseslint.configs.recommendedTypeChecked[0],
     languageOptions: {
+      ...tseslint.configs.recommendedTypeChecked[0].languageOptions,
       ecmaVersion: "latest",
       sourceType: "module",
+      parserOptions: {
+        ...(tseslint.configs.recommendedTypeChecked[0].languageOptions
+          ?.parserOptions ?? {}),
+        projectService: true,
+      },
+      globals: {
+        Env: "readonly",
+        ExecutionContext: "readonly",
+        fetch: "readonly",
+      },
     },
     rules: {
+      ...tseslint.configs.recommendedTypeChecked[0].rules,
+      "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -45,6 +61,15 @@ export default [
           caughtErrorsIgnorePattern: "^_",
         },
       ],
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "inline-type-imports",
+        },
+      ],
+      "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
     },
   },
 

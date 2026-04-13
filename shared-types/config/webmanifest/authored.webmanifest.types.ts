@@ -1,14 +1,14 @@
 // shared-types/config/webmanifest/authored.webmanifest.types.ts
 
-type WebManifestAuthoredDisplay =
+type AuthoredWebManifestDisplay =
   | "standalone"
   | "browser"
   | "fullscreen"
   | "minimal-ui";
 
-export type WebManifestAuthored = {
+export type AuthoredWebManifest = Readonly<{
   shortName: string;
   themeColor: string;
   backgroundColor: string;
-  display: WebManifestAuthoredDisplay;
-};
+  display: AuthoredWebManifestDisplay;
+}>;

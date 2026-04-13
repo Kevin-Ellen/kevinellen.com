@@ -3,7 +3,7 @@
 import type {
   AuthoredGlobalFooter,
   AuthoredGlobalFooterAffiliations,
-} from "@shared-types/modules/global-footer/authored.global-footer.module.types";
+} from "@shared-types/page-content/site/global-footer/authored.global-footer.page-content.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 

@@ -1,6 +1,6 @@
 // src/app-state/config/navigation/authored.footer.navigation.app-state.ts
 
-import { AuthoredNavigation } from "@shared-types/config/navigation/authored.navigation.types";
+import type { AuthoredNavigation } from "@shared-types/config/navigation/authored.navigation.types";
 import type { PageId } from "@shared-types/pages/shared/id.shared.page.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";

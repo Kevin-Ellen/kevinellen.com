@@ -2,7 +2,7 @@
 
 import type { AuthoredNavigationItem } from "@shared-types/config/navigation/authored.shared.navigation.types";
 
-export type AuthoredHeaderNavigation = {
+export type AuthoredHeaderNavigation = Readonly<{
   primary: readonly AuthoredNavigationItem[];
   social: readonly AuthoredNavigationItem[];
-};
+}>;

@@ -2,6 +2,6 @@
 
 import type { AppStateWebSiteStructuredData } from "@shared-types/config/structured-data/app-state.website.structured-data.types";
 
-export type AppStateStructuredData = {
+export type AppStateStructuredData = Readonly<{
   website: AppStateWebSiteStructuredData;
-};
+}>;

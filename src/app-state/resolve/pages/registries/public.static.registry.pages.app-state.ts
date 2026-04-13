@@ -1,6 +1,6 @@
 // src/app-state/resolve/pages/registries/public.static.registry.pages.app-state.ts
 
-import { AuthoredPublicPageDefintion } from "@shared-types/pages/definitions/public/authored.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/pages/definitions/public/authored.public.definition.page.types";
 
 import { authoredHomePublicPage } from "@pages/public/static/authored.home.public.page";
 
@@ -9,7 +9,7 @@ import { authoredLicensingLegalPage } from "@pages/public/static/legal/authored.
 import { authoredTermsLegalPage } from "@pages/public/static/legal/authored.terms.legal.page";
 import { authoredPrivacyLegalPage } from "@pages/public/static/legal/authored.privacy.legal.page";
 
-export const APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC: readonly AuthoredPublicPageDefintion[] =
+export const APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC: readonly AuthoredPublicPageDefinition[] =
   [
     authoredHomePublicPage,
     authoredLicensingLegalPage,
