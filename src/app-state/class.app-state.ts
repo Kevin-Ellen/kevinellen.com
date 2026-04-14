@@ -5,6 +5,7 @@ import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-st
 
 import type { SystemGoneRule } from "@shared-types/config/system/gone-rules.system.types";
 import type { SystemRedirectRule } from "@shared-types/config/system/redirect-rules.system.types";
+import type { AppStatePublicPageDefinition } from "@shared-types/pages/definitions/public/app-state.public.definition.page.types";
 
 // import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
 
@@ -25,6 +26,10 @@ export class AppState {
 
   public get redirectRules(): readonly SystemRedirectRule[] {
     return this.#data.system.redirectRules;
+  }
+
+  public get publicPages(): readonly AppStatePublicPageDefinition[] {
+    return this.#data.pages.public;
   }
 
   public get inspect(): AppStateData {

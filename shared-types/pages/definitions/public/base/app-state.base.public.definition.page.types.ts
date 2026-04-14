@@ -7,6 +7,8 @@ import type { PageIdPublic } from "@shared-types/pages/shared/id.shared.page.typ
 import type { AppStateStructuredDataEntry } from "@shared-types/structured-data/app-state.structured-data.types";
 import type { AppStateAssets } from "@shared-types/assets/app-state.assets.types";
 import type { AppStatePageContent } from "@shared-types/page-content/app-state.page-content.types";
+import type { AppStateRobotsTxt } from "@shared-types/pages/public/robots-txt/app-state.robots-txt.public.page.types";
+import type { AppStateSitemapXml } from "@shared-types/pages/public/sitemap-xml/app-state.sitemap-xml.public.page.types";
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
@@ -15,6 +17,8 @@ export type AppStatePublicBasePageDefinitionDeterministicFields = Readonly<{
   assets: AppStateAssets;
   breadcrumbs: readonly PageIdPublic[];
   structuredData: readonly AppStateStructuredDataEntry[];
+  robotsTxt: AppStateRobotsTxt;
+  sitemapXml: AppStateSitemapXml;
   content: AppStatePageContent;
 }>;
 

@@ -6,6 +6,8 @@ import type { AuthoredAssets } from "@shared-types/pages/shared/assets/authored.
 import type { AuthoredPageRobotsDirectives } from "@shared-types/pages/shared/authored.robots.shared.page.types";
 import type { PageIdPublic } from "@shared-types/pages/shared/id.shared.page.types";
 import type { AuthoredStructuredDataEntry } from "@shared-types/structured-data/authored.structured-data.types";
+import type { AuthoredRobotsTxt } from "@shared-types/pages/public/robots-txt/authored.robots-txt.public.page.types";
+import type { AuthoredSitemapXml } from "@shared-types/pages/public/sitemap-xml/authored.sitemap-xml.public.page.types";
 
 type AuthoredBasePublicPageDefinitionSpecialisedFields = Readonly<{
   id: PageIdPublic;
@@ -13,7 +15,10 @@ type AuthoredBasePublicPageDefinitionSpecialisedFields = Readonly<{
   slug: `/${string}` | "/";
   label: string;
   robots?: AuthoredPageRobotsDirectives;
+  robotsTxt?: AuthoredRobotsTxt;
+  sitemapXml?: AuthoredSitemapXml;
   assets?: AuthoredAssets;
+  sitemap?: AuthoredSitemapXml;
   breadcrumbs?: readonly PageIdPublic[];
   structuredData?: readonly AuthoredStructuredDataEntry[];
 }>;
