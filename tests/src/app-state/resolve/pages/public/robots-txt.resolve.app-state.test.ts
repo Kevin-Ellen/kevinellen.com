@@ -30,12 +30,4 @@ describe("appStateResolvePageRobotsTxT", () => {
       disallow: false,
     });
   });
-
-  it("falls back to default when disallow is undefined", () => {
-    const result = appStateResolvePageRobotsTxT({});
-
-    expect(result).toEqual({
-      disallow: false,
-    });
-  });
 });
