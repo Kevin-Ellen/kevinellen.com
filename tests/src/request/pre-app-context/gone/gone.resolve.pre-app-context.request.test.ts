@@ -1,4 +1,4 @@
-// tests/src/request/pre-context/gone/gone.resolve.pre-app-context.request.test.ts
+// tests/src/request/pre-app-context/gone/gone.resolve.pre-app-context.request.test.ts
 
 import { preAppContextResolveGone } from "@request/pre-app-context/gone/gone.resolve.pre-app-context.request";
 
@@ -17,7 +17,7 @@ describe("preAppContextResolveGone", () => {
     expect(result).toBeNull();
   });
 
-  it("returns { kind: 'gone' } when a rule matches the pathname", () => {
+  it("returns an error result with status 410 when a rule matches the pathname", () => {
     const req = new Request("https://dev.kevinellen.com/old-page");
 
     const appState = {
@@ -26,7 +26,10 @@ describe("preAppContextResolveGone", () => {
 
     const result = preAppContextResolveGone(req, appState);
 
-    expect(result).toEqual({ kind: "gone" });
+    expect(result).toEqual({
+      kind: "error",
+      status: 410,
+    });
   });
 
   it("matches correctly when multiple rules are present", () => {
@@ -38,7 +41,10 @@ describe("preAppContextResolveGone", () => {
 
     const result = preAppContextResolveGone(req, appState);
 
-    expect(result).toEqual({ kind: "gone" });
+    expect(result).toEqual({
+      kind: "error",
+      status: 410,
+    });
   });
 
   it("does not match partial paths", () => {

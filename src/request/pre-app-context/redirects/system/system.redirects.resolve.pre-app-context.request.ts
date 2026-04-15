@@ -1,7 +1,7 @@
 // src/request/pre-app-context/redirects/system/system.redirects.resolve.pre-app-context.request.ts
 
 import type { AppState } from "@app-state/class.app-state";
-import type { PreAppContextResult } from "@request/pre-app-context/types/pre-app-context.request.types";
+import type { PreAppContextResult } from "@request/types/request.types";
 
 const isInternalRedirectTarget = (
   target: string,

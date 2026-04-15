@@ -1,7 +1,7 @@
 // src/request/pre-app-context/redirects/redirects.resolve.pre-app-context.request.ts
 
 import type { AppState } from "@app-state/class.app-state";
-import type { PreAppContextResult } from "@request/pre-app-context/types/pre-app-context.request.types";
+import type { PreAppContextResult } from "@request/types/request.types";
 
 import { resolveSystemRedirect } from "@request/pre-app-context/redirects/system/system.redirects.resolve.pre-app-context.request";
 import { resolveCanonicalUrl } from "@request/pre-app-context/redirects/canonical/canonical.redirects.resolve.pre-app-context.request";

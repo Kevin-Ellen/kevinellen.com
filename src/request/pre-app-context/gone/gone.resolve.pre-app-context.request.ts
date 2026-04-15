@@ -1,12 +1,12 @@
 // src/request/pre-app-context/gone/gone.resolve.pre-app-context.request.ts
 
 import type { AppState } from "@app-state/class.app-state";
-import type { PreAppContextResult } from "@request/pre-app-context/types/pre-app-context.request.types";
+import type { RequestResult } from "@request/types/request.types";
 
 export const preAppContextResolveGone = (
   req: Request,
   appState: AppState,
-): PreAppContextResult | null => {
+): RequestResult | null => {
   const url = new URL(req.url);
   const pathname = url.pathname;
 
@@ -15,7 +15,7 @@ export const preAppContextResolveGone = (
   const hasMatch = rules.some((rule) => rule.path === pathname);
 
   if (hasMatch) {
-    return { kind: "gone" };
+    return { kind: "error", status: 410 };
   }
 
   return null;
