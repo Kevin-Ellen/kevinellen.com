@@ -1,6 +1,7 @@
 // src/request/request.ts
 
 import { appStateCreate } from "@app-state/create.app-state";
+import { preAppContextOrchestrator } from "@request/pre-app-context/pre-app-context.request";
 import { preRequestOrchestrator } from "@request/pre-request/pre-request.request";
 
 export const requestOrchestrator = async (
@@ -15,6 +16,18 @@ export const requestOrchestrator = async (
   }
 
   const appState = appStateCreate(env);
+
+  const preAppContext = await preAppContextOrchestrator(req, env, appState);
+
+  if (preAppContext.kind === "direct-response") {
+    return preAppContext.response;
+  }
+
+  if (preAppContext.kind === "error") {
+    return new Response("gone", {
+      status: preAppContext.status,
+    });
+  }
 
   return new Response(JSON.stringify(appState.inspect, null, 2));
 };

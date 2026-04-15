@@ -1,0 +1,87 @@
+// tests/src/request/pre-request/assets/assets.pre-request.request.test.ts
+
+import { staticAssetOrchestrator } from "@request/pre-request/assets/static/static.assets.pre-request.request";
+import { photoAssetOrchestrator } from "@request/pre-request/assets/photo/photo.assets.pre-request.request";
+import { orchestrateAssetsPreRequest } from "@request/pre-request/assets/assets.pre-request.request";
+
+jest.mock(
+  "@request/pre-request/assets/static/static.assets.pre-request.request",
+  () => ({
+    staticAssetOrchestrator: jest.fn(),
+  }),
+);
+
+jest.mock(
+  "@request/pre-request/assets/photo/photo.assets.pre-request.request",
+  () => ({
+    photoAssetOrchestrator: jest.fn(),
+  }),
+);
+
+const mockedStaticAssetOrchestrator = jest.mocked(staticAssetOrchestrator);
+const mockedPhotoAssetOrchestrator = jest.mocked(photoAssetOrchestrator);
+
+describe("orchestrateAssetsPreRequest", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns the static asset response and does not continue to photo assets", async () => {
+    const req = new Request("https://kevinellen.com/favicon.ico");
+    const env = {} as Env;
+    const ctx = {} as ExecutionContext;
+
+    const staticResponse = new Response("static");
+
+    mockedStaticAssetOrchestrator.mockResolvedValue(staticResponse);
+
+    const result = await orchestrateAssetsPreRequest(req, env, ctx);
+
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledTimes(1);
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+
+    expect(mockedPhotoAssetOrchestrator).not.toHaveBeenCalled();
+
+    expect(result).toBe(staticResponse);
+  });
+
+  it("falls through to photo assets when static assets return null", async () => {
+    const req = new Request("https://kevinellen.com/photo/example");
+    const env = {} as Env;
+    const ctx = {} as ExecutionContext;
+
+    const photoResponse = new Response("photo");
+
+    mockedStaticAssetOrchestrator.mockResolvedValue(null);
+    mockedPhotoAssetOrchestrator.mockResolvedValue(photoResponse);
+
+    const result = await orchestrateAssetsPreRequest(req, env, ctx);
+
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledTimes(1);
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+
+    expect(mockedPhotoAssetOrchestrator).toHaveBeenCalledTimes(1);
+    expect(mockedPhotoAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+
+    expect(result).toBe(photoResponse);
+  });
+
+  it("returns null when neither static nor photo assets resolve the request", async () => {
+    const req = new Request("https://kevinellen.com/");
+    const env = {} as Env;
+    const ctx = {} as ExecutionContext;
+
+    mockedStaticAssetOrchestrator.mockResolvedValue(null);
+    mockedPhotoAssetOrchestrator.mockResolvedValue(null);
+
+    const result = await orchestrateAssetsPreRequest(req, env, ctx);
+
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledTimes(1);
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+
+    expect(mockedPhotoAssetOrchestrator).toHaveBeenCalledTimes(1);
+    expect(mockedPhotoAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+
+    expect(result).toBeNull();
+  });
+});

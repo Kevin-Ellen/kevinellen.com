@@ -162,6 +162,8 @@ describe("appStateResolvePublicPage", () => {
         body: [],
         footer: [],
       },
+      robotsTxt: { disallow: false },
+      sitemapXml: { include: true },
     };
 
     expect(result).toEqual(expected);
