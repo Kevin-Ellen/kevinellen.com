@@ -9,13 +9,7 @@ describe("resolveSystemRedirect", () => {
     const url = new URL("https://dev.kevinellen.com/no-match");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "/new-path",
-          redirectStatusCode: 301,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue(null),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -23,6 +17,7 @@ describe("resolveSystemRedirect", () => {
 
     const result = resolveSystemRedirect(url, appState);
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/no-match");
     expect(result).toBeNull();
   });
 
@@ -30,13 +25,11 @@ describe("resolveSystemRedirect", () => {
     const url = new URL("https://dev.kevinellen.com/old-path");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "/new-path",
-          redirectStatusCode: 301,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/old-path",
+        to: "/new-path",
+        redirectStatusCode: 301,
+      }),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -44,6 +37,7 @@ describe("resolveSystemRedirect", () => {
 
     const result = resolveSystemRedirect(url, appState);
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/old-path");
     expect(result).toEqual({
       kind: "redirect",
       redirectMatch: {
@@ -59,13 +53,11 @@ describe("resolveSystemRedirect", () => {
     const url = new URL("https://dev.kevinellen.com/old-path");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "https://dev.kevinellen.com/new-path",
-          redirectStatusCode: 308,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/old-path",
+        to: "https://dev.kevinellen.com/new-path",
+        redirectStatusCode: 308,
+      }),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -73,6 +65,7 @@ describe("resolveSystemRedirect", () => {
 
     const result = resolveSystemRedirect(url, appState);
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/old-path");
     expect(result).toEqual({
       kind: "redirect",
       redirectMatch: {
@@ -88,13 +81,11 @@ describe("resolveSystemRedirect", () => {
     const url = new URL("https://dev.kevinellen.com/old-path");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "https://example.com/new-path",
-          redirectStatusCode: 302,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/old-path",
+        to: "https://example.com/new-path",
+        redirectStatusCode: 302,
+      }),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -102,6 +93,7 @@ describe("resolveSystemRedirect", () => {
 
     const result = resolveSystemRedirect(url, appState);
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/old-path");
     expect(result).toEqual({
       kind: "redirect",
       redirectMatch: {
@@ -117,13 +109,11 @@ describe("resolveSystemRedirect", () => {
     const url = new URL("https://dev.kevinellen.com/old-path");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "ht!tp:// definitely-not-valid",
-          redirectStatusCode: 307,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/old-path",
+        to: "ht!tp:// definitely-not-valid",
+        redirectStatusCode: 307,
+      }),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -131,6 +121,7 @@ describe("resolveSystemRedirect", () => {
 
     const result = resolveSystemRedirect(url, appState);
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/old-path");
     expect(result).toEqual({
       kind: "redirect",
       redirectMatch: {

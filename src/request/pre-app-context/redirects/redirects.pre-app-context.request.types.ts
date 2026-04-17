@@ -9,3 +9,8 @@ type RedirectMatchAdditionaFields = Readonly<{
 export type RedirectMatch = Readonly<
   SystemRedirectRule & RedirectMatchAdditionaFields
 >;
+
+export type SystemRedirectResolution = {
+  kind: "redirect";
+  redirectMatch: RedirectMatch;
+} | null;

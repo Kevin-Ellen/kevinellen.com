@@ -1,7 +1,7 @@
 // src/request/pre-app-context/redirects/system/system.redirects.resolve.pre-app-context.request.ts
 
 import type { AppState } from "@app-state/class.app-state";
-import type { PreAppContextResult } from "@request/types/request.types";
+import type { SystemRedirectResolution } from "@request/pre-app-context/redirects/redirects.pre-app-context.request.types";
 
 const isInternalRedirectTarget = (
   target: string,
@@ -19,13 +19,12 @@ const isInternalRedirectTarget = (
 export const resolveSystemRedirect = (
   url: URL,
   appState: AppState,
-): PreAppContextResult | null => {
+): SystemRedirectResolution => {
   const pathname = url.pathname;
 
-  const redirects = appState.redirectRules;
   const siteOrigin = new URL(appState.siteConfig.origin).origin;
 
-  const rule = redirects.find((r) => r.fromPath === pathname);
+  const rule = appState.getRedirectRuleByPath(pathname);
 
   if (!rule) return null;
 

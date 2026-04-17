@@ -1,7 +1,7 @@
 // src/request/pre-app-context/pre-app-context.request.ts
 
 import type { AppState } from "@app-state/class.app-state";
-import type { RequestResult } from "@request/types/request.types";
+import type { PreAppContextResult } from "@request/types/request.types";
 
 import { preAppContextResolveGone } from "@request/pre-app-context/gone/gone.resolve.pre-app-context.request";
 import { preAppContextResolveRedirects } from "@request/pre-app-context/redirects/redirects.resolve.pre-app-context.request";
@@ -11,7 +11,7 @@ export const preAppContextOrchestrator = async (
   req: Request,
   env: Env,
   appState: AppState,
-): Promise<RequestResult> => {
+): Promise<PreAppContextResult> => {
   // gone
   const goneResult = preAppContextResolveGone(req, appState);
   if (goneResult) return goneResult;

@@ -38,7 +38,7 @@ export const preAppContextResolveRedirects = (
     redirectStatus = systemRedirect.redirectMatch.redirectStatusCode;
   }
 
-  const canonicalUrl = resolveCanonicalUrl(effectiveUrl, appState, env);
+  const canonicalUrl = resolveCanonicalUrl(effectiveUrl, env);
 
   if (canonicalUrl.href === originalUrl.href) {
     return null;
