@@ -9,10 +9,18 @@ import { authoredLicensingLegalPage } from "@pages/public/static/legal/authored.
 import { authoredTermsLegalPage } from "@pages/public/static/legal/authored.terms.legal.page";
 import { authoredPrivacyLegalPage } from "@pages/public/static/legal/authored.privacy.legal.page";
 
+// About
+import { authoredAboutPage } from "@pages/public/static/about/authored.about.public.page";
+import { authoredEquipmentAboutPage } from "@pages/public/static/about/authored.equipment.about.page";
+import { authoredTechnologyAboutPage } from "@pages/public/static/about/authored.technology.about.page";
+
 export const APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC: readonly AuthoredPublicPageDefinition[] =
   [
     authoredHomePublicPage,
     authoredLicensingLegalPage,
     authoredTermsLegalPage,
     authoredPrivacyLegalPage,
+    authoredAboutPage,
+    authoredEquipmentAboutPage,
+    authoredTechnologyAboutPage,
   ] as const;
