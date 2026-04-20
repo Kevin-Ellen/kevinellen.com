@@ -3,7 +3,7 @@
 import type { AuthoredInternalLinkInlineContent } from "@shared-types/page-content/inline/internal-link/authored.internal-link.inline-content.page-content.types";
 import type { AppStateInternalLinkInlineContent } from "@shared-types/page-content/inline/internal-link/app-state.internal-link.inline-content.page-content.types";
 
-import { appStateResolveInternalLink } from "@app-state/resolve/links/internal-link.resolve.app-state";
+import { appStateResolveInternalLink } from "@app-state/resolve/links/internal.link.resolve.app-state";
 
 export const appStateResolveInternalLinkInlineContent = (
   content: AuthoredInternalLinkInlineContent,

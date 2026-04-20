@@ -1,4 +1,4 @@
-// shared-types/config/navigation/authored.header.navigation.types.ts
+// shared-types/config/navigation/header/authored.header.navigation.types.ts
 
 import type { AuthoredNavigationItem } from "@shared-types/config/navigation/authored.shared.navigation.types";
 

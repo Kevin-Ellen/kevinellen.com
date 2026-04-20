@@ -1,30 +1,37 @@
 // src/app-context/class.app-context.ts
 
-import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
-import type { AppContextErrorPageDefinition } from "@shared-types/pages/definitions/error/app-context.base.error.definition.page.types";
-import type { AppContextPublicPageDefinition } from "@shared-types/pages/definitions/public/app-context.public.definition.page.types";
-
-type AppContextPage =
-  | AppContextPublicPageDefinition
-  | AppContextErrorPageDefinition;
+import type { AppContextData } from "@app-context/app-context.types";
+import type { AppContextNavigation } from "@shared-types/config/navigation/app-context.navigation.types";
+import type { AppContextGlobalFooter } from "@shared-types/page-content/site/global-footer/app-context.global-footer.page-content.types";
+import type { AppContextStructuredDataEntry } from "@shared-types/structured-data/app-context.structured-data.types";
 
 export class AppContext {
-  readonly #siteConfig: AppStateSiteConfig;
-  readonly #page: AppContextPage;
+  readonly #data: AppContextData;
 
-  public constructor(input: {
-    siteConfig: AppStateSiteConfig;
-    page: AppContextPage;
-  }) {
-    this.#siteConfig = input.siteConfig;
-    this.#page = input.page;
+  readonly #navigation: AppContextNavigation;
+  readonly #globalFooter: AppContextGlobalFooter;
+  readonly #structuredData: readonly AppContextStructuredDataEntry[];
+
+  public constructor(data: AppContextData) {
+    this.#data = data;
+    this.#navigation = data.navigation;
+    this.#globalFooter = data.globalFooter;
+    this.#structuredData = data.structuredData;
   }
 
-  public get siteConfig(): AppStateSiteConfig {
-    return this.#siteConfig;
+  public get navigation(): AppContextNavigation {
+    return this.#navigation;
   }
 
-  public get page(): AppContextPage {
-    return this.#page;
+  public get globalFooter(): AppContextGlobalFooter {
+    return this.#globalFooter;
+  }
+
+  public get structuredData(): readonly AppContextStructuredDataEntry[] {
+    return this.#structuredData;
+  }
+
+  public get inspect(): AppContextData {
+    return this.#data;
   }
 }

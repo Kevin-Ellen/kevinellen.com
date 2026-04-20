@@ -5,6 +5,8 @@ import { preAppContextOrchestrator } from "@request/pre-app-context/pre-app-cont
 import { preRequestOrchestrator } from "@request/pre-request/pre-request.request";
 import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-resolution.request";
 
+import { appContextCreate } from "@app-context/create.app-context";
+
 import { inspectRequest } from "@request/inspect/inspect.request";
 
 export const requestOrchestrator = async (
@@ -28,16 +30,19 @@ export const requestOrchestrator = async (
 
   const routing = orchestrateRouteResolution(req, appState, preAppContext);
 
+  const appContext = appContextCreate(appState, routing);
+
   const inspectResponse = inspectRequest(req, env, {
     appState,
     routing,
+    appContext,
   });
 
   if (inspectResponse) {
     return inspectResponse;
   }
 
-  return new Response(JSON.stringify(routing, null, 2), {
+  return new Response(JSON.stringify(appContext.inspect, null, 2), {
     headers: {
       "content-type": "application/json; charset=utf-8",
     },

@@ -1,6 +1,6 @@
 // tests/src/app-state/resolve/links/internal-link.resolve.app-state.test.ts
 
-import { appStateResolveInternalLink } from "@app-state/resolve/links/internal-link.resolve.app-state";
+import { appStateResolveInternalLink } from "@app-state/resolve/links/internal.link.resolve.app-state";
 
 import type { SvgAssetId } from "@shared-types/assets/svg/id.svg.assets.types";
 import {

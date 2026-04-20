@@ -4,7 +4,7 @@ jest.mock("@app-state/resolve/links/internal-link.resolve.app-state", () => ({
   appStateResolveInternalLink: jest.fn(),
 }));
 
-import { appStateResolveInternalLink } from "@app-state/resolve/links/internal-link.resolve.app-state";
+import { appStateResolveInternalLink } from "@app-state/resolve/links/internal.link.resolve.app-state";
 import { appStateResolveInternalLinkInlineContent } from "@app-state/resolve/page-content/inline/internal-link.resolve.app-state";
 
 import type { AuthoredInternalLinkInlineContent } from "@shared-types/page-content/inline/internal-link/authored.internal-link.inline-content.page-content.types";

@@ -2,12 +2,12 @@
 
 import type { AppState } from "@app-state/class.app-state";
 import type { RoutingResult } from "@request/types/request.types";
+import type { AppContext } from "@app-context/class.app-context";
 
 type InspectArtifacts = {
   appState?: AppState;
   routing?: RoutingResult;
-  resolvedPage?: unknown;
-  appContext?: unknown;
+  appContext?: AppContext;
   renderContext?: unknown;
 };
 
@@ -47,7 +47,6 @@ export const inspectRequest = (
       available: [
         "/_inspect/app-state",
         "/_inspect/routing",
-        "/_inspect/resolved-page",
         "/_inspect/app-context",
         "/_inspect/render-context",
       ],
@@ -66,15 +65,9 @@ export const inspectRequest = (
       : unavailableInspectResponse("routing");
   }
 
-  if (pathname === "/_inspect/resolved-page") {
-    return artifacts.resolvedPage
-      ? jsonResponse(artifacts.resolvedPage)
-      : unavailableInspectResponse("resolved-page");
-  }
-
   if (pathname === "/_inspect/app-context") {
     return artifacts.appContext
-      ? jsonResponse(artifacts.appContext)
+      ? jsonResponse(artifacts.appContext.inspect)
       : unavailableInspectResponse("app-context");
   }
 

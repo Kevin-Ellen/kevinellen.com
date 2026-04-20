@@ -9,5 +9,9 @@ export const appStateResolveErrorPage = (
   return {
     ...page,
     breadcrumbs: ["home", page.id],
+    assets: {
+      svg: [],
+      scripts: [],
+    },
   };
 };
