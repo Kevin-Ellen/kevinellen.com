@@ -251,4 +251,97 @@ describe("inspectRequest", () => {
       error: "Unknown inspect route.",
     });
   });
+
+  it("returns the app-context inspect payload", async () => {
+    const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
+
+    const appContext = {
+      inspect: {
+        navigation: {
+          header: {
+            primary: [],
+            social: [],
+          },
+          footer: {
+            sections: [],
+          },
+        },
+        globalFooter: {
+          affiliations: {
+            kind: "affiliations",
+            title: "Conservation",
+            description: "Supporting organisations.",
+            items: [],
+          },
+          colophon: {
+            kind: "colophon",
+            copyrightName: "Kevin Ellen",
+            copyrightYear: 2026,
+            allRightsReserved: true,
+          },
+        },
+        assets: {
+          scripts: [],
+          svg: [],
+        },
+        structuredData: [],
+        breadcrumbs: {
+          items: [],
+          current: "Home",
+        },
+        page: {
+          id: "home",
+          kind: "home",
+          slug: "/",
+          label: "Home",
+          content: {
+            head: {
+              eyebrow: "Kevin Ellen",
+              title: "Home",
+              intro: "A personal platform.",
+            },
+            body: [],
+            footer: [],
+          },
+        },
+      },
+    };
+
+    const result = inspectRequest(req, envDev, {
+      appContext: appContext as never,
+    });
+
+    expect(result).toBeInstanceOf(Response);
+    expect(result?.status).toBe(200);
+    expect(result?.headers.get("content-type")).toBe(
+      "application/json; charset=utf-8",
+    );
+
+    await expect(result?.json()).resolves.toEqual(appContext.inspect);
+  });
+
+  it("returns the render-context payload", async () => {
+    const req = new Request(
+      "https://dev.kevinellen.com/_inspect/render-context",
+    );
+
+    const renderContext = {
+      page: {
+        title: "Home",
+      },
+      content: {
+        body: [],
+      },
+    };
+
+    const result = inspectRequest(req, envDev, { renderContext });
+
+    expect(result).toBeInstanceOf(Response);
+    expect(result?.status).toBe(200);
+    expect(result?.headers.get("content-type")).toBe(
+      "application/json; charset=utf-8",
+    );
+
+    await expect(result?.json()).resolves.toEqual(renderContext);
+  });
 });

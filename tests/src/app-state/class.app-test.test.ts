@@ -290,4 +290,58 @@ describe("AppState", () => {
 
     expect(appState.inspect).toBe(data);
   });
+
+  it("returns social", () => {
+    const appState = new AppState(data);
+
+    expect(appState.social).toBe(data.social);
+  });
+
+  it("returns navigation", () => {
+    const appState = new AppState(data);
+
+    expect(appState.navigation).toBe(data.navigation);
+  });
+
+  it("returns globalFooter", () => {
+    const appState = new AppState(data);
+
+    expect(appState.globalFooter).toBe(data.globalFooter);
+  });
+
+  it("returns assets", () => {
+    const appState = new AppState(data);
+
+    expect(appState.assets).toBe(data.assets);
+  });
+
+  it("returns structuredData", () => {
+    const appState = new AppState(data);
+
+    expect(appState.structuredData).toBe(data.structuredData);
+  });
+
+  it("returns the matching public page by id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPageById("home")).toBe(data.pages.public[0]);
+  });
+
+  it("returns null when no public page matches the id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPageById("about" as never)).toBeNull();
+  });
+
+  it("returns the matching error page by id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getErrorPageById("error-404")).toBe(data.pages.error[0]);
+  });
+
+  it("returns null when no error page matches the id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getErrorPageById("error-410" as never)).toBeNull();
+  });
 });

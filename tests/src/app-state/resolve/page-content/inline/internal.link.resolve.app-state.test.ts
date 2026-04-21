@@ -54,4 +54,45 @@ describe("appStateResolveInternalLinkInlineContent", () => {
       },
     });
   });
+
+  it("preserves provided svgId and behaviour", () => {
+    const authoredContent: AuthoredInternalLinkInlineContent = {
+      kind: "internalLink",
+      link: {
+        kind: "internal",
+        id: "about",
+        svgId: "icon-home",
+        behaviour: {
+          openInNewTab: true,
+        },
+      },
+    };
+
+    const result = appStateResolveInternalLinkInlineContent(authoredContent);
+
+    expect(result).toEqual({
+      kind: "internalLink",
+      link: {
+        kind: "internal",
+        id: "about",
+        svgId: "icon-home",
+        behaviour: {
+          openInNewTab: true,
+        },
+      },
+    });
+  });
+
+  it("throws when the nested internal link is missing an id", () => {
+    const authoredContent = {
+      kind: "internalLink",
+      link: {
+        kind: "internal",
+      },
+    } as AuthoredInternalLinkInlineContent;
+
+    expect(() =>
+      appStateResolveInternalLinkInlineContent(authoredContent),
+    ).toThrow("Invalid internal link: missing id in inline content");
+  });
 });
