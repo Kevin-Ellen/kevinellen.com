@@ -8,6 +8,10 @@ export const resolveInternalLinkAppContext = (
   link: AppStateInternalLink,
   appState: AppState,
 ): AppContextInternalLink => {
+  if (!link || link.id == null) {
+    throw new Error(`Invalid AppStateInternalLink: ${JSON.stringify(link)}`);
+  }
+
   const page = appState.getPublicPageById(link.id);
 
   if (!page) {

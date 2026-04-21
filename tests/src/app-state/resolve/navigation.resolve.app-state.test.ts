@@ -2,20 +2,132 @@
 
 import { appStateResolveNavigation } from "@app-state/resolve/navigation.resolve.app-state";
 
-import { authoredHeaderNavigation } from "@app-state/config/navigation/authored.header.navigation.app-state";
-import { authoredFooterNavigation } from "@app-state/config/navigation/authored.footer.navigation.app-state";
-
 describe("appStateResolveNavigation", () => {
-  it("composes navigation from authored header and footer navigation", () => {
+  it("composes deterministic header and footer navigation", () => {
     expect(appStateResolveNavigation).toEqual({
-      header: authoredHeaderNavigation,
-      footer: authoredFooterNavigation,
+      header: {
+        primary: [
+          {
+            kind: "internal",
+            id: "about",
+            svgId: null,
+            behaviour: {
+              openInNewTab: false,
+            },
+          },
+        ],
+        social: [
+          {
+            kind: "social",
+            id: "github",
+            svgId: "icon-github",
+            behaviour: {
+              openInNewTab: true,
+            },
+          },
+          {
+            kind: "social",
+            id: "instagram",
+            svgId: "icon-instagram",
+            behaviour: {
+              openInNewTab: true,
+            },
+          },
+        ],
+      },
+      footer: {
+        sections: [
+          {
+            id: "site",
+            label: "Site",
+            items: [
+              {
+                kind: "internal",
+                id: "about",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: false,
+                },
+              },
+            ],
+          },
+          {
+            id: "practice",
+            label: "Practice",
+            items: [
+              {
+                kind: "internal",
+                id: "about-equipment",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: false,
+                },
+              },
+            ],
+          },
+          {
+            id: "elsewhere",
+            label: "Elsewhere",
+            items: [
+              {
+                kind: "social",
+                id: "github",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: true,
+                },
+              },
+              {
+                kind: "social",
+                id: "instagram",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: true,
+                },
+              },
+              {
+                kind: "social",
+                id: "linkedin",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: true,
+                },
+              },
+            ],
+          },
+          {
+            id: "legal",
+            label: "Legal",
+            items: [
+              {
+                kind: "internal",
+                id: "privacy",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: false,
+                },
+              },
+              {
+                kind: "internal",
+                id: "terms",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: false,
+                },
+              },
+              {
+                kind: "internal",
+                id: "licensing",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: false,
+                },
+              },
+            ],
+          },
+        ],
+      },
     });
-  });
-
-  it("preserves references to authored navigation config", () => {
-    expect(appStateResolveNavigation.header).toBe(authoredHeaderNavigation);
-    expect(appStateResolveNavigation.footer).toBe(authoredFooterNavigation);
   });
 
   it("is deeply frozen", () => {

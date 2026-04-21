@@ -157,7 +157,6 @@ describe("inspectRequest", () => {
       available: [
         "/_inspect/app-state",
         "/_inspect/routing",
-        "/_inspect/resolved-page",
         "/_inspect/app-context",
         "/_inspect/render-context",
       ],
@@ -212,21 +211,6 @@ describe("inspectRequest", () => {
     });
   });
 
-  it("returns a 409 response when resolved-page is not available", async () => {
-    const req = new Request(
-      "https://dev.kevinellen.com/_inspect/resolved-page",
-    );
-
-    const result = inspectRequest(req, envDev, {});
-
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(409);
-
-    await expect(result?.json()).resolves.toEqual({
-      error: "Inspect target 'resolved-page' is not available at this stage.",
-    });
-  });
-
   it("returns a 409 response when app-context is not available", async () => {
     const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
 
@@ -265,39 +249,6 @@ describe("inspectRequest", () => {
 
     await expect(result?.json()).resolves.toEqual({
       error: "Unknown inspect route.",
-    });
-  });
-
-  it("returns the resolved-page payload when available", async () => {
-    const req = new Request(
-      "https://dev.kevinellen.com/_inspect/resolved-page",
-    );
-
-    const result = inspectRequest(req, envDev, {
-      resolvedPage: { kind: "public", publicPageId: "home" },
-    });
-
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
-
-    await expect(result?.json()).resolves.toEqual({
-      kind: "public",
-      publicPageId: "home",
-    });
-  });
-
-  it("returns the app-context payload when available", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
-
-    const result = inspectRequest(req, envDev, {
-      appContext: { page: { id: "home" } },
-    });
-
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
-
-    await expect(result?.json()).resolves.toEqual({
-      page: { id: "home" },
     });
   });
 });

@@ -10,19 +10,18 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
     {
       id: "site",
       label: "Site",
-      items: [
-        // { kind: "internal", id: "journal" as PageId },
-        // { kind: "page", id: "photos" },
-        { kind: "internal", id: "about" as PageId },
-      ],
+      items: [{ kind: "internal", id: "about" as PageId, text: "About" }],
     },
 
     {
       id: "practice",
       label: "Practice",
       items: [
-        { kind: "internal", id: "about-equipment" as PageId },
-        // { kind: "page", id: "field-notes" },
+        {
+          kind: "internal",
+          id: "about-equipment" as PageId,
+          text: "Equipment",
+        },
       ],
     },
 
@@ -30,9 +29,19 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
       id: "elsewhere",
       label: "Elsewhere",
       items: [
-        { kind: "social", id: "github", openInNewTab: true },
-        { kind: "social", id: "instagram", openInNewTab: true },
-        { kind: "social", id: "linkedin", openInNewTab: true },
+        { kind: "social", id: "github", openInNewTab: true, text: "GitHub" },
+        {
+          kind: "social",
+          id: "instagram",
+          openInNewTab: true,
+          text: "Instagram",
+        },
+        {
+          kind: "social",
+          id: "linkedin",
+          openInNewTab: true,
+          text: "LinkedIn",
+        },
       ],
     },
 
@@ -40,9 +49,13 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
       id: "legal",
       label: "Legal",
       items: [
-        { kind: "internal", id: "privacy" as PageId },
-        { kind: "internal", id: "terms" as PageId },
-        { kind: "internal", id: "licensing" as PageId },
+        { kind: "internal", id: "privacy" as PageId, text: "Privacy" },
+        { kind: "internal", id: "terms" as PageId, text: "Terms of Use" },
+        {
+          kind: "internal",
+          id: "licensing" as PageId,
+          text: "Photo Licensing",
+        },
       ],
     },
   ],

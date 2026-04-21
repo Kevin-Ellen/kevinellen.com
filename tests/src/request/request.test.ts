@@ -36,6 +36,167 @@ const mockedOrchestrateRouteResolution = jest.mocked(
 );
 const mockedInspectRequest = jest.mocked(inspectRequest);
 
+const buildPublicPage = (id: "home" | "about") => {
+  if (id === "home") {
+    return {
+      id: "home",
+      kind: "home",
+      slug: "/",
+      label: "Home",
+      metadata: {
+        pageTitle: "Home | Kevin Ellen",
+        metaDescription: "Home page.",
+      },
+      robots: {
+        allowIndex: true,
+        allowFollow: true,
+        noarchive: false,
+        nosnippet: false,
+        noimageindex: false,
+      },
+      assets: {
+        scripts: [],
+        svg: [],
+      },
+      breadcrumbs: ["home"],
+      structuredData: [],
+      content: {
+        head: {
+          eyebrow: null,
+          title: "Home",
+          intro: null,
+        },
+        body: [],
+        footer: [],
+      },
+    };
+  }
+
+  return {
+    id: "about",
+    kind: "static",
+    slug: "/about",
+    label: "About",
+    metadata: {
+      pageTitle: "About | Kevin Ellen",
+      metaDescription: "About page.",
+    },
+    robots: {
+      allowIndex: true,
+      allowFollow: true,
+      noarchive: false,
+      nosnippet: false,
+      noimageindex: false,
+    },
+    assets: {
+      scripts: [],
+      svg: [],
+    },
+    breadcrumbs: ["home", "about"],
+    structuredData: [],
+    content: {
+      head: {
+        eyebrow: null,
+        title: "About",
+        intro: null,
+      },
+      body: [],
+      footer: [],
+    },
+  };
+};
+
+const buildErrorPage = () => ({
+  id: "error-410",
+  status: 410,
+  metadata: {
+    pageTitle: "410 | Gone",
+    metaDescription: "Gone.",
+  },
+  assets: {
+    scripts: [],
+    svg: [],
+  },
+  breadcrumbs: ["home", "error-410"] as const,
+  content: {
+    head: {
+      eyebrow: null,
+      title: "Gone",
+      intro: null,
+    },
+    body: [],
+    footer: [],
+  },
+});
+
+const buildAppState = (): AppState =>
+  ({
+    inspect: { ok: true },
+    siteConfig: {
+      origin: "https://kevinellen.com",
+    },
+    navigation: {
+      header: {
+        primary: [],
+        social: [],
+      },
+      footer: {
+        sections: [],
+      },
+    },
+    globalFooter: {
+      affiliations: {
+        kind: "affiliations",
+        title: "Conservation",
+        description: "Supporting organisations.",
+        items: [],
+      },
+      colophon: {
+        kind: "colophon",
+        copyrightName: "Kevin Ellen",
+        copyrightYear: 2026,
+        allRightsReserved: true,
+      },
+    },
+    assets: {
+      scripts: [],
+      svg: [],
+    },
+    structuredData: {
+      website: {
+        id: {
+          pageId: "home",
+          hash: "#website",
+        },
+        url: {
+          pageId: "home",
+        },
+        name: "Kevin Ellen",
+        description: "Wildlife photography, field notes, and technical work.",
+        inLanguage: "en-GB",
+        publisherId: {
+          pageId: "about",
+          hash: "#person",
+        },
+      },
+    },
+    getPublicPageById: jest.fn((id: string) => {
+      if (id === "home" || id === "about") {
+        return buildPublicPage(id);
+      }
+
+      return null;
+    }),
+    getErrorPageById: jest.fn((id: string) => {
+      if (id === "error-410") {
+        return buildErrorPage();
+      }
+
+      return null;
+    }),
+    getErrorPageByStatus: jest.fn().mockReturnValue(buildErrorPage()),
+  }) as unknown as AppState;
+
 describe("requestOrchestrator", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -69,10 +230,7 @@ describe("requestOrchestrator", () => {
       APP_HOST: "kevinellen.com",
     } as unknown as Env;
     const ctx = {} as ExecutionContext;
-
-    const appState = {
-      inspect: { ok: true },
-    } as unknown as AppState;
+    const appState = buildAppState();
 
     const preAppContextResponse = new Response("robots", {
       status: 200,
@@ -109,10 +267,7 @@ describe("requestOrchestrator", () => {
       APP_ENV: "prod",
     } as unknown as Env;
     const ctx = {} as ExecutionContext;
-
-    const appState = {
-      inspect: { ok: true },
-    } as unknown as AppState;
+    const appState = buildAppState();
 
     const routingResult = {
       kind: "found",
@@ -140,18 +295,50 @@ describe("requestOrchestrator", () => {
       appState,
       { kind: "continue" },
     );
-    expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
-      appState,
-      routing: routingResult,
-    });
+    expect(mockedInspectRequest).toHaveBeenCalledWith(
+      req,
+      env,
+      expect.objectContaining({
+        appState,
+        routing: routingResult,
+        appContext: expect.any(Object),
+      }),
+    );
 
     expect(result).toBeInstanceOf(Response);
     expect(result.status).toBe(200);
     expect(result.headers.get("content-type")).toBe(
       "application/json; charset=utf-8",
     );
-    await expect(result.text()).resolves.toBe(
-      JSON.stringify(routingResult, null, 2),
+    await expect(result.json()).resolves.toEqual(
+      expect.objectContaining({
+        page: {
+          id: "home",
+          kind: "home",
+          slug: "/",
+          label: "Home",
+          content: {
+            head: {
+              eyebrow: null,
+              title: "Home",
+              intro: null,
+            },
+            body: [],
+            footer: [],
+          },
+        },
+        metadata: {
+          pageTitle: "Home | Kevin Ellen",
+          metaDescription: "Home page.",
+        },
+        robots: {
+          allowIndex: true,
+          allowFollow: true,
+          noarchive: false,
+          nosnippet: false,
+          noimageindex: false,
+        },
+      }),
     );
   });
 
@@ -162,10 +349,7 @@ describe("requestOrchestrator", () => {
       APP_ENV: "prod",
     } as unknown as Env;
     const ctx = {} as ExecutionContext;
-
-    const appState = {
-      inspect: { ok: true },
-    } as unknown as AppState;
+    const appState = buildAppState();
 
     const routingResult = {
       kind: "error",
@@ -190,17 +374,40 @@ describe("requestOrchestrator", () => {
         status: 410,
       },
     );
-    expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
-      appState,
-      routing: routingResult,
-    });
+    expect(mockedInspectRequest).toHaveBeenCalledWith(
+      req,
+      env,
+      expect.objectContaining({
+        appState,
+        routing: routingResult,
+        appContext: expect.any(Object),
+      }),
+    );
 
     expect(result.status).toBe(200);
     expect(result.headers.get("content-type")).toBe(
       "application/json; charset=utf-8",
     );
-    await expect(result.text()).resolves.toBe(
-      JSON.stringify(routingResult, null, 2),
+    await expect(result.json()).resolves.toEqual(
+      expect.objectContaining({
+        page: {
+          id: "error-410",
+          status: 410,
+          metadata: {
+            pageTitle: "410 | Gone",
+            metaDescription: "Gone.",
+          },
+          content: {
+            head: {
+              eyebrow: null,
+              title: "Gone",
+              intro: null,
+            },
+            body: [],
+            footer: [],
+          },
+        },
+      }),
     );
   });
 
@@ -211,10 +418,7 @@ describe("requestOrchestrator", () => {
       APP_ENV: "dev",
     } as unknown as Env;
     const ctx = {} as ExecutionContext;
-
-    const appState = {
-      inspect: { ok: true },
-    } as unknown as AppState;
+    const appState = buildAppState();
 
     const routingResult = {
       kind: "found",
@@ -238,10 +442,15 @@ describe("requestOrchestrator", () => {
 
     const result = await requestOrchestrator(req, env, ctx);
 
-    expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
-      appState,
-      routing: routingResult,
-    });
+    expect(mockedInspectRequest).toHaveBeenCalledWith(
+      req,
+      env,
+      expect.objectContaining({
+        appState,
+        routing: routingResult,
+        appContext: expect.any(Object),
+      }),
+    );
     expect(result).toBe(inspectResponse);
   });
 });

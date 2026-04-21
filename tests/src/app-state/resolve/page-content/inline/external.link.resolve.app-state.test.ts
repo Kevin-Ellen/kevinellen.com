@@ -1,6 +1,6 @@
-// tests/src/app-state/resolve/page-content/inline/external-link.resolve.app-state.test.ts
+// tests/src/app-state/resolve/page-content/inline/external.link.resolve.app-state.test.ts
 
-jest.mock("@app-state/resolve/links/external-link.resolve.app-state", () => ({
+jest.mock("@app-state/resolve/links/external.link.resolve.app-state", () => ({
   appStateResolveExternalLink: jest.fn(),
 }));
 
