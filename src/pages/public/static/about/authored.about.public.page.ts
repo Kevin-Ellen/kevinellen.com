@@ -12,7 +12,7 @@ export const authoredAboutPage: AuthoredAboutPublicPage = deepFreeze({
 
   metadata: {
     pageTitle: "About | Kevin Ellen",
-    metaDescription: "About Page.",
+    metaDescription: "About Page meta description.",
   },
 
   breadcrumbs: ["home", "about"],

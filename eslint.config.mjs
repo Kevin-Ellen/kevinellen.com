@@ -48,6 +48,7 @@ export default [
         Env: "readonly",
         ExecutionContext: "readonly",
         fetch: "readonly",
+        crypto: "readonly",
       },
     },
     rules: {

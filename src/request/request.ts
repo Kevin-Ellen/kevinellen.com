@@ -8,6 +8,7 @@ import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-r
 import { appContextCreate } from "@app-context/create.app-context";
 
 import { inspectRequest } from "@request/inspect/inspect.request";
+import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -32,17 +33,20 @@ export const requestOrchestrator = async (
 
   const appContext = appContextCreate(appState, routing);
 
+  const appRenderContext = appRenderContextCreate(appContext);
+
   const inspectResponse = inspectRequest(req, env, {
     appState,
     routing,
     appContext,
+    appRenderContext,
   });
 
   if (inspectResponse) {
     return inspectResponse;
   }
 
-  return new Response(JSON.stringify(appContext.inspect, null, 2), {
+  return new Response(JSON.stringify(appRenderContext.inspect, null, 2), {
     headers: {
       "content-type": "application/json; charset=utf-8",
     },

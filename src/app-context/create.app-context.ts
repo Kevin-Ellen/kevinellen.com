@@ -17,10 +17,12 @@ import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links
 
 const resolvePageRuntimeAppContext = (
   page: AppStatePublicPageDefinition | AppStateErrorPageDefinition,
+  origin: string,
 ) => {
   return {
     ...("metadata" in page ? { metadata: page.metadata } : {}),
     ...("robots" in page ? { robots: page.robots } : {}),
+    canonicalUrl: "slug" in page ? `${origin}${page.slug}` : null,
   };
 };
 
@@ -32,7 +34,10 @@ export const appContextCreate = (
   const globalFooter = resolveGlobalFooterAppContext(appState.globalFooter);
 
   const pageState = resolvePageSourceAppContext(appState, routing);
-  const pageRuntime = resolvePageRuntimeAppContext(pageState);
+  const pageRuntime = resolvePageRuntimeAppContext(
+    pageState,
+    appState.siteConfig.origin,
+  );
 
   const assets = resolveAssetsAppContext(appState.assets, pageState.assets);
   const structuredData = resolveStructuredDataAppContext(appState, pageState);
@@ -46,6 +51,8 @@ export const appContextCreate = (
       resolveInternalLinkAppContext(link, appState),
   });
 
+  const language = appState.siteConfig.language; // wherever this lives
+
   return new AppContext({
     navigation,
     globalFooter,
@@ -53,6 +60,9 @@ export const appContextCreate = (
     structuredData,
     breadcrumbs,
     page,
-    ...pageRuntime,
+    metadata: pageRuntime.metadata,
+    robots: pageRuntime.robots,
+    canonicalUrl: pageRuntime.canonicalUrl,
+    language,
   });
 };
