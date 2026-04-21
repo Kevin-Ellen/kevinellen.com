@@ -51,7 +51,11 @@ export const appContextCreate = (
       resolveInternalLinkAppContext(link, appState),
   });
 
-  const language = appState.siteConfig.language; // wherever this lives
+  const language = appState.siteConfig.language;
+
+  const headAssets = appState.siteConfig.headAssets;
+
+  const themeColour = appState.manifest.backgroundColor;
 
   return new AppContext({
     navigation,
@@ -64,5 +68,7 @@ export const appContextCreate = (
     robots: pageRuntime.robots,
     canonicalUrl: pageRuntime.canonicalUrl,
     language,
+    headAssets,
+    themeColour,
   });
 };

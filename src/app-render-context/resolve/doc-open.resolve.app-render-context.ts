@@ -4,6 +4,7 @@ import type { AppRenderContextDocOpen } from "@app-render-context/app-render-con
 import type { AppContext } from "@app-context/class.app-context";
 
 import { resolveScriptsAppRenderContext } from "@app-render-context/resolve/scripts.assets.resolve.app-render-context";
+import { resolveHeadLinksAppRenderContext } from "@app-render-context/resolve/head-links.resolve.app-render-context";
 
 type ResolveDocOpenAppRenderContextContext = Readonly<{
   nonce: string;
@@ -17,11 +18,13 @@ export const resolveDocOpenAppRenderContext = (
     metadata: appContext.metadata,
     language: appContext.language,
     canonicalUrl: appContext.canonicalUrl,
+    themeColour: appContext.themeColour,
     assets: {
       scripts: resolveScriptsAppRenderContext(appContext, {
         location: "header",
         nonce: context.nonce,
       }),
+      links: resolveHeadLinksAppRenderContext(appContext),
     },
     nonce: context.nonce,
   };

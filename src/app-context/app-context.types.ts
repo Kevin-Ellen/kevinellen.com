@@ -10,6 +10,8 @@ import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-contex
 import type { PageMetadata } from "@shared-types/pages/shared/metadata.shared.page.types";
 import type { AppStatePageRobotsDirectives } from "@shared-types/pages/shared/app-state.robots.shared.page.types";
 import type { SiteLanguage } from "@shared-types/language/language.types";
+import type { AppContextHeadAssets } from "@shared-types/config/site-config/app-context.head-assets.config.types";
+import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app-context.theme-colour.webmanifest.types";
 
 export type AppContextDocument = Readonly<{
   metadata?: PageMetadata;
@@ -30,9 +32,10 @@ export type AppContextData = Readonly<{
   structuredData: readonly AppContextStructuredDataEntry[];
   breadcrumbs: AppContextBreadcrumbs;
   page: AppContextPublicPageDefinition | AppContextErrorPageDefinition;
-
   metadata?: PageMetadata;
   robots?: AppStatePageRobotsDirectives;
   canonicalUrl: string | null;
   language: SiteLanguage;
+  headAssets: AppContextHeadAssets;
+  themeColour: AppContextThemeColour;
 }>;

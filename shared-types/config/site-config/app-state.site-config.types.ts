@@ -10,3 +10,5 @@ type AppStateSiteConfigRuntime = Readonly<{
 export type AppStateSiteConfig = Readonly<
   AuthoredSiteConfig & AppStateSiteConfigRuntime
 >;
+
+export type AppStateHeadAssets = AppStateSiteConfig["headAssets"];

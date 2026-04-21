@@ -8,6 +8,8 @@ import type { PageMetadata } from "@shared-types/pages/shared/metadata.shared.pa
 import type { AppStatePageRobotsDirectives } from "@shared-types/pages/shared/app-state.robots.shared.page.types";
 import type { SiteLanguage } from "@shared-types/language/language.types";
 import type { AppContextAssets } from "@shared-types/assets/app-context.assets.types";
+import type { AppContextHeadAssets } from "@shared-types/config/site-config/app-context.head-assets.config.types";
+import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app-context.theme-colour.webmanifest.types";
 
 export class AppContext {
   readonly #data: AppContextData;
@@ -63,6 +65,14 @@ export class AppContext {
 
   public get assets(): AppContextAssets {
     return this.#data.assets;
+  }
+
+  public get headAssets(): AppContextHeadAssets {
+    return this.#data.headAssets;
+  }
+
+  public get themeColour(): AppContextThemeColour {
+    return this.#data.themeColour;
   }
 
   public get inspect(): AppContextData {

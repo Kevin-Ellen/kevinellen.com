@@ -7,6 +7,7 @@ import type {
   AppRenderContextDocOpenAssets,
   AppRenderContextDocCloseAssets,
 } from "@shared-types/pages/shared/assets/app-render-context.assets.shared.page.types";
+import type { AppRenderContextThemeColour } from "@shared-types/config/webmanifest/app-render-context.theme-colour.webmanifest.types";
 
 export type AppRenderContextResponsePolicy = Readonly<{
   robots: AppStatePageRobotsDirectives | null;
@@ -19,6 +20,7 @@ export type AppRenderContextDocOpen = Readonly<{
   canonicalUrl: string | null;
   assets: AppRenderContextDocOpenAssets;
   nonce: string;
+  themeColour: AppRenderContextThemeColour;
 }>;
 
 export type AppRenderContextDocClose = Readonly<{
