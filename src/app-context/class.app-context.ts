@@ -10,6 +10,8 @@ import type { SiteLanguage } from "@shared-types/language/language.types";
 import type { AppContextAssets } from "@shared-types/assets/app-context.assets.types";
 import type { AppContextHeadAssets } from "@shared-types/config/site-config/app-context.head-assets.config.types";
 import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app-context.theme-colour.webmanifest.types";
+import type { AppContextHeaderBranding } from "@shared-types/config/site-config/app-context.header-branding.config.types";
+import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-context.breadcrumbs.types";
 
 export class AppContext {
   readonly #data: AppContextData;
@@ -73,6 +75,14 @@ export class AppContext {
 
   public get themeColour(): AppContextThemeColour {
     return this.#data.themeColour;
+  }
+
+  public get headerBranding(): AppContextHeaderBranding {
+    return this.#data.headerBranding;
+  }
+
+  public get breadcrumbs(): AppContextBreadcrumbs {
+    return this.#data.breadcrumbs;
   }
 
   public get inspect(): AppContextData {

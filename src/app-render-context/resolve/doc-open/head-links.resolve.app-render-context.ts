@@ -1,4 +1,4 @@
-// src/app-render-context/resolve/head-links.resolve.app-render-context.ts
+// src/app-render-context/resolve/doc-open/head-links.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextHeadLinkAsset } from "@shared-types/config/site-config/app-render-context.head-assets.config.types";

@@ -57,6 +57,8 @@ export const appContextCreate = (
 
   const themeColour = appState.manifest.backgroundColor;
 
+  const headerBranding = appState.siteConfig.headerBranding;
+
   return new AppContext({
     navigation,
     globalFooter,
@@ -70,5 +72,6 @@ export const appContextCreate = (
     language,
     headAssets,
     themeColour,
+    headerBranding,
   });
 };

@@ -12,6 +12,7 @@ import type { AppStatePageRobotsDirectives } from "@shared-types/pages/shared/ap
 import type { SiteLanguage } from "@shared-types/language/language.types";
 import type { AppContextHeadAssets } from "@shared-types/config/site-config/app-context.head-assets.config.types";
 import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app-context.theme-colour.webmanifest.types";
+import type { AppContextHeaderBranding } from "@shared-types/config/site-config/app-context.header-branding.config.types";
 
 export type AppContextDocument = Readonly<{
   metadata?: PageMetadata;
@@ -38,4 +39,5 @@ export type AppContextData = Readonly<{
   language: SiteLanguage;
   headAssets: AppContextHeadAssets;
   themeColour: AppContextThemeColour;
+  headerBranding: AppContextHeaderBranding;
 }>;

@@ -54,6 +54,7 @@ export default [
     rules: {
       ...tseslint.configs.recommendedTypeChecked[0].rules,
       "no-unused-vars": "off",
+      "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

@@ -12,3 +12,4 @@ export type AppStateSiteConfig = Readonly<
 >;
 
 export type AppStateHeadAssets = AppStateSiteConfig["headAssets"];
+export type AppStateHeaderBranding = AppStateSiteConfig["headerBranding"];
