@@ -155,7 +155,45 @@ describe("AppState", () => {
           structuredData: [],
         },
       ],
-      error: [],
+      error: [
+        {
+          id: "error-404",
+          status: 404,
+          label: "Not Found",
+          metadata: {
+            pageTitle: "404 | Page not found",
+            metaDescription: "The page could not be found.",
+          },
+          breadcrumbs: ["home", "error-404"],
+          content: {
+            head: {
+              eyebrow: "Error",
+              title: "Page not found",
+              intro: "The page you were looking for does not exist.",
+            },
+            body: [],
+            footer: [],
+          },
+          robots: {
+            allowIndex: false,
+            allowFollow: false,
+            noarchive: true,
+            nosnippet: true,
+            noimageindex: true,
+          },
+          robotsTxt: {
+            disallow: true,
+          },
+          sitemapXml: {
+            include: false,
+          },
+          assets: {
+            scripts: [],
+            svg: [],
+          },
+          structuredData: [],
+        },
+      ],
     },
   } as unknown as AppStateData;
 
@@ -189,9 +227,121 @@ describe("AppState", () => {
     expect(appState.publicPages).toBe(data.pages.public);
   });
 
+  it("returns errorPages", () => {
+    const appState = new AppState(data);
+
+    expect(appState.errorPages).toBe(data.pages.error);
+  });
+
+  it("returns the matching gone rule by path", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getGoneRuleByPath("/gone-page")).toBe(
+      data.system.goneRules[0],
+    );
+  });
+
+  it("returns null when no gone rule matches the path", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getGoneRuleByPath("/missing-page")).toBeNull();
+  });
+
+  it("returns the matching redirect rule by path", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getRedirectRuleByPath("/old-page")).toBe(
+      data.system.redirectRules[0],
+    );
+  });
+
+  it("returns null when no redirect rule matches the path", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getRedirectRuleByPath("/missing-page")).toBeNull();
+  });
+
+  it("returns the matching public page by slug", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPageBySlug("/")).toBe(data.pages.public[0]);
+  });
+
+  it("returns null when no public page matches the slug", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPageBySlug("/missing-page")).toBeNull();
+  });
+
+  it("returns the matching error page by status", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getErrorPageByStatus(404)).toBe(data.pages.error[0]);
+  });
+
+  it("returns null when no error page matches the status", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getErrorPageByStatus(410)).toBeNull();
+  });
+
   it("returns inspect", () => {
     const appState = new AppState(data);
 
     expect(appState.inspect).toBe(data);
+  });
+
+  it("returns social", () => {
+    const appState = new AppState(data);
+
+    expect(appState.social).toBe(data.social);
+  });
+
+  it("returns navigation", () => {
+    const appState = new AppState(data);
+
+    expect(appState.navigation).toBe(data.navigation);
+  });
+
+  it("returns globalFooter", () => {
+    const appState = new AppState(data);
+
+    expect(appState.globalFooter).toBe(data.globalFooter);
+  });
+
+  it("returns assets", () => {
+    const appState = new AppState(data);
+
+    expect(appState.assets).toBe(data.assets);
+  });
+
+  it("returns structuredData", () => {
+    const appState = new AppState(data);
+
+    expect(appState.structuredData).toBe(data.structuredData);
+  });
+
+  it("returns the matching public page by id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPageById("home")).toBe(data.pages.public[0]);
+  });
+
+  it("returns null when no public page matches the id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPageById("about" as never)).toBeNull();
+  });
+
+  it("returns the matching error page by id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getErrorPageById("error-404")).toBe(data.pages.error[0]);
+  });
+
+  it("returns null when no error page matches the id", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getErrorPageById("error-410" as never)).toBeNull();
   });
 });

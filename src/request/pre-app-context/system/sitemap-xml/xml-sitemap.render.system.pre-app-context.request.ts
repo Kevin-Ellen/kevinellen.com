@@ -1,6 +1,6 @@
 // src/request/pre-app-context/system/xml-sitemap/xml-sitemap.render.system.pre-app-context.request.ts
 
-import type { RequestResult } from "@request/types/request.types";
+import type { PreAppContextResult } from "@request/types/request.types";
 import type { ResolvedXmlSitemapSystem } from "@request/pre-app-context/system/sitemap-xml/xml-sitemap.resolver.system.pre-app-context.request";
 
 const escapeXml = (value: string): string => {
@@ -14,7 +14,7 @@ const escapeXml = (value: string): string => {
 
 export const renderXmlSitemapSystem = (
   resolved: ResolvedXmlSitemapSystem,
-): RequestResult => {
+): PreAppContextResult => {
   const urlsXml = resolved.urls
     .map((url) => `  <url><loc>${escapeXml(url)}</loc></url>`)
     .join("\n");

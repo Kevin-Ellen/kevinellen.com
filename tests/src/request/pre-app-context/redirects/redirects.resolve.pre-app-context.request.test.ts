@@ -9,13 +9,11 @@ describe("preAppContextResolveRedirects", () => {
     const req = new Request("https://dev.kevinellen.com/old-path");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "https://example.com/new-path",
-          redirectStatusCode: 302,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/old-path",
+        to: "https://example.com/new-path",
+        redirectStatusCode: 302,
+      }),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -27,6 +25,7 @@ describe("preAppContextResolveRedirects", () => {
       appState,
     );
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/old-path");
     expect(result?.kind).toBe("direct-response");
 
     if (result?.kind !== "direct-response") {
@@ -44,13 +43,11 @@ describe("preAppContextResolveRedirects", () => {
     const req = new Request("https://dev.kevinellen.com/old-path");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/old-path",
-          to: "/New-Path/",
-          redirectStatusCode: 301,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/old-path",
+        to: "/New-Path/",
+        redirectStatusCode: 301,
+      }),
       siteConfig: {
         origin: "https://dev.kevinellen.com",
       },
@@ -62,6 +59,7 @@ describe("preAppContextResolveRedirects", () => {
       appState,
     );
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/old-path");
     expect(result?.kind).toBe("direct-response");
 
     if (result?.kind !== "direct-response") {
@@ -79,7 +77,7 @@ describe("preAppContextResolveRedirects", () => {
     const req = new Request("http://www.kevinellen.com/About/");
 
     const appState = {
-      redirectRules: [],
+      getRedirectRuleByPath: jest.fn().mockReturnValue(null),
       siteConfig: {
         origin: "https://kevinellen.com",
       },
@@ -91,6 +89,7 @@ describe("preAppContextResolveRedirects", () => {
       appState,
     );
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/About/");
     expect(result?.kind).toBe("direct-response");
 
     if (result?.kind !== "direct-response") {
@@ -108,7 +107,7 @@ describe("preAppContextResolveRedirects", () => {
     const req = new Request("https://kevinellen.com/about");
 
     const appState = {
-      redirectRules: [],
+      getRedirectRuleByPath: jest.fn().mockReturnValue(null),
       siteConfig: {
         origin: "https://kevinellen.com",
       },
@@ -120,6 +119,7 @@ describe("preAppContextResolveRedirects", () => {
       appState,
     );
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/about");
     expect(result).toBeNull();
   });
 
@@ -127,13 +127,11 @@ describe("preAppContextResolveRedirects", () => {
     const req = new Request("https://kevinellen.com/about");
 
     const appState = {
-      redirectRules: [
-        {
-          fromPath: "/about",
-          to: "/about",
-          redirectStatusCode: 301,
-        },
-      ],
+      getRedirectRuleByPath: jest.fn().mockReturnValue({
+        fromPath: "/about",
+        to: "/about",
+        redirectStatusCode: 301,
+      }),
       siteConfig: {
         origin: "https://kevinellen.com",
       },
@@ -145,6 +143,7 @@ describe("preAppContextResolveRedirects", () => {
       appState,
     );
 
+    expect(appState.getRedirectRuleByPath).toHaveBeenCalledWith("/about");
     expect(result).toBeNull();
   });
 });

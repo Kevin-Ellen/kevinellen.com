@@ -19,6 +19,7 @@ const config: Config = {
     "^@tests/(.*)$": "<rootDir>/tests/$1",
     "^@request/(.*)$": "<rootDir>/src/request/$1",
     "^@app-state/(.*)$": "<rootDir>/src/app-state/$1",
+    "^@app-context/(.*)$": "<rootDir>/src/app-context/$1",
     "^@shared-types/(.*)$": "<rootDir>/shared-types/$1",
     "^@utils/(.*)$": "<rootDir>/src/utils/$1",
     "^@pages/(.*)$": "<rootDir>/src/pages/$1",

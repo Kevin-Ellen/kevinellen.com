@@ -1,12 +1,6 @@
 // src/request/pre-app-context/redirects/canonical/canonical.redirects.resolve.pre-app-context.request.ts
 
-import type { AppState } from "@app-state/class.app-state";
-
-export const resolveCanonicalUrl = (
-  inputUrl: URL,
-  appState: AppState,
-  env: Env,
-): URL => {
+export const resolveCanonicalUrl = (inputUrl: URL, env: Env): URL => {
   const url = new URL(inputUrl.href);
 
   const isProd = env.APP_ENV === "prod";

@@ -3,6 +3,11 @@
 import { appStateCreate } from "@app-state/create.app-state";
 import { preAppContextOrchestrator } from "@request/pre-app-context/pre-app-context.request";
 import { preRequestOrchestrator } from "@request/pre-request/pre-request.request";
+import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-resolution.request";
+
+import { appContextCreate } from "@app-context/create.app-context";
+
+import { inspectRequest } from "@request/inspect/inspect.request";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -23,11 +28,23 @@ export const requestOrchestrator = async (
     return preAppContext.response;
   }
 
-  if (preAppContext.kind === "error") {
-    return new Response("gone", {
-      status: preAppContext.status,
-    });
+  const routing = orchestrateRouteResolution(req, appState, preAppContext);
+
+  const appContext = appContextCreate(appState, routing);
+
+  const inspectResponse = inspectRequest(req, env, {
+    appState,
+    routing,
+    appContext,
+  });
+
+  if (inspectResponse) {
+    return inspectResponse;
   }
 
-  return new Response(JSON.stringify(appState.inspect, null, 2));
+  return new Response(JSON.stringify(appContext.inspect, null, 2), {
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+    },
+  });
 };

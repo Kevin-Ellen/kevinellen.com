@@ -1,6 +1,6 @@
 // tests/src/app-state/resolve/links/external-link.resolve.app-state.test.ts
 
-import { appStateResolveExternalLink } from "@app-state/resolve/links/external-link.resolve.app-state";
+import { appStateResolveExternalLink } from "@app-state/resolve/links/external.link.resolve.app-state";
 
 import type { AuthoredExternalLink } from "@shared-types/links/authored.links.types";
 import type { SvgAssetId } from "@shared-types/assets/svg/id.svg.assets.types";

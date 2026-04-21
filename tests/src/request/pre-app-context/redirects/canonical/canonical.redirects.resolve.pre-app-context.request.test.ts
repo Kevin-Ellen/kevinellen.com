@@ -2,15 +2,11 @@
 
 import { resolveCanonicalUrl } from "@request/pre-app-context/redirects/canonical/canonical.redirects.resolve.pre-app-context.request";
 
-import type { AppState } from "@app-state/class.app-state";
-
 describe("resolveCanonicalUrl", () => {
-  const appState = {} as AppState;
-
   it("removes www and forces https in prod", () => {
     const inputUrl = new URL("http://www.kevinellen.com/about");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "prod",
     } as Env);
 
@@ -20,7 +16,7 @@ describe("resolveCanonicalUrl", () => {
   it("lowercases non-root pathnames in prod", () => {
     const inputUrl = new URL("https://kevinellen.com/About/Photography");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "prod",
     } as Env);
 
@@ -30,7 +26,7 @@ describe("resolveCanonicalUrl", () => {
   it("removes a trailing slash from non-root pathnames", () => {
     const inputUrl = new URL("https://kevinellen.com/about/");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "prod",
     } as Env);
 
@@ -40,7 +36,7 @@ describe("resolveCanonicalUrl", () => {
   it("keeps the root pathname as /", () => {
     const inputUrl = new URL("https://kevinellen.com/");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "prod",
     } as Env);
 
@@ -53,7 +49,7 @@ describe("resolveCanonicalUrl", () => {
       "http://www.kevinellen.com/About/?page=2&sort=desc",
     );
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "prod",
     } as Env);
 
@@ -63,7 +59,7 @@ describe("resolveCanonicalUrl", () => {
   it("does not force https or strip www outside prod", () => {
     const inputUrl = new URL("http://www.kevinellen.com/About/");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "dev",
     } as Env);
 
@@ -75,7 +71,7 @@ describe("resolveCanonicalUrl", () => {
   it("preserves the port outside prod", () => {
     const inputUrl = new URL("http://localhost:8787/About/");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "dev",
     } as Env);
 
@@ -85,7 +81,7 @@ describe("resolveCanonicalUrl", () => {
   it("does not mutate the original input URL", () => {
     const inputUrl = new URL("http://www.kevinellen.com/About/");
 
-    const result = resolveCanonicalUrl(inputUrl, appState, {
+    const result = resolveCanonicalUrl(inputUrl, {
       APP_ENV: "prod",
     } as Env);
 

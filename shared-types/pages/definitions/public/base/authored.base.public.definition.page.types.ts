@@ -18,7 +18,6 @@ type AuthoredBasePublicPageDefinitionSpecialisedFields = Readonly<{
   robotsTxt?: AuthoredRobotsTxt;
   sitemapXml?: AuthoredSitemapXml;
   assets?: AuthoredAssets;
-  sitemap?: AuthoredSitemapXml;
   breadcrumbs?: readonly PageIdPublic[];
   structuredData?: readonly AuthoredStructuredDataEntry[];
 }>;
