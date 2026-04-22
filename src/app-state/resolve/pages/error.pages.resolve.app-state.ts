@@ -1,14 +1,13 @@
 // src/app-state/resolve/pages/error.pages.resolve.app-state.ts
 
-import type { AuthoredErrorPageDefinition } from "@shared-types/pages/definitions/error/authored.base.error.definition.page.types";
-import type { AppStateErrorPageDefinition } from "@shared-types/pages/definitions/error/app-state.base.error.definition.page.types";
-
+import type { AuthoredErrorPageDefinition } from "@shared-types/page-definitions/authored.error.page-definition.types";
+import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 import { APP_STATE_PAGE_REGISTRY_STATIC_ERROR } from "@app-state/resolve/pages/registries/error.static.registry.pages.app-state";
 
 import { appStateResolveErrorPage } from "@app-state/resolve/pages/error/error.page.resolve.app-state";
 
 export const appStateResolveErrorPages =
-  (): readonly AppStateErrorPageDefinition[] => {
+  (): readonly AppStatePageDefinition[] => {
     const mergedPublicRegistries: readonly AuthoredErrorPageDefinition[] = [
       ...APP_STATE_PAGE_REGISTRY_STATIC_ERROR,
     ];

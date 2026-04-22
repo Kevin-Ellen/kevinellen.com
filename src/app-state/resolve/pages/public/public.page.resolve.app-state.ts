@@ -1,7 +1,7 @@
 // src/app-state/resolve/pages/public/public.page.resolve.app-state.ts
 
-import type { AuthoredPublicPageDefinition } from "@shared-types/pages/definitions/public/authored.public.definition.page.types";
-import type { AppStatePublicPageDefinition } from "@shared-types/pages/definitions/public/app-state.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
+import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 
 import { appStateResolvePageRobots } from "@app-state/resolve/pages/public/robots.resolve.app-state";
 import { appStateResolvePageAssets } from "@app-state/resolve/pages/public/assets.resolve.app-state";
@@ -13,9 +13,10 @@ import { appStateResolvePageSitemapXml } from "@app-state/resolve/pages/public/s
 
 export const appStateResolvePublicPage = (
   page: AuthoredPublicPageDefinition,
-): AppStatePublicPageDefinition => {
+): AppStatePageDefinition => {
   return {
     ...page,
+    status: null,
     robots: appStateResolvePageRobots(page.robots),
     assets: appStateResolvePageAssets(page.assets),
     breadcrumbs: appStateResolvePageBreadcrumbs(page.breadcrumbs),

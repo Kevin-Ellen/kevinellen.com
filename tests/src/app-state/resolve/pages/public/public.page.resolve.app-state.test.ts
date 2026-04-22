@@ -29,16 +29,32 @@ jest.mock(
   }),
 );
 
+jest.mock(
+  "@app-state/resolve/pages/public/robots-txt.resolve.app-state",
+  () => ({
+    appStateResolvePageRobotsTxT: jest.fn(),
+  }),
+);
+
+jest.mock(
+  "@app-state/resolve/pages/public/sitemap-xml.resolve.app-state",
+  () => ({
+    appStateResolvePageSitemapXml: jest.fn(),
+  }),
+);
+
 import { appStateResolvePageRobots } from "@app-state/resolve/pages/public/robots.resolve.app-state";
 import { appStateResolvePageAssets } from "@app-state/resolve/pages/public/assets.resolve.app-state";
 import { appStateResolvePageBreadcrumbs } from "@app-state/resolve/pages/public/breadcrumbs.resolve.app-state";
 import { appStateResolvePageStructuredData } from "@app-state/resolve/pages/public/structured-data.resolve.app-state";
 import { appStateResolvePageContent } from "@app-state/resolve/page-content/page-content.resolve.app-state";
+import { appStateResolvePageRobotsTxT } from "@app-state/resolve/pages/public/robots-txt.resolve.app-state";
+import { appStateResolvePageSitemapXml } from "@app-state/resolve/pages/public/sitemap-xml.resolve.app-state";
 
 import { appStateResolvePublicPage } from "@app-state/resolve/pages/public/public.page.resolve.app-state";
 
-import type { AuthoredPublicPageDefinition } from "@shared-types/pages/definitions/public/authored.public.definition.page.types";
-import type { AppStatePublicPageDefinition } from "@shared-types/pages/definitions/public/app-state.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
+import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 
 const mockedAppStateResolvePageRobots =
   appStateResolvePageRobots as jest.MockedFunction<
@@ -65,6 +81,16 @@ const mockedAppStateResolvePageContent =
     typeof appStateResolvePageContent
   >;
 
+const mockedAppStateResolvePageRobotsTxT =
+  appStateResolvePageRobotsTxT as jest.MockedFunction<
+    typeof appStateResolvePageRobotsTxT
+  >;
+
+const mockedAppStateResolvePageSitemapXml =
+  appStateResolvePageSitemapXml as jest.MockedFunction<
+    typeof appStateResolvePageSitemapXml
+  >;
+
 describe("appStateResolvePublicPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -82,6 +108,12 @@ describe("appStateResolvePublicPage", () => {
       },
       robots: {
         allowIndex: false,
+      },
+      robotsTxt: {
+        disallow: false,
+      },
+      sitemapXml: {
+        include: true,
       },
       assets: {
         scripts: [{ id: "header-condense" }] as never[],
@@ -126,6 +158,14 @@ describe("appStateResolvePublicPage", () => {
       footer: [],
     });
 
+    mockedAppStateResolvePageRobotsTxT.mockReturnValue({
+      disallow: false,
+    });
+
+    mockedAppStateResolvePageSitemapXml.mockReturnValue({
+      include: true,
+    });
+
     const result = appStateResolvePublicPage(page);
 
     expect(mockedAppStateResolvePageRobots).toHaveBeenCalledWith(page.robots);
@@ -137,9 +177,16 @@ describe("appStateResolvePublicPage", () => {
       page.structuredData,
     );
     expect(mockedAppStateResolvePageContent).toHaveBeenCalledWith(page.content);
+    expect(mockedAppStateResolvePageRobotsTxT).toHaveBeenCalledWith(
+      page.robotsTxt,
+    );
+    expect(mockedAppStateResolvePageSitemapXml).toHaveBeenCalledWith(
+      page.sitemapXml,
+    );
 
-    const expected: AppStatePublicPageDefinition = {
+    const expected: AppStatePageDefinition = {
       ...page,
+      status: null,
       robots: {
         allowIndex: false,
         allowFollow: true,
@@ -214,12 +261,21 @@ describe("appStateResolvePublicPage", () => {
       footer: [],
     });
 
+    mockedAppStateResolvePageRobotsTxT.mockReturnValue({
+      disallow: false,
+    });
+
+    mockedAppStateResolvePageSitemapXml.mockReturnValue({
+      include: true,
+    });
+
     const result = appStateResolvePublicPage(page);
 
     expect(result.id).toBe("journal");
     expect(result.kind).toBe("journal");
     expect(result.slug).toBe("/journal");
     expect(result.label).toBe("Journal");
+    expect(result.status).toBeNull();
     expect(result.metadata).toEqual(page.metadata);
   });
 });

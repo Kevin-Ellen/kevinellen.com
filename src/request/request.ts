@@ -7,9 +7,9 @@ import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-r
 
 import { appContextCreate } from "@app-context/create.app-context";
 
-import { inspectRequest } from "@request/inspect/inspect.request";
-import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
-import { render } from "@rendering/renderer";
+// import { inspectRequest } from "@request/inspect/inspect.request";
+// import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
+// import { render } from "@rendering/renderer";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -34,24 +34,25 @@ export const requestOrchestrator = async (
 
   const appContext = appContextCreate(appState, routing);
 
-  const appRenderContext = appRenderContextCreate(appContext);
+  // const appRenderContext = appRenderContextCreate(appContext);
 
-  const inspectResponse = inspectRequest(req, env, {
-    appState,
-    routing,
-    appContext,
-    appRenderContext,
-  });
+  // const inspectResponse = inspectRequest(req, env, {
+  //   appState,
+  //   routing,
+  //   appContext,
+  //   appRenderContext,
+  // });
 
-  if (inspectResponse) {
-    return inspectResponse;
-  }
+  // if (inspectResponse) {
+  //   return inspectResponse;
+  // }
 
-  const document = render(appRenderContext);
+  // const document = render(appRenderContext);
 
-  return new Response(document, {
+  return new Response(JSON.stringify(appContext.inspect, null, 2), {
     headers: {
-      "content-type": "text/html; charset=utf-8",
+      "content-type": "application/json; charset=utf-8",
+      // "content-type": "text/html; charset=utf-8",
     },
   });
 };

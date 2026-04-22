@@ -1,7 +1,7 @@
 // src/app-state/config/navigation/authored.footer.navigation.app-state.ts
 
 import type { AuthoredFooterNavigation } from "@shared-types/config/navigation/footer/authored.footer.navigation.types";
-import type { PageId } from "@shared-types/pages/shared/id.shared.page.types";
+import type { PageId } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 

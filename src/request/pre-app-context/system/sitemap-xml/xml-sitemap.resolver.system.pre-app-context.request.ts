@@ -19,8 +19,14 @@ export const resolveXmlSitemapSystem = (
   const baseUrl = appState.siteConfig.origin;
 
   const urls = appState.publicPages
-    .filter((page) => page.sitemapXml.include)
-    .map((page) => `${baseUrl}${page.slug}`);
+    .filter((page) => page.sitemapXml !== null && page.sitemapXml.include)
+    .map((page) => {
+      if (page.slug === null) {
+        throw new Error(`Public page '${page.id}' is missing a slug.`);
+      }
+
+      return `${baseUrl}${page.slug}`;
+    });
 
   return {
     urls,

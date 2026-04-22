@@ -1,10 +1,10 @@
 // src/pages/public/static/about/authored.about.public.page.ts
 
-import type { AuthoredAboutPublicPage } from "@shared-types/pages/definitions/public/about/authored.about.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const authoredAboutPage: AuthoredAboutPublicPage = deepFreeze({
+export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
   id: "about",
   kind: "static",
   slug: "/about",

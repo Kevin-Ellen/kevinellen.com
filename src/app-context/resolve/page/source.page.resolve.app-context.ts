@@ -2,13 +2,12 @@
 
 import type { AppState } from "@app-state/class.app-state";
 import type { RoutingResult } from "@request/types/request.types";
-import type { AppStatePublicPageDefinition } from "@shared-types/pages/definitions/public/app-state.public.definition.page.types";
-import type { AppStateErrorPageDefinition } from "@shared-types/pages/definitions/error/app-state.base.error.definition.page.types";
+import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 
 export const resolvePageSourceAppContext = (
   appState: AppState,
   routing: RoutingResult,
-): AppStatePublicPageDefinition | AppStateErrorPageDefinition => {
+): AppStatePageDefinition => {
   if (routing.kind === "found") {
     const page = appState.getPublicPageById(routing.publicPageId);
 

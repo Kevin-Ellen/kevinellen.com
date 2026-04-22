@@ -34,7 +34,8 @@
     // "packages/shared-types/src",
     // "packages/shared-types/src/uploads",
     "shared-types/",
-    "jest.config.ts"
+    "jest.config.ts",
+    "__OLD/__OLD_pages"
   ],
   "exclude": ["__OLD"]
 }

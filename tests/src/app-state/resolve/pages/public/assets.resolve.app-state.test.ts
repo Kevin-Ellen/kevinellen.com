@@ -2,8 +2,8 @@
 
 import { appStateResolvePageAssets } from "@app-state/resolve/pages/public/assets.resolve.app-state";
 
-import type { AuthoredAssets } from "@shared-types/pages/shared/assets/authored.assets.shared.page.types";
-import type { AppStateAssets } from "@shared-types/pages/shared/assets/app-state.assets.shared.page.types";
+import type { AuthoredAssets } from "@shared-types/page-definitions/assets/authored.assets.page-definition.types";
+import type { AppStateAssets } from "@shared-types/page-definitions/assets/app-state.assets.page-definition.types";
 
 describe("appStateResolvePageAssets", () => {
   it("defaults scripts and svg to empty arrays when assets are omitted", () => {

@@ -1,10 +1,10 @@
 // src/app/content/pages/public/legal/privacy.public.page.ts
 
-import type { AuthoredPrivacyLegalPublicPage } from "@shared-types/pages/definitions/public/legal/privacy/authored.privacy.legal.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const authoredPrivacyLegalPage: AuthoredPrivacyLegalPublicPage =
+export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
   deepFreeze({
     id: "privacy",
     kind: "static",

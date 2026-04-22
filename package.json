@@ -9,6 +9,7 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
     "type-check:content": "tsc --noEmit -p packages/content-pipeline/tsconfig.json",
     "type-check:all": "npm run type-check && npm run type-check:content",
     "build": "node scripts/build.mjs",

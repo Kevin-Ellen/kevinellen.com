@@ -2,8 +2,7 @@
 
 import type { RoutingResult } from "@request/types/request.types";
 import type { AppState } from "@app-state/class.app-state";
-import type { AppStatePublicPageDefinition } from "@shared-types/pages/definitions/public/app-state.public.definition.page.types";
-import type { AppStateErrorPageDefinition } from "@shared-types/pages/definitions/error/app-state.base.error.definition.page.types";
+import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 
 import { AppContext } from "@app-context/class.app-context";
 import { resolveNavigationAppContext } from "@app-context/resolve/navigation/navigation.resolve.app-context";
@@ -16,13 +15,13 @@ import { resolveBreadcrumbsAppContext } from "@app-context/resolve/breadcrumbs.r
 import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
 
 const resolvePageRuntimeAppContext = (
-  page: AppStatePublicPageDefinition | AppStateErrorPageDefinition,
+  page: AppStatePageDefinition,
   origin: string,
 ) => {
   return {
-    ...("metadata" in page ? { metadata: page.metadata } : {}),
-    ...("robots" in page ? { robots: page.robots } : {}),
-    canonicalUrl: "slug" in page ? `${origin}${page.slug}` : null,
+    metadata: page.metadata,
+    robots: page.robots,
+    canonicalUrl: page.slug ? `${origin}${page.slug}` : null,
   };
 };
 
@@ -34,7 +33,8 @@ export const appContextCreate = (
   const globalFooter = resolveGlobalFooterAppContext(appState.globalFooter);
 
   const pageState = resolvePageSourceAppContext(appState, routing);
-  const pageRuntime = resolvePageRuntimeAppContext(
+
+  const { metadata, robots, canonicalUrl } = resolvePageRuntimeAppContext(
     pageState,
     appState.siteConfig.origin,
   );
@@ -52,11 +52,8 @@ export const appContextCreate = (
   });
 
   const language = appState.siteConfig.language;
-
   const headAssets = appState.siteConfig.headAssets;
-
   const themeColour = appState.manifest.backgroundColor;
-
   const headerBranding = appState.siteConfig.headerBranding;
 
   return new AppContext({
@@ -66,9 +63,9 @@ export const appContextCreate = (
     structuredData,
     breadcrumbs,
     page,
-    metadata: pageRuntime.metadata,
-    robots: pageRuntime.robots,
-    canonicalUrl: pageRuntime.canonicalUrl,
+    metadata,
+    robots,
+    canonicalUrl,
     language,
     headAssets,
     themeColour,

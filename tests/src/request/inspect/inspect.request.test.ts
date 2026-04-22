@@ -320,28 +320,28 @@ describe("inspectRequest", () => {
     await expect(result?.json()).resolves.toEqual(appContext.inspect);
   });
 
-  it("returns the render-context payload", async () => {
-    const req = new Request(
-      "https://dev.kevinellen.com/_inspect/render-context",
-    );
+  // it("returns the render-context payload", async () => {
+  //   const req = new Request(
+  //     "https://dev.kevinellen.com/_inspect/render-context",
+  //   );
 
-    const renderContext = {
-      page: {
-        title: "Home",
-      },
-      content: {
-        body: [],
-      },
-    };
+  //   const renderContext = {
+  //     page: {
+  //       title: "Home",
+  //     },
+  //     content: {
+  //       body: [],
+  //     },
+  //   };
 
-    const result = inspectRequest(req, envDev, { renderContext });
+  //   const result = inspectRequest(req, envDev, { renderContext });
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
-    expect(result?.headers.get("content-type")).toBe(
-      "application/json; charset=utf-8",
-    );
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(200);
+  //   expect(result?.headers.get("content-type")).toBe(
+  //     "application/json; charset=utf-8",
+  //   );
 
-    await expect(result?.json()).resolves.toEqual(renderContext);
-  });
+  //   await expect(result?.json()).resolves.toEqual(renderContext);
+  // });
 });

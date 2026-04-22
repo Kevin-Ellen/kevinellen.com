@@ -1,6 +1,6 @@
 // src/app-state/resolve/structured-data.resolve.app-state.ts
 
-import type { PageId } from "@shared-types/pages/shared/id.shared.page.types";
+import type { PageId } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";

@@ -144,6 +144,7 @@ describe("AppContext", () => {
       kind: "static",
       slug: "/about",
       label: "About",
+      status: null,
       content: {
         head: {
           eyebrow: "Kevin Ellen",
@@ -173,6 +174,48 @@ describe("AppContext", () => {
           },
         ],
         footer: [],
+      },
+    },
+    metadata: {
+      pageTitle: "About | Kevin Ellen",
+      metaDescription: "About Kevin Ellen.",
+    },
+    robots: {
+      allowIndex: true,
+      allowFollow: true,
+      noarchive: false,
+      nosnippet: false,
+      noimageindex: false,
+    },
+    canonicalUrl: "https://dev.kevinellen.com/about",
+    language: "en-GB",
+    headAssets: {
+      faviconIco: {
+        href: "/favicon.ico",
+      },
+      faviconSvg: {
+        href: "/assets/icons/ke-monogram-logo.svg",
+        type: "image/svg+xml",
+      },
+      faviconPng: {
+        href: "/assets/icons/favicon-96x96.png",
+        sizes: "96x96",
+        type: "image/png",
+      },
+      appleTouchIcon: {
+        href: "/apple-touch-icon.png",
+      },
+      manifest: {
+        href: "/manifest.webmanifest",
+      },
+    },
+    themeColour: "#1f2621",
+    headerBranding: {
+      homeHref: "/",
+      ariaLabel: "Kevin Ellen home",
+      logo: {
+        type: "inline-svg",
+        svg: "logo-monogram-ke",
       },
     },
   };

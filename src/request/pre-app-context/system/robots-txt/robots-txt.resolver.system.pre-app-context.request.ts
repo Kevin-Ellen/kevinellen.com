@@ -20,8 +20,14 @@ export const resolveRobotsTxtSystem = (
   const disallowRules = [
     ...new Set(
       appState.publicPages
-        .filter((page) => page.robotsTxt.disallow === true)
-        .map((page) => `Disallow: ${page.slug}`),
+        .filter((page) => page.robotsTxt !== null && page.robotsTxt.disallow)
+        .map((page) => {
+          if (page.slug === null) {
+            throw new Error(`Public page '${page.id}' is missing a slug.`);
+          }
+
+          return `Disallow: ${page.slug}`;
+        }),
     ),
   ].sort();
 
