@@ -1,4 +1,4 @@
-// src/app-render-context/resolve/doc-open/head-links.resolve.app-render-context.ts
+// src/app-render-context/resolve/head-links.assets.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextHeadLinkAsset } from "@shared-types/config/site-config/app-render-context.head-assets.config.types";
@@ -6,30 +6,30 @@ import type { AppRenderContextHeadLinkAsset } from "@shared-types/config/site-co
 export const resolveHeadLinksAppRenderContext = (
   appContext: AppContext,
 ): readonly AppRenderContextHeadLinkAsset[] => {
-  const headAssets = appContext.headAssets;
+  const { headAssets } = appContext;
 
   return [
     {
-      kind: "favicon-ico",
+      rel: "icon",
       href: headAssets.faviconIco.href,
     },
     {
-      kind: "favicon-svg",
+      rel: "icon",
       href: headAssets.faviconSvg.href,
       type: headAssets.faviconSvg.type,
     },
     {
-      kind: "favicon-png",
+      rel: "icon",
       href: headAssets.faviconPng.href,
       sizes: headAssets.faviconPng.sizes,
       type: headAssets.faviconPng.type,
     },
     {
-      kind: "apple-touch-icon",
+      rel: "apple-touch-icon",
       href: headAssets.appleTouchIcon.href,
     },
     {
-      kind: "manifest",
+      rel: "manifest",
       href: headAssets.manifest.href,
     },
   ];

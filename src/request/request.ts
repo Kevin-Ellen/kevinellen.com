@@ -9,6 +9,7 @@ import { appContextCreate } from "@app-context/create.app-context";
 
 import { inspectRequest } from "@request/inspect/inspect.request";
 import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
+import { render } from "@rendering/renderer";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -46,9 +47,11 @@ export const requestOrchestrator = async (
     return inspectResponse;
   }
 
-  return new Response(JSON.stringify(appRenderContext.inspect, null, 2), {
+  const document = render(appRenderContext);
+
+  return new Response(document, {
     headers: {
-      "content-type": "application/json; charset=utf-8",
+      "content-type": "text/html; charset=utf-8",
     },
   });
 };

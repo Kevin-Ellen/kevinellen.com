@@ -16,6 +16,7 @@
       "@app-state/*": ["./src/app-state/*"],
       "@app-context/*": ["./src/app-context/*"],
       "@app-render-context/*": ["./src/app-render-context/*"],
+      "@rendering/*": ["./src/rendering/*"],
 
       "@utils/*": ["./src/utils/*"],
       "@pages/*": ["./src/pages/*"],
