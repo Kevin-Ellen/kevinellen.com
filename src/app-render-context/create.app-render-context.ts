@@ -11,6 +11,7 @@ import { resolveDocCloseAppRenderContext } from "@app-render-context/resolve/doc
 import { resolveResponsePolicyAppRenderContext } from "@app-render-context/resolve/response-policy.resolve.app-render-context";
 
 import { createNonceAppRenderContext } from "@app-render-context/shared/create-nonce.app-render-context";
+import { resolveBodyContentAppRenderContext } from "./resolve/body-content/body-content.resolve.app-render-context";
 
 export const appRenderContextCreate = (
   appContext: AppContext,
@@ -23,6 +24,7 @@ export const appRenderContextCreate = (
     }),
     docOpen: resolveDocOpenAppRenderContext(appContext, { nonce }),
     bodyHeader: resolveBodyHeaderAppRenderContext(appContext),
+    bodyContent: resolveBodyContentAppRenderContext(appContext),
     bodyFooter: resolveBodyFooterAppRenderContext(appContext),
     docClose: resolveDocCloseAppRenderContext(appContext, { nonce }),
   });

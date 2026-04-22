@@ -12,6 +12,8 @@ import type { AppContextHeadAssets } from "@shared-types/config/site-config/app-
 import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app-context.theme-colour.webmanifest.types";
 import type { AppContextHeaderBranding } from "@shared-types/config/site-config/app-context.header-branding.config.types";
 import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-context.breadcrumbs.types";
+import type { AppContextPublicPageDefinition } from "@shared-types/pages/definitions/public/app-context.public.definition.page.types";
+import type { AppContextErrorPageDefinition } from "@shared-types/pages/definitions/error/app-context.base.error.definition.page.types";
 
 export class AppContext {
   readonly #data: AppContextData;
@@ -83,6 +85,12 @@ export class AppContext {
 
   public get breadcrumbs(): AppContextBreadcrumbs {
     return this.#data.breadcrumbs;
+  }
+
+  public get pageContent():
+    | AppContextPublicPageDefinition
+    | AppContextErrorPageDefinition {
+    return this.#data.page;
   }
 
   public get inspect(): AppContextData {
