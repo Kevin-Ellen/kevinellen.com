@@ -55,6 +55,7 @@ export const appContextCreate = (
   const headAssets = appState.siteConfig.headAssets;
   const themeColour = appState.manifest.backgroundColor;
   const headerBranding = appState.siteConfig.headerBranding;
+  const preload = appState.siteConfig.preload;
 
   return new AppContext({
     navigation,
@@ -68,6 +69,7 @@ export const appContextCreate = (
     canonicalUrl,
     language,
     headAssets,
+    preload,
     themeColour,
     headerBranding,
   });

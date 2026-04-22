@@ -54,4 +54,25 @@ export const appStateSiteConfigAuthored: AuthoredSiteConfig = deepFreeze({
       "logo-vogelbescherming-nederland",
     ],
   },
+
+  preload: [
+    {
+      href: "/assets/fonts/source-sans/sourcesans3-regular.woff2",
+      as: "font",
+      type: "font/woff2",
+      crossorigin: "anonymous",
+    },
+    {
+      href: "/assets/fonts/source-sans/sourcesans3-semibold.woff2",
+      as: "font",
+      type: "font/woff2",
+      crossorigin: "anonymous",
+    },
+    {
+      href: "/assets/fonts/source-serif/sourceserif4-regular.woff2",
+      as: "font",
+      type: "font/woff2",
+      crossorigin: "anonymous",
+    },
+  ],
 });

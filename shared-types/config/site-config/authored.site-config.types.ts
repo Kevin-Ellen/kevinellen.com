@@ -15,6 +15,13 @@ export type AuthoredSiteConfigHeaderBranding = Readonly<{
   logo: AuthoredSiteConfigHeaderBrandingLogo;
 }>;
 
+export type AuthoredSiteConfigHeadAssetPreload = Readonly<{
+  href: string;
+  as: "script" | "style" | "font" | "image" | "fetch";
+  type?: string;
+  crossorigin?: "anonymous" | "use-credentials";
+}>;
+
 export type AuthoredSiteConfigHeadAssets = Readonly<{
   faviconIco: Readonly<{
     href: "/favicon.ico";
@@ -49,4 +56,5 @@ export type AuthoredSiteConfig = Readonly<{
   headerBranding: AuthoredSiteConfigHeaderBranding;
   headAssets: AuthoredSiteConfigHeadAssets;
   assets: AuthoredSiteConfigAssets;
+  preload?: readonly AuthoredSiteConfigHeadAssetPreload[];
 }>;

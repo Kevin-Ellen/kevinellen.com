@@ -13,6 +13,7 @@ import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app
 import type { AppContextHeaderBranding } from "@shared-types/config/site-config/app-context.header-branding.config.types";
 import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-context.breadcrumbs.types";
 import type { AppContextPageDefinition } from "@shared-types/page-definitions/app-context.page-definition.types";
+import type { AppContextPreload } from "@shared-types/config/site-config/app-context.preload.config.types";
 
 export class AppContext {
   readonly #data: AppContextData;
@@ -21,7 +22,7 @@ export class AppContext {
   readonly #globalFooter: AppContextGlobalFooter;
   readonly #structuredData: readonly AppContextStructuredDataEntry[];
 
-  readonly #metadata: PageMetadata | null;
+  readonly #metadata: PageMetadata;
   readonly #robots: AppStatePageRobotsDirectives | null;
   readonly #language: SiteLanguage;
   readonly #canonicalUrl: string | null;
@@ -32,13 +33,13 @@ export class AppContext {
     this.#globalFooter = data.globalFooter;
     this.#structuredData = data.structuredData;
 
-    this.#metadata = data.metadata ?? null;
-    this.#robots = data.robots ?? null;
+    this.#metadata = data.metadata;
+    this.#robots = data.robots;
     this.#language = data.language;
     this.#canonicalUrl = data.canonicalUrl;
   }
 
-  public get metadata(): PageMetadata | null {
+  public get metadata(): PageMetadata {
     return this.#metadata;
   }
 
@@ -86,8 +87,12 @@ export class AppContext {
     return this.#data.breadcrumbs;
   }
 
-  public get pageContent(): AppContextPageDefinition {
+  public get page(): AppContextPageDefinition {
     return this.#data.page;
+  }
+
+  public get preload(): AppContextPreload {
+    return this.#data.preload;
   }
 
   public get inspect(): AppContextData {

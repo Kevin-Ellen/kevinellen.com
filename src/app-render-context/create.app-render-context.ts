@@ -8,7 +8,7 @@ import { resolveDocOpenAppRenderContext } from "@app-render-context/resolve/doc-
 import { resolveBodyHeaderAppRenderContext } from "@app-render-context/resolve/body-header/body-header.resolve.app-render-context";
 import { resolveBodyFooterAppRenderContext } from "@app-render-context/resolve/body-footer/body-footer.resolve.app-render-context";
 import { resolveDocCloseAppRenderContext } from "@app-render-context/resolve/doc-close/doc-close.resolve.app-render-context";
-import { resolveResponsePolicyAppRenderContext } from "@app-render-context/resolve/response-policy.resolve.app-render-context";
+import { resolveResponsePolicyAppRenderContext } from "@app-render-context/resolve/response-policy/response-policy.resolve.app-render-context";
 
 import { createNonceAppRenderContext } from "@app-render-context/shared/create-nonce.app-render-context";
 import { resolveBodyContentAppRenderContext } from "./resolve/body-content/body-content.resolve.app-render-context";
