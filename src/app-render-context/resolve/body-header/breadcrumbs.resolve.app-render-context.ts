@@ -10,7 +10,7 @@ export const resolveBreadcrumbsAppRenderContext = (
 ): AppRenderContextBreadcrumbs => {
   return {
     items: appContext.breadcrumbs.items.map((item) =>
-      resolveInternalLinkAppRenderContext(item),
+      resolveInternalLinkAppRenderContext(appContext, item),
     ),
     current: appContext.breadcrumbs.current,
   };

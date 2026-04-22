@@ -6,12 +6,12 @@ import type { AppRenderContextBodyHeaderNavigation } from "@app-render-context/t
 import { resolveLinkAppRenderContext } from "@app-render-context/shared/link.resolve.app-render-context";
 
 const resolvePrimaryNavigation = (appContext: AppContext) => {
-  return appContext.navigation.header.primary.map((link) => {
-    const resolved = resolveLinkAppRenderContext(link);
+  const currentPath = appContext.canonicalUrl
+    ? new URL(appContext.canonicalUrl).pathname
+    : null;
 
-    const currentPath = appContext.canonicalUrl
-      ? new URL(appContext.canonicalUrl).pathname
-      : null;
+  return appContext.navigation.header.primary.map((link) => {
+    const resolved = resolveLinkAppRenderContext(appContext, link);
 
     const ariaCurrent: "page" | null =
       resolved.href === currentPath ? "page" : null;
@@ -25,7 +25,7 @@ const resolvePrimaryNavigation = (appContext: AppContext) => {
 
 const resolveSocialNavigation = (appContext: AppContext) => {
   return appContext.navigation.header.social.map((link) => {
-    const resolved = resolveLinkAppRenderContext(link);
+    const resolved = resolveLinkAppRenderContext(appContext, link);
 
     return {
       ...resolved,
