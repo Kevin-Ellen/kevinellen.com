@@ -7,8 +7,8 @@ import type { AppRenderContextBlockContentModule } from "@shared-types/page-cont
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type AppRenderContextPageContentRuntimeFields = Readonly<{
-  head: AppRenderContextPageContentHead;
-  body: readonly AppRenderContextBlockContentModule[];
+  header: AppRenderContextPageContentHead;
+  content: readonly AppRenderContextBlockContentModule[];
   footer: readonly AppRenderContextBlockContentModule[];
 }>;
 
@@ -17,8 +17,8 @@ export type AppRenderContextPageContent = Replace<
   AppRenderContextPageContentRuntimeFields
 >;
 
-export type AppRenderContextPageBodyModule =
-  AppRenderContextPageContent["body"][number];
+export type AppRenderContextPageContentModule =
+  AppRenderContextPageContent["content"][number];
 
 export type AppRenderContextPageFooterModule =
   AppRenderContextPageContent["footer"][number];

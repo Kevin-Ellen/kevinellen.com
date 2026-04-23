@@ -1,4 +1,4 @@
-// shared-types/page-content/block/content-section/app-render-context.content-section.block.page-contemt.types.ts
+// shared-types/page-content/block/content-section/app-render-context.content-section.block.page-content.types.ts
 
 import type {
   AppContextContentSectionHeadingBlockContentModule,
@@ -24,6 +24,5 @@ export type AppRenderContextContentSectionBlockContentModule = Replace<
 export type AppRenderContextContentSectionModule =
   AppRenderContextContentSectionBlockContentModule["modules"][number];
 
-export type AppRenderContextContentSectionHeading = NonNullable<
-  AppRenderContextContentSectionBlockContentModule["heading"]
->;
+export type AppRenderContextContentSectionHeading =
+  AppRenderContextContentSectionBlockContentModule["heading"];

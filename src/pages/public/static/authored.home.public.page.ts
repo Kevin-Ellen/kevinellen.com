@@ -19,14 +19,14 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
   breadcrumbs: ["home"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "Kevin Ellen",
       title: "Nature photography, writing, and technical architecture",
       intro:
         "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {

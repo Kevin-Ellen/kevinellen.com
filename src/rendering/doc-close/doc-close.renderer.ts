@@ -8,28 +8,37 @@ const renderStructuredDataItem = (item: unknown): string => {
   return `<script type="application/ld+json">${JSON.stringify(item)}</script>`;
 };
 
-const renderScriptAsset = (
-  script: AppRenderContextDocClose["assets"]["scripts"][number],
+const renderInlineScript = (
+  script: AppRenderContextDocClose["inlineScripts"][number],
 ): string => {
-  if (script.kind === "inline") {
-    const nonceAttribute = script.nonce
-      ? ` nonce="${escapeAttribute(script.nonce)}"`
-      : "";
+  const nonceAttribute = script.nonce
+    ? ` nonce="${escapeAttribute(script.nonce)}"`
+    : "";
 
-    return `<script${nonceAttribute}>${script.content}</script>`;
-  }
+  return `<script${nonceAttribute}>${script.content}</script>`;
+};
 
-  return "";
+const renderLinkScript = (
+  script: AppRenderContextDocClose["linkScripts"][number],
+): string => {
+  const nonceAttribute = script.nonce
+    ? ` nonce="${escapeAttribute(script.nonce)}"`
+    : "";
+
+  const loadingAttribute =
+    script.loading === "blocking" ? "" : ` ${script.loading}`;
+
+  return `<script src="${escapeAttribute(script.src)}"${nonceAttribute}${loadingAttribute}></script>`;
 };
 
 const renderSvgAsset = (
-  svg: AppRenderContextDocClose["assets"]["svg"][number],
+  svg: AppRenderContextDocClose["svg"][number],
 ): string => {
   return `<symbol id="${escapeAttribute(svg.id)}" viewBox="${escapeAttribute(svg.viewBox)}">${svg.content}</symbol>`;
 };
 
 const renderSvgSprite = (
-  svgAssets: AppRenderContextDocClose["assets"]["svg"],
+  svgAssets: AppRenderContextDocClose["svg"],
 ): string => {
   if (!svgAssets.length) {
     return "";
@@ -45,9 +54,9 @@ export const renderDocClose = (docClose: AppRenderContextDocClose): string => {
     .map(renderStructuredDataItem)
     .join("");
 
-  const scripts = docClose.assets.scripts.map(renderScriptAsset).join("");
+  const inlineScripts = docClose.inlineScripts.map(renderInlineScript).join("");
+  const linkScripts = docClose.linkScripts.map(renderLinkScript).join("");
+  const svgSprite = renderSvgSprite(docClose.svg);
 
-  const svgSprite = renderSvgSprite(docClose.assets.svg);
-
-  return `${structuredData}${scripts}${svgSprite}</body></html>`;
+  return `${structuredData}${inlineScripts}${linkScripts}${svgSprite}</body></html>`;
 };

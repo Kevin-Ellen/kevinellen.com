@@ -20,14 +20,14 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "privacy"],
 
     content: {
-      head: {
+      header: {
         eyebrow: "Legal",
         title: "Privacy",
         intro:
           "This page explains what personal data may be processed when you use this website, why it may be processed, and what rights you have in relation to it.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

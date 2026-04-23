@@ -14,8 +14,8 @@ export const appContextResolvePageContent = (
 ): AppContextPageContent => {
   return {
     ...content,
-    head: appContextResolvePageContentHead(content.head, context),
-    body: content.body.map((module) =>
+    header: appContextResolvePageContentHead(content.header, context),
+    content: content.content.map((module) =>
       appContextResolveBlockContentModule(module, context),
     ),
     footer: content.footer.map((module) =>

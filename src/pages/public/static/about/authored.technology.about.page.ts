@@ -20,14 +20,14 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "about", "about-technology"],
 
     content: {
-      head: {
+      header: {
         eyebrow: "About",
         title: "Technology",
         intro:
           "This site is built as a small, structured system instead of using a traditional CMS. The goal is to keep things predictable, fast, and easy to reason about.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

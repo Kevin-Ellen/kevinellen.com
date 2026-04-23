@@ -20,14 +20,14 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "licensing"],
 
     content: {
-      head: {
+      header: {
         eyebrow: "Legal",
         title: "Photo Licensing",
         intro:
           "All photographs on this site are protected by copyright. This page outlines how they may and may not be used.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

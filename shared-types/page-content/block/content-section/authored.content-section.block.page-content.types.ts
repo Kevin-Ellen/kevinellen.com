@@ -10,6 +10,6 @@ export type AuthoredContentSectionHeadingBlockContentModule = Readonly<{
 
 export type AuthoredContentSectionBlockContentModule = Readonly<{
   kind: "contentSection";
-  heading?: AuthoredContentSectionHeadingBlockContentModule;
+  heading: AuthoredContentSectionHeadingBlockContentModule;
   modules: readonly AuthoredBlockContentModule[];
 }>;

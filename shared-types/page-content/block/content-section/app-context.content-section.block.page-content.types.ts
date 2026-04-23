@@ -12,7 +12,7 @@ export type AppContextContentSectionHeadingBlockContentModule =
   AppStateContentSectionHeadingBlockContentModule;
 
 type AppContextContentSectionBlockContentModuleRuntimeFields = Readonly<{
-  heading: AppContextContentSectionHeadingBlockContentModule | null;
+  heading: AppContextContentSectionHeadingBlockContentModule;
   modules: readonly AppContextBlockContentModule[];
 }>;
 

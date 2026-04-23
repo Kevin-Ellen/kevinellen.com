@@ -25,9 +25,9 @@ export const appStateResolveContentSectionBlockContentModule = (
 ): AppStateContentSectionBlockContentModule => {
   return {
     ...module,
-    heading: module.heading
-      ? appStateResolveContentSectionHeadingBlockContentModule(module.heading)
-      : null,
+    heading: appStateResolveContentSectionHeadingBlockContentModule(
+      module.heading,
+    ),
     modules: module.modules.map(appStateResolveBlockContentModule),
   };
 };

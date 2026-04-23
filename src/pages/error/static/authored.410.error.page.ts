@@ -17,14 +17,14 @@ export const authoredGoneErrorPage: AuthoredErrorPageDefinition = deepFreeze({
   breadcrumbs: ["home", "error-410"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "410",
       title: "Gone",
       intro:
         "This page has been permanently removed and is no longer available.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {

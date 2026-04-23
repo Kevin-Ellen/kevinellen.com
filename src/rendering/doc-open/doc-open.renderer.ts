@@ -8,7 +8,7 @@ import {
 } from "@rendering/utils/html.escape.util.renderer";
 
 const renderHeadLink = (
-  link: AppRenderContextDocOpen["assets"]["links"][number],
+  link: AppRenderContextDocOpen["links"][number],
 ): string => {
   const attributes = [
     `rel="${escapeAttribute(link.rel)}"`,
@@ -25,14 +25,16 @@ const renderHeadLink = (
 };
 
 export const renderDocOpen = (docOpen: AppRenderContextDocOpen): string => {
-  const headLinks = docOpen.assets.links.map(renderHeadLink).join("");
+  const headLinks = docOpen.links.map(renderHeadLink).join("");
 
   const pageTitle = docOpen.metadata?.pageTitle
     ? `<title>${escapeHtml(docOpen.metadata.pageTitle)}</title>`
     : "";
 
   const metaDescription = docOpen.metadata?.metaDescription
-    ? `<meta name="description" content="${escapeAttribute(docOpen.metadata.metaDescription)}">`
+    ? `<meta name="description" content="${escapeAttribute(
+        docOpen.metadata.metaDescription,
+      )}">`
     : "";
 
   const canonical = docOpen.canonicalUrl

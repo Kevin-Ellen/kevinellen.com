@@ -17,10 +17,10 @@ describe("appStateResolveErrorPage", () => {
         metaDescription: "The page could not be found.",
       },
       content: {
-        head: {
+        header: {
           title: "Page not found",
         },
-        body: [],
+        content: [],
       },
     };
 
@@ -56,10 +56,10 @@ describe("appStateResolveErrorPage", () => {
           "Something went wrong while trying to render this page.",
       },
       content: {
-        head: {
+        header: {
           title: "Internal server error",
         },
-        body: [],
+        content: [],
       },
     };
 
@@ -78,10 +78,10 @@ describe("appStateResolveErrorPage", () => {
         metaDescription: "This page is no longer available.",
       },
       content: {
-        head: {
+        header: {
           title: "Gone",
         },
-        body: [],
+        content: [],
       },
     };
 
@@ -103,10 +103,10 @@ describe("appStateResolveErrorPage", () => {
         metaDescription: "This page is no longer available.",
       },
       content: {
-        head: {
+        header: {
           title: "Gone",
         },
-        body: [],
+        content: [],
       },
     };
 
@@ -130,10 +130,10 @@ describe("appStateResolveErrorPage", () => {
         metaDescription: "This page is no longer available.",
       },
       content: {
-        head: {
+        header: {
           title: "Gone",
         },
-        body: [],
+        content: [],
       },
     };
 

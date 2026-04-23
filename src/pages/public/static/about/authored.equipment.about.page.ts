@@ -19,14 +19,14 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "about", "about-equipment"],
 
     content: {
-      head: {
+      header: {
         eyebrow: "About",
         title: "Equipment",
         intro:
           "This is the camera kit I use for wildlife, macro, and general nature photography. I prioritise equipment that helps me stay mobile, react quickly, and remain comfortable during long days in the field.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

@@ -121,6 +121,7 @@ describe("appContextResolveBlockContentModule", () => {
       id: "quote-1",
       text: "Quote",
       attribution: "Author",
+      flow: "content",
     } as const;
 
     const resolved = module;
@@ -167,6 +168,7 @@ describe("appContextResolveBlockContentModule", () => {
       pagination: {
         pageSize: 10,
       },
+      flow: "content",
     } as const;
 
     const resolved = module;
@@ -187,6 +189,7 @@ describe("appContextResolveBlockContentModule", () => {
     const module = {
       kind: "pre",
       value: "const x = 1;",
+      flow: "content",
     } as const;
 
     const resolved = module;
@@ -207,7 +210,11 @@ describe("appContextResolveBlockContentModule", () => {
   it("dispatches content section modules to the content section resolver", () => {
     const module = {
       kind: "contentSection",
-      heading: null,
+      heading: {
+        text: "Section heading",
+        visuallyHidden: false,
+        level: 2,
+      },
       modules: [],
     } as const;
 

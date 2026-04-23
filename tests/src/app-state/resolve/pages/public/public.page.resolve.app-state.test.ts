@@ -122,10 +122,10 @@ describe("appStateResolvePublicPage", () => {
       breadcrumbs: ["home"],
       structuredData: [{ "@type": "AboutPage" }] as never[],
       content: {
-        head: {
+        header: {
           title: "About",
         },
-        body: [],
+        content: [],
       },
     };
 
@@ -149,12 +149,12 @@ describe("appStateResolvePublicPage", () => {
     ] as never[]);
 
     mockedAppStateResolvePageContent.mockReturnValue({
-      head: {
+      header: {
         title: "About",
         eyebrow: null,
         intro: null,
       },
-      body: [],
+      content: [],
       footer: [],
     });
 
@@ -201,12 +201,12 @@ describe("appStateResolvePublicPage", () => {
       breadcrumbs: ["home"],
       structuredData: [{ "@type": "AboutPage" }] as never[],
       content: {
-        head: {
+        header: {
           title: "About",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
       robotsTxt: { disallow: false },
@@ -227,10 +227,10 @@ describe("appStateResolvePublicPage", () => {
         metaDescription: "Field notes and journal entries.",
       },
       content: {
-        head: {
+        header: {
           title: "Journal",
         },
-        body: [],
+        content: [],
       },
     };
 
@@ -252,12 +252,12 @@ describe("appStateResolvePublicPage", () => {
     mockedAppStateResolvePageStructuredData.mockReturnValue([]);
 
     mockedAppStateResolvePageContent.mockReturnValue({
-      head: {
+      header: {
         title: "Journal",
         eyebrow: null,
         intro: null,
       },
-      body: [],
+      content: [],
       footer: [],
     });
 

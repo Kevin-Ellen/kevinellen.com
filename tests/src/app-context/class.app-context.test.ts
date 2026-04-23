@@ -146,13 +146,13 @@ describe("AppContext", () => {
       label: "About",
       status: null,
       content: {
-        head: {
+        header: {
           eyebrow: "Kevin Ellen",
           title: "About me",
           intro:
             "This site brings together two long-standing interests: nature and technology.",
         },
-        body: [
+        content: [
           {
             kind: "contentSection",
             heading: {

@@ -1,4 +1,4 @@
-// src/app-state/class.appState.ts
+// src/app-state/class.app-state.ts
 
 import type { AppStateData } from "@app-state/types/app-state.types";
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
@@ -17,6 +17,24 @@ import type { AppStateGlobalFooter } from "@shared-types/page-content/site/globa
 import type { AppStateAssets } from "@shared-types/assets/app-state.assets.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";
 
+const isPublicPageDefinition = (
+  page: AppStatePageDefinition,
+): page is AppStatePageDefinition & {
+  id: PageIdPublic;
+  slug: `/${string}`;
+} => {
+  return page.slug !== null;
+};
+
+const isErrorPageDefinition = (
+  page: AppStatePageDefinition,
+): page is AppStatePageDefinition & {
+  id: PageIdError;
+  status: ErrorPageStatus;
+} => {
+  return page.status !== null;
+};
+
 export class AppState {
   readonly #data: AppStateData;
 
@@ -28,11 +46,13 @@ export class AppState {
     ErrorPageStatus,
     AppStatePageDefinition
   >;
-
   readonly #errorPagesById: ReadonlyMap<PageIdError, AppStatePageDefinition>;
 
   public constructor(data: AppStateData) {
     this.#data = data;
+
+    const publicPages = data.pages.public.filter(isPublicPageDefinition);
+    const errorPages = data.pages.error.filter(isErrorPageDefinition);
 
     this.#goneRulesByPath = new Map(
       data.system.goneRules.map((rule) => [rule.path, rule] as const),
@@ -43,19 +63,19 @@ export class AppState {
     );
 
     this.#publicPagesById = new Map(
-      data.pages.public.map((page) => [page.id, page] as const),
+      publicPages.map((page) => [page.id, page] as const),
     );
 
     this.#publicPagesBySlug = new Map(
-      data.pages.public.map((page) => [page.slug, page] as const),
+      publicPages.map((page) => [page.slug, page] as const),
     );
 
     this.#errorPagesByStatus = new Map(
-      data.pages.error.map((page) => [page.status, page] as const),
+      errorPages.map((page) => [page.status, page] as const),
     );
 
     this.#errorPagesById = new Map(
-      data.pages.error.map((page) => [page.id, page] as const),
+      errorPages.map((page) => [page.id, page] as const),
     );
   }
 
@@ -102,6 +122,7 @@ export class AppState {
   public get structuredData(): AppStateStructuredData {
     return this.#data.structuredData;
   }
+
   public getGoneRuleByPath(pathname: string): SystemGoneRule | null {
     return this.#goneRulesByPath.get(pathname) ?? null;
   }

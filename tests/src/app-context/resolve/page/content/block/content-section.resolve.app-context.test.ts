@@ -54,6 +54,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
         id: "quote-1",
         text: "Resolved quote",
         attribution: "Author",
+        flow: "content",
       });
 
     const module = {
@@ -73,6 +74,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
           id: "quote-1",
           text: "Original quote",
           attribution: "Author",
+          flow: "content",
         },
       ],
     } as const;
@@ -99,6 +101,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
           id: "quote-1",
           text: "Resolved quote",
           attribution: "Author",
+          flow: "content",
         },
       ],
     });
@@ -116,10 +119,14 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
     );
   });
 
-  it("returns null heading when the section has no heading", () => {
+  it("resolves an empty section with a heading", () => {
     const module = {
       kind: "contentSection",
-      heading: null,
+      heading: {
+        text: "Empty section",
+        level: 2,
+        visuallyHidden: true,
+      },
       modules: [],
     } as const;
 
@@ -130,7 +137,11 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
 
     expect(result).toEqual({
       kind: "contentSection",
-      heading: null,
+      heading: {
+        text: "Empty section",
+        level: 2,
+        visuallyHidden: true,
+      },
       modules: [],
     });
 

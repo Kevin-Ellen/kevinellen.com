@@ -9,6 +9,7 @@ describe("appContextResolveQuoteBlockContentModule", () => {
       id: "quote-1",
       text: "A quote",
       attribution: "Author",
+      flow: "content",
     } as const;
 
     const result = appContextResolveQuoteBlockContentModule(

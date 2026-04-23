@@ -1,7 +1,8 @@
 // shared-types/page-content/block/journal-listing/app-render-context.journal-listing.block.page-content.types.ts
 
 import type { AppContextJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-context.journal-listing.block.page-content.types";
-import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
+
+import type { ReplaceAndOmit } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type AppRenderContextJournalListingItem = Readonly<{
   href: string;
@@ -15,9 +16,10 @@ type AppRenderContextJournalListingBlockContentModuleRuntimeFields = Readonly<{
   items: readonly AppRenderContextJournalListingItem[];
 }>;
 
-export type AppRenderContextJournalListingBlockContentModule = Replace<
+export type AppRenderContextJournalListingBlockContentModule = ReplaceAndOmit<
   AppContextJournalListingBlockContentModule,
-  AppRenderContextJournalListingBlockContentModuleRuntimeFields
+  AppRenderContextJournalListingBlockContentModuleRuntimeFields,
+  "pagination"
 >;
 
 export type AppRenderContextJournalListingModuleItem =

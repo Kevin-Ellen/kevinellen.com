@@ -19,14 +19,14 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
   breadcrumbs: ["home", "terms"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "Legal",
       title: "Terms of Use",
       intro:
         "These terms govern the use of this website. By accessing or using the site, you agree to them. If you do not agree, please do not use the site.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {

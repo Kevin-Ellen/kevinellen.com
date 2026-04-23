@@ -6,5 +6,8 @@ import type { AppStateJournalListingBlockContentModule } from "@shared-types/pag
 export const appStateResolveJournalListingBlockContentModule = (
   module: AuthoredJournalListingBlockContentModule,
 ): AppStateJournalListingBlockContentModule => {
-  return module;
+  return {
+    ...module,
+    flow: module.flow ?? "content",
+  };
 };

@@ -16,13 +16,13 @@ export const authoredNotFoundErrorPage: AuthoredErrorPageDefinition =
     },
 
     content: {
-      head: {
+      header: {
         eyebrow: "404",
         title: "Page not found",
         intro: "The page you were looking for does not appear to exist here.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

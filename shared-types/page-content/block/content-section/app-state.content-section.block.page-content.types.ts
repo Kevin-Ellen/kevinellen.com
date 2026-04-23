@@ -19,7 +19,7 @@ export type AppStateContentSectionHeadingBlockContentModule = Replace<
 >;
 
 type AppStateContentSectionBlockContentModuleDeterministicFields = Readonly<{
-  heading: AppStateContentSectionHeadingBlockContentModule | null;
+  heading: AppStateContentSectionHeadingBlockContentModule;
   modules: readonly AppStateBlockContentModule[];
 }>;
 

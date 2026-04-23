@@ -18,14 +18,14 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
   breadcrumbs: ["home", "about"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "Kevin Ellen",
       title: "About me",
       intro:
         "This site brings together two long-standing interests: nature and technology. It is a place to share photography, field notes, and journal writing alongside the technical thinking, architecture, and systems work that shape how the platform itself is built.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {
@@ -120,6 +120,11 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       },
       {
         kind: "contentSection",
+        heading: {
+          text: "Technology quote",
+          visuallyHidden: true,
+          level: 2,
+        },
         modules: [
           {
             kind: "quote",

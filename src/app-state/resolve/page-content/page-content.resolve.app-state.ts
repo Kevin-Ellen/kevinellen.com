@@ -10,8 +10,8 @@ export const appStateResolvePageContent = (
   content: AuthoredPageContent,
 ): AppStatePageContent => {
   return {
-    head: appStateResolvePageContentHead(content.head),
-    body: content.body.map(appStateResolveBlockContentModule),
+    header: appStateResolvePageContentHead(content.header),
+    content: content.content.map(appStateResolveBlockContentModule),
     footer: (content.footer ?? []).map(appStateResolveBlockContentModule),
   };
 };

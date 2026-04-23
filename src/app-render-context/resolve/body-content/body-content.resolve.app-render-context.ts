@@ -3,10 +3,18 @@
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyContent } from "@app-render-context/types/body-content.app-render-context.types";
 
+import { resolveBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/block.resolve.app-render-context";
+
 export const resolveBodyContentAppRenderContext = (
   appContext: AppContext,
 ): AppRenderContextBodyContent => {
   return {
-    body: appContext.pageContent,
+    header: appContext.page.content.header,
+    content: appContext.page.content.content.map((module) =>
+      resolveBlockContentModuleAppRenderContext(appContext, module),
+    ),
+    footer: appContext.page.content.footer.map((module) =>
+      resolveBlockContentModuleAppRenderContext(appContext, module),
+    ),
   };
 };

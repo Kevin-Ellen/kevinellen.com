@@ -7,8 +7,8 @@ import type { AppContextBlockContentModule } from "@shared-types/page-content/bl
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type AppContextPageContentRuntimeFields = Readonly<{
-  head: AppContextPageContentHead;
-  body: readonly AppContextBlockContentModule[];
+  header: AppContextPageContentHead;
+  content: readonly AppContextBlockContentModule[];
   footer: readonly AppContextBlockContentModule[];
 }>;
 

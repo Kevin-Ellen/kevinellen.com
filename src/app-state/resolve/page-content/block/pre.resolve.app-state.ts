@@ -6,5 +6,8 @@ import type { AppStatePreBlockContentModule } from "@shared-types/page-content/b
 export const appStateResolvePreBlockContentModule = (
   module: AuthoredPreBlockContentModule,
 ): AppStatePreBlockContentModule => {
-  return module;
+  return {
+    ...module,
+    flow: module.flow ?? "content",
+  };
 };
