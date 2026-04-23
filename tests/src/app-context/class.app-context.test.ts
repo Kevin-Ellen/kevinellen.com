@@ -209,6 +209,26 @@ describe("AppContext", () => {
         href: "/manifest.webmanifest",
       },
     },
+    preload: [
+      {
+        href: "/assets/fonts/source-sans/sourcesans3-regular.woff2",
+        as: "font",
+        type: "font/woff2",
+        crossorigin: "anonymous",
+      },
+      {
+        href: "/assets/fonts/source-sans/sourcesans3-semibold.woff2",
+        as: "font",
+        type: "font/woff2",
+        crossorigin: "anonymous",
+      },
+      {
+        href: "/assets/fonts/source-serif/sourceserif4-regular.woff2",
+        as: "font",
+        type: "font/woff2",
+        crossorigin: "anonymous",
+      },
+    ],
     themeColour: "#1f2621",
     headerBranding: {
       homeHref: "/",

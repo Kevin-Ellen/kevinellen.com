@@ -4,7 +4,7 @@ import type { AppContext } from "@app-context/class.app-context";
 import type { SvgAssetId } from "@shared-types/assets/svg/id.svg.assets.types";
 import type { AppRenderContextSvgReference } from "@shared-types/assets/svg/app-render-context.svg.assets.types";
 
-import { resolveSvgAppRenderContext } from "@app-render-context/shared/svg.resolve.app-render-context";
+import { resolveSvgReferencesAppRenderContext } from "@app-render-context/shared/svg.resolve.app-render-context";
 
 export const resolveSvgReferenceByIdAppRenderContext = (
   appContext: AppContext,
@@ -14,7 +14,7 @@ export const resolveSvgReferenceByIdAppRenderContext = (
     return null;
   }
 
-  const svg = resolveSvgAppRenderContext(appContext).find(
+  const svg = resolveSvgReferencesAppRenderContext(appContext).find(
     (item) => item.id === svgId,
   );
 
@@ -22,9 +22,5 @@ export const resolveSvgReferenceByIdAppRenderContext = (
     throw new Error(`Missing SVG asset: ${svgId}`);
   }
 
-  return {
-    id: svg.id,
-    width: svg.dimensions.calculated.width,
-    height: svg.dimensions.calculated.height,
-  };
+  return svg;
 };

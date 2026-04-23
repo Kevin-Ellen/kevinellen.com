@@ -3,10 +3,10 @@
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyHeaderBranding } from "@app-render-context/types/body-header.app-render-context.types";
 
-import { resolveSvgAppRenderContext } from "@app-render-context/shared/svg.resolve.app-render-context";
+import { resolveSvgReferencesAppRenderContext } from "@app-render-context/shared/svg.resolve.app-render-context";
 
 const resolveSvgReference = (appContext: AppContext, svgId: string) => {
-  const svg = resolveSvgAppRenderContext(appContext).find(
+  const svg = resolveSvgReferencesAppRenderContext(appContext).find(
     (item) => item.id === svgId,
   );
 
@@ -14,11 +14,7 @@ const resolveSvgReference = (appContext: AppContext, svgId: string) => {
     throw new Error(`Missing SVG asset: ${svgId}`);
   }
 
-  return {
-    id: svg.id,
-    width: svg.dimensions.calculated.width,
-    height: svg.dimensions.calculated.height,
-  };
+  return svg;
 };
 
 export const resolveBrandingBodyHeaderAppRenderContext = (
