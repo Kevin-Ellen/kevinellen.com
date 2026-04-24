@@ -2,16 +2,22 @@
 
 import type { AppRenderContextBodyFooterAffiliations } from "@app-render-context/types/body-footer.app-render-context.types";
 
-import { escapeAttribute } from "@rendering/utils/html.escape.util.renderer";
+import { renderLinkAttributes } from "@rendering/shared/link.shared.renderer";
+import { renderSvgReference } from "@rendering/shared/svg-reference.shared.renderer";
 
 const renderAffiliationItem = (
   item: AppRenderContextBodyFooterAffiliations["items"][number],
 ): string => {
   return `<li>
-    <a href="${escapeAttribute(item.href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeAttribute(item.ariaLabel)}">
-      <svg class="l-footer__logo" aria-hidden="true" width="${item.logo.width}" height="${item.logo.height}">
-        <use href="#${escapeAttribute(item.logo.id)}"></use>
-      </svg>
+    <a ${renderLinkAttributes({
+      kind: "external",
+      href: item.href,
+      text: item.ariaLabel,
+      openInNewTab: true,
+      svg: null,
+      ariaLabel: item.ariaLabel,
+    })}>
+      ${renderSvgReference(item.logo, "l-footer__logo")}
     </a>
   </li>`;
 };

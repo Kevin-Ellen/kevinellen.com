@@ -3,16 +3,15 @@
 import type { AppRenderContextLink } from "@shared-types/links/app-render-context.links.types";
 import type { AppRenderContextBreadcrumbs } from "@shared-types/breadcrumbs/app-render-context.breadcrumbs.types";
 
-import {
-  escapeAttribute,
-  escapeHtml,
-} from "@rendering/utils/html.escape.util.renderer";
+import { renderTextLink } from "@rendering/shared/link.shared.renderer";
+import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 
 const renderBreadcrumbItem = (item: AppRenderContextLink): string => {
   return `<li class="l-header__breadcrumb-item">
-    <a class="l-header__breadcrumb-link" href="${escapeAttribute(item.href)}">
-      ${escapeHtml(item.text)}
-    </a>
+    ${renderTextLink({
+      ...item,
+      className: "l-header__breadcrumb-link",
+    })}
   </li>`;
 };
 
