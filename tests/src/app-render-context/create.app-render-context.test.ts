@@ -62,7 +62,13 @@ jest.mock(
 describe("appRenderContextCreate", () => {
   it("creates an AppRenderContext from resolved render context boundaries", () => {
     const appContext = {} as AppContext;
+
+    const env = {
+      APP_HOST: "dev.kevinellen.com",
+    } as Env;
+
     const nonce = "test-nonce";
+    const origin = "https://dev.kevinellen.com";
 
     const responsePolicy = {
       headers: {
@@ -97,26 +103,32 @@ describe("appRenderContextCreate", () => {
     };
 
     jest.mocked(createNonceAppRenderContext).mockReturnValue(nonce);
+
     jest
       .mocked(resolveResponsePolicyAppRenderContext)
       .mockReturnValue(responsePolicy as never);
+
     jest
       .mocked(resolveDocOpenAppRenderContext)
       .mockReturnValue(docOpen as never);
+
     jest
       .mocked(resolveBodyHeaderAppRenderContext)
       .mockReturnValue(bodyHeader as never);
+
     jest
       .mocked(resolveBodyContentAppRenderContext)
       .mockReturnValue(bodyContent as never);
+
     jest
       .mocked(resolveBodyFooterAppRenderContext)
       .mockReturnValue(bodyFooter as never);
+
     jest
       .mocked(resolveDocCloseAppRenderContext)
       .mockReturnValue(docClose as never);
 
-    const result = appRenderContextCreate(appContext);
+    const result = appRenderContextCreate(appContext, env);
 
     expect(result).toBeInstanceOf(AppRenderContext);
 
@@ -137,6 +149,7 @@ describe("appRenderContextCreate", () => {
 
     expect(resolveDocCloseAppRenderContext).toHaveBeenCalledWith(appContext, {
       nonce,
+      origin,
     });
 
     expect(result.inspect).toEqual({

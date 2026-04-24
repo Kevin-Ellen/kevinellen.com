@@ -9,7 +9,9 @@ import { preAppContextOrchestrator } from "@request/pre-app-context/pre-app-cont
 import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-resolution.request";
 import { inspectRequest } from "@request/inspect/inspect.request";
 
-// import { render } from "@rendering/renderer";
+import { createHtmlResponse } from "@request/response/create-html.response.request";
+
+import { render } from "@rendering/renderer";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -34,7 +36,7 @@ export const requestOrchestrator = async (
 
   const appContext = appContextCreate(appState, routing);
 
-  const appRenderContext = appRenderContextCreate(appContext);
+  const appRenderContext = appRenderContextCreate(appContext, env);
 
   const inspectResponse = inspectRequest(req, env, {
     appState,
@@ -47,12 +49,7 @@ export const requestOrchestrator = async (
     return inspectResponse;
   }
 
-  // const document = render(appRenderContext);
+  const document = render(appRenderContext);
 
-  return new Response(JSON.stringify(appRenderContext.inspect, null, 2), {
-    headers: {
-      "content-type": "application/json; charset=utf-8",
-      // "content-type": "text/html; charset=utf-8",
-    },
-  });
+  return createHtmlResponse(document, appRenderContext);
 };

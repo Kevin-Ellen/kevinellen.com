@@ -1,12 +1,19 @@
 // tests/src/request/request.test.ts
 
 import type { AppState } from "@app-state/class.app-state";
+
 import { appStateCreate } from "@app-state/create.app-state";
+import { appContextCreate } from "@app-context/create.app-context";
+import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
+
 import { inspectRequest } from "@request/inspect/inspect.request";
 import { preAppContextOrchestrator } from "@request/pre-app-context/pre-app-context.request";
 import { preRequestOrchestrator } from "@request/pre-request/pre-request.request";
+import { createHtmlResponse } from "@request/response/create-html.response.request";
 import { requestOrchestrator } from "@request/request";
 import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-resolution.request";
+
+import { render } from "@rendering/renderer";
 
 jest.mock("@request/pre-request/pre-request.request", () => ({
   preRequestOrchestrator: jest.fn(),
@@ -24,8 +31,24 @@ jest.mock("@request/routing/orchestrate.route-resolution.request", () => ({
   orchestrateRouteResolution: jest.fn(),
 }));
 
+jest.mock("@app-context/create.app-context", () => ({
+  appContextCreate: jest.fn(),
+}));
+
+jest.mock("@app-render-context/create.app-render-context", () => ({
+  appRenderContextCreate: jest.fn(),
+}));
+
 jest.mock("@request/inspect/inspect.request", () => ({
   inspectRequest: jest.fn(),
+}));
+
+jest.mock("@rendering/renderer", () => ({
+  render: jest.fn(),
+}));
+
+jest.mock("@request/response/create-html.response.request", () => ({
+  createHtmlResponse: jest.fn(),
 }));
 
 const mockedPreRequestOrchestrator = jest.mocked(preRequestOrchestrator);
@@ -34,7 +57,11 @@ const mockedAppStateCreate = jest.mocked(appStateCreate);
 const mockedOrchestrateRouteResolution = jest.mocked(
   orchestrateRouteResolution,
 );
+const mockedAppContextCreate = jest.mocked(appContextCreate);
+const mockedAppRenderContextCreate = jest.mocked(appRenderContextCreate);
 const mockedInspectRequest = jest.mocked(inspectRequest);
+const mockedRender = jest.mocked(render);
+const mockedCreateHtmlResponse = jest.mocked(createHtmlResponse);
 
 const buildPublicPage = (id: "home" | "about") => {
   if (id === "home") {
@@ -250,6 +277,7 @@ describe("requestOrchestrator", () => {
       APP_HOST: "kevinellen.com",
     } as unknown as Env;
     const ctx = {} as ExecutionContext;
+
     const preRequestResponse = new Response("asset");
 
     mockedPreRequestOrchestrator.mockResolvedValue(preRequestResponse);
@@ -258,10 +286,12 @@ describe("requestOrchestrator", () => {
 
     expect(mockedPreRequestOrchestrator).toHaveBeenCalledTimes(1);
     expect(mockedPreRequestOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+
     expect(mockedAppStateCreate).not.toHaveBeenCalled();
     expect(mockedPreAppContextOrchestrator).not.toHaveBeenCalled();
     expect(mockedOrchestrateRouteResolution).not.toHaveBeenCalled();
     expect(mockedInspectRequest).not.toHaveBeenCalled();
+
     expect(result).toBe(preRequestResponse);
   });
 
@@ -271,6 +301,7 @@ describe("requestOrchestrator", () => {
       APP_HOST: "kevinellen.com",
     } as unknown as Env;
     const ctx = {} as ExecutionContext;
+
     const appState = buildAppState();
 
     const preAppContextResponse = new Response("robots", {
@@ -296,8 +327,115 @@ describe("requestOrchestrator", () => {
       env,
       appState,
     );
+
     expect(mockedOrchestrateRouteResolution).not.toHaveBeenCalled();
     expect(mockedInspectRequest).not.toHaveBeenCalled();
+
     expect(result).toBe(preAppContextResponse);
+  });
+
+  it("renders the app render context and returns the HTML response", async () => {
+    const req = new Request("https://kevinellen.com/about");
+    const env = {
+      APP_HOST: "kevinellen.com",
+    } as unknown as Env;
+    const ctx = {} as ExecutionContext;
+
+    const appState = buildAppState();
+    const preAppContext = { kind: "continue" };
+    const routing = { kind: "found", publicPageId: "about" };
+    const appContext = { page: { id: "about" } };
+    const appRenderContext = {
+      responsePolicy: {
+        status: 200,
+        robots: [],
+        nonce: "test-nonce",
+      },
+    };
+
+    const document = "<!doctype html><html></html>";
+    const htmlResponse = new Response(document, { status: 200 });
+
+    mockedPreRequestOrchestrator.mockResolvedValue(null);
+    mockedAppStateCreate.mockReturnValue(appState);
+    mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
+    mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
+    mockedAppContextCreate.mockReturnValue(appContext as never);
+    mockedAppRenderContextCreate.mockReturnValue(appRenderContext as never);
+    mockedRender.mockReturnValue(document);
+    mockedCreateHtmlResponse.mockReturnValue(htmlResponse);
+
+    const result = await requestOrchestrator(req, env, ctx);
+
+    expect(mockedOrchestrateRouteResolution).toHaveBeenCalledWith(
+      req,
+      appState,
+      preAppContext,
+    );
+
+    expect(mockedAppContextCreate).toHaveBeenCalledWith(appState, routing);
+    expect(mockedAppRenderContextCreate).toHaveBeenCalledWith(appContext, env);
+
+    expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
+      appState,
+      routing,
+      appContext,
+      appRenderContext,
+    });
+
+    expect(mockedRender).toHaveBeenCalledWith(appRenderContext);
+
+    expect(mockedCreateHtmlResponse).toHaveBeenCalledWith(
+      document,
+      appRenderContext,
+    );
+
+    expect(result).toBe(htmlResponse);
+  });
+
+  it("returns the inspect response after app render context creation when one is provided", async () => {
+    const req = new Request(
+      "https://kevinellen.com/_inspect/app-render-context",
+    );
+    const env = {
+      APP_HOST: "kevinellen.com",
+    } as unknown as Env;
+    const ctx = {} as ExecutionContext;
+
+    const appState = buildAppState();
+    const preAppContext = { kind: "continue" };
+    const routing = { kind: "found", publicPageId: "about" };
+    const appContext = { page: { id: "about" } };
+    const appRenderContext = {
+      responsePolicy: {
+        status: 200,
+        robots: [],
+        nonce: "test-nonce",
+      },
+    };
+
+    const inspectResponse = new Response("inspect", { status: 200 });
+
+    mockedPreRequestOrchestrator.mockResolvedValue(null);
+    mockedAppStateCreate.mockReturnValue(appState);
+    mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
+    mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
+    mockedAppContextCreate.mockReturnValue(appContext as never);
+    mockedAppRenderContextCreate.mockReturnValue(appRenderContext as never);
+    mockedInspectRequest.mockReturnValue(inspectResponse);
+
+    const result = await requestOrchestrator(req, env, ctx);
+
+    expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
+      appState,
+      routing,
+      appContext,
+      appRenderContext,
+    });
+
+    expect(mockedRender).not.toHaveBeenCalled();
+    expect(mockedCreateHtmlResponse).not.toHaveBeenCalled();
+
+    expect(result).toBe(inspectResponse);
   });
 });

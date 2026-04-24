@@ -29,6 +29,7 @@ describe("resolveDocCloseAppRenderContext", () => {
   it("resolves footer scripts, SVG sprites, and structured data", () => {
     const appContext = {} as AppContext;
     const nonce = "test-nonce";
+    const origin = "https://dev.kevinellen.com";
 
     const scripts = {
       inlineScripts: [
@@ -71,7 +72,10 @@ describe("resolveDocCloseAppRenderContext", () => {
       .mocked(resolveStructuredDataAppRenderContext)
       .mockReturnValue(structuredData as never);
 
-    const result = resolveDocCloseAppRenderContext(appContext, { nonce });
+    const result = resolveDocCloseAppRenderContext(appContext, {
+      nonce,
+      origin,
+    });
 
     expect(resolveScriptsAppRenderContext).toHaveBeenCalledWith(appContext, {
       location: "footer",
@@ -80,6 +84,7 @@ describe("resolveDocCloseAppRenderContext", () => {
     expect(resolveSvgSpritesAppRenderContext).toHaveBeenCalledWith(appContext);
     expect(resolveStructuredDataAppRenderContext).toHaveBeenCalledWith(
       appContext,
+      { origin },
     );
 
     expect(result).toEqual({

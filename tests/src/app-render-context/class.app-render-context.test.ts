@@ -6,18 +6,24 @@ import type { AppRenderContextData } from "@app-render-context/app-render-contex
 
 describe("AppRenderContext", () => {
   const mockData = {
+    responsePolicy: {
+      status: 200,
+      robots: [],
+      nonce: "test-nonce",
+    },
     docOpen: {
-      doctype: "<!doctype html>",
-      htmlAttributes: {
-        lang: "en-GB",
+      metadata: {
+        pageTitle: "About | Kevin Ellen",
+        metaDescription: "About Page meta description.",
       },
-      head: {
-        title: "About | Kevin Ellen",
-        meta: [],
-        links: [],
-        scripts: [],
-        structuredData: [],
-      },
+      language: "en-GB",
+      canonicalUrl: "https://dev.kevinellen.com/about",
+      inlineScripts: [],
+      linkScripts: [],
+      links: [],
+      preload: [],
+      nonce: "test-nonce",
+      themeColour: "#1f2621",
     },
     bodyHeader: {
       branding: {
@@ -33,22 +39,36 @@ describe("AppRenderContext", () => {
         primary: [],
         social: [],
       },
+      breadcrumbs: {
+        items: [],
+        current: "About",
+      },
     },
     bodyContent: {
-      page: {
-        id: "about",
-        kind: "static",
+      header: {
+        eyebrow: null,
+        title: "About",
+        intro: null,
       },
       content: [],
+      footer: [],
     },
     bodyFooter: {
-      affiliations: null,
+      nav: {
+        sections: [],
+      },
+      affiliations: {
+        items: [],
+      },
       colophon: {
-        copyright: "© 2026 Kevin Ellen. All rights reserved.",
+        items: [],
       },
     },
     docClose: {
-      scripts: [],
+      inlineScripts: [],
+      linkScripts: [],
+      svg: [],
+      structuredData: [],
     },
   } as unknown as AppRenderContextData;
 
@@ -56,6 +76,12 @@ describe("AppRenderContext", () => {
     const appRenderContext = new AppRenderContext(mockData);
 
     expect(appRenderContext.data).toBe(mockData);
+  });
+
+  it("returns responsePolicy from the provided data", () => {
+    const appRenderContext = new AppRenderContext(mockData);
+
+    expect(appRenderContext.responsePolicy).toBe(mockData.responsePolicy);
   });
 
   it("returns docOpen from the provided data", () => {
@@ -98,6 +124,9 @@ describe("AppRenderContext", () => {
     const appRenderContext = new AppRenderContext(mockData);
 
     expect(appRenderContext.data).toBe(appRenderContext.data);
+    expect(appRenderContext.responsePolicy).toBe(
+      appRenderContext.responsePolicy,
+    );
     expect(appRenderContext.docOpen).toBe(appRenderContext.docOpen);
     expect(appRenderContext.bodyHeader).toBe(appRenderContext.bodyHeader);
     expect(appRenderContext.bodyContent).toBe(appRenderContext.bodyContent);

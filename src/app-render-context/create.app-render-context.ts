@@ -15,8 +15,10 @@ import { resolveBodyContentAppRenderContext } from "./resolve/body-content/body-
 
 export const appRenderContextCreate = (
   appContext: AppContext,
+  env: Env,
 ): AppRenderContext => {
   const nonce = createNonceAppRenderContext();
+  const origin = `https://${env.APP_HOST}`;
 
   return new AppRenderContext({
     responsePolicy: resolveResponsePolicyAppRenderContext(appContext, {
@@ -26,6 +28,9 @@ export const appRenderContextCreate = (
     bodyHeader: resolveBodyHeaderAppRenderContext(appContext),
     bodyContent: resolveBodyContentAppRenderContext(appContext),
     bodyFooter: resolveBodyFooterAppRenderContext(appContext),
-    docClose: resolveDocCloseAppRenderContext(appContext, { nonce }),
+    docClose: resolveDocCloseAppRenderContext(appContext, {
+      nonce,
+      origin,
+    }),
   });
 };

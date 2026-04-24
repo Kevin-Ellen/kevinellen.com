@@ -9,6 +9,7 @@ import { resolveStructuredDataAppRenderContext } from "@app-render-context/resol
 
 type ResolveDocCloseAppRenderContextContext = Readonly<{
   nonce: string;
+  origin: string;
 }>;
 
 export const resolveDocCloseAppRenderContext = (
@@ -24,6 +25,8 @@ export const resolveDocCloseAppRenderContext = (
     inlineScripts: scripts.inlineScripts,
     linkScripts: scripts.linkScripts,
     svg: resolveSvgSpritesAppRenderContext(appContext),
-    structuredData: resolveStructuredDataAppRenderContext(appContext),
+    structuredData: resolveStructuredDataAppRenderContext(appContext, {
+      origin: context.origin,
+    }),
   };
 };
