@@ -1,6 +1,9 @@
 // tests/src/utils/normaliseDimensions.util.test.ts
 
-import { normaliseDimensionsToBase } from "@utils/normaliseDimensions.util";
+import {
+  normaliseDimensionsToBase,
+  resolveSvgReferenceDimensions,
+} from "@utils/normaliseDimensions.util";
 
 describe("normaliseDimensionsToBase", () => {
   it("normalises landscape dimensions (ratio >= 1)", () => {
@@ -87,5 +90,66 @@ describe("normaliseDimensionsToBase", () => {
     expect(() => normaliseDimensionsToBase(100, -100)).toThrow(
       "Dimensions must be greater than zero.",
     );
+  });
+
+  describe("resolveSvgReferenceDimensions", () => {
+    it("normalises dimensions from a valid SVG viewBox", () => {
+      const result = resolveSvgReferenceDimensions("0 0 200 100");
+
+      expect(result).toEqual({
+        width: 100,
+        height: 50,
+      });
+    });
+
+    it("normalises dimensions from a valid SVG viewBox with custom base size", () => {
+      const result = resolveSvgReferenceDimensions("0 0 100 200", 200);
+
+      expect(result).toEqual({
+        width: 100,
+        height: 200,
+      });
+    });
+
+    it("handles extra whitespace in the SVG viewBox", () => {
+      const result = resolveSvgReferenceDimensions("  0   0   100   100  ");
+
+      expect(result).toEqual({
+        width: 100,
+        height: 100,
+      });
+    });
+
+    it("throws when the SVG viewBox does not contain four values", () => {
+      expect(() => resolveSvgReferenceDimensions("0 0 100")).toThrow(
+        'Invalid SVG viewBox: "0 0 100"',
+      );
+    });
+
+    it("throws when the SVG viewBox contains non-numeric values", () => {
+      expect(() => resolveSvgReferenceDimensions("0 0 duck 100")).toThrow(
+        'Invalid SVG viewBox: "0 0 duck 100"',
+      );
+    });
+
+    it("throws when the SVG viewBox width is zero or negative", () => {
+      expect(() => resolveSvgReferenceDimensions("0 0 0 100")).toThrow(
+        'Invalid SVG dimensions in viewBox: "0 0 0 100"',
+      );
+
+      expect(() => resolveSvgReferenceDimensions("0 0 -100 100")).toThrow(
+        'Invalid SVG dimensions in viewBox: "0 0 -100 100"',
+      );
+    });
+
+    it("throws when the SVG viewBox height is zero or negative", () => {
+      expect(() => resolveSvgReferenceDimensions("0 0 100 0")).toThrow(
+        'Invalid SVG dimensions in viewBox: "0 0 100 0"',
+      );
+
+      expect(() => resolveSvgReferenceDimensions("0 0 100 -100")).toThrow(
+        'Invalid SVG dimensions in viewBox: "0 0 100 -100"',
+      );
+    });
   });
 });

@@ -66,4 +66,51 @@ describe("resolveXmlSitemapSystem", () => {
       urls: [],
     });
   });
+
+  it("ignores pages where sitemapXml is null", () => {
+    const req = new Request("https://dev.kevinellen.com/sitemap.xml");
+
+    const appState = {
+      siteConfig: {
+        origin: "https://dev.kevinellen.com",
+      },
+      publicPages: [
+        {
+          slug: "/draft",
+          sitemapXml: null,
+        },
+        {
+          slug: "/about",
+          sitemapXml: { include: true },
+        },
+      ],
+    } as unknown as AppState;
+
+    const result = resolveXmlSitemapSystem(req, appState);
+
+    expect(result).toEqual({
+      urls: ["https://dev.kevinellen.com/about"],
+    });
+  });
+
+  it("throws when an included public page is missing a slug", () => {
+    const req = new Request("https://dev.kevinellen.com/sitemap.xml");
+
+    const appState = {
+      siteConfig: {
+        origin: "https://dev.kevinellen.com",
+      },
+      publicPages: [
+        {
+          id: "about",
+          slug: null,
+          sitemapXml: { include: true },
+        },
+      ],
+    } as unknown as AppState;
+
+    expect(() => resolveXmlSitemapSystem(req, appState)).toThrow(
+      "Public page 'about' is missing a slug.",
+    );
+  });
 });

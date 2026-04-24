@@ -3,26 +3,16 @@
 import type { AppRenderContextFooterNavigation } from "@shared-types/config/navigation/footer/app-render-context.footer.navigation.types";
 import type { AppRenderContextLink } from "@shared-types/links/app-render-context.links.types";
 
+import { renderTextLink } from "@rendering/shared/link.shared.renderer";
+
 import {
   escapeAttribute,
   escapeHtml,
 } from "@rendering/utils/html.escape.util.renderer";
 
-const renderLinkAttributes = (link: AppRenderContextLink): string => {
-  const attributes = [
-    `href="${escapeAttribute(link.href)}"`,
-    link.openInNewTab ? `target="_blank"` : "",
-    link.openInNewTab ? `rel="noopener noreferrer"` : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  return attributes;
-};
-
 const renderFooterNavLink = (link: AppRenderContextLink): string => {
   return `<li>
-    <a ${renderLinkAttributes(link)}>${escapeHtml(link.text)}</a>
+    ${renderTextLink(link)}
   </li>`;
 };
 

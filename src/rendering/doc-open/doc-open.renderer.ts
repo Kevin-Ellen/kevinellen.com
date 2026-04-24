@@ -7,25 +7,22 @@ import {
   escapeHtml,
 } from "@rendering/utils/html.escape.util.renderer";
 
-const renderHeadLink = (
-  link: AppRenderContextDocOpen["links"][number],
-): string => {
-  const attributes = [
-    `rel="${escapeAttribute(link.rel)}"`,
-    `href="${escapeAttribute(link.href)}"`,
-    "type" in link && link.type ? `type="${escapeAttribute(link.type)}"` : "",
-    "sizes" in link && link.sizes
-      ? `sizes="${escapeAttribute(link.sizes)}"`
-      : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+import {
+  renderCanonicalLink,
+  renderHeadLink,
+  renderPreloadLink,
+} from "@rendering/doc-open/link.doc-open.renderer";
 
-  return `<link ${attributes}>`;
-};
+import {
+  renderInlineScript,
+  renderLinkScript,
+} from "@rendering/shared/script.shared.renderer";
 
 export const renderDocOpen = (docOpen: AppRenderContextDocOpen): string => {
   const headLinks = docOpen.links.map(renderHeadLink).join("");
+  const preloadLinks = docOpen.preload.map(renderPreloadLink).join("");
+  const linkScripts = docOpen.linkScripts.map(renderLinkScript).join("");
+  const inlineScripts = docOpen.inlineScripts.map(renderInlineScript).join("");
 
   const pageTitle = docOpen.metadata?.pageTitle
     ? `<title>${escapeHtml(docOpen.metadata.pageTitle)}</title>`
@@ -38,7 +35,7 @@ export const renderDocOpen = (docOpen: AppRenderContextDocOpen): string => {
     : "";
 
   const canonical = docOpen.canonicalUrl
-    ? `<link rel="canonical" href="${escapeAttribute(docOpen.canonicalUrl)}">`
+    ? renderCanonicalLink(docOpen.canonicalUrl)
     : "";
 
   return `<!doctype html>
@@ -50,7 +47,10 @@ export const renderDocOpen = (docOpen: AppRenderContextDocOpen): string => {
     ${metaDescription}
     ${canonical}
     <meta name="theme-color" content="${escapeAttribute(docOpen.themeColour)}">
+    ${preloadLinks}
     ${headLinks}
+    ${linkScripts}
+    ${inlineScripts}
   </head>
   <body>`;
 };

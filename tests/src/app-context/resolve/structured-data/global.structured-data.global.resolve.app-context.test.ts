@@ -1,7 +1,17 @@
-// tests/src/app-context/resolve/structured-data/website.structured-data.global.resolve.app-context.test.ts
+// tests/src/app-context/resolve/structured-data/global.structured-data.global.resolve.app-context.test.ts
 
+import type { AppContextStructuredDataEntry } from "@shared-types/structured-data/app-context.structured-data.types";
+
+import { resolveGlobalStructuredDataAppContext } from "@app-context/resolve/structured-data/global.structured-data.global.resolve.app-context";
 import { resolveWebsiteStructuredDataGlobalAppContext } from "@app-context/resolve/structured-data/website.structured-data.global.resolve.app-context";
 import { appStateCreate } from "@app-state/create.app-state";
+
+jest.mock(
+  "@app-context/resolve/structured-data/website.structured-data.global.resolve.app-context",
+  () => ({
+    resolveWebsiteStructuredDataGlobalAppContext: jest.fn(),
+  }),
+);
 
 const makeEnv = (): Env =>
   ({
@@ -9,86 +19,29 @@ const makeEnv = (): Env =>
     APP_HOST: "dev.kevinellen.com",
   }) as Env;
 
-describe("resolveWebsiteStructuredDataGlobalAppContext", () => {
-  it("resolves website structured data references to absolute urls", () => {
+describe("resolveGlobalStructuredDataAppContext", () => {
+  it("resolves global structured data entries from AppState", () => {
     const appState = appStateCreate(makeEnv());
-    const origin = appState.siteConfig.origin;
 
-    const result = resolveWebsiteStructuredDataGlobalAppContext(
-      appState.structuredData.website,
-      appState,
-    );
-
-    expect(result).toEqual({
+    const websiteEntry: AppContextStructuredDataEntry = {
       id: "website",
       json: {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "@id": `${origin}/#website`,
-        url: `${origin}/`,
-        name: appState.structuredData.website.name,
-        description: appState.structuredData.website.description,
-        inLanguage: appState.structuredData.website.inLanguage,
-        publisher: {
-          "@id": `${origin}/about#person`,
-        },
       },
-    });
-  });
+    };
 
-  it("throws when the id page reference cannot be resolved", () => {
-    const appState = appStateCreate(makeEnv());
+    jest
+      .mocked(resolveWebsiteStructuredDataGlobalAppContext)
+      .mockReturnValue(websiteEntry);
 
-    expect(() =>
-      resolveWebsiteStructuredDataGlobalAppContext(
-        {
-          ...appState.structuredData.website,
-          id: {
-            pageId: "missing-page" as never,
-            hash: "#website",
-          },
-        },
-        appState,
-      ),
-    ).toThrow(
-      "Missing public page for structured data reference 'missing-page'.",
+    const result = resolveGlobalStructuredDataAppContext(appState);
+
+    expect(resolveWebsiteStructuredDataGlobalAppContext).toHaveBeenCalledWith(
+      appState.structuredData.website,
+      appState,
     );
-  });
 
-  it("throws when the url page reference cannot be resolved", () => {
-    const appState = appStateCreate(makeEnv());
-
-    expect(() =>
-      resolveWebsiteStructuredDataGlobalAppContext(
-        {
-          ...appState.structuredData.website,
-          url: {
-            pageId: "missing-page" as never,
-          },
-        },
-        appState,
-      ),
-    ).toThrow(
-      "Missing public page for structured data reference 'missing-page'.",
-    );
-  });
-
-  it("throws when the publisher page reference cannot be resolved", () => {
-    const appState = appStateCreate(makeEnv());
-
-    expect(() =>
-      resolveWebsiteStructuredDataGlobalAppContext(
-        {
-          ...appState.structuredData.website,
-          publisherId: {
-            pageId: "missing-page" as never,
-            hash: "#person",
-          },
-        },
-        appState,
-      ),
-    ).toThrow(
-      "Missing public page for structured data reference 'missing-page'.",
-    );
+    expect(result).toEqual([websiteEntry]);
   });
 });

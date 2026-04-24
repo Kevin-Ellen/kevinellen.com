@@ -4,41 +4,19 @@ import type { AppRenderContextDocClose } from "@app-render-context/types/doc-clo
 
 import { escapeAttribute } from "@rendering/utils/html.escape.util.renderer";
 
-const renderStructuredDataItem = (item: unknown): string => {
-  return `<script type="application/ld+json">${JSON.stringify(item)}</script>`;
-};
+import {
+  renderInlineScript,
+  renderLinkScript,
+  renderStructuredDataScript,
+} from "@rendering/shared/script.shared.renderer";
+import type { AppRenderContextSvgAsset } from "@shared-types/assets/svg/app-render-context.svg.assets.types";
 
-const renderInlineScript = (
-  script: AppRenderContextDocClose["inlineScripts"][number],
-): string => {
-  const nonceAttribute = script.nonce
-    ? ` nonce="${escapeAttribute(script.nonce)}"`
-    : "";
-
-  return `<script${nonceAttribute}>${script.content}</script>`;
-};
-
-const renderLinkScript = (
-  script: AppRenderContextDocClose["linkScripts"][number],
-): string => {
-  const nonceAttribute = script.nonce
-    ? ` nonce="${escapeAttribute(script.nonce)}"`
-    : "";
-
-  const loadingAttribute =
-    script.loading === "blocking" ? "" : ` ${script.loading}`;
-
-  return `<script src="${escapeAttribute(script.src)}"${nonceAttribute}${loadingAttribute}></script>`;
-};
-
-const renderSvgAsset = (
-  svg: AppRenderContextDocClose["svg"][number],
-): string => {
+const renderSvgAsset = (svg: AppRenderContextSvgAsset): string => {
   return `<symbol id="${escapeAttribute(svg.id)}" viewBox="${escapeAttribute(svg.viewBox)}">${svg.content}</symbol>`;
 };
 
 const renderSvgSprite = (
-  svgAssets: AppRenderContextDocClose["svg"],
+  svgAssets: readonly AppRenderContextSvgAsset[],
 ): string => {
   if (!svgAssets.length) {
     return "";
@@ -51,7 +29,7 @@ const renderSvgSprite = (
 
 export const renderDocClose = (docClose: AppRenderContextDocClose): string => {
   const structuredData = docClose.structuredData
-    .map(renderStructuredDataItem)
+    .map(renderStructuredDataScript)
     .join("");
 
   const inlineScripts = docClose.inlineScripts.map(renderInlineScript).join("");
