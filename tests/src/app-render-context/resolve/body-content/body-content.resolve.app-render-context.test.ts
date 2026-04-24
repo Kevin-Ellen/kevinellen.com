@@ -13,6 +13,9 @@ jest.mock(
 );
 
 describe("resolveBodyContentAppRenderContext", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it("resolves body content header, content modules, and footer modules", () => {
     const contentModule = {
       kind: "paragraph",

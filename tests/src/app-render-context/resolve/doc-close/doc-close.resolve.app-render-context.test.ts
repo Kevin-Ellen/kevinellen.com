@@ -8,7 +8,7 @@ import { resolveStructuredDataAppRenderContext } from "@app-render-context/resol
 import type { AppContext } from "@app-context/class.app-context";
 
 jest.mock(
-  "@app-render-context/resolve/scripts.assets.resolve.app-render-context",
+  "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context",
   () => ({
     resolveScriptsAppRenderContext: jest.fn(),
   }),

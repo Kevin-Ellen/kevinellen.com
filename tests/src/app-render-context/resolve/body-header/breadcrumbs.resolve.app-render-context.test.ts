@@ -13,6 +13,9 @@ jest.mock(
 );
 
 describe("resolveBreadcrumbsAppRenderContext", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it("resolves breadcrumb items and preserves the current label", () => {
     const breadcrumbItem = {
       kind: "internal",

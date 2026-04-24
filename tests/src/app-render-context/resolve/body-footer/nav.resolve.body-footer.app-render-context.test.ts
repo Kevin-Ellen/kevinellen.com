@@ -10,6 +10,9 @@ jest.mock("@app-render-context/shared/link.resolve.app-render-context", () => ({
 }));
 
 describe("resolveNavBodyFooterAppRenderContext", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it("resolves footer navigation sections and items", () => {
     const navItem = {
       kind: "internal",
