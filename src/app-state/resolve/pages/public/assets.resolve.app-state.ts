@@ -1,7 +1,7 @@
 // src/app-state/resolve/pages/public/assets.resolve.app-state.ts
 
-import type { AuthoredAssets } from "@shared-types/pages/shared/assets/authored.assets.shared.page.types";
-import type { AppStateAssets } from "@shared-types/pages/shared/assets/app-state.assets.shared.page.types";
+import type { AuthoredAssets } from "@shared-types/page-definitions/assets/authored.assets.page-definition.types";
+import type { AppStateAssets } from "@shared-types/assets/app-state.assets.types";
 
 export const appStateResolvePageAssets = (
   assets: AuthoredAssets | undefined,

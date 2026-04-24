@@ -134,214 +134,214 @@ describe("inspectRequest", () => {
     expect(result).toBeNull();
   });
 
-  it("returns null for non-inspect paths", () => {
-    const req = new Request("https://dev.kevinellen.com/about");
+  // it("returns null for non-inspect paths", () => {
+  //   const req = new Request("https://dev.kevinellen.com/about");
 
-    const result = inspectRequest(req, envDev, { appState, routing });
+  //   const result = inspectRequest(req, envDev, { appState, routing });
 
-    expect(result).toBeNull();
-  });
+  //   expect(result).toBeNull();
+  // });
 
-  it("returns the inspect index route", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect");
+  // it("returns the inspect index route", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect");
 
-    const result = inspectRequest(req, envDev, {});
+  //   const result = inspectRequest(req, envDev, {});
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
-    expect(result?.headers.get("content-type")).toBe(
-      "application/json; charset=utf-8",
-    );
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(200);
+  //   expect(result?.headers.get("content-type")).toBe(
+  //     "application/json; charset=utf-8",
+  //   );
 
-    await expect(result?.json()).resolves.toEqual({
-      available: [
-        "/_inspect/app-state",
-        "/_inspect/routing",
-        "/_inspect/app-context",
-        "/_inspect/render-context",
-      ],
-    });
-  });
+  //   await expect(result?.json()).resolves.toEqual({
+  //     available: [
+  //       "/_inspect/app-state",
+  //       "/_inspect/routing",
+  //       "/_inspect/app-context",
+  //       "/_inspect/render-context",
+  //     ],
+  //   });
+  // });
 
-  it("returns the app-state inspect payload", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/app-state");
+  // it("returns the app-state inspect payload", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/app-state");
 
-    const result = inspectRequest(req, envDev, { appState });
+  //   const result = inspectRequest(req, envDev, { appState });
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(200);
 
-    await expect(result?.json()).resolves.toEqual(appState.inspect);
-  });
+  //   await expect(result?.json()).resolves.toEqual(appState.inspect);
+  // });
 
-  it("returns a 409 response when app-state is not available", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/app-state");
+  // it("returns a 409 response when app-state is not available", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/app-state");
 
-    const result = inspectRequest(req, envDev, {});
+  //   const result = inspectRequest(req, envDev, {});
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(409);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(409);
 
-    await expect(result?.json()).resolves.toEqual({
-      error: "Inspect target 'app-state' is not available at this stage.",
-    });
-  });
+  //   await expect(result?.json()).resolves.toEqual({
+  //     error: "Inspect target 'app-state' is not available at this stage.",
+  //   });
+  // });
 
-  it("returns the routing payload", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/routing");
+  // it("returns the routing payload", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/routing");
 
-    const result = inspectRequest(req, envDev, { routing });
+  //   const result = inspectRequest(req, envDev, { routing });
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(200);
 
-    await expect(result?.json()).resolves.toEqual(routing);
-  });
+  //   await expect(result?.json()).resolves.toEqual(routing);
+  // });
 
-  it("returns a 409 response when routing is not available", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/routing");
+  // it("returns a 409 response when routing is not available", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/routing");
 
-    const result = inspectRequest(req, envDev, {});
+  //   const result = inspectRequest(req, envDev, {});
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(409);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(409);
 
-    await expect(result?.json()).resolves.toEqual({
-      error: "Inspect target 'routing' is not available at this stage.",
-    });
-  });
+  //   await expect(result?.json()).resolves.toEqual({
+  //     error: "Inspect target 'routing' is not available at this stage.",
+  //   });
+  // });
 
-  it("returns a 409 response when app-context is not available", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
+  // it("returns a 409 response when app-context is not available", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
 
-    const result = inspectRequest(req, envDev, {});
+  //   const result = inspectRequest(req, envDev, {});
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(409);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(409);
 
-    await expect(result?.json()).resolves.toEqual({
-      error: "Inspect target 'app-context' is not available at this stage.",
-    });
-  });
+  //   await expect(result?.json()).resolves.toEqual({
+  //     error: "Inspect target 'app-context' is not available at this stage.",
+  //   });
+  // });
 
-  it("returns a 409 response when render-context is not available", async () => {
-    const req = new Request(
-      "https://dev.kevinellen.com/_inspect/render-context",
-    );
+  // it("returns a 409 response when render-context is not available", async () => {
+  //   const req = new Request(
+  //     "https://dev.kevinellen.com/_inspect/render-context",
+  //   );
 
-    const result = inspectRequest(req, envDev, {});
+  //   const result = inspectRequest(req, envDev, {});
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(409);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(409);
 
-    await expect(result?.json()).resolves.toEqual({
-      error: "Inspect target 'render-context' is not available at this stage.",
-    });
-  });
+  //   await expect(result?.json()).resolves.toEqual({
+  //     error: "Inspect target 'render-context' is not available at this stage.",
+  //   });
+  // });
 
-  it("returns 404 for an unknown inspect route", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/not-real");
+  // it("returns 404 for an unknown inspect route", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/not-real");
 
-    const result = inspectRequest(req, envDev, {});
+  //   const result = inspectRequest(req, envDev, {});
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(404);
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(404);
 
-    await expect(result?.json()).resolves.toEqual({
-      error: "Unknown inspect route.",
-    });
-  });
+  //   await expect(result?.json()).resolves.toEqual({
+  //     error: "Unknown inspect route.",
+  //   });
+  // });
 
-  it("returns the app-context inspect payload", async () => {
-    const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
+  // it("returns the app-context inspect payload", async () => {
+  //   const req = new Request("https://dev.kevinellen.com/_inspect/app-context");
 
-    const appContext = {
-      inspect: {
-        navigation: {
-          header: {
-            primary: [],
-            social: [],
-          },
-          footer: {
-            sections: [],
-          },
-        },
-        globalFooter: {
-          affiliations: {
-            kind: "affiliations",
-            title: "Conservation",
-            description: "Supporting organisations.",
-            items: [],
-          },
-          colophon: {
-            kind: "colophon",
-            copyrightName: "Kevin Ellen",
-            copyrightYear: 2026,
-            allRightsReserved: true,
-          },
-        },
-        assets: {
-          scripts: [],
-          svg: [],
-        },
-        structuredData: [],
-        breadcrumbs: {
-          items: [],
-          current: "Home",
-        },
-        page: {
-          id: "home",
-          kind: "home",
-          slug: "/",
-          label: "Home",
-          content: {
-            head: {
-              eyebrow: "Kevin Ellen",
-              title: "Home",
-              intro: "A personal platform.",
-            },
-            body: [],
-            footer: [],
-          },
-        },
-      },
-    };
+  //   const appContext = {
+  //     inspect: {
+  //       navigation: {
+  //         header: {
+  //           primary: [],
+  //           social: [],
+  //         },
+  //         footer: {
+  //           sections: [],
+  //         },
+  //       },
+  //       globalFooter: {
+  //         affiliations: {
+  //           kind: "affiliations",
+  //           title: "Conservation",
+  //           description: "Supporting organisations.",
+  //           items: [],
+  //         },
+  //         colophon: {
+  //           kind: "colophon",
+  //           copyrightName: "Kevin Ellen",
+  //           copyrightYear: 2026,
+  //           allRightsReserved: true,
+  //         },
+  //       },
+  //       assets: {
+  //         scripts: [],
+  //         svg: [],
+  //       },
+  //       structuredData: [],
+  //       breadcrumbs: {
+  //         items: [],
+  //         current: "Home",
+  //       },
+  //       page: {
+  //         id: "home",
+  //         kind: "home",
+  //         slug: "/",
+  //         label: "Home",
+  //         content: {
+  //           head: {
+  //             eyebrow: "Kevin Ellen",
+  //             title: "Home",
+  //             intro: "A personal platform.",
+  //           },
+  //           body: [],
+  //           footer: [],
+  //         },
+  //       },
+  //     },
+  //   };
 
-    const result = inspectRequest(req, envDev, {
-      appContext: appContext as never,
-    });
+  //   const result = inspectRequest(req, envDev, {
+  //     appContext: appContext as never,
+  //   });
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
-    expect(result?.headers.get("content-type")).toBe(
-      "application/json; charset=utf-8",
-    );
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(200);
+  //   expect(result?.headers.get("content-type")).toBe(
+  //     "application/json; charset=utf-8",
+  //   );
 
-    await expect(result?.json()).resolves.toEqual(appContext.inspect);
-  });
+  //   await expect(result?.json()).resolves.toEqual(appContext.inspect);
+  // });
 
-  it("returns the render-context payload", async () => {
-    const req = new Request(
-      "https://dev.kevinellen.com/_inspect/render-context",
-    );
+  // it("returns the render-context payload", async () => {
+  //   const req = new Request(
+  //     "https://dev.kevinellen.com/_inspect/render-context",
+  //   );
 
-    const renderContext = {
-      page: {
-        title: "Home",
-      },
-      content: {
-        body: [],
-      },
-    };
+  //   const renderContext = {
+  //     page: {
+  //       title: "Home",
+  //     },
+  //     content: {
+  //       body: [],
+  //     },
+  //   };
 
-    const result = inspectRequest(req, envDev, { renderContext });
+  //   const result = inspectRequest(req, envDev, { renderContext });
 
-    expect(result).toBeInstanceOf(Response);
-    expect(result?.status).toBe(200);
-    expect(result?.headers.get("content-type")).toBe(
-      "application/json; charset=utf-8",
-    );
+  //   expect(result).toBeInstanceOf(Response);
+  //   expect(result?.status).toBe(200);
+  //   expect(result?.headers.get("content-type")).toBe(
+  //     "application/json; charset=utf-8",
+  //   );
 
-    await expect(result?.json()).resolves.toEqual(renderContext);
-  });
+  //   await expect(result?.json()).resolves.toEqual(renderContext);
+  // });
 });

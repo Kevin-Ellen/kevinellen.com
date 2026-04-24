@@ -1,8 +1,7 @@
 // src/app-state/resolve/pages/public/robots.resolve.app-state.ts
 
-import type { AppStatePageRobotsDirectives } from "@shared-types/pages/shared/app-state.robots.shared.page.types";
-import type { AuthoredPageRobotsDirectives } from "@shared-types/pages/shared/authored.robots.shared.page.types";
-
+import type { AppStatePageRobotsDirectives } from "@shared-types/page-definitions/robots/app-state.robots.page-definition.types";
+import type { AuthoredPageRobotsDirectives } from "@shared-types/page-definitions/robots/authored.robots.page-definition.types";
 const DEFAULT_APP_STATE_PAGE_ROBOTS: AppStatePageRobotsDirectives = {
   allowIndex: true,
   allowFollow: true,

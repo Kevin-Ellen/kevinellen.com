@@ -72,24 +72,6 @@ describe("content-section AppState resolvers", () => {
   });
 
   describe("appStateResolveContentSectionBlockContentModule", () => {
-    it("defaults heading to null when omitted", () => {
-      const module: AuthoredContentSectionBlockContentModule = {
-        kind: "contentSection",
-        modules: [],
-      };
-
-      const result = appStateResolveContentSectionBlockContentModule(module);
-
-      const expected: AppStateContentSectionBlockContentModule = {
-        kind: "contentSection",
-        heading: null,
-        modules: [],
-      };
-
-      expect(result).toEqual(expected);
-      expect(mockedAppStateResolveBlockContentModule).not.toHaveBeenCalled();
-    });
-
     it("resolves heading with deterministic visuallyHidden defaulting", () => {
       const module: AuthoredContentSectionBlockContentModule = {
         kind: "contentSection",
@@ -115,6 +97,10 @@ describe("content-section AppState resolvers", () => {
 
       const module: AuthoredContentSectionBlockContentModule = {
         kind: "contentSection",
+        heading: {
+          text: "Section heading",
+          level: 2,
+        },
         modules: [firstModule, secondModule],
       };
 
@@ -147,6 +133,10 @@ describe("content-section AppState resolvers", () => {
 
       const module: AuthoredContentSectionBlockContentModule = {
         kind: "contentSection",
+        heading: {
+          text: "Section heading",
+          level: 2,
+        },
         modules: [firstModule, secondModule],
       };
 

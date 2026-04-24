@@ -7,8 +7,8 @@ import type { AppStateBlockContentModule } from "@shared-types/page-content/bloc
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type AppStatePageContentDeterministicFields = Readonly<{
-  head: AppStatePageContentHead;
-  body: readonly AppStateBlockContentModule[];
+  header: AppStatePageContentHead;
+  content: readonly AppStateBlockContentModule[];
   footer: readonly AppStateBlockContentModule[];
 }>;
 

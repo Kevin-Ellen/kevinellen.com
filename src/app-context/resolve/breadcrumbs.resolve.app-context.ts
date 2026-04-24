@@ -3,47 +3,39 @@
 import type { AppState } from "@app-state/class.app-state";
 import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-context.breadcrumbs.types";
 import type {
+  PageId,
   PageIdError,
-  PageIdPublic,
-} from "@shared-types/pages/shared/id.shared.page.types";
+} from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
 import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
 
-type BreadcrumbSource =
-  | readonly PageIdPublic[]
-  | readonly ["home", PageIdError];
+const resolvePageById = (id: PageId, appState: AppState) => {
+  return (
+    appState.getPublicPageById(id) ??
+    appState.getErrorPageById(id as PageIdError)
+  );
+};
 
-const resolveBreadcrumbLabel = (
-  id: PageIdPublic | PageIdError,
-  appState: AppState,
-): string => {
-  const publicPage = appState.getPublicPageById(id);
+const resolveBreadcrumbLabel = (id: PageId, appState: AppState): string => {
+  const page = resolvePageById(id, appState);
 
-  if (publicPage) {
-    return publicPage.label;
+  if (!page) {
+    throw new Error(`Missing page for breadcrumb id '${id}'.`);
   }
 
-  const errorPage = appState.getErrorPageById(id as PageIdError);
-
-  if (errorPage) {
-    return errorPage.metadata.pageTitle;
-  }
-
-  throw new Error(`Missing page for breadcrumb id '${id}'.`);
+  return page.label;
 };
 
 export const resolveBreadcrumbsAppContext = (
-  breadcrumbIds: BreadcrumbSource,
+  breadcrumbIds: readonly PageId[],
   appState: AppState,
 ): AppContextBreadcrumbs => {
-  const ids = [...breadcrumbIds];
-
-  if (ids.length === 0) {
+  if (breadcrumbIds.length === 0) {
     throw new Error("Breadcrumbs must contain at least one item.");
   }
 
-  const currentId = ids[ids.length - 1];
-  const parentIds = ids.slice(0, -1);
+  const currentId = breadcrumbIds[breadcrumbIds.length - 1];
+  const parentIds = breadcrumbIds.slice(0, -1);
 
   return {
     items: parentIds.map((id) =>

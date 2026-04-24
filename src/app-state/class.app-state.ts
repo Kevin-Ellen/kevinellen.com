@@ -1,4 +1,4 @@
-// src/app-state/class.appState.ts
+// src/app-state/class.app-state.ts
 
 import type { AppStateData } from "@app-state/types/app-state.types";
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
@@ -6,43 +6,53 @@ import type { AppStateSocial } from "@shared-types/config/social/app-state.socia
 import type { SystemGoneRule } from "@shared-types/config/system/gone-rules.system.types";
 import type { SystemRedirectRule } from "@shared-types/config/system/redirect-rules.system.types";
 import type { AppStateWebManifest } from "@shared-types/config/webmanifest/app-state.webmanifest.types";
-import type { AppStatePublicPageDefinition } from "@shared-types/pages/definitions/public/app-state.public.definition.page.types";
-import type { AppStateErrorPageDefinition } from "@shared-types/pages/definitions/error/app-state.base.error.definition.page.types";
-import type { ErrorPageStatus } from "@shared-types/pages/error/status.error.page.types";
+import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
+import type { ErrorPageStatus } from "@shared-types/page-definitions/shared/shared.error.page-definition.types";
 import type {
   PageIdError,
   PageIdPublic,
-} from "@shared-types/pages/shared/id.shared.page.types";
+} from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 import type { AppStateNavigation } from "@shared-types/config/navigation/app-state.navigation.types";
 import type { AppStateGlobalFooter } from "@shared-types/page-content/site/global-footer/app-state.global-footer.page-content.types";
 import type { AppStateAssets } from "@shared-types/assets/app-state.assets.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";
+
+const isPublicPageDefinition = (
+  page: AppStatePageDefinition,
+): page is AppStatePageDefinition & {
+  id: PageIdPublic;
+  slug: `/${string}`;
+} => {
+  return page.slug !== null;
+};
+
+const isErrorPageDefinition = (
+  page: AppStatePageDefinition,
+): page is AppStatePageDefinition & {
+  id: PageIdError;
+  status: ErrorPageStatus;
+} => {
+  return page.status !== null;
+};
 
 export class AppState {
   readonly #data: AppStateData;
 
   readonly #goneRulesByPath: ReadonlyMap<string, SystemGoneRule>;
   readonly #redirectRulesByPath: ReadonlyMap<string, SystemRedirectRule>;
-  readonly #publicPagesBySlug: ReadonlyMap<
-    string,
-    AppStatePublicPageDefinition
-  >;
-  readonly #publicPagesById: ReadonlyMap<
-    PageIdPublic,
-    AppStatePublicPageDefinition
-  >;
+  readonly #publicPagesBySlug: ReadonlyMap<string, AppStatePageDefinition>;
+  readonly #publicPagesById: ReadonlyMap<PageIdPublic, AppStatePageDefinition>;
   readonly #errorPagesByStatus: ReadonlyMap<
     ErrorPageStatus,
-    AppStateErrorPageDefinition
+    AppStatePageDefinition
   >;
-
-  readonly #errorPagesById: ReadonlyMap<
-    PageIdError,
-    AppStateErrorPageDefinition
-  >;
+  readonly #errorPagesById: ReadonlyMap<PageIdError, AppStatePageDefinition>;
 
   public constructor(data: AppStateData) {
     this.#data = data;
+
+    const publicPages = data.pages.public.filter(isPublicPageDefinition);
+    const errorPages = data.pages.error.filter(isErrorPageDefinition);
 
     this.#goneRulesByPath = new Map(
       data.system.goneRules.map((rule) => [rule.path, rule] as const),
@@ -53,19 +63,19 @@ export class AppState {
     );
 
     this.#publicPagesById = new Map(
-      data.pages.public.map((page) => [page.id, page] as const),
+      publicPages.map((page) => [page.id, page] as const),
     );
 
     this.#publicPagesBySlug = new Map(
-      data.pages.public.map((page) => [page.slug, page] as const),
+      publicPages.map((page) => [page.slug, page] as const),
     );
 
     this.#errorPagesByStatus = new Map(
-      data.pages.error.map((page) => [page.status, page] as const),
+      errorPages.map((page) => [page.status, page] as const),
     );
 
     this.#errorPagesById = new Map(
-      data.pages.error.map((page) => [page.id, page] as const),
+      errorPages.map((page) => [page.id, page] as const),
     );
   }
 
@@ -85,11 +95,11 @@ export class AppState {
     return this.#data.webManifest;
   }
 
-  public get publicPages(): readonly AppStatePublicPageDefinition[] {
+  public get publicPages(): readonly AppStatePageDefinition[] {
     return this.#data.pages.public;
   }
 
-  public get errorPages(): readonly AppStateErrorPageDefinition[] {
+  public get errorPages(): readonly AppStatePageDefinition[] {
     return this.#data.pages.error;
   }
 
@@ -112,6 +122,7 @@ export class AppState {
   public get structuredData(): AppStateStructuredData {
     return this.#data.structuredData;
   }
+
   public getGoneRuleByPath(pathname: string): SystemGoneRule | null {
     return this.#goneRulesByPath.get(pathname) ?? null;
   }
@@ -120,25 +131,21 @@ export class AppState {
     return this.#redirectRulesByPath.get(pathname) ?? null;
   }
 
-  public getPublicPageById(
-    id: PageIdPublic,
-  ): AppStatePublicPageDefinition | null {
+  public getPublicPageById(id: PageIdPublic): AppStatePageDefinition | null {
     return this.#publicPagesById.get(id) ?? null;
   }
 
-  public getPublicPageBySlug(
-    slug: string,
-  ): AppStatePublicPageDefinition | null {
+  public getPublicPageBySlug(slug: string): AppStatePageDefinition | null {
     return this.#publicPagesBySlug.get(slug) ?? null;
   }
 
   public getErrorPageByStatus(
     status: ErrorPageStatus,
-  ): AppStateErrorPageDefinition | null {
+  ): AppStatePageDefinition | null {
     return this.#errorPagesByStatus.get(status) ?? null;
   }
 
-  public getErrorPageById(id: PageIdError): AppStateErrorPageDefinition | null {
+  public getErrorPageById(id: PageIdError): AppStatePageDefinition | null {
     return this.#errorPagesById.get(id) ?? null;
   }
 

@@ -54,6 +54,7 @@
       "**/dist": true,
       "**/.ds_store": true,
     },
+    "js/ts.tsdk.path": "node_modules/typescript/lib",
   },
   "extensions": {
     "recommendations": [

@@ -48,11 +48,13 @@ export default [
         Env: "readonly",
         ExecutionContext: "readonly",
         fetch: "readonly",
+        crypto: "readonly",
       },
     },
     rules: {
       ...tseslint.configs.recommendedTypeChecked[0].rules,
       "no-unused-vars": "off",
+      "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

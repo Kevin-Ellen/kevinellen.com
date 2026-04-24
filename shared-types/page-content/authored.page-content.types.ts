@@ -4,7 +4,7 @@ import type { AuthoredPageContentHead } from "@shared-types/page-content/site/co
 import type { AuthoredBlockContentModule } from "@shared-types/page-content/block/authored.block.page-content.types";
 
 export type AuthoredPageContent = Readonly<{
-  head: AuthoredPageContentHead;
-  body: readonly AuthoredBlockContentModule[];
+  header: AuthoredPageContentHead;
+  content: readonly AuthoredBlockContentModule[];
   footer?: readonly AuthoredBlockContentModule[];
 }>;

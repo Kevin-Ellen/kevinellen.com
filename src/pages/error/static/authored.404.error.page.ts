@@ -1,6 +1,6 @@
 // src/pages/error/static/authored.404.error.page.ts
 
-import type { AuthoredErrorPageDefinition } from "@shared-types/pages/definitions/error/authored.base.error.definition.page.types";
+import type { AuthoredErrorPageDefinition } from "@shared-types/page-definitions/authored.error.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
@@ -8,6 +8,7 @@ export const authoredNotFoundErrorPage: AuthoredErrorPageDefinition =
   deepFreeze({
     id: "error-404",
     status: 404,
+    label: "404 | Page not found",
 
     metadata: {
       pageTitle: "404 | Page not found",
@@ -15,13 +16,13 @@ export const authoredNotFoundErrorPage: AuthoredErrorPageDefinition =
     },
 
     content: {
-      head: {
+      header: {
         eyebrow: "404",
         title: "Page not found",
         intro: "The page you were looking for does not appear to exist here.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

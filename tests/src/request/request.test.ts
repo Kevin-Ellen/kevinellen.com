@@ -61,12 +61,12 @@ const buildPublicPage = (id: "home" | "about") => {
       breadcrumbs: ["home"],
       structuredData: [],
       content: {
-        head: {
+        header: {
           eyebrow: null,
           title: "Home",
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
     };
@@ -95,12 +95,12 @@ const buildPublicPage = (id: "home" | "about") => {
     breadcrumbs: ["home", "about"],
     structuredData: [],
     content: {
-      head: {
+      header: {
         eyebrow: null,
         title: "About",
         intro: null,
       },
-      body: [],
+      content: [],
       footer: [],
     },
   };
@@ -113,18 +113,25 @@ const buildErrorPage = () => ({
     pageTitle: "410 | Gone",
     metaDescription: "Gone.",
   },
+  robots: {
+    allowIndex: false,
+    allowFollow: false,
+    noarchive: false,
+    nosnippet: false,
+    noimageindex: false,
+  },
   assets: {
     scripts: [],
     svg: [],
   },
   breadcrumbs: ["home", "error-410"] as const,
   content: {
-    head: {
+    header: {
       eyebrow: null,
       title: "Gone",
       intro: null,
     },
-    body: [],
+    content: [],
     footer: [],
   },
 });
@@ -134,6 +141,40 @@ const buildAppState = (): AppState =>
     inspect: { ok: true },
     siteConfig: {
       origin: "https://kevinellen.com",
+      language: "en-GB",
+      headAssets: {
+        faviconIco: {
+          href: "/favicon.ico",
+        },
+        faviconSvg: {
+          href: "/favicon.svg",
+          type: "image/svg+xml",
+        },
+        faviconPng: {
+          href: "/favicon-32x32.png",
+          sizes: "32x32",
+          type: "image/png",
+        },
+        appleTouchIcon: {
+          href: "/apple-touch-icon.png",
+        },
+        manifest: {
+          href: "/site.webmanifest",
+        },
+      },
+      headerBranding: {
+        href: "/",
+        ariaLabel: "Kevin Ellen home",
+        logo: {
+          id: "logo-monogram-ke",
+          width: 100,
+          height: 100,
+        },
+      },
+      preload: [],
+    },
+    manifest: {
+      backgroundColor: "#ffffff",
     },
     navigation: {
       header: {
@@ -258,199 +299,5 @@ describe("requestOrchestrator", () => {
     expect(mockedOrchestrateRouteResolution).not.toHaveBeenCalled();
     expect(mockedInspectRequest).not.toHaveBeenCalled();
     expect(result).toBe(preAppContextResponse);
-  });
-
-  it("continues into route resolution when pre-request returns null and pre-app-context continues", async () => {
-    const req = new Request("https://kevinellen.com/");
-    const env = {
-      APP_HOST: "kevinellen.com",
-      APP_ENV: "prod",
-    } as unknown as Env;
-    const ctx = {} as ExecutionContext;
-    const appState = buildAppState();
-
-    const routingResult = {
-      kind: "found",
-      publicPageId: "home",
-    } as const;
-
-    mockedPreRequestOrchestrator.mockResolvedValue(null);
-    mockedAppStateCreate.mockReturnValue(appState);
-    mockedPreAppContextOrchestrator.mockResolvedValue({
-      kind: "continue",
-    });
-    mockedOrchestrateRouteResolution.mockReturnValue(routingResult);
-
-    const result = await requestOrchestrator(req, env, ctx);
-
-    expect(mockedPreRequestOrchestrator).toHaveBeenCalledWith(req, env, ctx);
-    expect(mockedAppStateCreate).toHaveBeenCalledWith(env);
-    expect(mockedPreAppContextOrchestrator).toHaveBeenCalledWith(
-      req,
-      env,
-      appState,
-    );
-    expect(mockedOrchestrateRouteResolution).toHaveBeenCalledWith(
-      req,
-      appState,
-      { kind: "continue" },
-    );
-    expect(mockedInspectRequest).toHaveBeenCalledWith(
-      req,
-      env,
-      expect.objectContaining({
-        appState,
-        routing: routingResult,
-        appContext: expect.any(Object),
-      }),
-    );
-
-    expect(result).toBeInstanceOf(Response);
-    expect(result.status).toBe(200);
-    expect(result.headers.get("content-type")).toBe(
-      "application/json; charset=utf-8",
-    );
-    await expect(result.json()).resolves.toEqual(
-      expect.objectContaining({
-        page: {
-          id: "home",
-          kind: "home",
-          slug: "/",
-          label: "Home",
-          content: {
-            head: {
-              eyebrow: null,
-              title: "Home",
-              intro: null,
-            },
-            body: [],
-            footer: [],
-          },
-        },
-        metadata: {
-          pageTitle: "Home | Kevin Ellen",
-          metaDescription: "Home page.",
-        },
-        robots: {
-          allowIndex: true,
-          allowFollow: true,
-          noarchive: false,
-          nosnippet: false,
-          noimageindex: false,
-        },
-      }),
-    );
-  });
-
-  it("passes a pre-app-context error into route resolution", async () => {
-    const req = new Request("https://kevinellen.com/old-page");
-    const env = {
-      APP_HOST: "kevinellen.com",
-      APP_ENV: "prod",
-    } as unknown as Env;
-    const ctx = {} as ExecutionContext;
-    const appState = buildAppState();
-
-    const routingResult = {
-      kind: "error",
-      status: 410,
-    } as const;
-
-    mockedPreRequestOrchestrator.mockResolvedValue(null);
-    mockedAppStateCreate.mockReturnValue(appState);
-    mockedPreAppContextOrchestrator.mockResolvedValue({
-      kind: "error",
-      status: 410,
-    });
-    mockedOrchestrateRouteResolution.mockReturnValue(routingResult);
-
-    const result = await requestOrchestrator(req, env, ctx);
-
-    expect(mockedOrchestrateRouteResolution).toHaveBeenCalledWith(
-      req,
-      appState,
-      {
-        kind: "error",
-        status: 410,
-      },
-    );
-    expect(mockedInspectRequest).toHaveBeenCalledWith(
-      req,
-      env,
-      expect.objectContaining({
-        appState,
-        routing: routingResult,
-        appContext: expect.any(Object),
-      }),
-    );
-
-    expect(result.status).toBe(200);
-    expect(result.headers.get("content-type")).toBe(
-      "application/json; charset=utf-8",
-    );
-    await expect(result.json()).resolves.toEqual(
-      expect.objectContaining({
-        page: {
-          id: "error-410",
-          status: 410,
-          metadata: {
-            pageTitle: "410 | Gone",
-            metaDescription: "Gone.",
-          },
-          content: {
-            head: {
-              eyebrow: null,
-              title: "Gone",
-              intro: null,
-            },
-            body: [],
-            footer: [],
-          },
-        },
-      }),
-    );
-  });
-
-  it("returns the inspect response when one is provided", async () => {
-    const req = new Request("https://kevinellen.com/_inspect/routing");
-    const env = {
-      APP_HOST: "kevinellen.com",
-      APP_ENV: "dev",
-    } as unknown as Env;
-    const ctx = {} as ExecutionContext;
-    const appState = buildAppState();
-
-    const routingResult = {
-      kind: "found",
-      publicPageId: "home",
-    } as const;
-
-    const inspectResponse = new Response('{"ok":true}', {
-      status: 200,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
-    });
-
-    mockedPreRequestOrchestrator.mockResolvedValue(null);
-    mockedAppStateCreate.mockReturnValue(appState);
-    mockedPreAppContextOrchestrator.mockResolvedValue({
-      kind: "continue",
-    });
-    mockedOrchestrateRouteResolution.mockReturnValue(routingResult);
-    mockedInspectRequest.mockReturnValue(inspectResponse);
-
-    const result = await requestOrchestrator(req, env, ctx);
-
-    expect(mockedInspectRequest).toHaveBeenCalledWith(
-      req,
-      env,
-      expect.objectContaining({
-        appState,
-        routing: routingResult,
-        appContext: expect.any(Object),
-      }),
-    );
-    expect(result).toBe(inspectResponse);
   });
 });

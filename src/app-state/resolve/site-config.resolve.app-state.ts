@@ -1,6 +1,7 @@
-// src/app-state/resolve/site-config.resolve.appState.ts
+// src/app-state/resolve/site-config.resolve.app-state.ts
 
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
+
 import { appStateSiteConfigAuthored } from "@app-state/config/site-config/authored.site-config.app-state";
 import { deepFreeze } from "@utils/deepFreeze.util";
 
@@ -17,6 +18,7 @@ export const appStateResolveSiteConfig = (env: Env): AppStateSiteConfig => {
 
   return deepFreeze({
     ...appStateSiteConfigAuthored,
+    preload: appStateSiteConfigAuthored.preload ?? [],
     host,
     origin: `https://${host}`,
   });

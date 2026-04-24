@@ -7,6 +7,7 @@ describe("appContextResolvePreBlockContentModule", () => {
     const module = {
       kind: "pre",
       value: "hello-world",
+      flow: "content",
     } as const;
 
     const result = appContextResolvePreBlockContentModule(module, {} as never);

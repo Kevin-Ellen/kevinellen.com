@@ -32,14 +32,14 @@ describe("appContextResolvePageContent", () => {
     jest.clearAllMocks();
   });
 
-  it("resolves head, body, and footer content", () => {
+  it("resolves header, content, and footer content", () => {
     const content = {
-      head: {
+      header: {
         title: "About",
         eyebrow: null,
         intro: null,
       },
-      body: [
+      content: [
         {
           kind: "paragraph",
           content: [],
@@ -49,12 +49,14 @@ describe("appContextResolvePageContent", () => {
           id: "quote-1",
           text: "Quote",
           attribution: "Author",
+          flow: "content",
         },
       ],
       footer: [
         {
           kind: "pre",
           value: "const x = 1;",
+          flow: "content",
         },
       ],
     } as const;
@@ -80,21 +82,23 @@ describe("appContextResolvePageContent", () => {
         id: "quote-1",
         text: "Resolved quote",
         attribution: "Author",
+        flow: "content",
       })
       .mockReturnValueOnce({
         kind: "pre",
         value: "resolved pre block",
+        flow: "content",
       });
 
     const result = appContextResolvePageContent(content, context);
 
     expect(result).toEqual({
-      head: {
+      header: {
         title: "Resolved About",
         eyebrow: "Resolved eyebrow",
         intro: "Resolved intro",
       },
-      body: [
+      content: [
         {
           kind: "paragraph",
           content: [
@@ -109,30 +113,32 @@ describe("appContextResolvePageContent", () => {
           id: "quote-1",
           text: "Resolved quote",
           attribution: "Author",
+          flow: "content",
         },
       ],
       footer: [
         {
           kind: "pre",
           value: "resolved pre block",
+          flow: "content",
         },
       ],
     });
 
     expect(mockedAppContextResolvePageContentHead).toHaveBeenCalledWith(
-      content.head,
+      content.header,
       context,
     );
 
     expect(mockedAppContextResolveBlockContentModule).toHaveBeenCalledTimes(3);
     expect(mockedAppContextResolveBlockContentModule).toHaveBeenNthCalledWith(
       1,
-      content.body[0],
+      content.content[0],
       context,
     );
     expect(mockedAppContextResolveBlockContentModule).toHaveBeenNthCalledWith(
       2,
-      content.body[1],
+      content.content[1],
       context,
     );
     expect(mockedAppContextResolveBlockContentModule).toHaveBeenNthCalledWith(
@@ -142,29 +148,29 @@ describe("appContextResolvePageContent", () => {
     );
   });
 
-  it("resolves empty body and footer arrays", () => {
+  it("resolves empty content and footer arrays", () => {
     const content = {
-      head: {
+      header: {
         title: "Home",
         eyebrow: null,
         intro: null,
       },
-      body: [],
+      content: [],
       footer: [],
     } as const;
 
-    mockedAppContextResolvePageContentHead.mockReturnValue(content.head);
+    mockedAppContextResolvePageContentHead.mockReturnValue(content.header);
 
     const result = appContextResolvePageContent(content, context);
 
     expect(result).toEqual({
-      head: content.head,
-      body: [],
+      header: content.header,
+      content: [],
       footer: [],
     });
 
     expect(mockedAppContextResolvePageContentHead).toHaveBeenCalledWith(
-      content.head,
+      content.header,
       context,
     );
     expect(mockedAppContextResolveBlockContentModule).not.toHaveBeenCalled();

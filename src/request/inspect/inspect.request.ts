@@ -3,12 +3,13 @@
 import type { AppState } from "@app-state/class.app-state";
 import type { RoutingResult } from "@request/types/request.types";
 import type { AppContext } from "@app-context/class.app-context";
+import type { AppRenderContext } from "@app-render-context/class.app-render-context";
 
 type InspectArtifacts = {
   appState?: AppState;
   routing?: RoutingResult;
   appContext?: AppContext;
-  renderContext?: unknown;
+  appRenderContext?: AppRenderContext;
 };
 
 const jsonResponse = (body: unknown, status = 200): Response =>
@@ -48,7 +49,7 @@ export const inspectRequest = (
         "/_inspect/app-state",
         "/_inspect/routing",
         "/_inspect/app-context",
-        "/_inspect/render-context",
+        "/_inspect/app-render-context",
       ],
     });
   }
@@ -71,9 +72,9 @@ export const inspectRequest = (
       : unavailableInspectResponse("app-context");
   }
 
-  if (pathname === "/_inspect/render-context") {
-    return artifacts.renderContext
-      ? jsonResponse(artifacts.renderContext)
+  if (pathname === "/_inspect/app-render-context") {
+    return artifacts.appRenderContext
+      ? jsonResponse(artifacts.appRenderContext)
       : unavailableInspectResponse("render-context");
   }
 

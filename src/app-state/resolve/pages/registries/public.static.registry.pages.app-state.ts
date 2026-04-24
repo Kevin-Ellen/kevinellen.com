@@ -1,6 +1,6 @@
 // src/app-state/resolve/pages/registries/public.static.registry.pages.app-state.ts
 
-import type { AuthoredPublicPageDefinition } from "@shared-types/pages/definitions/public/authored.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { authoredHomePublicPage } from "@pages/public/static/authored.home.public.page";
 

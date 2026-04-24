@@ -1,10 +1,10 @@
 // src/app/content/pages/public/legal/terms.public.page.ts
 
-import type { AuthoredTermsLegalPublicPage } from "@shared-types/pages/definitions/public/legal/terms/authored.terms.legal.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const authoredTermsLegalPage: AuthoredTermsLegalPublicPage = deepFreeze({
+export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
   id: "terms",
   kind: "static",
   slug: "/legal/terms",
@@ -19,14 +19,14 @@ export const authoredTermsLegalPage: AuthoredTermsLegalPublicPage = deepFreeze({
   breadcrumbs: ["home", "terms"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "Legal",
       title: "Terms of Use",
       intro:
         "These terms govern the use of this website. By accessing or using the site, you agree to them. If you do not agree, please do not use the site.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {

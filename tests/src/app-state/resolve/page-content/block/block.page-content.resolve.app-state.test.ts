@@ -155,6 +155,7 @@ describe("appStateResolveBlockContentModule", () => {
       kind: "quote",
       id: "quote-1",
       text: "A quote",
+      flow: "content",
     } as const;
 
     const resolvedModule = {
@@ -162,6 +163,7 @@ describe("appStateResolveBlockContentModule", () => {
       id: "quote-1",
       text: "A quote",
       attribution: null,
+      flow: "content",
     } as const;
 
     mockedAppStateResolveQuoteBlockContentModule.mockReturnValue(
@@ -211,6 +213,7 @@ describe("appStateResolveBlockContentModule", () => {
       pagination: {
         pageSize: 12,
       },
+      flow: "content",
     } as const;
 
     const resolvedModule = {
@@ -218,6 +221,7 @@ describe("appStateResolveBlockContentModule", () => {
       pagination: {
         pageSize: 12,
       },
+      flow: "content",
     } as const;
 
     mockedAppStateResolveJournalListingBlockContentModule.mockReturnValue(
@@ -243,6 +247,7 @@ describe("appStateResolveBlockContentModule", () => {
     const resolvedModule = {
       kind: "pre",
       value: "const answer = 42;",
+      flow: "content",
     } as const;
 
     mockedAppStateResolvePreBlockContentModule.mockReturnValue(
@@ -260,12 +265,20 @@ describe("appStateResolveBlockContentModule", () => {
   it("dispatches contentSection modules through the content section block resolver", () => {
     const module = {
       kind: "contentSection",
+      heading: {
+        text: "Section",
+        level: 2,
+      },
       modules: [],
     } as const;
 
     const resolvedModule = {
       kind: "contentSection",
-      heading: null,
+      heading: {
+        text: "Section",
+        level: 2,
+        visuallyHidden: false,
+      },
       modules: [],
     } as const;
 

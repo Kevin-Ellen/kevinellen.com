@@ -1,10 +1,10 @@
 // src/app/content/pages/public/legal/privacy.public.page.ts
 
-import type { AuthoredPrivacyLegalPublicPage } from "@shared-types/pages/definitions/public/legal/privacy/authored.privacy.legal.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const authoredPrivacyLegalPage: AuthoredPrivacyLegalPublicPage =
+export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
   deepFreeze({
     id: "privacy",
     kind: "static",
@@ -20,14 +20,14 @@ export const authoredPrivacyLegalPage: AuthoredPrivacyLegalPublicPage =
     breadcrumbs: ["home", "privacy"],
 
     content: {
-      head: {
+      header: {
         eyebrow: "Legal",
         title: "Privacy",
         intro:
           "This page explains what personal data may be processed when you use this website, why it may be processed, and what rights you have in relation to it.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

@@ -1,12 +1,13 @@
 // src/pages/error/static/authored.410.error.page.ts
 
-import type { AuthoredErrorPageDefinition } from "@shared-types/pages/definitions/error/authored.base.error.definition.page.types";
+import type { AuthoredErrorPageDefinition } from "@shared-types/page-definitions/authored.error.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
 export const authoredGoneErrorPage: AuthoredErrorPageDefinition = deepFreeze({
   id: "error-410",
   status: 410,
+  label: "410 | Gone",
 
   metadata: {
     pageTitle: "410 | Gone",
@@ -16,14 +17,14 @@ export const authoredGoneErrorPage: AuthoredErrorPageDefinition = deepFreeze({
   breadcrumbs: ["home", "error-410"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "410",
       title: "Gone",
       intro:
         "This page has been permanently removed and is no longer available.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {

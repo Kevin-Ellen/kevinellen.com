@@ -1,10 +1,10 @@
 // src/pages/public/static/authored.home.public.page.ts
 
-import type { AuthoredHomePublicPage } from "@shared-types/pages/definitions/public/home/authored.home.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const authoredHomePublicPage: AuthoredHomePublicPage = deepFreeze({
+export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
   id: "home",
   kind: "home",
   slug: "/",
@@ -19,14 +19,14 @@ export const authoredHomePublicPage: AuthoredHomePublicPage = deepFreeze({
   breadcrumbs: ["home"],
 
   content: {
-    head: {
+    header: {
       eyebrow: "Kevin Ellen",
       title: "Nature photography, writing, and technical architecture",
       intro:
         "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
     },
 
-    body: [
+    content: [
       {
         kind: "contentSection",
         heading: {

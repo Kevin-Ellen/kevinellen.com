@@ -1,7 +1,7 @@
 // src/app-state/config/navigation/authored.header.navigation.app-state.ts
 
 import type { AuthoredHeaderNavigation } from "@shared-types/config/navigation/header/authored.header.navigation.types";
-import type { PageIdPublic } from "@shared-types/pages/shared/id.shared.page.types";
+import type { PageIdPublic } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 

@@ -8,6 +8,7 @@ export const appStateResolveQuoteBlockContentModule = (
 ): AppStateQuoteBlockContentModule => {
   return {
     ...module,
+    flow: module.flow ?? "content",
     attribution: module.attribution ?? null,
   };
 };

@@ -7,7 +7,9 @@ import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-r
 
 import { appContextCreate } from "@app-context/create.app-context";
 
-import { inspectRequest } from "@request/inspect/inspect.request";
+// import { inspectRequest } from "@request/inspect/inspect.request";
+import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
+// import { render } from "@rendering/renderer";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -32,19 +34,25 @@ export const requestOrchestrator = async (
 
   const appContext = appContextCreate(appState, routing);
 
-  const inspectResponse = inspectRequest(req, env, {
-    appState,
-    routing,
-    appContext,
-  });
+  const appRenderContext = appRenderContextCreate(appContext);
 
-  if (inspectResponse) {
-    return inspectResponse;
-  }
+  // const inspectResponse = inspectRequest(req, env, {
+  //   appState,
+  //   routing,
+  //   appContext,
+  //   appRenderContext,
+  // });
 
-  return new Response(JSON.stringify(appContext.inspect, null, 2), {
+  // if (inspectResponse) {
+  //   return inspectResponse;
+  // }
+
+  // const document = render(appRenderContext);
+
+  return new Response(JSON.stringify(appRenderContext.inspect, null, 2), {
     headers: {
       "content-type": "application/json; charset=utf-8",
+      // "content-type": "text/html; charset=utf-8",
     },
   });
 };

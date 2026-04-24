@@ -38,10 +38,10 @@ describe("appStateResolvePageContent", () => {
 
   it("defaults footer to an empty array when omitted", () => {
     const authoredContent: AuthoredPageContent = {
-      head: {
+      header: {
         title: "About",
       },
-      body: [],
+      content: [],
     };
 
     mockedAppStateResolvePageContentHead.mockReturnValue({
@@ -53,7 +53,7 @@ describe("appStateResolvePageContent", () => {
     const result = appStateResolvePageContent(authoredContent);
 
     expect(mockedAppStateResolvePageContentHead).toHaveBeenCalledWith(
-      authoredContent.head,
+      authoredContent.header,
     );
     expect(mockedAppStateResolveBlockContentModule).not.toHaveBeenCalled();
     expect(result.footer).toEqual([]);
@@ -65,10 +65,10 @@ describe("appStateResolvePageContent", () => {
     const footerBlock = { kind: "footer-a" } as never;
 
     const authoredContent: AuthoredPageContent = {
-      head: {
+      header: {
         title: "Journal",
       },
-      body: [bodyBlockA, bodyBlockB],
+      content: [bodyBlockA, bodyBlockB],
       footer: [footerBlock],
     };
 
@@ -95,7 +95,7 @@ describe("appStateResolvePageContent", () => {
       footerBlock,
     );
 
-    expect(result.body).toEqual([
+    expect(result.content).toEqual([
       { kind: "resolved-body-a" },
       { kind: "resolved-body-b" },
     ]);

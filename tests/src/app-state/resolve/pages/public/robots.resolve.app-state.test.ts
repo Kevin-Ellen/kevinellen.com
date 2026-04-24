@@ -2,7 +2,7 @@
 
 import { appStateResolvePageRobots } from "@app-state/resolve/pages/public/robots.resolve.app-state";
 
-import type { AppStatePageRobotsDirectives } from "@shared-types/pages/shared/app-state.robots.shared.page.types";
+import type { AppStatePageRobotsDirectives } from "@shared-types/page-definitions/robots/app-state.robots.page-definition.types";
 
 describe("appStateResolvePageRobots", () => {
   it("defaults all robots directives when omitted", () => {

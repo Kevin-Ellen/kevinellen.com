@@ -32,12 +32,12 @@ describe("resolvePageAppContext", () => {
         metaDescription: "About page",
       },
       content: {
-        head: {
+        header: {
           title: "About",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
       assets: {
@@ -48,12 +48,12 @@ describe("resolvePageAppContext", () => {
     } as const;
 
     const resolvedContent = {
-      head: {
+      header: {
         title: "Resolved About",
         eyebrow: null,
         intro: null,
       },
-      body: [],
+      content: [],
       footer: [],
     } as const;
 
@@ -94,12 +94,12 @@ describe("resolvePageAppContext", () => {
         metaDescription: "The page could not be found.",
       },
       content: {
-        head: {
+        header: {
           title: "404",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
       assets: {
@@ -110,12 +110,12 @@ describe("resolvePageAppContext", () => {
     } as const;
 
     const resolvedContent = {
-      head: {
+      header: {
         title: "Resolved 404",
         eyebrow: null,
         intro: null,
       },
-      body: [],
+      content: [],
       footer: [],
     } as const;
 
@@ -133,10 +133,6 @@ describe("resolvePageAppContext", () => {
     expect(result).toEqual({
       id: "error-404",
       status: 404,
-      metadata: {
-        pageTitle: "404 | Not found",
-        metaDescription: "The page could not be found.",
-      },
       content: resolvedContent,
     });
 

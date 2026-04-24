@@ -16,6 +16,7 @@
       "@app-state/*": ["./src/app-state/*"],
       "@app-context/*": ["./src/app-context/*"],
       "@app-render-context/*": ["./src/app-render-context/*"],
+      "@rendering/*": ["./src/rendering/*"],
 
       "@utils/*": ["./src/utils/*"],
       "@pages/*": ["./src/pages/*"],
@@ -33,7 +34,8 @@
     // "packages/shared-types/src",
     // "packages/shared-types/src/uploads",
     "shared-types/",
-    "jest.config.ts"
+    "jest.config.ts",
+    "__OLD/__OLD_pages"
   ],
   "exclude": ["__OLD"]
 }

@@ -26,12 +26,11 @@ export const appContextResolveContentSectionBlockContentModule = (
 ): AppContextContentSectionBlockContentModule => {
   return {
     ...module,
-    heading: module.heading
-      ? appContextResolveContentSectionHeadingBlockContentModule(
-          module.heading,
-          context,
-        )
-      : null,
+    heading: appContextResolveContentSectionHeadingBlockContentModule(
+      module.heading,
+      context,
+    ),
+
     modules: module.modules.map((nestedModule) =>
       appContextResolveBlockContentModule(nestedModule, context),
     ),

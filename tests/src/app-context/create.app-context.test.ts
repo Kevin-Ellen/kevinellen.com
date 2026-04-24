@@ -81,6 +81,26 @@ describe("appContextCreate", () => {
 
   it("orchestrates AppContext creation for a public page", () => {
     const appState = {
+      siteConfig: {
+        origin: "https://www.kevinellen.com",
+        language: "en-GB",
+        headAssets: {
+          links: [],
+        },
+        headerBranding: {
+          href: "/",
+          ariaLabel: "Kevin Ellen home",
+          logo: {
+            id: "logo-monogram-ke",
+            width: 100,
+            height: 100,
+          },
+        },
+        preload: [],
+      },
+      manifest: {
+        backgroundColor: "#ffffff",
+      },
       navigation: { some: "navigation-state" },
       globalFooter: { some: "global-footer-state" },
       assets: { some: "global-assets" },
@@ -120,12 +140,12 @@ describe("appContextCreate", () => {
       },
       breadcrumbs: ["home", "about"],
       content: {
-        head: {
+        header: {
           title: "About",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
     };
@@ -141,12 +161,12 @@ describe("appContextCreate", () => {
       slug: "/about",
       label: "About",
       content: {
-        head: {
+        header: {
           title: "Resolved About",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
     } as never;
@@ -228,11 +248,47 @@ describe("appContextCreate", () => {
       page: resolvedPage,
       metadata: pageState.metadata,
       robots: pageState.robots,
+      canonicalUrl: "https://www.kevinellen.com/about",
+      language: "en-GB",
+      headAssets: {
+        links: [],
+      },
+      headerBranding: {
+        href: "/",
+        ariaLabel: "Kevin Ellen home",
+        logo: {
+          id: "logo-monogram-ke",
+          width: 100,
+          height: 100,
+        },
+      },
+      preload: [],
+      themeColour: "#ffffff",
     });
   });
 
   it("omits robots when the resolved page source does not include them", () => {
     const appState = {
+      siteConfig: {
+        origin: "https://www.kevinellen.com",
+        language: "en-GB",
+        headAssets: {
+          links: [],
+        },
+        headerBranding: {
+          href: "/",
+          ariaLabel: "Kevin Ellen home",
+          logo: {
+            id: "logo-monogram-ke",
+            width: 100,
+            height: 100,
+          },
+        },
+        preload: [],
+      },
+      manifest: {
+        backgroundColor: "#ffffff",
+      },
       navigation: { some: "navigation-state" },
       globalFooter: { some: "global-footer-state" },
       assets: { some: "global-assets" },
@@ -256,12 +312,12 @@ describe("appContextCreate", () => {
       },
       breadcrumbs: ["home", "error-404"],
       content: {
-        head: {
+        header: {
           title: "404",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
     };
@@ -300,15 +356,50 @@ describe("appContextCreate", () => {
         content: pageState.content,
       },
       metadata: pageState.metadata,
+      robots: undefined,
+      canonicalUrl: null,
+      language: "en-GB",
+      headAssets: {
+        links: [],
+      },
+      headerBranding: {
+        href: "/",
+        ariaLabel: "Kevin Ellen home",
+        logo: {
+          id: "logo-monogram-ke",
+          width: 100,
+          height: 100,
+        },
+      },
+      preload: [],
+      themeColour: "#ffffff",
     });
 
-    expect("robots" in result.inspect).toBe(false);
+    expect(result.inspect.robots).toBeUndefined();
   });
 
-  // Defensive branch coverage: real AppState page definitions currently always
-  // include metadata, but appContextCreate defensively tolerates missing runtime fields.
   it("omits metadata and robots when the resolved page source exposes neither", () => {
     const appState = {
+      siteConfig: {
+        origin: "https://www.kevinellen.com",
+        language: "en-GB",
+        headAssets: {
+          links: [],
+        },
+        headerBranding: {
+          href: "/",
+          ariaLabel: "Kevin Ellen home",
+          logo: {
+            id: "logo-monogram-ke",
+            width: 100,
+            height: 100,
+          },
+        },
+        preload: [],
+      },
+      manifest: {
+        backgroundColor: "#ffffff",
+      },
       navigation: { some: "navigation-state" },
       globalFooter: { some: "global-footer-state" },
       assets: { some: "global-assets" },
@@ -327,12 +418,12 @@ describe("appContextCreate", () => {
       },
       breadcrumbs: ["home"],
       content: {
-        head: {
+        header: {
           title: "Synthetic",
           eyebrow: null,
           intro: null,
         },
-        body: [],
+        content: [],
         footer: [],
       },
     };
@@ -366,9 +457,27 @@ describe("appContextCreate", () => {
         id: "synthetic-page",
         content: pageState.content,
       },
+      metadata: undefined,
+      robots: undefined,
+      canonicalUrl: null,
+      language: "en-GB",
+      headAssets: {
+        links: [],
+      },
+      headerBranding: {
+        href: "/",
+        ariaLabel: "Kevin Ellen home",
+        logo: {
+          id: "logo-monogram-ke",
+          width: 100,
+          height: 100,
+        },
+      },
+      preload: [],
+      themeColour: "#ffffff",
     });
 
-    expect("metadata" in result.inspect).toBe(false);
-    expect("robots" in result.inspect).toBe(false);
+    expect(result.inspect.metadata).toBeUndefined();
+    expect(result.inspect.robots).toBeUndefined();
   });
 });

@@ -1,8 +1,8 @@
 // src/request/types/request.types.ts
 
 import type { RedirectMatch } from "@request/pre-app-context/redirects/redirects.pre-app-context.request.types";
-import type { ErrorPageStatus } from "@shared-types/pages/error/status.error.page.types";
-import type { PageIdPublic } from "@shared-types/pages/shared/id.shared.page.types";
+import type { ErrorPageStatus } from "@shared-types/page-definitions/shared/shared.error.page-definition.types";
+import type { PageIdPublic } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
 export type RequestResult =
   | { kind: "continue" }

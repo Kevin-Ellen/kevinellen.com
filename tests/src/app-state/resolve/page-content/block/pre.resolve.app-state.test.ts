@@ -6,7 +6,7 @@ import type { AuthoredPreBlockContentModule } from "@shared-types/page-content/b
 import type { AppStatePreBlockContentModule } from "@shared-types/page-content/block/pre/app-state.pre.block.page-content.types";
 
 describe("appStateResolvePreBlockContentModule", () => {
-  it("returns pre block content unchanged", () => {
+  it("returns pre block content with deterministic flow", () => {
     const module: AuthoredPreBlockContentModule = {
       kind: "pre",
       value: "const answer = 42;",
@@ -17,19 +17,25 @@ describe("appStateResolvePreBlockContentModule", () => {
     const expected: AppStatePreBlockContentModule = {
       kind: "pre",
       value: "const answer = 42;",
+      flow: "content",
     };
 
     expect(result).toEqual(expected);
   });
 
-  it("returns the same object reference", () => {
+  it("preserves authored flow when provided", () => {
     const module: AuthoredPreBlockContentModule = {
       kind: "pre",
       value: "console.log('hello');",
+      flow: "breakout",
     };
 
     const result = appStateResolvePreBlockContentModule(module);
 
-    expect(result).toBe(module);
+    expect(result).toEqual({
+      kind: "pre",
+      value: "console.log('hello');",
+      flow: "breakout",
+    });
   });
 });

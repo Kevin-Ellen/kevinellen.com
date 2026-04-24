@@ -1,10 +1,10 @@
 // src/app/content/pages/public/legal/licensing.public.page.ts
 
-import type { AuthoredLicensingLegalPublicPage } from "@shared-types/pages/definitions/public/legal/licensing/authored.licensing.legal.public.definition.page.types";
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
-export const authoredLicensingLegalPage: AuthoredLicensingLegalPublicPage =
+export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
   deepFreeze({
     id: "licensing",
     kind: "static",
@@ -20,14 +20,14 @@ export const authoredLicensingLegalPage: AuthoredLicensingLegalPublicPage =
     breadcrumbs: ["home", "licensing"],
 
     content: {
-      head: {
+      header: {
         eyebrow: "Legal",
         title: "Photo Licensing",
         intro:
           "All photographs on this site are protected by copyright. This page outlines how they may and may not be used.",
       },
 
-      body: [
+      content: [
         {
           kind: "contentSection",
           heading: {

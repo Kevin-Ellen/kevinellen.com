@@ -6,10 +6,10 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
   it("returns the journal listing module unchanged", () => {
     const module = {
       kind: "journalListing",
-      title: "Latest journal",
       pagination: {
         pageSize: 10,
       },
+      flow: "content",
     } as const;
 
     const result = appContextResolveJournalListingBlockContentModule(
