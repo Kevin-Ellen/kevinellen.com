@@ -3,7 +3,7 @@
 import type { AppRenderContextDocOpen } from "@app-render-context/types/doc-open.app-render-context.types";
 import type { AppContext } from "@app-context/class.app-context";
 
-import { resolveScriptsAppRenderContext } from "@app-render-context/resolve/scripts.assets.resolve.app-render-context";
+import { resolveScriptsAppRenderContext } from "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context";
 import { resolveHeadLinksAppRenderContext } from "@app-render-context/resolve/doc-open/head-links.resolve.app-render-context";
 import { resolvePreloadAppRenderContext } from "@app-render-context/resolve/doc-open/preload.resolve.app-render-context";
 

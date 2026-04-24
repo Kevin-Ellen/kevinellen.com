@@ -86,4 +86,52 @@ describe("resolveRobotsTxtSystem", () => {
       ],
     });
   });
+
+  it("ignores pages where robotsTxt is null", () => {
+    const req = new Request("https://dev.kevinellen.com/robots.txt");
+
+    const appState = {
+      siteConfig: {
+        origin: "https://dev.kevinellen.com",
+      },
+      publicPages: [
+        {
+          slug: "/normal",
+          robotsTxt: null,
+        },
+        {
+          slug: "/private",
+          robotsTxt: { disallow: true },
+        },
+      ],
+    } as unknown as AppState;
+
+    const result = resolveRobotsTxtSystem(req, appState);
+
+    expect(result).toEqual({
+      sitemapUrl: "https://dev.kevinellen.com/sitemap.xml",
+      rules: ["User-agent: *", "Allow: /", "Disallow: /private"],
+    });
+  });
+
+  it("throws when a disallowed public page is missing a slug", () => {
+    const req = new Request("https://dev.kevinellen.com/robots.txt");
+
+    const appState = {
+      siteConfig: {
+        origin: "https://dev.kevinellen.com",
+      },
+      publicPages: [
+        {
+          id: "private-page",
+          slug: null,
+          robotsTxt: { disallow: true },
+        },
+      ],
+    } as unknown as AppState;
+
+    expect(() => resolveRobotsTxtSystem(req, appState)).toThrow(
+      "Public page 'private-page' is missing a slug.",
+    );
+  });
 });

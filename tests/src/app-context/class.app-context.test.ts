@@ -278,4 +278,70 @@ describe("AppContext", () => {
     expect(appContext.structuredData).toBe(appContext.structuredData);
     expect(appContext.inspect).toBe(appContext.inspect);
   });
+
+  it("returns page metadata from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.metadata).toBe(mockData.metadata);
+  });
+
+  it("returns robots from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.robots).toBe(mockData.robots);
+  });
+
+  it("returns language from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.language).toBe(mockData.language);
+  });
+
+  it("returns canonicalUrl from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.canonicalUrl).toBe(mockData.canonicalUrl);
+  });
+
+  it("returns assets from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.assets).toBe(mockData.assets);
+  });
+
+  it("returns headAssets from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.headAssets).toBe(mockData.headAssets);
+  });
+
+  it("returns themeColour from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.themeColour).toBe(mockData.themeColour);
+  });
+
+  it("returns headerBranding from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.headerBranding).toBe(mockData.headerBranding);
+  });
+
+  it("returns breadcrumbs from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.breadcrumbs).toBe(mockData.breadcrumbs);
+  });
+
+  it("returns page from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.page).toBe(mockData.page);
+  });
+
+  it("returns preload from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.preload).toBe(mockData.preload);
+  });
 });

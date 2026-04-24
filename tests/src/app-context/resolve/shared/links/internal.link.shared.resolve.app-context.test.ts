@@ -1,6 +1,7 @@
 // tests/src/app-context/resolve/shared/links/internal.link.shared.resolve.app-context.test.ts
 
 import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
+
 import { appStateCreate } from "@app-state/create.app-state";
 
 const makeEnv = (): Env =>
@@ -88,5 +89,29 @@ describe("resolveInternalLinkAppContext", () => {
         appState,
       ),
     ).toThrow("Missing public page for internal link id 'missing-page'.");
+  });
+
+  it("throws when the linked public page is missing a slug", () => {
+    const appState = {
+      getPublicPageById: jest.fn().mockReturnValue({
+        id: "about",
+        label: "About",
+        slug: null,
+      }),
+    } as never;
+
+    expect(() =>
+      resolveInternalLinkAppContext(
+        {
+          kind: "internal",
+          id: "about",
+          svgId: null,
+          behaviour: {
+            openInNewTab: false,
+          },
+        },
+        appState,
+      ),
+    ).toThrow("Public page 'about' is missing a slug.");
   });
 });

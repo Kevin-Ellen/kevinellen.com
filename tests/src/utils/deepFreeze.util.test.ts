@@ -111,4 +111,13 @@ describe("deepFreeze", () => {
     expect(Object.isFrozen(result.config.navigation[1])).toBe(true);
     expect(Object.isFrozen(result.flags)).toBe(true);
   });
+
+  it("freezes a function when passed directly", () => {
+    const handler = () => "ok";
+
+    const result = deepFreeze(handler);
+
+    expect(result).toBe(handler);
+    expect(Object.isFrozen(result)).toBe(true);
+  });
 });

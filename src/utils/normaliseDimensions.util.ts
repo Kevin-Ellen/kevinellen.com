@@ -1,4 +1,4 @@
-// src/urils/normaliseDimensions.util.ts
+// src/utils/normaliseDimensions.util.ts
 
 export const normaliseDimensionsToBase = (
   width: number,
