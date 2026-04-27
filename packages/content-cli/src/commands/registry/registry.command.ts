@@ -23,14 +23,6 @@ import { runValidatePhotoCommand } from "@content-cli/content/photo/validate.pho
 import { runPublishPhotoCommand } from "@content-cli/content/photo/publish.photo.content";
 import { runReadPhotoCommand } from "@content-cli/content/photo/read.photo.content";
 
-const stubCommand =
-  (label: string): ContentCommandHandler =>
-  async () => {
-    console.log(label);
-
-    return { ok: true };
-  };
-
 export const contentCommandRegistry: Record<
   ContentCliEntity,
   Partial<Record<ContentCliAction, ContentCommandHandler>>

@@ -31,5 +31,12 @@ export const runCreateJournalCommand: ContentCommandHandler = async (args) => {
   console.log(`Path: ${workspacePath}\n`);
   console.log(`Photos: ${photosPath}`);
 
-  return { ok: true };
+  return {
+    ok: true,
+    entity: "journal",
+    action: "create",
+    workspaceId,
+    workspacePath,
+    photosPath,
+  };
 };

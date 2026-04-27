@@ -1,17 +1,18 @@
 // packages/content-cli/src/cli/direct.run.cli.ts
 
-import { contentCommandRegistry } from "@content-cli/commands/registry/registry.command";
-
 import type { ParsedDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
+
+import { contentCommandRegistry } from "@content-cli/commands/registry/registry.command";
 
 export const runDirectCli = async (
   parsedArgs: ParsedDirectCliArgs,
-): Promise<void> => {
+): Promise<ContentCommandResult> => {
   const command = contentCommandRegistry[parsedArgs.entity][parsedArgs.action];
 
   if (!command) {
     throw new Error("Unsupported CLI command.");
   }
 
-  await command(parsedArgs);
+  return command(parsedArgs);
 };
