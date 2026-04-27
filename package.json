@@ -10,7 +10,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
-    "type-check:content": "tsc --noEmit -p packages/content-pipeline/tsconfig.json",
+    "type-check:content": "tsc --noEmit -p packages/content-cli/tsconfig.json",
     "type-check:all": "npm run type-check && npm run type-check:content",
     "build": "node scripts/build.mjs",
     "lint": "eslint .",
@@ -28,7 +28,7 @@
     "lint:styles:fix": "stylelint \"src/styles/**/*.scss\" --fix",
     "styles:watch": "sass --watch src/styles/main.scss:.build/generated/styles.css",
     "prepare": "husky",
-    "content": "tsx packages/content-pipeline/src/cli/content.cli.ts"
+    "content": "tsx packages/content-cli/src/cli/content.cli.ts"
   },
   "keywords": [],
   "author": "Kevin Ellen",

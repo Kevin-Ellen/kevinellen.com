@@ -20,10 +20,10 @@
 
       "@utils/*": ["./src/utils/*"],
       "@pages/*": ["./src/pages/*"],
-      "@tests/*": ["./tests/*"]
+      "@tests/*": ["./tests/*"],
 
       // "@shared-types/*": ["./packages/shared-types/src/*"],
-      // "@content-pipeline/*": ["./packages/content-pipeline/src/*"],
+      "@content-cli/*": ["./packages/content-cli/src/*"]
       // "@app/*": ["./src/app/*"]
     }
   },
@@ -34,8 +34,7 @@
     // "packages/shared-types/src",
     // "packages/shared-types/src/uploads",
     "shared-types/",
-    "jest.config.ts",
-    "__OLD/__OLD_pages"
+    "jest.config.ts"
   ],
   "exclude": ["__OLD"]
 }

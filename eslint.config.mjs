@@ -15,6 +15,9 @@ export default [
       "__OLD/**",
       "tests/**",
       "packages/**",
+      "content-pipeline/journal/uploaded/**",
+      "content-pipeline/photo/uploaded/**",
+      "content-pipeline/journal copy/**",
     ],
   },
 
