@@ -7,6 +7,6 @@ import { APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC } from "@app-state/resolve/pages/
 
 export const APP_STATE_PAGE_REGISTRY_PUBLIC_MERGED: readonly AuthoredPublicPageDefinition[] =
   [
-    ...APP_STATE_PAGE_REGISTRY_KV_PUBLIC,
     ...APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC,
+    ...APP_STATE_PAGE_REGISTRY_KV_PUBLIC,
   ] as const;
