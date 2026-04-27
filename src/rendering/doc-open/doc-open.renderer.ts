@@ -26,15 +26,11 @@ export const renderDocOpen = (docOpen: AppRenderContextDocOpen): string => {
   const linkScripts = docOpen.linkScripts.map(renderLinkScript).join("");
   const inlineScripts = docOpen.inlineScripts.map(renderInlineScript).join("");
 
-  const pageTitle = docOpen.metadata?.pageTitle
-    ? `<title>${escapeHtml(docOpen.metadata.pageTitle)}</title>`
-    : "";
+  const pageTitle = `<title>${escapeHtml(docOpen.metadata.pageTitle)}</title>`;
 
-  const metaDescription = docOpen.metadata?.metaDescription
-    ? `<meta name="description" content="${escapeAttribute(
-        docOpen.metadata.metaDescription,
-      )}">`
-    : "";
+  const metaDescription = `<meta name="description" content="${escapeAttribute(
+    docOpen.metadata.metaDescription,
+  )}">`;
 
   const canonical = docOpen.canonicalUrl
     ? renderCanonicalLink(docOpen.canonicalUrl)
