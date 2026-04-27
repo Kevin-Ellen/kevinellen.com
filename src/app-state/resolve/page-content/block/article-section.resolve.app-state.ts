@@ -28,6 +28,8 @@ export const appStateResolveArticleSectionBlockContentModule = (
     heading: appStateResolveArticleSectionHeadingBlockContentModule(
       module.heading,
     ),
-    modules: module.modules.map(appStateResolveBlockContentModule),
+    modules: module.modules.map((nestedModule) =>
+      appStateResolveBlockContentModule(nestedModule),
+    ),
   };
 };

@@ -10,8 +10,8 @@ describe("resolvePreBlockContentModuleAppRenderContext", () => {
 
     const module = {
       kind: "pre",
-      code: "const duck = true;",
-      language: "ts",
+      value: "const duck = true;",
+      flow: "content",
     } as never;
 
     const result = resolvePreBlockContentModuleAppRenderContext(

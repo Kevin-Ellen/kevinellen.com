@@ -55,7 +55,7 @@ jest.mock(
 );
 
 jest.mock(
-  "@app-render-context/resolve/body-content/block/content-section.resolve.app-render-context",
+  "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context",
   () => ({
     resolveArticleSectionBlockContentModuleAppRenderContext: jest.fn(),
   }),

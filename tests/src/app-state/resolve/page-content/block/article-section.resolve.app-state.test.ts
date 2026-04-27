@@ -9,17 +9,17 @@ jest.mock(
 
 import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
 import {
-  appStateResolveArticleSectionHeadingBlockContentModule,
   appStateResolveArticleSectionBlockContentModule,
+  appStateResolveArticleSectionHeadingBlockContentModule,
 } from "@app-state/resolve/page-content/block/article-section.resolve.app-state";
 
 import type {
-  AuthoredArticleSectionHeadingBlockContentModule,
   AuthoredArticleSectionBlockContentModule,
+  AuthoredArticleSectionHeadingBlockContentModule,
 } from "@shared-types/page-content/block/article-section/authored.article-section.block.page-content.types";
 import type {
-  AppStateArticleSectionHeadingBlockContentModule,
   AppStateArticleSectionBlockContentModule,
+  AppStateArticleSectionHeadingBlockContentModule,
 } from "@shared-types/page-content/block/article-section/app-state.article-section.block.page-content.types";
 
 const mockedAppStateResolveBlockContentModule = jest.mocked(
@@ -112,6 +112,7 @@ describe("article-section AppState resolvers", () => {
         flow: "content",
         content: [],
       } as never;
+
       const resolvedSecondModule = {
         kind: "quote",
         id: "quote-1",
@@ -135,6 +136,7 @@ describe("article-section AppState resolvers", () => {
         2,
         secondModule,
       );
+
       expect(result.modules).toEqual([
         resolvedFirstModule,
         resolvedSecondModule,
@@ -158,12 +160,13 @@ describe("article-section AppState resolvers", () => {
         modules: [firstModule, secondModule],
       };
 
-      const resolvedFirst = {
+      const resolvedFirstModule = {
         kind: "paragraph",
         flow: "content",
         content: [],
       } as never;
-      const resolvedSecond = {
+
+      const resolvedSecondModule = {
         kind: "quote",
         id: "quote-1",
         text: "Quote",
@@ -172,12 +175,15 @@ describe("article-section AppState resolvers", () => {
       } as never;
 
       mockedAppStateResolveBlockContentModule
-        .mockReturnValueOnce(resolvedFirst)
-        .mockReturnValueOnce(resolvedSecond);
+        .mockReturnValueOnce(resolvedFirstModule)
+        .mockReturnValueOnce(resolvedSecondModule);
 
       const result = appStateResolveArticleSectionBlockContentModule(module);
 
-      expect(result.modules).toEqual([resolvedFirst, resolvedSecond]);
+      expect(result.modules).toEqual([
+        resolvedFirstModule,
+        resolvedSecondModule,
+      ]);
     });
 
     it("returns the expected AppState article section shape", () => {

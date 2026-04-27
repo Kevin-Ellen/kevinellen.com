@@ -14,6 +14,8 @@ const config: Config = {
     ...tsJestTransformCfg,
   },
 
+  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
+
   moduleNameMapper: {
     "\\.css\\?raw$": "<rootDir>/tests/mocks/rawCss.mock.ts",
     "^@tests/(.*)$": "<rootDir>/tests/$1",

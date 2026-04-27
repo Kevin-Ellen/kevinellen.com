@@ -126,6 +126,7 @@ describe("appStateResolveParagraphBlockContentModule", () => {
     expect(mockedAppStateResolveInlineContent).not.toHaveBeenCalled();
     expect(result).toEqual({
       kind: "paragraph",
+      flow: "content",
       content: [],
     });
   });

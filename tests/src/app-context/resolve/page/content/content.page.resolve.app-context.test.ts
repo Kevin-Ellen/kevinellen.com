@@ -103,6 +103,7 @@ describe("appContextResolvePageContent", () => {
       content: [
         {
           kind: "paragraph",
+          flow: "content",
           content: [
             {
               kind: "text",
