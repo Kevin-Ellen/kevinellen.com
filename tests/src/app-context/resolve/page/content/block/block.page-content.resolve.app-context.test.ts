@@ -7,7 +7,7 @@ import { appContextResolveQuoteBlockContentModule } from "@app-context/resolve/p
 import { appContextResolveHeroBlockContentModule } from "@app-context/resolve/page/content/block/hero.resolve.app-context";
 import { appContextResolveJournalListingBlockContentModule } from "@app-context/resolve/page/content/block/journal-listing.resolve.app-context";
 import { appContextResolvePreBlockContentModule } from "@app-context/resolve/page/content/block/pre.resolve.app-context";
-import { appContextResolveContentSectionBlockContentModule } from "@app-context/resolve/page/content/block/content-section.resolve.app-context";
+import { appContextResolveArticleSectionBlockContentModule } from "@app-context/resolve/page/content/block/article-section.resolve.app-context";
 
 jest.mock(
   "@app-context/resolve/page/content/block/paragraph.resolve.app-context",
@@ -52,9 +52,9 @@ jest.mock(
 );
 
 jest.mock(
-  "@app-context/resolve/page/content/block/content-section.resolve.app-context",
+  "@app-context/resolve/page/content/block/article-section.resolve.app-context",
   () => ({
-    appContextResolveContentSectionBlockContentModule: jest.fn(),
+    appContextResolveArticleSectionBlockContentModule: jest.fn(),
   }),
 );
 
@@ -68,13 +68,11 @@ describe("appContextResolveBlockContentModule", () => {
   it("dispatches paragraph modules to the paragraph resolver", () => {
     const module = {
       kind: "paragraph",
+      flow: "content",
       content: [],
     } as const;
 
-    const resolved = {
-      kind: "paragraph",
-      content: [],
-    } as const;
+    const resolved = module;
 
     jest
       .mocked(appContextResolveParagraphBlockContentModule)
@@ -93,14 +91,11 @@ describe("appContextResolveBlockContentModule", () => {
     const module = {
       kind: "list",
       style: "unordered",
+      flow: "content",
       items: [],
     } as const;
 
-    const resolved = {
-      kind: "list",
-      style: "unordered",
-      items: [],
-    } as const;
+    const resolved = module;
 
     jest
       .mocked(appContextResolveListBlockContentModule)
@@ -207,9 +202,9 @@ describe("appContextResolveBlockContentModule", () => {
     );
   });
 
-  it("dispatches content section modules to the content section resolver", () => {
+  it("dispatches article section modules to the article section resolver", () => {
     const module = {
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Section heading",
         visuallyHidden: false,
@@ -221,14 +216,14 @@ describe("appContextResolveBlockContentModule", () => {
     const resolved = module;
 
     jest
-      .mocked(appContextResolveContentSectionBlockContentModule)
+      .mocked(appContextResolveArticleSectionBlockContentModule)
       .mockReturnValue(resolved);
 
     const result = appContextResolveBlockContentModule(module, context);
 
     expect(result).toBe(resolved);
     expect(
-      appContextResolveContentSectionBlockContentModule,
+      appContextResolveArticleSectionBlockContentModule,
     ).toHaveBeenCalledWith(module, context);
   });
 

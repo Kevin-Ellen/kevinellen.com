@@ -8,7 +8,7 @@ export const renderJournalDraftFile = (photoIds: string[]): string => {
     photoIds.length > 0
       ? `[
   {
-    kind: "contentSection",
+    kind: "articleSection",
     modules: [
       {
         kind: "hero",

@@ -29,7 +29,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
 
       content: [
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "The idea behind the site",
             level: 2,
@@ -59,7 +59,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Infrastructure",
             level: 2,
@@ -89,7 +89,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "How content is structured",
             level: 2,
@@ -119,7 +119,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "From request to page",
             level: 2,
@@ -159,7 +159,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "How rendering works",
             level: 2,
@@ -188,7 +188,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
           ],
         },
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Publishing while travelling",
             level: 2,
@@ -228,7 +228,7 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Why it is built this way",
             level: 2,

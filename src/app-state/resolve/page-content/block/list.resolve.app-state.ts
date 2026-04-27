@@ -25,6 +25,7 @@ export const appStateResolveListBlockContentModule = (
 ): AppStateListBlockContentModule => {
   return {
     ...module,
+    flow: module.flow ?? "content",
     style: module.style ?? "unordered",
     items: module.items.map(appStateResolveListItemBlockContentModule),
   };

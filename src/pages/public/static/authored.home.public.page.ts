@@ -28,7 +28,7 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
 
     content: [
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Introduction",
           visuallyHidden: true,

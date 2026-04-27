@@ -1,11 +1,12 @@
 // shared-types/page-content/block/quote/authored.quote.block.page-content.types.ts
 
-import type { BlockContentModuleFlow } from "@shared-types/page-content/block/shared.block.content.types";
+import type { AuthoredBaseBlockContentModule } from "@shared-types/page-content/block/base/authored.base.block.page-content.types";
 
-export type AuthoredQuoteBlockContentModule = Readonly<{
-  kind: "quote";
-  id: string;
-  text: string;
-  attribution?: string;
-  flow?: BlockContentModuleFlow;
-}>;
+export type AuthoredQuoteBlockContentModule = AuthoredBaseBlockContentModule<
+  "quote",
+  {
+    id: string;
+    text: string;
+    attribution?: string;
+  }
+>;

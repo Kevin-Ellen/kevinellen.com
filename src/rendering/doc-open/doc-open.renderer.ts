@@ -2,6 +2,8 @@
 
 import type { AppRenderContextDocOpen } from "@app-render-context/types/doc-open.app-render-context.types";
 
+import CSS from "../../../.build/generated/styles.css?raw";
+
 import {
   escapeAttribute,
   escapeHtml,
@@ -38,19 +40,22 @@ export const renderDocOpen = (docOpen: AppRenderContextDocOpen): string => {
     ? renderCanonicalLink(docOpen.canonicalUrl)
     : "";
 
-  return `<!doctype html>
-<html lang="${escapeAttribute(docOpen.language)}">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    ${pageTitle}
-    ${metaDescription}
-    ${canonical}
-    <meta name="theme-color" content="${escapeAttribute(docOpen.themeColour)}">
-    ${preloadLinks}
-    ${headLinks}
-    ${linkScripts}
-    ${inlineScripts}
-  </head>
-  <body>`;
+  return [
+    `<!doctype html>`,
+    `<html lang="${escapeAttribute(docOpen.language)}">`,
+    `<head>`,
+    `<meta charset="utf-8">`,
+    `<meta name="viewport" content="width=device-width, initial-scale=1">`,
+    `<style nonce="${escapeAttribute(docOpen.nonce)}">${CSS}</style>`,
+    pageTitle,
+    metaDescription,
+    canonical,
+    `<meta name="theme-color" content="${escapeAttribute(docOpen.themeColour)}">`,
+    preloadLinks,
+    headLinks,
+    linkScripts,
+    inlineScripts,
+    `</head>`,
+    `<body>`,
+  ].join("");
 };

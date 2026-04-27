@@ -42,6 +42,7 @@ describe("appContextResolvePageContent", () => {
       content: [
         {
           kind: "paragraph",
+          flow: "content",
           content: [],
         },
         {
@@ -70,6 +71,7 @@ describe("appContextResolvePageContent", () => {
     mockedAppContextResolveBlockContentModule
       .mockReturnValueOnce({
         kind: "paragraph",
+        flow: "content",
         content: [
           {
             kind: "text",

@@ -29,7 +29,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
 
       content: [
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Approach",
             level: 2,
@@ -59,7 +59,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "What data may be processed",
             level: 2,
@@ -89,7 +89,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Why this data may be used",
             level: 2,
@@ -119,7 +119,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Lawful basis",
             level: 2,
@@ -149,7 +149,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Third parties",
             level: 2,
@@ -179,7 +179,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Retention",
             level: 2,
@@ -209,7 +209,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Your rights",
             level: 2,
@@ -239,7 +239,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Contact",
             level: 2,
@@ -259,7 +259,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Changes",
             level: 2,

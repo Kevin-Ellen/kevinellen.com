@@ -24,7 +24,7 @@ export const authoredNotFoundErrorPage: AuthoredErrorPageDefinition =
 
       content: [
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Page not found",
             visuallyHidden: true,

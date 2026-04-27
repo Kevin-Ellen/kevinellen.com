@@ -28,7 +28,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
 
     content: [
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "About this site",
           level: 2,
@@ -58,7 +58,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Acceptable use",
           level: 2,
@@ -119,7 +119,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Intellectual property",
           level: 2,
@@ -211,7 +211,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Accuracy and availability",
           level: 2,
@@ -241,7 +241,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "External links",
           level: 2,
@@ -261,7 +261,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Limitation of liability",
           level: 2,
@@ -281,7 +281,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Changes to these terms",
           level: 2,
@@ -301,7 +301,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Contact",
           level: 2,

@@ -11,7 +11,7 @@ import { appContextResolveQuoteBlockContentModule } from "@app-context/resolve/p
 import { appContextResolveHeroBlockContentModule } from "@app-context/resolve/page/content/block/hero.resolve.app-context";
 import { appContextResolveJournalListingBlockContentModule } from "@app-context/resolve/page/content/block/journal-listing.resolve.app-context";
 import { appContextResolvePreBlockContentModule } from "@app-context/resolve/page/content/block/pre.resolve.app-context";
-import { appContextResolveContentSectionBlockContentModule } from "@app-context/resolve/page/content/block/content-section.resolve.app-context";
+import { appContextResolveArticleSectionBlockContentModule } from "@app-context/resolve/page/content/block/article-section.resolve.app-context";
 
 type AppStateBlockContentModuleKind = AppStateBlockContentModule["kind"];
 
@@ -38,7 +38,7 @@ const getAppContextBlockContentModuleResolver = <
     hero: appContextResolveHeroBlockContentModule,
     journalListing: appContextResolveJournalListingBlockContentModule,
     pre: appContextResolvePreBlockContentModule,
-    contentSection: appContextResolveContentSectionBlockContentModule,
+    articleSection: appContextResolveArticleSectionBlockContentModule,
   } satisfies AppContextBlockContentModuleResolverRegistry;
 
   return registry[kind];

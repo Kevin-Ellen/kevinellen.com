@@ -1,6 +1,9 @@
 // shared-types/page-content/block/list/app-state.list.block.page-content.types.ts
 
-import type { BlockContentModuleListStyle } from "@shared-types/page-content/block/shared.block.content.types";
+import type {
+  BlockContentModuleFlow,
+  BlockContentModuleListStyle,
+} from "@shared-types/page-content/block/shared.block.content.types";
 import type {
   AuthoredListItemBlockContentModule,
   AuthoredListBlockContentModule,
@@ -20,6 +23,7 @@ export type AppStateListItemBlockContentModule = Replace<
 
 type AppStateListBlockContentModuleDeterministicFields = Readonly<{
   style: BlockContentModuleListStyle;
+  flow: BlockContentModuleFlow;
   items: readonly AppStateListItemBlockContentModule[];
 }>;
 

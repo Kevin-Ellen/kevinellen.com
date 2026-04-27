@@ -27,7 +27,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
 
     content: [
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "A bit about me",
           visuallyHidden: true,
@@ -58,7 +58,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Nature",
           level: 2,
@@ -119,7 +119,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
         ],
       },
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Technology quote",
           visuallyHidden: true,
@@ -136,7 +136,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Technology",
           level: 2,
@@ -189,7 +189,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Cross-roads",
           level: 2,
@@ -263,7 +263,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       },
 
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Final words",
           level: 2,

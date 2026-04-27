@@ -33,6 +33,7 @@ describe("appContextResolveParagraphBlockContentModule", () => {
 
     const module = {
       kind: "paragraph",
+      flow: "content",
       content: [
         {
           kind: "text",

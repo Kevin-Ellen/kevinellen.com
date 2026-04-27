@@ -29,7 +29,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
 
       content: [
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Ownership",
             level: 2,
@@ -59,7 +59,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Personal use",
             level: 2,
@@ -111,7 +111,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Prohibited use",
             level: 2,
@@ -181,7 +181,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Licensing",
             level: 2,
@@ -221,7 +221,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Attribution",
             level: 2,
@@ -241,7 +241,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Contact",
             level: 2,

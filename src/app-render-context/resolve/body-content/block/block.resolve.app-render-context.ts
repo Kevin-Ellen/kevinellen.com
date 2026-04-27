@@ -10,7 +10,7 @@ import { resolveQuoteBlockContentModuleAppRenderContext } from "@app-render-cont
 import { resolveHeroBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/hero.resolve.app-render-context";
 import { resolveJournalListingBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/journal-listing.resolve.app-render-context";
 import { resolvePreBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/pre.resolve.app-render-context";
-import { resolveContentSectionBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/content-section.resolve.app-render-context";
+import { resolveArticleSectionBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context";
 
 type AppRenderContextBlockResolverMap = Readonly<{
   [K in AppContextBlockContentModule["kind"]]: (
@@ -26,7 +26,7 @@ const blockContentModuleResolvers = {
   hero: resolveHeroBlockContentModuleAppRenderContext,
   journalListing: resolveJournalListingBlockContentModuleAppRenderContext,
   pre: resolvePreBlockContentModuleAppRenderContext,
-  contentSection: resolveContentSectionBlockContentModuleAppRenderContext,
+  articleSection: resolveArticleSectionBlockContentModuleAppRenderContext,
 } satisfies AppRenderContextBlockResolverMap;
 
 export const resolveBlockContentModuleAppRenderContext = (

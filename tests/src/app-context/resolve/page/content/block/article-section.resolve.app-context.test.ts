@@ -1,9 +1,9 @@
-// tests/src/app-context/resolve/page/content/block/content-section.resolve.app-context.test.ts
+// tests/src/app-context/resolve/page/content/block/article-section.resolve.app-context.test.ts
 
 import {
-  appContextResolveContentSectionBlockContentModule,
-  appContextResolveContentSectionHeadingBlockContentModule,
-} from "@app-context/resolve/page/content/block/content-section.resolve.app-context";
+  appContextResolveArticleSectionBlockContentModule,
+  appContextResolveArticleSectionHeadingBlockContentModule,
+} from "@app-context/resolve/page/content/block/article-section.resolve.app-context";
 import { appContextResolveBlockContentModule } from "@app-context/resolve/page/content/block/block.page-content.resolve.app-context";
 
 jest.mock(
@@ -13,7 +13,7 @@ jest.mock(
   }),
 );
 
-describe("appContextResolveContentSectionHeadingBlockContentModule", () => {
+describe("appContextResolveArticleSectionHeadingBlockContentModule", () => {
   const context = {} as never;
 
   it("returns the heading unchanged", () => {
@@ -23,7 +23,7 @@ describe("appContextResolveContentSectionHeadingBlockContentModule", () => {
       visuallyHidden: false,
     } as const;
 
-    const result = appContextResolveContentSectionHeadingBlockContentModule(
+    const result = appContextResolveArticleSectionHeadingBlockContentModule(
       heading,
       context,
     );
@@ -32,7 +32,7 @@ describe("appContextResolveContentSectionHeadingBlockContentModule", () => {
   });
 });
 
-describe("appContextResolveContentSectionBlockContentModule", () => {
+describe("appContextResolveArticleSectionBlockContentModule", () => {
   const mockedAppContextResolveBlockContentModule = jest.mocked(
     appContextResolveBlockContentModule,
   );
@@ -47,6 +47,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
     mockedAppContextResolveBlockContentModule
       .mockReturnValueOnce({
         kind: "paragraph",
+        flow: "content",
         content: [{ kind: "text", value: "Resolved paragraph" }],
       })
       .mockReturnValueOnce({
@@ -58,7 +59,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
       });
 
     const module = {
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Section title",
         level: 2,
@@ -67,6 +68,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
       modules: [
         {
           kind: "paragraph",
+          flow: "content",
           content: [{ kind: "text", value: "Original paragraph" }],
         },
         {
@@ -79,7 +81,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
       ],
     } as const;
 
-    const result = appContextResolveContentSectionBlockContentModule(
+    const result = appContextResolveArticleSectionBlockContentModule(
       module,
       context,
     );
@@ -94,6 +96,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
       modules: [
         {
           kind: "paragraph",
+          flow: "content",
           content: [{ kind: "text", value: "Resolved paragraph" }],
         },
         {
@@ -121,7 +124,7 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
 
   it("resolves an empty section with a heading", () => {
     const module = {
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Empty section",
         level: 2,
@@ -130,13 +133,13 @@ describe("appContextResolveContentSectionBlockContentModule", () => {
       modules: [],
     } as const;
 
-    const result = appContextResolveContentSectionBlockContentModule(
+    const result = appContextResolveArticleSectionBlockContentModule(
       module,
       context,
     );
 
     expect(result).toEqual({
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Empty section",
         level: 2,

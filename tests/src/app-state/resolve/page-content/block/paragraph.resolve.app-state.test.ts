@@ -69,6 +69,7 @@ describe("appStateResolveParagraphBlockContentModule", () => {
 
     const expected: AppStateParagraphBlockContentModule = {
       kind: "paragraph",
+      flow: "content",
       content: [resolvedFirstInline, resolvedSecondInline],
     };
 
@@ -153,6 +154,7 @@ describe("appStateResolveParagraphBlockContentModule", () => {
 
     const expected: AppStateParagraphBlockContentModule = {
       kind: "paragraph",
+      flow: "content",
       content: [resolvedInline],
     };
 
