@@ -69,6 +69,7 @@ describe("appStateResolveParagraphBlockContentModule", () => {
 
     const expected: AppStateParagraphBlockContentModule = {
       kind: "paragraph",
+      flow: "content",
       content: [resolvedFirstInline, resolvedSecondInline],
     };
 
@@ -125,6 +126,7 @@ describe("appStateResolveParagraphBlockContentModule", () => {
     expect(mockedAppStateResolveInlineContent).not.toHaveBeenCalled();
     expect(result).toEqual({
       kind: "paragraph",
+      flow: "content",
       content: [],
     });
   });
@@ -153,6 +155,7 @@ describe("appStateResolveParagraphBlockContentModule", () => {
 
     const expected: AppStateParagraphBlockContentModule = {
       kind: "paragraph",
+      flow: "content",
       content: [resolvedInline],
     };
 

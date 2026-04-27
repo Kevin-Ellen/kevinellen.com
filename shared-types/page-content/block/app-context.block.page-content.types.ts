@@ -5,7 +5,7 @@ import type { AppContextListBlockContentModule } from "@shared-types/page-conten
 import type { AppContextQuoteBlockContentModule } from "@shared-types/page-content/block/quote/app-context.quote.block.page-content.types";
 import type { AppContextHeroBlockContentModule } from "@shared-types/page-content/block/hero/app-context.hero.block.page-content.types";
 import type { AppContextJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-context.journal-listing.block.page-content.types";
-import type { AppContextContentSectionBlockContentModule } from "@shared-types/page-content/block/content-section/app-context.content-section.block.page-content.types";
+import type { AppContextArticleSectionBlockContentModule } from "@shared-types/page-content/block/article-section/app-context.article-section.block.page-content.types";
 import type { AppContextPreBlockContentModule } from "@shared-types/page-content/block/pre/app-context.pre.block.page-content.types";
 
 export type AppContextBlockContentModule =
@@ -14,5 +14,5 @@ export type AppContextBlockContentModule =
   | AppContextQuoteBlockContentModule
   | AppContextHeroBlockContentModule
   | AppContextJournalListingBlockContentModule
-  | AppContextContentSectionBlockContentModule
+  | AppContextArticleSectionBlockContentModule
   | AppContextPreBlockContentModule;

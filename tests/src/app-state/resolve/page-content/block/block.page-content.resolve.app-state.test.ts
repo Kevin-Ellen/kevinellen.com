@@ -43,56 +43,42 @@ jest.mock(
 );
 
 jest.mock(
-  "@app-state/resolve/page-content/block/content-section.resolve.app-state",
+  "@app-state/resolve/page-content/block/article-section.resolve.app-state",
   () => ({
-    appStateResolveContentSectionBlockContentModule: jest.fn(),
+    appStateResolveArticleSectionBlockContentModule: jest.fn(),
   }),
 );
 
+import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
 import { appStateResolveParagraphBlockContentModule } from "@app-state/resolve/page-content/block/paragraph.resolve.app-state";
 import { appStateResolveListBlockContentModule } from "@app-state/resolve/page-content/block/list.resolve.app-state";
 import { appStateResolveQuoteBlockContentModule } from "@app-state/resolve/page-content/block/quote.resolve.app-state";
 import { appStateResolveHeroBlockContentModule } from "@app-state/resolve/page-content/block/hero.resolve.app-state";
 import { appStateResolveJournalListingBlockContentModule } from "@app-state/resolve/page-content/block/journal-listing.resolve.app-state";
 import { appStateResolvePreBlockContentModule } from "@app-state/resolve/page-content/block/pre.resolve.app-state";
-import { appStateResolveContentSectionBlockContentModule } from "@app-state/resolve/page-content/block/content-section.resolve.app-state";
+import { appStateResolveArticleSectionBlockContentModule } from "@app-state/resolve/page-content/block/article-section.resolve.app-state";
 
-import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
-
-const mockedAppStateResolveParagraphBlockContentModule =
-  appStateResolveParagraphBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveParagraphBlockContentModule
-  >;
-
-const mockedAppStateResolveListBlockContentModule =
-  appStateResolveListBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveListBlockContentModule
-  >;
-
-const mockedAppStateResolveQuoteBlockContentModule =
-  appStateResolveQuoteBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveQuoteBlockContentModule
-  >;
-
-const mockedAppStateResolveHeroBlockContentModule =
-  appStateResolveHeroBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveHeroBlockContentModule
-  >;
-
-const mockedAppStateResolveJournalListingBlockContentModule =
-  appStateResolveJournalListingBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveJournalListingBlockContentModule
-  >;
-
-const mockedAppStateResolvePreBlockContentModule =
-  appStateResolvePreBlockContentModule as jest.MockedFunction<
-    typeof appStateResolvePreBlockContentModule
-  >;
-
-const mockedAppStateResolveContentSectionBlockContentModule =
-  appStateResolveContentSectionBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveContentSectionBlockContentModule
-  >;
+const mockedAppStateResolveParagraphBlockContentModule = jest.mocked(
+  appStateResolveParagraphBlockContentModule,
+);
+const mockedAppStateResolveListBlockContentModule = jest.mocked(
+  appStateResolveListBlockContentModule,
+);
+const mockedAppStateResolveQuoteBlockContentModule = jest.mocked(
+  appStateResolveQuoteBlockContentModule,
+);
+const mockedAppStateResolveHeroBlockContentModule = jest.mocked(
+  appStateResolveHeroBlockContentModule,
+);
+const mockedAppStateResolveJournalListingBlockContentModule = jest.mocked(
+  appStateResolveJournalListingBlockContentModule,
+);
+const mockedAppStateResolvePreBlockContentModule = jest.mocked(
+  appStateResolvePreBlockContentModule,
+);
+const mockedAppStateResolveArticleSectionBlockContentModule = jest.mocked(
+  appStateResolveArticleSectionBlockContentModule,
+);
 
 describe("appStateResolveBlockContentModule", () => {
   beforeEach(() => {
@@ -107,13 +93,12 @@ describe("appStateResolveBlockContentModule", () => {
 
     const resolvedModule = {
       kind: "paragraph",
+      flow: "content",
       content: [],
     } as const;
 
     mockedAppStateResolveParagraphBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<
-        typeof appStateResolveParagraphBlockContentModule
-      >,
+      resolvedModule,
     );
 
     const result = appStateResolveBlockContentModule(module);
@@ -133,14 +118,11 @@ describe("appStateResolveBlockContentModule", () => {
     const resolvedModule = {
       kind: "list",
       style: "unordered",
+      flow: "content",
       items: [],
     } as const;
 
-    mockedAppStateResolveListBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<
-        typeof appStateResolveListBlockContentModule
-      >,
-    );
+    mockedAppStateResolveListBlockContentModule.mockReturnValue(resolvedModule);
 
     const result = appStateResolveBlockContentModule(module);
 
@@ -167,9 +149,7 @@ describe("appStateResolveBlockContentModule", () => {
     } as const;
 
     mockedAppStateResolveQuoteBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<
-        typeof appStateResolveQuoteBlockContentModule
-      >,
+      resolvedModule,
     );
 
     const result = appStateResolveBlockContentModule(module);
@@ -193,11 +173,7 @@ describe("appStateResolveBlockContentModule", () => {
       flow: "content",
     } as const;
 
-    mockedAppStateResolveHeroBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<
-        typeof appStateResolveHeroBlockContentModule
-      >,
-    );
+    mockedAppStateResolveHeroBlockContentModule.mockReturnValue(resolvedModule);
 
     const result = appStateResolveBlockContentModule(module);
 
@@ -225,9 +201,7 @@ describe("appStateResolveBlockContentModule", () => {
     } as const;
 
     mockedAppStateResolveJournalListingBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<
-        typeof appStateResolveJournalListingBlockContentModule
-      >,
+      resolvedModule,
     );
 
     const result = appStateResolveBlockContentModule(module);
@@ -250,9 +224,7 @@ describe("appStateResolveBlockContentModule", () => {
       flow: "content",
     } as const;
 
-    mockedAppStateResolvePreBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<typeof appStateResolvePreBlockContentModule>,
-    );
+    mockedAppStateResolvePreBlockContentModule.mockReturnValue(resolvedModule);
 
     const result = appStateResolveBlockContentModule(module);
 
@@ -262,9 +234,9 @@ describe("appStateResolveBlockContentModule", () => {
     expect(result).toBe(resolvedModule);
   });
 
-  it("dispatches contentSection modules through the content section block resolver", () => {
+  it("dispatches articleSection modules through the article section block resolver", () => {
     const module = {
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Section",
         level: 2,
@@ -273,7 +245,7 @@ describe("appStateResolveBlockContentModule", () => {
     } as const;
 
     const resolvedModule = {
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Section",
         level: 2,
@@ -282,16 +254,14 @@ describe("appStateResolveBlockContentModule", () => {
       modules: [],
     } as const;
 
-    mockedAppStateResolveContentSectionBlockContentModule.mockReturnValue(
-      resolvedModule as ReturnType<
-        typeof appStateResolveContentSectionBlockContentModule
-      >,
+    mockedAppStateResolveArticleSectionBlockContentModule.mockReturnValue(
+      resolvedModule,
     );
 
     const result = appStateResolveBlockContentModule(module);
 
     expect(
-      mockedAppStateResolveContentSectionBlockContentModule,
+      mockedAppStateResolveArticleSectionBlockContentModule,
     ).toHaveBeenCalledWith(module);
     expect(result).toBe(resolvedModule);
   });

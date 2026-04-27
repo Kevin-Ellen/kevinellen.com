@@ -26,7 +26,7 @@ export const authoredInternalErrorPage: AuthoredErrorPageDefinition =
 
       content: [
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Internal server error",
             visuallyHidden: true,

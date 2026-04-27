@@ -26,7 +26,7 @@ export const authoredGoneErrorPage: AuthoredErrorPageDefinition = deepFreeze({
 
     content: [
       {
-        kind: "contentSection",
+        kind: "articleSection",
         heading: {
           text: "Gone",
           visuallyHidden: true,

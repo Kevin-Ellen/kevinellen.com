@@ -33,6 +33,7 @@ describe("appContextResolveParagraphBlockContentModule", () => {
 
     const module = {
       kind: "paragraph",
+      flow: "content",
       content: [
         {
           kind: "text",
@@ -51,6 +52,7 @@ describe("appContextResolveParagraphBlockContentModule", () => {
 
     expect(result).toEqual({
       kind: "paragraph",
+      flow: "content",
       content: [
         {
           kind: "text",

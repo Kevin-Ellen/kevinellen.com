@@ -10,6 +10,7 @@ export const appStateResolveParagraphBlockContentModule = (
 ): AppStateParagraphBlockContentModule => {
   return {
     ...module,
+    flow: module.flow ?? "content",
     content: module.content.map(appStateResolveInlineContent),
   };
 };

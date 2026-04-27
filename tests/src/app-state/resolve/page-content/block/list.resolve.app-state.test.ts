@@ -151,6 +151,7 @@ describe("list AppState resolvers", () => {
       const expected: AppStateListBlockContentModule = {
         kind: "list",
         style: "unordered",
+        flow: "content",
         items: [],
       };
 
@@ -227,6 +228,7 @@ describe("list AppState resolvers", () => {
       const expected: AppStateListBlockContentModule = {
         kind: "list",
         style: "unordered",
+        flow: "content",
         items: [
           {
             content: [resolvedFirstInline],
@@ -327,6 +329,7 @@ describe("list AppState resolvers", () => {
       const expected: AppStateListBlockContentModule = {
         kind: "list",
         style: "ordered",
+        flow: "content",
         items: [
           {
             content: [resolvedInline],

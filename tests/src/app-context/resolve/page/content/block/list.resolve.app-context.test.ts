@@ -35,6 +35,7 @@ describe("appContextResolveListBlockContentModule", () => {
     const module = {
       kind: "list",
       style: "unordered",
+      flow: "content",
       items: [
         {
           content: [

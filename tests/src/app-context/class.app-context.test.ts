@@ -154,7 +154,7 @@ describe("AppContext", () => {
         },
         content: [
           {
-            kind: "contentSection",
+            kind: "articleSection",
             heading: {
               text: "A bit about me",
               visuallyHidden: true,
@@ -163,6 +163,7 @@ describe("AppContext", () => {
             modules: [
               {
                 kind: "paragraph",
+                flow: "content",
                 content: [
                   {
                     kind: "text",

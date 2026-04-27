@@ -17,7 +17,7 @@ const renderAffiliationItem = (
       svg: null,
       ariaLabel: item.ariaLabel,
     })}>
-      ${renderSvgReference(item.logo, "l-footer__logo")}
+      ${renderSvgReference(item.logo, "l-footer__icon")}
     </a>
   </li>`;
 };
@@ -25,9 +25,9 @@ const renderAffiliationItem = (
 export const renderBodyFooterAffiliations = (
   affiliations: AppRenderContextBodyFooterAffiliations,
 ): string => {
-  return `<section class="l-footer__affiliations" aria-labelledby="footer-affiliations-heading">
-    <h3 id="footer-affiliations-heading" class="l-footer__heading">Affiliations</h3>
-    <ul class="l-footer__logos" aria-label="Affiliations">
+  return `<section class="l-footer__conservation" aria-labelledby="footer-conservation-heading">
+    <h3 id="footer-conservation-heading" class="l-footer__heading">Conservation</h3>
+    <ul class="l-footer__logos" aria-label="Supported organisations">
       ${affiliations.items.map(renderAffiliationItem).join("")}
     </ul>
   </section>`;

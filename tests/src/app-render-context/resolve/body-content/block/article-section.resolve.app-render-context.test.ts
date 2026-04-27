@@ -1,15 +1,15 @@
-// tests/src/app-render-context/resolve/body-content/block/content-section.resolve.app-render-context.test.ts
+// tests/src/app-render-context/resolve/body-content/block/article-section.resolve.app-render-context.test.ts
 
 import {
-  resolveContentSectionBlockContentModuleAppRenderContext,
-  resolveContentSectionHeadingBlockContentModuleAppRenderContext,
-} from "@app-render-context/resolve/body-content/block/content-section.resolve.app-render-context";
+  resolveArticleSectionBlockContentModuleAppRenderContext,
+  resolveArticleSectionHeadingBlockContentModuleAppRenderContext,
+} from "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context";
 import { resolveBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/block.resolve.app-render-context";
 
 import type {
-  AppContextContentSectionBlockContentModule,
-  AppContextContentSectionHeadingBlockContentModule,
-} from "@shared-types/page-content/block/content-section/app-context.content-section.block.page-content.types";
+  AppContextArticleSectionBlockContentModule,
+  AppContextArticleSectionHeadingBlockContentModule,
+} from "@shared-types/page-content/block/article-section/app-context.article-section.block.page-content.types";
 
 import type { AppContext } from "@app-context/class.app-context";
 
@@ -20,24 +20,18 @@ jest.mock(
   }),
 );
 
-describe("content-section block resolvers", () => {
+describe("article-section block resolvers", () => {
   const appContext = {} as AppContext;
-
-  const heading = {
-    text: "Section heading",
-    level: 2,
-    visuallyHidden: false,
-  } as unknown as AppContextContentSectionHeadingBlockContentModule;
 
   it("returns the heading unchanged", () => {
     const heading = {
       text: "Section heading",
       level: 2,
       visuallyHidden: false,
-    } as const;
+    } as AppContextArticleSectionHeadingBlockContentModule;
 
     const result =
-      resolveContentSectionHeadingBlockContentModuleAppRenderContext(
+      resolveArticleSectionHeadingBlockContentModuleAppRenderContext(
         appContext,
         heading,
       );
@@ -45,32 +39,34 @@ describe("content-section block resolvers", () => {
     expect(result).toBe(heading);
   });
 
-  it("resolves child modules inside a content section", () => {
+  it("resolves child modules inside an article section", () => {
     const childModule = {
       kind: "paragraph",
+      flow: "content",
       content: [],
-    };
+    } as never;
 
     const resolvedChildModule = {
       kind: "paragraph",
+      flow: "content",
       content: [{ kind: "text", value: "Resolved" }],
-    };
+    } as never;
 
     const module = {
-      kind: "contentSection",
+      kind: "articleSection",
       heading: {
         text: "Section heading",
         level: 2,
         visuallyHidden: false,
       },
       modules: [childModule],
-    } as unknown as AppContextContentSectionBlockContentModule;
+    } as AppContextArticleSectionBlockContentModule;
 
     jest
       .mocked(resolveBlockContentModuleAppRenderContext)
-      .mockReturnValue(resolvedChildModule as never);
+      .mockReturnValue(resolvedChildModule);
 
-    const result = resolveContentSectionBlockContentModuleAppRenderContext(
+    const result = resolveArticleSectionBlockContentModuleAppRenderContext(
       appContext,
       module,
     );

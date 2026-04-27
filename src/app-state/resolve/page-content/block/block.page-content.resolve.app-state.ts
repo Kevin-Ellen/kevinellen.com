@@ -9,7 +9,7 @@ import { appStateResolveQuoteBlockContentModule } from "@app-state/resolve/page-
 import { appStateResolveHeroBlockContentModule } from "@app-state/resolve/page-content/block/hero.resolve.app-state";
 import { appStateResolveJournalListingBlockContentModule } from "@app-state/resolve/page-content/block/journal-listing.resolve.app-state";
 import { appStateResolvePreBlockContentModule } from "@app-state/resolve/page-content/block/pre.resolve.app-state";
-import { appStateResolveContentSectionBlockContentModule } from "@app-state/resolve/page-content/block/content-section.resolve.app-state";
+import { appStateResolveArticleSectionBlockContentModule } from "@app-state/resolve/page-content/block/article-section.resolve.app-state";
 
 type AuthoredBlockContentModuleKind = AuthoredBlockContentModule["kind"];
 
@@ -35,7 +35,7 @@ const getAppStateBlockContentModuleResolver = <
     hero: appStateResolveHeroBlockContentModule,
     journalListing: appStateResolveJournalListingBlockContentModule,
     pre: appStateResolvePreBlockContentModule,
-    contentSection: appStateResolveContentSectionBlockContentModule,
+    articleSection: appStateResolveArticleSectionBlockContentModule,
   } satisfies AppStateBlockContentModuleResolverRegistry;
 
   return registry[kind];

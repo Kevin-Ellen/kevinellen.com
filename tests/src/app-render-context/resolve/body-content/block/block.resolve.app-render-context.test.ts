@@ -8,7 +8,7 @@ import { resolveQuoteBlockContentModuleAppRenderContext } from "@app-render-cont
 import { resolveHeroBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/hero.resolve.app-render-context";
 import { resolveJournalListingBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/journal-listing.resolve.app-render-context";
 import { resolvePreBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/pre.resolve.app-render-context";
-import { resolveContentSectionBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/content-section.resolve.app-render-context";
+import { resolveArticleSectionBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context";
 
 import type { AppContext } from "@app-context/class.app-context";
 
@@ -55,9 +55,9 @@ jest.mock(
 );
 
 jest.mock(
-  "@app-render-context/resolve/body-content/block/content-section.resolve.app-render-context",
+  "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context",
   () => ({
-    resolveContentSectionBlockContentModuleAppRenderContext: jest.fn(),
+    resolveArticleSectionBlockContentModuleAppRenderContext: jest.fn(),
   }),
 );
 
@@ -75,7 +75,7 @@ describe("resolveBlockContentModuleAppRenderContext", () => {
     ["hero", resolveHeroBlockContentModuleAppRenderContext],
     ["journalListing", resolveJournalListingBlockContentModuleAppRenderContext],
     ["pre", resolvePreBlockContentModuleAppRenderContext],
-    ["contentSection", resolveContentSectionBlockContentModuleAppRenderContext],
+    ["articleSection", resolveArticleSectionBlockContentModuleAppRenderContext],
   ] as const)(
     "delegates %s modules to the matching resolver",
     (kind, resolver) => {

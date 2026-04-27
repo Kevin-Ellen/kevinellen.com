@@ -23,41 +23,6 @@ figcaption {
   display: block;
 }
 
-figure:has(blockquote) {
-  margin-block: tokens.$blockquote-spacing-top tokens.$blockquote-spacing-bottom;
-  border-inline-start: tokens.$blockquote-rule-width solid
-    tokens.$colour-rule-blockquote;
-  padding-inline-start: tokens.$blockquote-padding-inline;
-
-  blockquote {
-    font-family: tokens.$font-family-blockquote;
-    font-weight: tokens.$font-weight-blockquote;
-    font-size: tokens.$font-size-blockquote;
-    line-height: tokens.$line-height-blockquote;
-    color: tokens.$colour-type-blockquote;
-    max-inline-size: 36ch;
-  }
-
-  figcaption {
-    display: block;
-    margin-top: tokens.$blockquote-cite-spacing-top;
-    font-style: normal;
-    font-family: tokens.$font-family-body;
-    font-weight: tokens.$font-weight-blockquote-cite;
-    font-size: tokens.$font-size-blockquote-cite;
-    line-height: tokens.$line-height-blockquote-cite;
-    color: tokens.$colour-type-blockquote-cite;
-  }
-
-  > *:first-child {
-    margin-top: 0;
-  }
-
-  > *:last-child {
-    margin-bottom: 0;
-  }
-}
-
 a {
   color: inherit;
   text-decoration: underline;

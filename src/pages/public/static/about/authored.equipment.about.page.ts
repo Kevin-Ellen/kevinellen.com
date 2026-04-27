@@ -28,7 +28,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
 
       content: [
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Camera body",
             level: 2,
@@ -58,7 +58,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Lenses",
             level: 2,
@@ -88,7 +88,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "In the field",
             level: 2,
@@ -108,7 +108,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Sling",
             level: 3,
@@ -138,7 +138,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Backpack",
             level: 3,
@@ -168,7 +168,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
         },
 
         {
-          kind: "contentSection",
+          kind: "articleSection",
           heading: {
             text: "Closing words",
             level: 2,

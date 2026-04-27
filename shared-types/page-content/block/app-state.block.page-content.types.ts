@@ -5,7 +5,7 @@ import type { AppStateListBlockContentModule } from "@shared-types/page-content/
 import type { AppStateQuoteBlockContentModule } from "@shared-types/page-content/block/quote/app-state.quote.block.page-content.types";
 import type { AppStateHeroBlockContentModule } from "@shared-types/page-content/block/hero/app-state.hero.block.page-content.types";
 import type { AppStateJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-state.journal-listing.block.page-content.types";
-import type { AppStateContentSectionBlockContentModule } from "@shared-types/page-content/block/content-section/app-state.content-section.block.page-content.types";
+import type { AppStateArticleSectionBlockContentModule } from "@shared-types/page-content/block/article-section/app-state.article-section.block.page-content.types";
 import type { AppStatePreBlockContentModule } from "@shared-types/page-content/block/pre/app-state.pre.block.page-content.types";
 
 export type AppStateBlockContentModule =
@@ -14,5 +14,5 @@ export type AppStateBlockContentModule =
   | AppStateQuoteBlockContentModule
   | AppStateHeroBlockContentModule
   | AppStateJournalListingBlockContentModule
-  | AppStateContentSectionBlockContentModule
+  | AppStateArticleSectionBlockContentModule
   | AppStatePreBlockContentModule;

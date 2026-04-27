@@ -1,11 +1,12 @@
 // shared-types/page-content/block/hero/authored.hero.block.page-content.types.ts
 
 import type { PhotoId } from "@shared-types/media/photo/id.photo.types";
-import type { BlockContentModuleFlow } from "@shared-types/page-content/block/shared.block.content.types";
+import type { AuthoredBaseBlockContentModule } from "@shared-types/page-content/block/base/authored.base.block.page-content.types";
 
-export type AuthoredHeroBlockContentModule = Readonly<{
-  kind: "hero";
-  immersive?: boolean;
-  photoId: PhotoId;
-  flow?: BlockContentModuleFlow;
-}>;
+export type AuthoredHeroBlockContentModule = AuthoredBaseBlockContentModule<
+  "hero",
+  {
+    immersive?: boolean;
+    photoId: PhotoId;
+  }
+>;
