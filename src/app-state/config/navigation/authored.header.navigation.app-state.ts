@@ -6,7 +6,10 @@ import type { PageIdPublic } from "@shared-types/page-definitions/shared/shared.
 import { deepFreeze } from "@utils/deepFreeze.util";
 
 export const authoredHeaderNavigation: AuthoredHeaderNavigation = deepFreeze({
-  primary: [{ kind: "internal", id: "about" as PageIdPublic }],
+  primary: [
+    { kind: "internal", id: "journal" as PageIdPublic },
+    { kind: "internal", id: "about" as PageIdPublic },
+  ],
   social: [
     {
       kind: "social",

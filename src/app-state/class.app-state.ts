@@ -128,6 +128,10 @@ export class AppState {
     return this.#data.structuredData;
   }
 
+  public get getPublicPages(): readonly AppStatePageDefinition[] {
+    return this.#data.pages.public;
+  }
+
   public getGoneRuleByPath(pathname: string): SystemGoneRule | null {
     return this.#goneRulesByPath.get(pathname) ?? null;
   }

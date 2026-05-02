@@ -12,7 +12,8 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
 
   metadata: {
     pageTitle: "About | Kevin Ellen",
-    metaDescription: "About Page meta description.",
+    metaDescription:
+      "Wildlife photographer and technical SEO specialist building a personal platform for field notes, photography, and edge-native systems.",
   },
 
   breadcrumbs: ["home", "about"],
@@ -22,7 +23,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       eyebrow: "Kevin Ellen",
       title: "About me",
       intro:
-        "This site brings together two long-standing interests: nature and technology. It is a place to share photography, field notes, and journal writing alongside the technical thinking, architecture, and systems work that shape how the platform itself is built.",
+        "This site brings together two long-standing interests: wildlife and technology. It is a place for photography, field notes, journal writing, and the technical thinking behind the platform itself.",
     },
 
     content: [
@@ -40,7 +41,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "I am a technical SEO professional based in south-east England, on the border between London and Essex. Much of my time is spent around Epping Forest, a place I have been drawn to since moving to this area. Forests, and especially mountainous areas, are where I feel most at home.",
+                  "I am a technical SEO professional based in south-east England, on the border between London and Essex. I spend a lot of time around Epping Forest, a place I have loved since moving to the area. Forests, mountains, and quiet natural spaces are where I feel most at home.",
               },
             ],
           },
@@ -50,7 +51,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "In 2024 I picked up my dad’s old camera, and that simple decision quickly turned into something much bigger. Since then, I have travelled with my own camera, using it as a way to explore, observe, and document the natural world more closely.",
+                  "In 2024 I picked up my dad’s old camera. That simple decision quickly turned into something much bigger. Since then, I have travelled with my own camera, using it to explore, observe, and document the natural world more closely.",
               },
             ],
           },
@@ -70,7 +71,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "Wildlife and nature matter deeply to me. I enjoy being fully immersed in it — paying attention to the forest floor, the textures of foliage and shrubs, while always keeping an eye out for movement, whether it is something small and hidden or larger and more obvious.",
+                  "Wildlife and nature matter deeply to me. I enjoy being fully immersed in it: watching the forest floor, noticing textures in foliage and shrubs, and keeping an eye out for movement. Sometimes it is something small and hidden. Sometimes it is much more obvious.",
               },
             ],
           },
@@ -80,7 +81,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "Photography gives me a way to capture and share those moments. In a time dominated by screens and constant noise, I hope that sharing these observations encourages others to reconnect with nature and experience it for themselves.",
+                  "Photography gives me a way to capture and share those moments. In a world full of screens and constant noise, I hope these observations encourage others to reconnect with nature and experience it for themselves.",
               },
             ],
           },
@@ -90,7 +91,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "An important part of nature photography is travel. I tend to stay close to nature, away from busy urban and tourist-heavy areas, and instead seek out places where culture and landscape meet.",
+                  "Travel is an important part of nature photography for me. I tend to stay close to natural spaces, away from busy urban and tourist-heavy areas. I am drawn to places where culture and landscape meet.",
               },
             ],
           },
@@ -118,6 +119,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
           },
         ],
       },
+
       {
         kind: "articleSection",
         heading: {
@@ -147,8 +149,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
             content: [
               {
                 kind: "text",
-                value:
-                  "Technology has always fascinated me in the same way. I am interested in how systems are built, how they can be optimised, and how people discover and interact with content online.",
+                value: "Technology fascinates me too.",
               },
             ],
           },
@@ -158,7 +159,17 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "The web sits at a unique crossroads between machine and human. It allows us to create carefully structured, high-performance systems while still delivering meaningful experiences to people. That balance is something I continue to explore and refine.",
+                  "I am interested in how systems are built, how they can be improved, and how people discover and interact with content online.",
+              },
+            ],
+          },
+          {
+            kind: "paragraph",
+            content: [
+              {
+                kind: "text",
+                value:
+                  "The web sits between machines and people. It lets us build structured, high-performance systems while still creating meaningful experiences. That balance is something I keep exploring.",
               },
             ],
           },
@@ -191,7 +202,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       {
         kind: "articleSection",
         heading: {
-          text: "Cross-roads",
+          text: "Where they meet",
           level: 2,
         },
         modules: [
@@ -201,7 +212,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "At first glance, nature and technology might seem unrelated. But the more time I spend with both, the more similarities I see. Nature is an incredibly well-balanced system, where everything has a role and purpose.",
+                  "At first glance, nature and technology might seem unrelated. The more time I spend with both, the more similarities I see. Nature is a balanced system, where every part has a role.",
               },
             ],
           },
@@ -211,7 +222,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "That same philosophy applies to how I approach technical work. I aim for clarity, simplicity, and intention — where every part of a system has a reason to exist and contributes to the whole.",
+                  "That same idea shapes how I approach technical work. I aim for clarity, simplicity, and intention. Every part of a system should have a reason to exist.",
               },
             ],
           },
@@ -275,7 +286,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "This has been a journey on multiple levels; learning how to work with new systems, building this platform, and developing my photography at the same time.",
+                  "This has been a journey on several levels: learning new systems, building this platform, and developing my photography at the same time.",
               },
             ],
           },
@@ -285,7 +296,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "I am still not entirely sure whether climbing wet rocks in Bergen is easier or harder than building this website, but I know that I have enjoyed both. Though, if I had to choose, being out in nature probably wins.",
+                  "I am still not sure whether climbing wet rocks in Bergen is easier or harder than building this website. I enjoyed both. But if I had to choose, being out in nature probably wins.",
               },
             ],
           },

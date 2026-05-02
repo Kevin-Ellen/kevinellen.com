@@ -11,9 +11,9 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
   label: "Home",
 
   metadata: {
-    pageTitle: "Kevin Ellen",
+    pageTitle: "Kevin Ellen | Wildlife Photography & Technical Work",
     metaDescription:
-      "Nature photography, field notes, journal writing, and technical architecture.",
+      "Wildlife photography, field notes, and technical work exploring observation, behaviour, and edge-native publishing.",
   },
 
   breadcrumbs: ["home"],

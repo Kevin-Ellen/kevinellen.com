@@ -10,7 +10,10 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
     {
       id: "site",
       label: "Site",
-      items: [{ kind: "internal", id: "about" as PageId, text: "About" }],
+      items: [
+        { kind: "internal", id: "journal" as PageId, text: "Journal" },
+        { kind: "internal", id: "about" as PageId, text: "About" },
+      ],
     },
 
     {
