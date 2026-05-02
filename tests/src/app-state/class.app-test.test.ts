@@ -86,7 +86,39 @@ describe("AppState", () => {
       },
     },
     social: {},
-    metadataLabels: {},
+    metadataLabels: {
+      location: {
+        label: "Location",
+      },
+      shutterSpeed: {
+        label: "Shutter speed",
+        description: "How long the camera sensor was exposed to light.",
+      },
+      aperture: {
+        label: "Aperture",
+        description: "The size of the lens opening controlling light intake.",
+      },
+      focalLength: {
+        label: "Focal length",
+        description: "The zoom level or field of view used for the photograph.",
+      },
+      iso: {
+        label: "ISO",
+        description: "The camera’s sensitivity to light.",
+      },
+      publishedAt: {
+        label: "Published",
+      },
+      lastUpdatedAt: {
+        label: "Last updated",
+      },
+      capturedAt: {
+        label: "Captured",
+      },
+      author: {
+        label: "Author",
+      },
+    },
     navigation: {
       header: {
         primary: [],
@@ -343,5 +375,11 @@ describe("AppState", () => {
     const appState = new AppState(data);
 
     expect(appState.getErrorPageById("error-410" as never)).toBeNull();
+  });
+
+  it("returns metadataLabels", () => {
+    const appState = new AppState(data);
+
+    expect(appState.metadataLabels).toBe(data.metadataLabels);
   });
 });

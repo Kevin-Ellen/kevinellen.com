@@ -24,7 +24,7 @@ const resolveCameraLabel = (
     return null;
   }
 
-  if (cameraModel?.startsWith(cameraMake ?? "")) {
+  if (cameraMake && cameraModel?.startsWith(cameraMake)) {
     return cameraModel;
   }
 

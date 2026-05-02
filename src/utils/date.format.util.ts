@@ -1,4 +1,4 @@
-// src/rendering/utils/date.format.util.ts
+// src/utils/date.format.util.ts
 
 type DateFormatOptions = Readonly<{
   includeTime?: boolean;

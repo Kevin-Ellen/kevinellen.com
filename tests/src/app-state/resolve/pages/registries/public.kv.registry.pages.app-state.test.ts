@@ -125,14 +125,6 @@ describe("loadKvPublicPageRegistry", () => {
         breadcrumbs: [],
         content: {},
       },
-      "page:missing-breadcrumbs": {
-        id: "missing-breadcrumbs",
-        kind: "journal",
-        slug: "/journal/missing-breadcrumbs",
-        label: "Missing Breadcrumbs",
-        metadata: {},
-        content: {},
-      },
       "page:missing-content": {
         id: "missing-content",
         kind: "journal",

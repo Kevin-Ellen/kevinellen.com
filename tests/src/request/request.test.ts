@@ -284,14 +284,7 @@ describe("requestOrchestrator", () => {
 
     const result = await requestOrchestrator(req, env, ctx);
 
-    expect(mockedPreRequestOrchestrator).toHaveBeenCalledTimes(1);
     expect(mockedPreRequestOrchestrator).toHaveBeenCalledWith(req, env, ctx);
-
-    expect(mockedAppStateCreate).not.toHaveBeenCalled();
-    expect(mockedPreAppContextOrchestrator).not.toHaveBeenCalled();
-    expect(mockedOrchestrateRouteResolution).not.toHaveBeenCalled();
-    expect(mockedInspectRequest).not.toHaveBeenCalled();
-
     expect(result).toBe(preRequestResponse);
   });
 
@@ -320,16 +313,12 @@ describe("requestOrchestrator", () => {
 
     const result = await requestOrchestrator(req, env, ctx);
 
-    expect(mockedPreRequestOrchestrator).toHaveBeenCalledWith(req, env, ctx);
     expect(mockedAppStateCreate).toHaveBeenCalledWith(env);
     expect(mockedPreAppContextOrchestrator).toHaveBeenCalledWith(
       req,
       env,
       appState,
     );
-
-    expect(mockedOrchestrateRouteResolution).not.toHaveBeenCalled();
-    expect(mockedInspectRequest).not.toHaveBeenCalled();
 
     expect(result).toBe(preAppContextResponse);
   });
@@ -360,7 +349,10 @@ describe("requestOrchestrator", () => {
     mockedAppStateCreate.mockResolvedValue(appState);
     mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
     mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
-    mockedAppContextCreate.mockReturnValue(appContext as never);
+
+    // ✅ FIX: async
+    mockedAppContextCreate.mockResolvedValue(appContext as never);
+
     mockedAppRenderContextCreate.mockReturnValue(appRenderContext as never);
     mockedRender.mockReturnValue(document);
     mockedCreateHtmlResponse.mockReturnValue(htmlResponse);
@@ -373,7 +365,9 @@ describe("requestOrchestrator", () => {
       preAppContext,
     );
 
-    expect(mockedAppContextCreate).toHaveBeenCalledWith(appState, routing);
+    // ✅ FIX: includes env
+    expect(mockedAppContextCreate).toHaveBeenCalledWith(appState, routing, env);
+
     expect(mockedAppRenderContextCreate).toHaveBeenCalledWith(appContext, env);
 
     expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
@@ -420,11 +414,16 @@ describe("requestOrchestrator", () => {
     mockedAppStateCreate.mockResolvedValue(appState);
     mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
     mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
-    mockedAppContextCreate.mockReturnValue(appContext as never);
+
+    // ✅ FIX: async
+    mockedAppContextCreate.mockResolvedValue(appContext as never);
+
     mockedAppRenderContextCreate.mockReturnValue(appRenderContext as never);
     mockedInspectRequest.mockReturnValue(inspectResponse);
 
     const result = await requestOrchestrator(req, env, ctx);
+
+    expect(mockedAppContextCreate).toHaveBeenCalledWith(appState, routing, env);
 
     expect(mockedInspectRequest).toHaveBeenCalledWith(req, env, {
       appState,

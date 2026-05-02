@@ -2,6 +2,7 @@
 
 import { resolveBodyContentAppRenderContext } from "@app-render-context/resolve/body-content/body-content.resolve.app-render-context";
 import { resolveBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/block.resolve.app-render-context";
+import { resolveFooterContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/footer/footer.resolve.app-render-context";
 
 import type { AppContext } from "@app-context/class.app-context";
 
@@ -12,10 +13,18 @@ jest.mock(
   }),
 );
 
+jest.mock(
+  "@app-render-context/resolve/body-content/footer/footer.resolve.app-render-context",
+  () => ({
+    resolveFooterContentModuleAppRenderContext: jest.fn(),
+  }),
+);
+
 describe("resolveBodyContentAppRenderContext", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
   it("resolves body content header, content modules, and footer modules", () => {
     const contentModule = {
       kind: "paragraph",
@@ -23,8 +32,17 @@ describe("resolveBodyContentAppRenderContext", () => {
     };
 
     const footerModule = {
-      kind: "quote",
-      content: [],
+      kind: "journalEntryFooter",
+      publication: {
+        author: "Kevin Ellen",
+        publishedAt: "2025-05-27T10:30:00.000Z",
+        updatedAt: [],
+      },
+      tags: [],
+      equipment: {
+        cameras: [],
+        lenses: [],
+      },
     };
 
     const appContext = {
@@ -47,25 +65,37 @@ describe("resolveBodyContentAppRenderContext", () => {
     };
 
     const resolvedFooterModule = {
-      kind: "quote",
-      content: [{ kind: "text", value: "Resolved footer" }],
+      kind: "journalEntryFooter",
+      publication: {
+        author: "Kevin Ellen",
+        publishedAt: "27 May 2025",
+        updatedAt: [],
+      },
+      tags: [],
+      equipment: {
+        cameras: [],
+        lenses: [],
+      },
     };
 
     jest
       .mocked(resolveBlockContentModuleAppRenderContext)
-      .mockReturnValueOnce(resolvedContentModule as never)
+      .mockReturnValueOnce(resolvedContentModule as never);
+
+    jest
+      .mocked(resolveFooterContentModuleAppRenderContext)
       .mockReturnValueOnce(resolvedFooterModule as never);
 
     const result = resolveBodyContentAppRenderContext(appContext);
 
-    expect(resolveBlockContentModuleAppRenderContext).toHaveBeenNthCalledWith(
-      1,
+    expect(resolveBlockContentModuleAppRenderContext).toHaveBeenCalledTimes(1);
+    expect(resolveBlockContentModuleAppRenderContext).toHaveBeenCalledWith(
       appContext,
       contentModule,
     );
 
-    expect(resolveBlockContentModuleAppRenderContext).toHaveBeenNthCalledWith(
-      2,
+    expect(resolveFooterContentModuleAppRenderContext).toHaveBeenCalledTimes(1);
+    expect(resolveFooterContentModuleAppRenderContext).toHaveBeenCalledWith(
       appContext,
       footerModule,
     );
@@ -95,6 +125,7 @@ describe("resolveBodyContentAppRenderContext", () => {
     const result = resolveBodyContentAppRenderContext(appContext);
 
     expect(resolveBlockContentModuleAppRenderContext).not.toHaveBeenCalled();
+    expect(resolveFooterContentModuleAppRenderContext).not.toHaveBeenCalled();
 
     expect(result).toEqual({
       header: appContext.page.content.header,
