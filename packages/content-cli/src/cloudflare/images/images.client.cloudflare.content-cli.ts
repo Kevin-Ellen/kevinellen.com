@@ -40,6 +40,9 @@ export const uploadCloudflareImage = async (
     uploadFile.fileName,
   );
 
+  // ✅ enforce deterministic ID
+  formData.append("id", metadata.photoId);
+
   formData.append(
     "metadata",
     JSON.stringify({
@@ -64,16 +67,33 @@ export const uploadCloudflareImage = async (
 
   const data = (await response.json()) as CloudflareImagesUploadResponse;
 
-  if (!response.ok || !data.success || !data.result?.id) {
-    throw new Error(
-      `Cloudflare Images upload failed for ${uploadFile.fileName}: ${JSON.stringify(
-        data.errors,
-      )}`,
-    );
+  // ✅ SUCCESS
+  if (response.ok && data.success && data.result?.id) {
+    return {
+      id: data.result.id,
+      uploadedAt: data.result.uploaded ?? new Date().toISOString(),
+    };
   }
 
-  return {
-    id: data.result.id,
-    uploadedAt: data.result.uploaded ?? new Date().toISOString(),
-  };
+  // ✅ DUPLICATE HANDLING (Option A)
+  const isDuplicate =
+    data.errors?.some((err) =>
+      JSON.stringify(err).toLowerCase().includes("already exists"),
+    ) ?? false;
+
+  if (isDuplicate) {
+    console.log(`  ↺ Image already exists, reusing ID: ${metadata.photoId}`);
+
+    return {
+      id: metadata.photoId,
+      uploadedAt: new Date().toISOString(), // we don’t get original timestamp
+    };
+  }
+
+  // ❌ REAL FAILURE
+  throw new Error(
+    `Cloudflare Images upload failed for ${uploadFile.fileName}: ${JSON.stringify(
+      data.errors,
+    )}`,
+  );
 };

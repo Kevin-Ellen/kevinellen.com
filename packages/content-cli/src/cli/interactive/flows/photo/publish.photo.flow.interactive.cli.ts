@@ -9,12 +9,20 @@ import type { InteractiveCliState } from "@content-cli/cli/interactive/state.int
 export const runPhotoPublishFlow = async (
   state: InteractiveCliState,
 ): Promise<void> => {
-  const photoId = await text({
-    message: "Photo ID to publish",
+  const workspaceId = await text({
+    message: "Photo workspace ID to publish",
+    placeholder: "2026-05-02T19-55-10+01-00",
   });
 
-  if (isCancel(photoId)) {
+  if (isCancel(workspaceId)) {
     cancel("Cancelled.");
+    return;
+  }
+
+  const slug = workspaceId.trim();
+
+  if (!slug) {
+    cancel("Photo publish requires a workspace ID.");
     return;
   }
 
@@ -33,13 +41,13 @@ export const runPhotoPublishFlow = async (
     env: state.env,
     entity: "photo",
     action: "validate",
-    photoId,
+    slug,
   });
 
   await runInteractiveContentCommand({
     env: state.env,
     entity: "photo",
     action: "publish",
-    photoId,
+    slug,
   });
 };
