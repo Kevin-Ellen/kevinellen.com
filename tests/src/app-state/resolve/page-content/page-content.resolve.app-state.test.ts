@@ -1,9 +1,9 @@
 // tests/src/app-state/resolve/page-content/page-content.resolve.app-state.test.ts
 
 import { appStateResolvePageContent } from "@app-state/resolve/page-content/page-content.resolve.app-state";
-
 import { appStateResolvePageContentHead } from "@app-state/resolve/page-content/site/content-head.resolve.app-state";
 import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
+import { appStateResolveFooterContentModule } from "@app-state/resolve/page-content/footer/footer.resolve.app-state";
 
 import type { AuthoredPageContent } from "@shared-types/page-content/authored.page-content.types";
 
@@ -21,15 +21,24 @@ jest.mock(
   }),
 );
 
-const mockedAppStateResolvePageContentHead =
-  appStateResolvePageContentHead as jest.MockedFunction<
-    typeof appStateResolvePageContentHead
-  >;
+jest.mock(
+  "@app-state/resolve/page-content/footer/footer.resolve.app-state",
+  () => ({
+    appStateResolveFooterContentModule: jest.fn(),
+  }),
+);
 
-const mockedAppStateResolveBlockContentModule =
-  appStateResolveBlockContentModule as jest.MockedFunction<
-    typeof appStateResolveBlockContentModule
-  >;
+const mockedAppStateResolvePageContentHead = jest.mocked(
+  appStateResolvePageContentHead,
+);
+
+const mockedAppStateResolveBlockContentModule = jest.mocked(
+  appStateResolveBlockContentModule,
+);
+
+const mockedAppStateResolveFooterContentModule = jest.mocked(
+  appStateResolveFooterContentModule,
+);
 
 describe("appStateResolvePageContent", () => {
   beforeEach(() => {
@@ -56,13 +65,21 @@ describe("appStateResolvePageContent", () => {
       authoredContent.header,
     );
     expect(mockedAppStateResolveBlockContentModule).not.toHaveBeenCalled();
+    expect(mockedAppStateResolveFooterContentModule).not.toHaveBeenCalled();
     expect(result.footer).toEqual([]);
   });
 
-  it("maps body and footer modules through the block content resolver in order", () => {
+  it("maps body modules through the block resolver and footer modules through the footer resolver", () => {
     const bodyBlockA = { kind: "body-a" } as never;
     const bodyBlockB = { kind: "body-b" } as never;
-    const footerBlock = { kind: "footer-a" } as never;
+
+    const footerBlock = {
+      kind: "journalEntryFooter",
+      author: "Kevin Ellen",
+      publishedAt: "2025-05-27T10:30:00.000Z",
+      updatedAt: [],
+      tags: [],
+    } as never;
 
     const authoredContent: AuthoredPageContent = {
       header: {
@@ -80,19 +97,33 @@ describe("appStateResolvePageContent", () => {
 
     mockedAppStateResolveBlockContentModule
       .mockReturnValueOnce({ kind: "resolved-body-a" } as never)
-      .mockReturnValueOnce({ kind: "resolved-body-b" } as never)
-      .mockReturnValueOnce({ kind: "resolved-footer-a" } as never);
+      .mockReturnValueOnce({ kind: "resolved-body-b" } as never);
+
+    mockedAppStateResolveFooterContentModule.mockReturnValueOnce({
+      kind: "journalEntryFooter",
+      publication: {
+        author: "Kevin Ellen",
+        publishedAt: "2025-05-27T10:30:00.000Z",
+        updatedAt: [],
+      },
+      tags: [],
+    } as never);
 
     const result = appStateResolvePageContent(authoredContent);
 
+    expect(mockedAppStateResolveBlockContentModule).toHaveBeenCalledTimes(2);
     expect(mockedAppStateResolveBlockContentModule.mock.calls[0]?.[0]).toBe(
       bodyBlockA,
     );
     expect(mockedAppStateResolveBlockContentModule.mock.calls[1]?.[0]).toBe(
       bodyBlockB,
     );
-    expect(mockedAppStateResolveBlockContentModule.mock.calls[2]?.[0]).toBe(
+
+    expect(mockedAppStateResolveFooterContentModule).toHaveBeenCalledTimes(1);
+    expect(mockedAppStateResolveFooterContentModule).toHaveBeenCalledWith(
       footerBlock,
+      0,
+      [footerBlock],
     );
 
     expect(result.content).toEqual([
@@ -100,6 +131,16 @@ describe("appStateResolvePageContent", () => {
       { kind: "resolved-body-b" },
     ]);
 
-    expect(result.footer).toEqual([{ kind: "resolved-footer-a" }]);
+    expect(result.footer).toEqual([
+      {
+        kind: "journalEntryFooter",
+        publication: {
+          author: "Kevin Ellen",
+          publishedAt: "2025-05-27T10:30:00.000Z",
+          updatedAt: [],
+        },
+        tags: [],
+      },
+    ]);
   });
 });

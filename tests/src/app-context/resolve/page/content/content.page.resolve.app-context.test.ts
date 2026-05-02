@@ -3,6 +3,7 @@
 import { appContextResolvePageContent } from "@app-context/resolve/page/content/content.page.resolve.app-context";
 import { appContextResolvePageContentHead } from "@app-context/resolve/page/content/head/content-head.page.resolve.app-context";
 import { appContextResolveBlockContentModule } from "@app-context/resolve/page/content/block/block.page-content.resolve.app-context";
+import { appContextResolveFooterContentModule } from "@app-context/resolve/page/content/footer/footer.page-content.resolve.app-context";
 
 jest.mock(
   "@app-context/resolve/page/content/head/content-head.page.resolve.app-context",
@@ -18,12 +19,22 @@ jest.mock(
   }),
 );
 
+jest.mock(
+  "@app-context/resolve/page/content/footer/footer.page-content.resolve.app-context",
+  () => ({
+    appContextResolveFooterContentModule: jest.fn(),
+  }),
+);
+
 describe("appContextResolvePageContent", () => {
   const mockedAppContextResolvePageContentHead = jest.mocked(
     appContextResolvePageContentHead,
   );
   const mockedAppContextResolveBlockContentModule = jest.mocked(
     appContextResolveBlockContentModule,
+  );
+  const mockedAppContextResolveFooterContentModule = jest.mocked(
+    appContextResolveFooterContentModule,
   );
 
   const context = {} as never;
@@ -55,9 +66,13 @@ describe("appContextResolvePageContent", () => {
       ],
       footer: [
         {
-          kind: "pre",
-          value: "const x = 1;",
-          flow: "content",
+          kind: "journalEntryFooter",
+          publication: {
+            author: "Kevin Ellen",
+            publishedAt: "2025-05-27T10:30:00.000Z",
+            updatedAt: [],
+          },
+          tags: [],
         },
       ],
     } as const;
@@ -85,12 +100,21 @@ describe("appContextResolvePageContent", () => {
         text: "Resolved quote",
         attribution: "Author",
         flow: "content",
-      })
-      .mockReturnValueOnce({
-        kind: "pre",
-        value: "resolved pre block",
-        flow: "content",
       });
+
+    mockedAppContextResolveFooterContentModule.mockReturnValueOnce({
+      kind: "journalEntryFooter",
+      publication: {
+        author: "Kevin Ellen",
+        publishedAt: "2025-05-27T10:30:00.000Z",
+        updatedAt: [],
+      },
+      tags: [],
+      equipment: {
+        cameras: [],
+        lenses: [],
+      },
+    } as never);
 
     const result = appContextResolvePageContent(content, context);
 
@@ -121,9 +145,17 @@ describe("appContextResolvePageContent", () => {
       ],
       footer: [
         {
-          kind: "pre",
-          value: "resolved pre block",
-          flow: "content",
+          kind: "journalEntryFooter",
+          publication: {
+            author: "Kevin Ellen",
+            publishedAt: "2025-05-27T10:30:00.000Z",
+            updatedAt: [],
+          },
+          tags: [],
+          equipment: {
+            cameras: [],
+            lenses: [],
+          },
         },
       ],
     });
@@ -133,7 +165,7 @@ describe("appContextResolvePageContent", () => {
       context,
     );
 
-    expect(mockedAppContextResolveBlockContentModule).toHaveBeenCalledTimes(3);
+    expect(mockedAppContextResolveBlockContentModule).toHaveBeenCalledTimes(2);
     expect(mockedAppContextResolveBlockContentModule).toHaveBeenNthCalledWith(
       1,
       content.content[0],
@@ -144,8 +176,9 @@ describe("appContextResolvePageContent", () => {
       content.content[1],
       context,
     );
-    expect(mockedAppContextResolveBlockContentModule).toHaveBeenNthCalledWith(
-      3,
+
+    expect(mockedAppContextResolveFooterContentModule).toHaveBeenCalledTimes(1);
+    expect(mockedAppContextResolveFooterContentModule).toHaveBeenCalledWith(
       content.footer[0],
       context,
     );
@@ -177,5 +210,6 @@ describe("appContextResolvePageContent", () => {
       context,
     );
     expect(mockedAppContextResolveBlockContentModule).not.toHaveBeenCalled();
+    expect(mockedAppContextResolveFooterContentModule).not.toHaveBeenCalled();
   });
 });

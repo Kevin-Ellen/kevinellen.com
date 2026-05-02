@@ -27,17 +27,19 @@ const config: Config = {
     "^@shared-types/(.*)$": "<rootDir>/shared-types/$1",
     "^@utils/(.*)$": "<rootDir>/src/utils/$1",
     "^@pages/(.*)$": "<rootDir>/src/pages/$1",
-    // "^@config/(.*)$": "<rootDir>/src/config/$1",
-    // "^@src/(.*)$": "<rootDir>/src/$1",
-
-    // "^@app/(.*)$": "<rootDir>/src/app/$1",
-    // "^@system/(.*)$": "<rootDir>/src/system/$1",
-    // "^@resources/(.*)$": "<rootDir>/src/resources/$1",
-    // "^@types-src/(.*)$": "<rootDir>/src/types/$1",
     "^@generated/(.*)\\?raw$": "<rootDir>/tests/stubs/rawText.stub.ts",
   },
 
   moduleFileExtensions: ["ts", "js", "json"],
+
+  coverageThreshold: {
+    global: {
+      statements: 100,
+      branches: 100,
+      functions: 100,
+      lines: 100,
+    },
+  },
 };
 
 export default config;

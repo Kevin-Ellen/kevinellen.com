@@ -5,6 +5,7 @@ import type { AppStatePageContent } from "@shared-types/page-content/app-state.p
 
 import { appStateResolvePageContentHead } from "@app-state/resolve/page-content/site/content-head.resolve.app-state";
 import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
+import { appStateResolveFooterContentModule } from "@app-state/resolve/page-content/footer/footer.resolve.app-state";
 
 export const appStateResolvePageContent = (
   content: AuthoredPageContent,
@@ -12,6 +13,6 @@ export const appStateResolvePageContent = (
   return {
     header: appStateResolvePageContentHead(content.header),
     content: content.content.map(appStateResolveBlockContentModule),
-    footer: (content.footer ?? []).map(appStateResolveBlockContentModule),
+    footer: (content.footer ?? []).map(appStateResolveFooterContentModule),
   };
 };

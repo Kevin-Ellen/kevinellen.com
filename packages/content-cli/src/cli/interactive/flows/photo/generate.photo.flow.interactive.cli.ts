@@ -9,13 +9,20 @@ import type { InteractiveCliState } from "@content-cli/cli/interactive/state.int
 export const runPhotoGenerateFlow = async (
   state: InteractiveCliState,
 ): Promise<void> => {
-  const photoId = await text({
-    message: "Photo ID",
-    placeholder: "mallorca-glossy-ibis-flight",
+  const workspaceId = await text({
+    message: "Photo workspace ID",
+    placeholder: "2026-05-02T19-55-10+01-00",
   });
 
-  if (isCancel(photoId)) {
+  if (isCancel(workspaceId)) {
     cancel("Cancelled.");
+    return;
+  }
+
+  const slug = workspaceId.trim();
+
+  if (!slug) {
+    cancel("Photo generate requires a workspace ID.");
     return;
   }
 
@@ -23,6 +30,6 @@ export const runPhotoGenerateFlow = async (
     env: state.env,
     entity: "photo",
     action: "generate",
-    photoId,
+    slug,
   });
 };

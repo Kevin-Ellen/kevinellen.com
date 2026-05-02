@@ -13,6 +13,8 @@ import { resolveAssetsAppContext } from "@app-context/resolve/assets.resolve.app
 import { resolveStructuredDataAppContext } from "@app-context/resolve/structured-data.resolve.app-context";
 import { resolveBreadcrumbsAppContext } from "@app-context/resolve/breadcrumbs.resolve.app-context";
 import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
+import { appContextCollectPhotoIdsFromBlockContent } from "@app-context/resolve/page-content/collect-photo-ids.page-content.resolve.app-context";
+import { resolvePhotosAppContext } from "@app-context/resolve/photos/photos.resolve.app-context";
 
 const resolvePageRuntimeAppContext = (
   page: AppStatePageDefinition,
@@ -25,14 +27,24 @@ const resolvePageRuntimeAppContext = (
   };
 };
 
-export const appContextCreate = (
+export const appContextCreate = async (
   appState: AppState,
   routing: RoutingResult,
-): AppContext => {
+  env: Env,
+): Promise<AppContext> => {
   const navigation = resolveNavigationAppContext(appState.navigation, appState);
   const globalFooter = resolveGlobalFooterAppContext(appState.globalFooter);
 
   const pageState = resolvePageSourceAppContext(appState, routing);
+
+  const photoIds = appContextCollectPhotoIdsFromBlockContent(
+    pageState.content.content,
+  );
+
+  const photos = await resolvePhotosAppContext({
+    kv: env.KV_PHOTOS,
+    photoIds,
+  });
 
   const { metadata, robots, canonicalUrl } = resolvePageRuntimeAppContext(
     pageState,
@@ -47,6 +59,8 @@ export const appContextCreate = (
   );
 
   const page = resolvePageAppContext(pageState, routing, {
+    photos,
+    metadataLabels: appState.metadataLabels,
     resolveInternalLink: (link) =>
       resolveInternalLinkAppContext(link, appState),
   });
@@ -56,6 +70,7 @@ export const appContextCreate = (
   const themeColour = appState.manifest.backgroundColor;
   const headerBranding = appState.siteConfig.headerBranding;
   const preload = appState.siteConfig.preload;
+  const metadataLabels = appState.metadataLabels;
 
   return new AppContext({
     navigation,
@@ -72,5 +87,6 @@ export const appContextCreate = (
     preload,
     themeColour,
     headerBranding,
+    metadataLabels,
   });
 };

@@ -53,6 +53,46 @@ jest.mock(
   }),
 );
 
+const env = {
+  APP_HOST: "kevinellen.com",
+} as Env;
+
+const metadataLabels = {
+  location: "Location",
+  capturedAt: "Captured",
+  shutterSpeed: "Shutter speed",
+  aperture: "Aperture",
+  focalLength: "Focal length",
+  iso: "ISO",
+};
+
+const createAppState = () => ({
+  siteConfig: {
+    origin: "https://www.kevinellen.com",
+    language: "en-GB",
+    headAssets: {
+      links: [],
+    },
+    headerBranding: {
+      href: "/",
+      ariaLabel: "Kevin Ellen home",
+      logo: {
+        id: "logo-monogram-ke",
+        width: 100,
+        height: 100,
+      },
+    },
+    preload: [],
+  },
+  manifest: {
+    backgroundColor: "#ffffff",
+  },
+  navigation: { some: "navigation-state" },
+  globalFooter: { some: "global-footer-state" },
+  assets: { some: "global-assets" },
+  metadataLabels,
+});
+
 describe("appContextCreate", () => {
   const mockedResolveNavigationAppContext = jest.mocked(
     resolveNavigationAppContext,
@@ -79,32 +119,8 @@ describe("appContextCreate", () => {
     jest.clearAllMocks();
   });
 
-  it("orchestrates AppContext creation for a public page", () => {
-    const appState = {
-      siteConfig: {
-        origin: "https://www.kevinellen.com",
-        language: "en-GB",
-        headAssets: {
-          links: [],
-        },
-        headerBranding: {
-          href: "/",
-          ariaLabel: "Kevin Ellen home",
-          logo: {
-            id: "logo-monogram-ke",
-            width: 100,
-            height: 100,
-          },
-        },
-        preload: [],
-      },
-      manifest: {
-        backgroundColor: "#ffffff",
-      },
-      navigation: { some: "navigation-state" },
-      globalFooter: { some: "global-footer-state" },
-      assets: { some: "global-assets" },
-    };
+  it("orchestrates AppContext creation for a public page", async () => {
+    const appState = createAppState();
 
     const routing = {
       kind: "found",
@@ -181,7 +197,7 @@ describe("appContextCreate", () => {
     mockedResolveBreadcrumbsAppContext.mockReturnValue(resolvedBreadcrumbs);
     mockedResolvePageAppContext.mockReturnValue(resolvedPage);
 
-    const result = appContextCreate(appState as never, routing);
+    const result = await appContextCreate(appState as never, routing, env);
 
     expect(result).toBeInstanceOf(AppContext);
 
@@ -212,6 +228,7 @@ describe("appContextCreate", () => {
     expect(mockedResolvePageAppContext).toHaveBeenCalledTimes(1);
 
     const [, , pageContextArg] = mockedResolvePageAppContext.mock.calls[0];
+
     expect(mockedResolvePageAppContext).toHaveBeenCalledWith(
       pageState,
       routing,
@@ -264,35 +281,12 @@ describe("appContextCreate", () => {
       },
       preload: [],
       themeColour: "#ffffff",
+      metadataLabels,
     });
   });
 
-  it("omits robots when the resolved page source does not include them", () => {
-    const appState = {
-      siteConfig: {
-        origin: "https://www.kevinellen.com",
-        language: "en-GB",
-        headAssets: {
-          links: [],
-        },
-        headerBranding: {
-          href: "/",
-          ariaLabel: "Kevin Ellen home",
-          logo: {
-            id: "logo-monogram-ke",
-            width: 100,
-            height: 100,
-          },
-        },
-        preload: [],
-      },
-      manifest: {
-        backgroundColor: "#ffffff",
-      },
-      navigation: { some: "navigation-state" },
-      globalFooter: { some: "global-footer-state" },
-      assets: { some: "global-assets" },
-    };
+  it("omits robots when the resolved page source does not include them", async () => {
+    const appState = createAppState();
 
     const routing = {
       kind: "error",
@@ -341,7 +335,7 @@ describe("appContextCreate", () => {
       content: pageState.content,
     } as never);
 
-    const result = appContextCreate(appState as never, routing);
+    const result = await appContextCreate(appState as never, routing, env);
 
     expect(result.inspect).toEqual({
       navigation: {},
@@ -373,37 +367,14 @@ describe("appContextCreate", () => {
       },
       preload: [],
       themeColour: "#ffffff",
+      metadataLabels,
     });
 
     expect(result.inspect.robots).toBeUndefined();
   });
 
-  it("omits metadata and robots when the resolved page source exposes neither", () => {
-    const appState = {
-      siteConfig: {
-        origin: "https://www.kevinellen.com",
-        language: "en-GB",
-        headAssets: {
-          links: [],
-        },
-        headerBranding: {
-          href: "/",
-          ariaLabel: "Kevin Ellen home",
-          logo: {
-            id: "logo-monogram-ke",
-            width: 100,
-            height: 100,
-          },
-        },
-        preload: [],
-      },
-      manifest: {
-        backgroundColor: "#ffffff",
-      },
-      navigation: { some: "navigation-state" },
-      globalFooter: { some: "global-footer-state" },
-      assets: { some: "global-assets" },
-    };
+  it("omits metadata and robots when the resolved page source exposes neither", async () => {
+    const appState = createAppState();
 
     const routing = {
       kind: "error",
@@ -445,7 +416,7 @@ describe("appContextCreate", () => {
       content: pageState.content,
     } as never);
 
-    const result = appContextCreate(appState as never, routing);
+    const result = await appContextCreate(appState as never, routing, env);
 
     expect(result.inspect).toEqual({
       navigation: {},
@@ -475,6 +446,7 @@ describe("appContextCreate", () => {
       },
       preload: [],
       themeColour: "#ffffff",
+      metadataLabels,
     });
 
     expect(result.inspect.metadata).toBeUndefined();

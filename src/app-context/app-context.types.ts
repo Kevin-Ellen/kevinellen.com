@@ -13,6 +13,7 @@ import type { AppContextHeadAssets } from "@shared-types/config/site-config/app-
 import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app-context.theme-colour.webmanifest.types";
 import type { AppContextHeaderBranding } from "@shared-types/config/site-config/app-context.header-branding.config.types";
 import type { AppContextPreload } from "@shared-types/config/site-config/app-context.preload.config.types";
+import type { AppContextMetadataLabels } from "@shared-types/config/metadata-labels/app-context.metadata-labels.types";
 
 export type AppContextDocument = Readonly<{
   metadata: PageMetadata;
@@ -41,4 +42,5 @@ export type AppContextData = Readonly<{
   preload: AppContextPreload;
   themeColour: AppContextThemeColour;
   headerBranding: AppContextHeaderBranding;
+  metadataLabels: AppContextMetadataLabels;
 }>;

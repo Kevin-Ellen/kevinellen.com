@@ -142,7 +142,20 @@ describe("appContextResolveBlockContentModule", () => {
       flow: "breakout",
     } as const;
 
-    const resolved = module;
+    const resolved = {
+      ...module,
+      photo: {
+        id: "photo-hero-about",
+        sourceFileName: "photo.jpg",
+        title: "Hero photo",
+        alt: "Hero photo alt",
+        commentary: "Hero photo commentary",
+        readableLocation: "Epping Forest",
+        width: 3000,
+        height: 2000,
+        cloudflareImageId: "cloudflare-photo-id",
+      },
+    } as never;
 
     jest
       .mocked(appContextResolveHeroBlockContentModule)

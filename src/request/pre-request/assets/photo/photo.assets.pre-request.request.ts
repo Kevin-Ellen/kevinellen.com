@@ -32,6 +32,8 @@ export const photoAssetOrchestrator = async (
     assetResolution.asset.variant,
   );
 
+  console.log(imageUrl);
+
   const upstreamResponse = await fetch(imageUrl);
 
   if (upstreamResponse.status === 404) {

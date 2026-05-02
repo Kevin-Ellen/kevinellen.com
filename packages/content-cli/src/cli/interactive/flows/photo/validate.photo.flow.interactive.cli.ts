@@ -9,12 +9,20 @@ import type { InteractiveCliState } from "@content-cli/cli/interactive/state.int
 export const runPhotoValidateFlow = async (
   state: InteractiveCliState,
 ): Promise<void> => {
-  const photoId = await text({
-    message: "Photo ID to validate",
+  const workspaceId = await text({
+    message: "Photo workspace ID to validate",
+    placeholder: "2026-05-02T19-55-10+01-00",
   });
 
-  if (isCancel(photoId)) {
+  if (isCancel(workspaceId)) {
     cancel("Cancelled.");
+    return;
+  }
+
+  const slug = workspaceId.trim();
+
+  if (!slug) {
+    cancel("Photo validate requires a workspace ID.");
     return;
   }
 
@@ -22,6 +30,6 @@ export const runPhotoValidateFlow = async (
     env: state.env,
     entity: "photo",
     action: "validate",
-    photoId,
+    slug,
   });
 };

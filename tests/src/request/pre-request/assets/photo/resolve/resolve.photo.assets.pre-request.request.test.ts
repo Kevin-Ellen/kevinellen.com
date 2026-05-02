@@ -24,7 +24,7 @@ describe("photoAssetResolver", () => {
   });
 
   it("returns asset for a valid photo asset request", () => {
-    const req = new Request("https://kevinellen.com/photo/abc123/hero");
+    const req = new Request("https://kevinellen.com/media/photo/abc123");
 
     const result = photoAssetResolver(req);
 
@@ -32,14 +32,14 @@ describe("photoAssetResolver", () => {
       outcome: "asset",
       asset: {
         imageId: "abc123",
-        variant: "hero",
+        variant: "public",
       },
     });
   });
 
-  it("extracts imageId and variant from the pathname", () => {
+  it("extracts imageId and generated variant from the pathname", () => {
     const req = new Request(
-      "https://kevinellen.com/photo/cattle-egret-parenting-in-salbufera/content",
+      "https://kevinellen.com/media/photo/cattle-egret-parenting-in-salbufera/640/360",
     );
 
     const result = photoAssetResolver(req);
@@ -51,12 +51,12 @@ describe("photoAssetResolver", () => {
     }
 
     expect(result.asset.imageId).toBe("cattle-egret-parenting-in-salbufera");
-    expect(result.asset.variant).toBe("content");
+    expect(result.asset.variant).toBe("w=640,h=360,fit=cover");
   });
 
   it("ignores query strings and resolves from pathname only", () => {
     const req = new Request(
-      "https://kevinellen.com/photo/example-image/thumbnail?v=123",
+      "https://kevinellen.com/media/photo/example-image/960/540?v=123",
     );
 
     const result = photoAssetResolver(req);
@@ -65,7 +65,7 @@ describe("photoAssetResolver", () => {
       outcome: "asset",
       asset: {
         imageId: "example-image",
-        variant: "thumbnail",
+        variant: "w=960,h=540,fit=cover",
       },
     });
   });

@@ -3,13 +3,14 @@
 import type { AppStatePageContent } from "@shared-types/page-content/app-state.page-content.types";
 import type { AppContextPageContentHead } from "@shared-types/page-content/site/content-head/app-context.content-head.page-content.types";
 import type { AppContextBlockContentModule } from "@shared-types/page-content/block/app-context.block.page-content.types";
+import type { AppContextPageContentFooterModule } from "@shared-types/page-content/footer/app-context.page-footer.page-content.types";
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type AppContextPageContentRuntimeFields = Readonly<{
   header: AppContextPageContentHead;
   content: readonly AppContextBlockContentModule[];
-  footer: readonly AppContextBlockContentModule[];
+  footer: readonly AppContextPageContentFooterModule[];
 }>;
 
 export type AppContextPageContent = Replace<

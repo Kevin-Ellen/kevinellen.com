@@ -16,12 +16,18 @@ const REQUIRED_PLACEHOLDER = "__REQUIRED__";
 const isDraftFile = (fileName: string): boolean =>
   fileName.endsWith(".draft.ts");
 
-export const runValidatePhotoCommand: ContentCommandHandler = async (args) => {
-  const workspaceId = args.slug;
+const resolveWorkspaceId = (slug: string | undefined): string => {
+  const workspaceId = slug?.trim();
 
   if (!workspaceId) {
     throw new Error("Photo validate requires --slug <workspace-id>.");
   }
+
+  return workspaceId;
+};
+
+export const runValidatePhotoCommand: ContentCommandHandler = async (args) => {
+  const workspaceId = resolveWorkspaceId(args.slug);
 
   const workspacePath = getPhotoWorkspacePath(args.bucket, workspaceId);
   const entries = await fs.readdir(workspacePath, { withFileTypes: true });

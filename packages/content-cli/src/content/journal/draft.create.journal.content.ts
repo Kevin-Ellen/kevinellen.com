@@ -11,7 +11,7 @@ export const createDraftJournalDefinition = (
   const publishedAt = formatLocalDateTimeWithOffset(new Date());
 
   return {
-    id: "__REQUIRED__",
+    id: "journal:__REQUIRED__",
     kind: "journal",
     slug: `/journal/${workspaceId}`,
     label: "__REQUIRED__",
@@ -74,7 +74,7 @@ export const createDraftJournalDefinition = (
           kind: "journalEntryFooter",
           publication: {
             author: "Kevin Ellen",
-            published: publishedAt,
+            publishedAt: publishedAt,
             updatedAt: [publishedAt],
           },
           tags: [],

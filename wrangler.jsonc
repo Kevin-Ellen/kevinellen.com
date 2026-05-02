@@ -22,9 +22,21 @@
     "CF_IMAGES_DELIVERY_HASH": "y5zCV0xCeMBwfDh5UGa7tw",
   },
   "kv_namespaces": [
-    { "binding": "KV_PHOTOS", "id": "e142fd95a7094802b2d439af8a7f005b" },
-    { "binding": "KV_NOTES", "id": "ece1c602b5cc42849c82f9941ea2949b" },
-    { "binding": "KV_JOURNALS", "id": "54125d8122204f26a064dad33f09a284" },
+    {
+      "binding": "KV_PHOTOS",
+      "id": "e142fd95a7094802b2d439af8a7f005b",
+      "remote": true,
+    },
+    {
+      "binding": "KV_NOTES",
+      "id": "ece1c602b5cc42849c82f9941ea2949b",
+      "remote": true,
+    },
+    {
+      "binding": "KV_JOURNALS",
+      "id": "54125d8122204f26a064dad33f09a284",
+      "remote": true,
+    },
   ],
   "env": {
     "stg": {
@@ -34,9 +46,21 @@
         "APP_HOST": "stg.kevinellen.com",
       },
       "kv_namespaces": [
-        { "binding": "KV_PHOTOS", "id": "e142fd95a7094802b2d439af8a7f005b" },
-        { "binding": "KV_NOTES", "id": "a651d3cdc1f94d158033cfb6505e0dfd" },
-        { "binding": "KV_JOURNALS", "id": "9314b8ef005a4d33968bff2826fe802b" },
+        {
+          "binding": "KV_PHOTOS",
+          "id": "e142fd95a7094802b2d439af8a7f005b",
+          "remote": true,
+        },
+        {
+          "binding": "KV_NOTES",
+          "id": "a651d3cdc1f94d158033cfb6505e0dfd",
+          "remote": true,
+        },
+        {
+          "binding": "KV_JOURNALS",
+          "id": "9314b8ef005a4d33968bff2826fe802b",
+          "remote": true,
+        },
       ],
     },
     "prod": {
@@ -46,9 +70,21 @@
         "APP_HOST": "kevinellen.com",
       },
       "kv_namespaces": [
-        { "binding": "KV_PHOTOS", "id": "e142fd95a7094802b2d439af8a7f005b" },
-        { "binding": "KV_NOTES", "id": "4a93bb6494a34b5db7a0b950a6667e82" },
-        { "binding": "KV_JOURNALS", "id": "c359b77747b140aa8c9b0d1e876f2f3e" },
+        {
+          "binding": "KV_PHOTOS",
+          "id": "e142fd95a7094802b2d439af8a7f005b",
+          "remote": true,
+        },
+        {
+          "binding": "KV_NOTES",
+          "id": "4a93bb6494a34b5db7a0b950a6667e82",
+          "remote": true,
+        },
+        {
+          "binding": "KV_JOURNALS",
+          "id": "c359b77747b140aa8c9b0d1e876f2f3e",
+          "remote": true,
+        },
       ],
     },
   },

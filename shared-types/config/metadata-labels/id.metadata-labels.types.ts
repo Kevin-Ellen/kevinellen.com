@@ -6,7 +6,7 @@ export type MetadataLabelId =
   | "aperture"
   | "focalLength"
   | "iso"
-  | "published"
-  | "lastUpdated"
+  | "publishedAt"
+  | "lastUpdatedAt"
   | "capturedAt"
   | "author";

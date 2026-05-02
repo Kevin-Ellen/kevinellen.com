@@ -239,6 +239,39 @@ describe("AppContext", () => {
         svg: "logo-monogram-ke",
       },
     },
+    metadataLabels: {
+      location: {
+        label: "Location",
+      },
+      shutterSpeed: {
+        label: "Shutter speed",
+        description: "How long the camera sensor was exposed to light.",
+      },
+      aperture: {
+        label: "Aperture",
+        description: "The size of the lens opening controlling light intake.",
+      },
+      focalLength: {
+        label: "Focal length",
+        description: "The zoom level or field of view used for the photograph.",
+      },
+      iso: {
+        label: "ISO",
+        description: "The camera’s sensitivity to light.",
+      },
+      publishedAt: {
+        label: "Published",
+      },
+      lastUpdatedAt: {
+        label: "Last updated",
+      },
+      capturedAt: {
+        label: "Captured",
+      },
+      author: {
+        label: "Author",
+      },
+    },
   };
 
   it("stores the provided app context data", () => {
@@ -338,6 +371,12 @@ describe("AppContext", () => {
     const appContext = new AppContext(mockData);
 
     expect(appContext.page).toBe(mockData.page);
+  });
+
+  it("returns metadataLabels from the provided data", () => {
+    const appContext = new AppContext(mockData);
+
+    expect(appContext.metadataLabels).toBe(mockData.metadataLabels);
   });
 
   it("returns preload from the provided data", () => {

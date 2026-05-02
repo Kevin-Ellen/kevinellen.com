@@ -24,10 +24,10 @@ export const appStateMetadataLabelsAuthored: AuthoredMetadataLabels =
       label: "ISO",
       description: "The camera’s sensitivity to light.",
     },
-    published: {
+    publishedAt: {
       label: "Published",
     },
-    lastUpdated: {
+    lastUpdatedAt: {
       label: "Last updated",
     },
     capturedAt: {

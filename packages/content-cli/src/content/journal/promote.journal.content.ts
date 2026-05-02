@@ -27,7 +27,7 @@ export const runPromoteJournalCommand: ContentCommandHandler = async (args) => {
   const fromConfig = loadContentCliConfig(args.from);
   const toConfig = loadContentCliConfig(args.to);
 
-  const key = `journal:${journalId}`;
+  const key = `page:journal:${journalId}`;
 
   const journal = await readCloudflareKvValue<AuthoredPublicPageDefinition>(
     fromConfig,

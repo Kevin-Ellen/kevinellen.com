@@ -7,6 +7,7 @@ import type { AppContextPageContentResolverContext } from "@app-context/resolve/
 
 import { appContextResolvePageContentHead } from "@app-context/resolve/page/content/head/content-head.page.resolve.app-context";
 import { appContextResolveBlockContentModule } from "@app-context/resolve/page/content/block/block.page-content.resolve.app-context";
+import { appContextResolveFooterContentModule } from "@app-context/resolve/page/content/footer/footer.page-content.resolve.app-context";
 
 export const appContextResolvePageContent = (
   content: AppStatePageContent,
@@ -19,7 +20,7 @@ export const appContextResolvePageContent = (
       appContextResolveBlockContentModule(module, context),
     ),
     footer: content.footer.map((module) =>
-      appContextResolveBlockContentModule(module, context),
+      appContextResolveFooterContentModule(module, context),
     ),
   };
 };

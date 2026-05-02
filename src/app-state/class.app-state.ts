@@ -16,6 +16,7 @@ import type { AppStateNavigation } from "@shared-types/config/navigation/app-sta
 import type { AppStateGlobalFooter } from "@shared-types/page-content/site/global-footer/app-state.global-footer.page-content.types";
 import type { AppStateAssets } from "@shared-types/assets/app-state.assets.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";
+import type { AppStateMetadataLabels } from "@shared-types/config/metadata-labels/app-state.metadata-labels.types";
 
 const isPublicPageDefinition = (
   page: AppStatePageDefinition,
@@ -117,6 +118,10 @@ export class AppState {
 
   public get assets(): AppStateAssets {
     return this.#data.assets;
+  }
+
+  public get metadataLabels(): AppStateMetadataLabels {
+    return this.#data.metadataLabels;
   }
 
   public get structuredData(): AppStateStructuredData {
