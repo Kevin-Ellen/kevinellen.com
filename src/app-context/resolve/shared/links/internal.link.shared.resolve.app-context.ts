@@ -18,6 +18,10 @@ const resolvePublicPageHref = (
     throw new Error(`Public page '${link.id}' is missing a slug.`);
   }
 
+  if (page.label === null) {
+    throw new Error(`Public page '${link.id}' is missing a label.`);
+  }
+
   return {
     href: page.slug,
     text: page.label,

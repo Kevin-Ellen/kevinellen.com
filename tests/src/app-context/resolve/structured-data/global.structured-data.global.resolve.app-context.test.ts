@@ -13,15 +13,22 @@ jest.mock(
   }),
 );
 
+const makeKv = (): KVNamespace =>
+  ({
+    list: jest.fn().mockResolvedValue({ keys: [] }),
+    get: jest.fn(),
+  }) as unknown as KVNamespace;
+
 const makeEnv = (): Env =>
   ({
     APP_ENV: "dev",
     APP_HOST: "dev.kevinellen.com",
+    KV_JOURNALS: makeKv(),
   }) as Env;
 
 describe("resolveGlobalStructuredDataAppContext", () => {
-  it("resolves global structured data entries from AppState", () => {
-    const appState = appStateCreate(makeEnv());
+  it("resolves global structured data entries from AppState", async () => {
+    const appState = await appStateCreate(makeEnv());
 
     const websiteEntry: AppContextStructuredDataEntry = {
       id: "website",

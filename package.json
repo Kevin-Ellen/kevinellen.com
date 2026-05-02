@@ -35,6 +35,7 @@
   "license": "UNLICENSED",
   "packageManager": "npm@11.11.0",
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260502.1",
     "@eslint/js": "10.0.1",
     "@types/dotenv": "^6.1.1",
     "@types/jest": "^30.0.0",

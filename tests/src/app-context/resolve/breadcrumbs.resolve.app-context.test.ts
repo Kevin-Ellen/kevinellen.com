@@ -3,13 +3,21 @@
 import { resolveBreadcrumbsAppContext } from "@app-context/resolve/breadcrumbs.resolve.app-context";
 import { appStateCreate } from "@app-state/create.app-state";
 
-const env = {
-  APP_HOST: "dev.kevinellen.com",
-} as Env;
+const makeKv = (): KVNamespace =>
+  ({
+    list: jest.fn().mockResolvedValue({ keys: [] }),
+    get: jest.fn(),
+  }) as unknown as KVNamespace;
+
+const makeEnv = (): Env =>
+  ({
+    APP_HOST: "dev.kevinellen.com",
+    KV_JOURNALS: makeKv(),
+  }) as Env;
 
 describe("resolveBreadcrumbsAppContext", () => {
-  it("resolves parent breadcrumb items for a public page and sets the current label", () => {
-    const appState = appStateCreate(env);
+  it("resolves parent breadcrumb items for a public page and sets the current label", async () => {
+    const appState = await appStateCreate(makeEnv());
 
     const result = resolveBreadcrumbsAppContext(
       ["home", "about", "about-equipment"],
@@ -43,8 +51,8 @@ describe("resolveBreadcrumbsAppContext", () => {
     });
   });
 
-  it("resolves an error breadcrumb chain using the error page title as the current label", () => {
-    const appState = appStateCreate(env);
+  it("resolves an error breadcrumb chain using the error page title as the current label", async () => {
+    const appState = await appStateCreate(makeEnv());
 
     const result = resolveBreadcrumbsAppContext(
       ["home", "error-404"],
@@ -67,27 +75,27 @@ describe("resolveBreadcrumbsAppContext", () => {
     expect(result.current).toBe("404 | Page not found");
   });
 
-  it("throws when breadcrumbs are empty", () => {
-    const appState = appStateCreate(env);
+  it("throws when breadcrumbs are empty", async () => {
+    const appState = await appStateCreate(makeEnv());
 
     expect(() => resolveBreadcrumbsAppContext([] as never, appState)).toThrow(
       "Breadcrumbs must contain at least one item.",
     );
   });
 
-  it("throws when a parent breadcrumb id cannot be resolved", () => {
-    const appState = appStateCreate(env);
+  it("throws when a parent breadcrumb id cannot be resolved", async () => {
+    const appState = await appStateCreate(makeEnv());
 
     expect(() =>
       resolveBreadcrumbsAppContext(
         ["home", "missing-page" as never, "about"],
         appState,
       ),
-    ).toThrow();
+    ).toThrow("Missing public page for internal link id 'missing-page'.");
   });
 
-  it("throws when the current breadcrumb id cannot be resolved", () => {
-    const appState = appStateCreate(env);
+  it("throws when the current breadcrumb id cannot be resolved", async () => {
+    const appState = await appStateCreate(makeEnv());
 
     expect(() =>
       resolveBreadcrumbsAppContext(["home", "missing-page" as never], appState),

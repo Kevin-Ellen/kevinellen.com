@@ -13,17 +13,22 @@ import { appStateResolveNavigation } from "@app-state/resolve/navigation.resolve
 import { appStateResolveStructuredData } from "@app-state/resolve/structured-data.resolve.app-state";
 import { appStateResolvePages } from "./resolve/pages.resolve.app-state";
 
-export const appStateCreate = (env: Env): AppState => {
+export const appStateCreate = async (env: Env): Promise<AppState> => {
   const siteConfig = appStateResolveSiteConfig(env);
   const webManifest = appStateResolveWebmanifest(siteConfig);
+
   const system = appStateResolveSystem;
   const assets = appStateResolveAssets;
+
   const globalFooter = appStateResolveGlobalFooter(siteConfig);
   const social = appStateResolveSocial;
   const metadataLabels = appStateResolveMetadataLabels;
   const navigation = appStateResolveNavigation;
   const structuredData = appStateResolveStructuredData(siteConfig);
-  const pages = appStateResolvePages;
+
+  const pages = await appStateResolvePages({
+    kv: env.KV_JOURNALS,
+  });
 
   return new AppState({
     siteConfig,

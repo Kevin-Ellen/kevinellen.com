@@ -1,26 +1,54 @@
 // tests/src/app-context/resolve/shared/links/internal.link.shared.resolve.app-context.test.ts
 
+import type { AppState } from "@app-state/class.app-state";
+
 import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
 
-import { appStateCreate } from "@app-state/create.app-state";
-
-const makeEnv = (): Env =>
+const makeAppState = (
+  page: unknown = {
+    id: "about",
+    label: "About",
+    slug: "/about",
+  },
+): AppState =>
   ({
-    APP_ENV: "dev",
-    APP_HOST: "dev.kevinellen.com",
-  }) as Env;
+    getPublicPageById: jest.fn().mockReturnValue(page),
+  }) as unknown as AppState;
+
+const validLink = {
+  kind: "internal",
+  id: "about",
+  svgId: null,
+  behaviour: {
+    openInNewTab: false,
+  },
+} as const;
 
 describe("resolveInternalLinkAppContext", () => {
   it("resolves href and text from the linked public page", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState();
+
+    const result = resolveInternalLinkAppContext(validLink, appState);
+
+    expect(appState.getPublicPageById).toHaveBeenCalledWith("about");
+
+    expect(result).toEqual({
+      ...validLink,
+      href: "/about",
+      text: "About",
+    });
+  });
+
+  it("preserves link behaviour and svg metadata", () => {
+    const appState = makeAppState();
 
     const result = resolveInternalLinkAppContext(
       {
         kind: "internal",
         id: "about",
-        svgId: null,
+        svgId: "icon-home",
         behaviour: {
-          openInNewTab: false,
+          openInNewTab: true,
         },
       },
       appState,
@@ -29,17 +57,17 @@ describe("resolveInternalLinkAppContext", () => {
     expect(result).toEqual({
       kind: "internal",
       id: "about",
-      svgId: null,
+      svgId: "icon-home",
       behaviour: {
-        openInNewTab: false,
+        openInNewTab: true,
       },
       href: "/about",
       text: "About",
     });
   });
 
-  it("throws when the link is invalid", () => {
-    const appState = appStateCreate(makeEnv());
+  it("throws when the link is null", () => {
+    const appState = makeAppState();
 
     expect(() =>
       resolveInternalLinkAppContext(null as never, appState),
@@ -47,44 +75,30 @@ describe("resolveInternalLinkAppContext", () => {
   });
 
   it("throws when the link id is null", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState();
+
+    const invalidLink = {
+      kind: "internal",
+      id: null,
+      svgId: null,
+      behaviour: {
+        openInNewTab: false,
+      },
+    };
 
     expect(() =>
-      resolveInternalLinkAppContext(
-        {
-          kind: "internal",
-          id: null,
-          svgId: null,
-          behaviour: {
-            openInNewTab: false,
-          },
-        } as never,
-        appState,
-      ),
-    ).toThrow(
-      `Invalid AppStateInternalLink: ${JSON.stringify({
-        kind: "internal",
-        id: null,
-        svgId: null,
-        behaviour: {
-          openInNewTab: false,
-        },
-      })}`,
-    );
+      resolveInternalLinkAppContext(invalidLink as never, appState),
+    ).toThrow(`Invalid AppStateInternalLink: ${JSON.stringify(invalidLink)}`);
   });
 
   it("throws when the linked public page does not exist", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState(null);
 
     expect(() =>
       resolveInternalLinkAppContext(
         {
-          kind: "internal",
+          ...validLink,
           id: "missing-page" as never,
-          svgId: null,
-          behaviour: {
-            openInNewTab: false,
-          },
         },
         appState,
       ),
@@ -92,26 +106,26 @@ describe("resolveInternalLinkAppContext", () => {
   });
 
   it("throws when the linked public page is missing a slug", () => {
-    const appState = {
-      getPublicPageById: jest.fn().mockReturnValue({
-        id: "about",
-        label: "About",
-        slug: null,
-      }),
-    } as never;
+    const appState = makeAppState({
+      id: "about",
+      label: "About",
+      slug: null,
+    });
 
-    expect(() =>
-      resolveInternalLinkAppContext(
-        {
-          kind: "internal",
-          id: "about",
-          svgId: null,
-          behaviour: {
-            openInNewTab: false,
-          },
-        },
-        appState,
-      ),
-    ).toThrow("Public page 'about' is missing a slug.");
+    expect(() => resolveInternalLinkAppContext(validLink, appState)).toThrow(
+      "Public page 'about' is missing a slug.",
+    );
+  });
+
+  it("throws when the linked public page is missing a label", () => {
+    const appState = makeAppState({
+      id: "about",
+      label: null,
+      slug: "/about",
+    });
+
+    expect(() => resolveInternalLinkAppContext(validLink, appState)).toThrow(
+      "Public page 'about' is missing a label.",
+    );
   });
 });

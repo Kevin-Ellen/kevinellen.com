@@ -78,5 +78,12 @@ export default [
     },
   },
 
+  {
+    files: ["**/*.ts"],
+    rules: {
+      "no-undef": "off",
+    },
+  },
+
   eslintConfigPrettier,
 ];

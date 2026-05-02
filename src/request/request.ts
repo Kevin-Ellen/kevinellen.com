@@ -24,7 +24,7 @@ export const requestOrchestrator = async (
     return preRequest;
   }
 
-  const appState = appStateCreate(env);
+  const appState = await appStateCreate(env);
 
   const preAppContext = await preAppContextOrchestrator(req, env, appState);
 

@@ -312,7 +312,7 @@ describe("requestOrchestrator", () => {
     });
 
     mockedPreRequestOrchestrator.mockResolvedValue(null);
-    mockedAppStateCreate.mockReturnValue(appState);
+    mockedAppStateCreate.mockResolvedValue(appState);
     mockedPreAppContextOrchestrator.mockResolvedValue({
       kind: "direct-response",
       response: preAppContextResponse,
@@ -357,7 +357,7 @@ describe("requestOrchestrator", () => {
     const htmlResponse = new Response(document, { status: 200 });
 
     mockedPreRequestOrchestrator.mockResolvedValue(null);
-    mockedAppStateCreate.mockReturnValue(appState);
+    mockedAppStateCreate.mockResolvedValue(appState);
     mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
     mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
     mockedAppContextCreate.mockReturnValue(appContext as never);
@@ -417,7 +417,7 @@ describe("requestOrchestrator", () => {
     const inspectResponse = new Response("inspect", { status: 200 });
 
     mockedPreRequestOrchestrator.mockResolvedValue(null);
-    mockedAppStateCreate.mockReturnValue(appState);
+    mockedAppStateCreate.mockResolvedValue(appState);
     mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
     mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
     mockedAppContextCreate.mockReturnValue(appContext as never);

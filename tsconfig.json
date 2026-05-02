@@ -3,7 +3,11 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "types": ["./worker-configuration.d.ts", "jest"],
+    "types": [
+      "./worker-configuration.d.ts",
+      "jest",
+      "@cloudflare/workers-types"
+    ],
     "lib": ["ES2022", "DOM"],
     "strict": true,
     "noEmit": true,

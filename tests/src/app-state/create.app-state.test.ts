@@ -19,6 +19,10 @@ jest.mock("@app-state/resolve/structured-data.resolve.app-state", () => ({
   appStateResolveStructuredData: jest.fn(),
 }));
 
+jest.mock("@app-state/resolve/pages.resolve.app-state", () => ({
+  appStateResolvePages: jest.fn(),
+}));
+
 import { appStateResolveSiteConfig } from "@app-state/resolve/site-config.resolve.app-state";
 import { appStateResolveWebmanifest } from "@app-state/resolve/webmanifest.resolve.app-state";
 import { appStateResolveSystem } from "@app-state/resolve/system.resolve.app-state";
@@ -32,38 +36,42 @@ import { appStateResolvePages } from "@app-state/resolve/pages.resolve.app-state
 
 import { appStateCreate } from "@app-state/create.app-state";
 
-const mockedAppStateResolveSiteConfig =
-  appStateResolveSiteConfig as jest.MockedFunction<
-    typeof appStateResolveSiteConfig
-  >;
+const mockedAppStateResolveSiteConfig = jest.mocked(appStateResolveSiteConfig);
+const mockedAppStateResolveWebmanifest = jest.mocked(
+  appStateResolveWebmanifest,
+);
+const mockedAppStateResolveGlobalFooter = jest.mocked(
+  appStateResolveGlobalFooter,
+);
+const mockedAppStateResolveStructuredData = jest.mocked(
+  appStateResolveStructuredData,
+);
+const mockedAppStateResolvePages = jest.mocked(appStateResolvePages);
 
-const mockedAppStateResolveWebmanifest =
-  appStateResolveWebmanifest as jest.MockedFunction<
-    typeof appStateResolveWebmanifest
-  >;
+const makeKv = (): KVNamespace =>
+  ({
+    list: jest.fn().mockResolvedValue({ keys: [] }),
+    get: jest.fn(),
+  }) as unknown as KVNamespace;
 
-const mockedAppStateResolveGlobalFooter =
-  appStateResolveGlobalFooter as jest.MockedFunction<
-    typeof appStateResolveGlobalFooter
-  >;
-
-const mockedAppStateResolveStructuredData =
-  appStateResolveStructuredData as jest.MockedFunction<
-    typeof appStateResolveStructuredData
-  >;
+const makeEnv = (overrides: Partial<Env> = {}): Env =>
+  ({
+    APP_HOST: "kevinellen.com",
+    KV_JOURNALS: makeKv(),
+    ...overrides,
+  }) as unknown as Env;
 
 describe("appStateCreate", () => {
-  const makeEnv = (overrides: Partial<Env> = {}): Env =>
-    ({
-      APP_HOST: "kevinellen.com",
-      ...overrides,
-    }) as unknown as Env;
-
   beforeEach(() => {
     jest.clearAllMocks();
+
+    mockedAppStateResolvePages.mockResolvedValue({
+      public: [],
+      error: [],
+    } as never);
   });
 
-  it("creates an AppState from resolved AppState parts", () => {
+  it("creates an AppState from resolved AppState parts", async () => {
     const env = makeEnv();
 
     const siteConfig = {
@@ -95,12 +103,18 @@ describe("appStateCreate", () => {
       },
     } as never;
 
+    const pages = {
+      public: [],
+      error: [],
+    } as never;
+
     mockedAppStateResolveSiteConfig.mockReturnValue(siteConfig);
     mockedAppStateResolveWebmanifest.mockReturnValue(webManifest);
     mockedAppStateResolveGlobalFooter.mockReturnValue(globalFooter);
     mockedAppStateResolveStructuredData.mockReturnValue(structuredData);
+    mockedAppStateResolvePages.mockResolvedValue(pages);
 
-    const result = appStateCreate(env);
+    const result = await appStateCreate(env);
 
     expect(mockedAppStateResolveSiteConfig).toHaveBeenCalledWith(env);
     expect(mockedAppStateResolveWebmanifest).toHaveBeenCalledWith(siteConfig);
@@ -108,6 +122,9 @@ describe("appStateCreate", () => {
     expect(mockedAppStateResolveStructuredData).toHaveBeenCalledWith(
       siteConfig,
     );
+    expect(mockedAppStateResolvePages).toHaveBeenCalledWith({
+      kv: env.KV_JOURNALS,
+    });
 
     expect(result.inspect).toEqual({
       siteConfig,
@@ -119,14 +136,14 @@ describe("appStateCreate", () => {
       metadataLabels: appStateResolveMetadataLabels,
       navigation: appStateResolveNavigation,
       structuredData,
-      pages: appStateResolvePages,
+      pages,
     });
   });
 
-  it("returns an AppState instance", () => {
+  it("returns an AppState instance", async () => {
     const env = makeEnv();
 
-    const siteConfig = {
+    mockedAppStateResolveSiteConfig.mockReturnValue({
       siteName: "Kevin Ellen",
       origin: "https://kevinellen.com",
       description: "Description",
@@ -134,14 +151,13 @@ describe("appStateCreate", () => {
       headerBranding: {
         homeHref: "/",
       },
-    } as never;
+    } as never);
 
-    mockedAppStateResolveSiteConfig.mockReturnValue(siteConfig);
     mockedAppStateResolveWebmanifest.mockReturnValue({} as never);
     mockedAppStateResolveGlobalFooter.mockReturnValue({} as never);
     mockedAppStateResolveStructuredData.mockReturnValue({} as never);
 
-    const result = appStateCreate(env);
+    const result = await appStateCreate(env);
 
     expect(result.constructor.name).toBe("AppState");
   });

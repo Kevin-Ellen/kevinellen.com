@@ -1,21 +1,57 @@
 // tests/src/app-context/resolve/structured-data/website.structured-data.global.resolve.app-context.test.ts
 
-import { resolveWebsiteStructuredDataGlobalAppContext } from "@app-context/resolve/structured-data/website.structured-data.global.resolve.app-context";
-import { appStateCreate } from "@app-state/create.app-state";
+import type { AppState } from "@app-state/class.app-state";
+import type { AppStateWebSiteStructuredData } from "@shared-types/config/structured-data/app-state.website.structured-data.types";
 
-const makeEnv = (): Env =>
+import { resolveWebsiteStructuredDataGlobalAppContext } from "@app-context/resolve/structured-data/website.structured-data.global.resolve.app-context";
+
+const structuredData: AppStateWebSiteStructuredData = {
+  id: {
+    pageId: "home",
+    hash: "#website",
+  },
+  url: {
+    pageId: "home",
+  },
+  name: "Kevin Ellen",
+  description: "Wildlife photography, field notes, and technical work.",
+  inLanguage: "en-GB",
+  publisherId: {
+    pageId: "about",
+    hash: "#person",
+  },
+};
+
+const makeAppState = (): AppState =>
   ({
-    APP_ENV: "dev",
-    APP_HOST: "dev.kevinellen.com",
-  }) as Env;
+    siteConfig: {
+      origin: "https://dev.kevinellen.com",
+    },
+    getPublicPageById: jest.fn((id: string) => {
+      if (id === "home") {
+        return {
+          id: "home",
+          slug: "/",
+        };
+      }
+
+      if (id === "about") {
+        return {
+          id: "about",
+          slug: "/about",
+        };
+      }
+
+      return null;
+    }),
+  }) as unknown as AppState;
 
 describe("resolveWebsiteStructuredDataGlobalAppContext", () => {
   it("resolves website structured data references to absolute urls", () => {
-    const appState = appStateCreate(makeEnv());
-    const origin = appState.siteConfig.origin;
+    const appState = makeAppState();
 
     const result = resolveWebsiteStructuredDataGlobalAppContext(
-      appState.structuredData.website,
+      structuredData,
       appState,
     );
 
@@ -24,25 +60,48 @@ describe("resolveWebsiteStructuredDataGlobalAppContext", () => {
       json: {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "@id": `${origin}/#website`,
-        url: `${origin}/`,
-        name: appState.structuredData.website.name,
-        description: appState.structuredData.website.description,
-        inLanguage: appState.structuredData.website.inLanguage,
+        "@id": "https://dev.kevinellen.com/#website",
+        url: "https://dev.kevinellen.com/",
+        name: "Kevin Ellen",
+        description: "Wildlife photography, field notes, and technical work.",
+        inLanguage: "en-GB",
         publisher: {
-          "@id": `${origin}/about#person`,
+          "@id": "https://dev.kevinellen.com/about#person",
         },
       },
     });
+
+    expect(appState.getPublicPageById).toHaveBeenCalledWith("home");
+    expect(appState.getPublicPageById).toHaveBeenCalledWith("about");
+  });
+
+  it("resolves a reference without a hash", () => {
+    const appState = makeAppState();
+
+    const result = resolveWebsiteStructuredDataGlobalAppContext(
+      {
+        ...structuredData,
+        id: {
+          pageId: "about",
+        },
+      },
+      appState,
+    );
+
+    expect(result.json).toEqual(
+      expect.objectContaining({
+        "@id": "https://dev.kevinellen.com/about",
+      }),
+    );
   });
 
   it("throws when the id page reference cannot be resolved", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState();
 
     expect(() =>
       resolveWebsiteStructuredDataGlobalAppContext(
         {
-          ...appState.structuredData.website,
+          ...structuredData,
           id: {
             pageId: "missing-page" as never,
             hash: "#website",
@@ -56,12 +115,12 @@ describe("resolveWebsiteStructuredDataGlobalAppContext", () => {
   });
 
   it("throws when the url page reference cannot be resolved", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState();
 
     expect(() =>
       resolveWebsiteStructuredDataGlobalAppContext(
         {
-          ...appState.structuredData.website,
+          ...structuredData,
           url: {
             pageId: "missing-page" as never,
           },
@@ -74,12 +133,12 @@ describe("resolveWebsiteStructuredDataGlobalAppContext", () => {
   });
 
   it("throws when the publisher page reference cannot be resolved", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState();
 
     expect(() =>
       resolveWebsiteStructuredDataGlobalAppContext(
         {
-          ...appState.structuredData.website,
+          ...structuredData,
           publisherId: {
             pageId: "missing-page" as never,
             hash: "#person",

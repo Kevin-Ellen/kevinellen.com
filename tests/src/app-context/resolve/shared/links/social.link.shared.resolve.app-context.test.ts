@@ -1,25 +1,53 @@
 // tests/src/app-context/resolve/shared/links/social.link.shared.resolve.app-context.test.ts
 
-import { resolveSocialLinkAppContext } from "@app-context/resolve/shared/links/social.link.shared.resolve.app-context";
-import { appStateCreate } from "@app-state/create.app-state";
+import type { AppState } from "@app-state/class.app-state";
 
-const makeEnv = (): Env =>
+import { resolveSocialLinkAppContext } from "@app-context/resolve/shared/links/social.link.shared.resolve.app-context";
+
+const makeAppState = (
+  social: Record<string, { href: string; label: string }> = {
+    github: {
+      href: "https://github.com/Kevin-Ellen",
+      label: "GitHub",
+    },
+  },
+): AppState =>
   ({
-    APP_ENV: "dev",
-    APP_HOST: "dev.kevinellen.com",
-  }) as Env;
+    social,
+  }) as unknown as AppState;
+
+const validLink = {
+  kind: "social",
+  id: "github",
+  svgId: "icon-github",
+  behaviour: {
+    openInNewTab: true,
+  },
+} as const;
 
 describe("resolveSocialLinkAppContext", () => {
   it("resolves href and text from social config", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState();
+
+    const result = resolveSocialLinkAppContext(validLink, appState);
+
+    expect(result).toEqual({
+      ...validLink,
+      href: "https://github.com/Kevin-Ellen",
+      text: "GitHub",
+    });
+  });
+
+  it("preserves link behaviour and svg metadata", () => {
+    const appState = makeAppState();
 
     const result = resolveSocialLinkAppContext(
       {
         kind: "social",
         id: "github",
-        svgId: "icon-github",
+        svgId: null,
         behaviour: {
-          openInNewTab: true,
+          openInNewTab: false,
         },
       },
       appState,
@@ -28,9 +56,9 @@ describe("resolveSocialLinkAppContext", () => {
     expect(result).toEqual({
       kind: "social",
       id: "github",
-      svgId: "icon-github",
+      svgId: null,
       behaviour: {
-        openInNewTab: true,
+        openInNewTab: false,
       },
       href: "https://github.com/Kevin-Ellen",
       text: "GitHub",
@@ -38,17 +66,13 @@ describe("resolveSocialLinkAppContext", () => {
   });
 
   it("throws when the social config entry does not exist", () => {
-    const appState = appStateCreate(makeEnv());
+    const appState = makeAppState({});
 
     expect(() =>
       resolveSocialLinkAppContext(
         {
-          kind: "social",
+          ...validLink,
           id: "missing-social" as never,
-          svgId: null,
-          behaviour: {
-            openInNewTab: true,
-          },
         },
         appState,
       ),
