@@ -9,6 +9,14 @@ describe("appStateResolveNavigation", () => {
         primary: [
           {
             kind: "internal",
+            id: "journal",
+            svgId: null,
+            behaviour: {
+              openInNewTab: false,
+            },
+          },
+          {
+            kind: "internal",
             id: "about",
             svgId: null,
             behaviour: {
@@ -41,6 +49,14 @@ describe("appStateResolveNavigation", () => {
             id: "site",
             label: "Site",
             items: [
+              {
+                kind: "internal",
+                id: "journal",
+                svgId: null,
+                behaviour: {
+                  openInNewTab: false,
+                },
+              },
               {
                 kind: "internal",
                 id: "about",

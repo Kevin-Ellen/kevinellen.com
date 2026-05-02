@@ -118,6 +118,7 @@ describe("inspectRequest", () => {
   const routing: RoutingResult = {
     kind: "found",
     publicPageId: "home",
+    pagination: null,
   };
 
   const appContext = {

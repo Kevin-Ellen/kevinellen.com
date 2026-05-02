@@ -32,6 +32,7 @@ describe("resolvePageSourceAppContext", () => {
     const result = resolvePageSourceAppContext(appState as never, {
       kind: "found",
       publicPageId: "about",
+      pagination: null,
     });
 
     expect(result).toBe(publicPage);
@@ -49,6 +50,7 @@ describe("resolvePageSourceAppContext", () => {
       resolvePageSourceAppContext(appState as never, {
         kind: "found",
         publicPageId: "about",
+        pagination: null,
       }),
     ).toThrow("Missing public page for routing id 'about'.");
 

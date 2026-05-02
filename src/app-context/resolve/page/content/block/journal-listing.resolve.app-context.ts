@@ -83,12 +83,12 @@ export const appContextResolveJournalListingBlockContentModule = (
 
     return {
       id: page.id,
-      href: page.slug, // safe after slug fix
+      href: page.slug,
       title: page.content.header.title,
       intro: page.content.header.intro,
       eyebrow: page.content.header.eyebrow,
       publishedAt: getPublishedAt(page),
-      image, // 👈 THIS WAS MISSING
+      image,
     };
   });
 
