@@ -4,6 +4,7 @@ import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyContent } from "@app-render-context/types/body-content.app-render-context.types";
 
 import { resolveBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/block.resolve.app-render-context";
+import { resolveFooterContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/footer/footer.resolve.app-render-context";
 
 export const resolveBodyContentAppRenderContext = (
   appContext: AppContext,
@@ -14,7 +15,7 @@ export const resolveBodyContentAppRenderContext = (
       resolveBlockContentModuleAppRenderContext(appContext, module),
     ),
     footer: appContext.page.content.footer.map((module) =>
-      resolveBlockContentModuleAppRenderContext(appContext, module),
+      resolveFooterContentModuleAppRenderContext(appContext, module),
     ),
   };
 };

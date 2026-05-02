@@ -7,7 +7,20 @@ import type { AppContextPageContentResolverContext } from "@app-context/resolve/
 
 export const appContextResolveHeroBlockContentModule = (
   module: AppStateHeroBlockContentModule,
-  _context: AppContextPageContentResolverContext,
+  context: AppContextPageContentResolverContext,
 ): AppContextHeroBlockContentModule => {
-  return module;
+  const photo = context.photos.find(
+    (candidate) => candidate.id === module.photoId,
+  );
+
+  if (!photo) {
+    throw new Error(
+      `No AppContext photo resolved for hero photoId: ${module.photoId}`,
+    );
+  }
+
+  return {
+    ...module,
+    photo,
+  };
 };

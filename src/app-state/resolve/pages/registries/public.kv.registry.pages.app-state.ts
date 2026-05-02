@@ -24,7 +24,8 @@ const isAuthoredPublicPageDefinition = (
     typeof candidate.label === "string" &&
     typeof candidate.metadata === "object" &&
     candidate.metadata !== null &&
-    Array.isArray(candidate.breadcrumbs) &&
+    (candidate.breadcrumbs === undefined ||
+      Array.isArray(candidate.breadcrumbs)) &&
     typeof candidate.content === "object" &&
     candidate.content !== null
   );

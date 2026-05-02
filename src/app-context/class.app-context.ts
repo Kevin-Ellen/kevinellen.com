@@ -14,6 +14,7 @@ import type { AppContextHeaderBranding } from "@shared-types/config/site-config/
 import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-context.breadcrumbs.types";
 import type { AppContextPageDefinition } from "@shared-types/page-definitions/app-context.page-definition.types";
 import type { AppContextPreload } from "@shared-types/config/site-config/app-context.preload.config.types";
+import type { AppContextMetadataLabels } from "@shared-types/config/metadata-labels/app-context.metadata-labels.types";
 
 export class AppContext {
   readonly #data: AppContextData;
@@ -93,6 +94,10 @@ export class AppContext {
 
   public get preload(): AppContextPreload {
     return this.#data.preload;
+  }
+
+  public get metadataLabels(): AppContextMetadataLabels {
+    return this.#data.metadataLabels;
   }
 
   public get inspect(): AppContextData {

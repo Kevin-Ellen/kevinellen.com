@@ -25,10 +25,6 @@ export const resolveArticleSectionBlockContentModuleAppRenderContext = (
 ): AppRenderContextArticleSectionBlockContentModule => {
   return {
     ...module,
-    heading: resolveArticleSectionHeadingBlockContentModuleAppRenderContext(
-      appContext,
-      module.heading,
-    ),
     modules: module.modules.map((childModule) =>
       resolveBlockContentModuleAppRenderContext(appContext, childModule),
     ),

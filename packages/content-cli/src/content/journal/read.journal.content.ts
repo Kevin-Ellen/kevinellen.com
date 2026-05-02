@@ -18,7 +18,7 @@ export const runReadJournalCommand: ContentCommandHandler = async (args) => {
   const journal = await readCloudflareKvValue<AuthoredPublicPageDefinition>(
     config,
     config.cloudflareKvJournalsNamespaceId,
-    `journal:${journalId}`,
+    `page:journal:${journalId}`,
   );
 
   console.log("\nJournal from KV\n");

@@ -4,7 +4,7 @@ import type { AppRenderContextBodyContent } from "@app-render-context/types/body
 
 import { renderBodyContentHeader } from "@rendering/body-content/header.body-content.renderer";
 import { renderBodyContentModule } from "@rendering/body-content/module.body-content.renderer";
-import { renderBodyContentFooter } from "@rendering/body-content/footer.body-content.renderer";
+import { renderBodyContentFooter } from "@rendering/body-content/footer/footer.body-content.renderer";
 
 export const renderBodyContent = (
   bodyContent: AppRenderContextBodyContent,

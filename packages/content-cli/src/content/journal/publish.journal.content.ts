@@ -17,6 +17,26 @@ import { publishPhotoDrafts } from "@content-cli/content/shared/publish-drafts.p
 import { runValidateJournalCommand } from "@content-cli/content/journal/validate.journal.content";
 import { formatLocalDateTimeWithOffset } from "@content-cli/utils/format.local.date.time.with.offset.util";
 
+const JOURNAL_PAGE_ID_PREFIX = "journal:";
+
+const toJournalPageId = (workspaceId: string): `journal:${string}` =>
+  `${JOURNAL_PAGE_ID_PREFIX}${workspaceId}`;
+
+const updateJournalIdentity = (
+  page: AuthoredPublicPageDefinition,
+  workspaceId: string,
+): AuthoredPublicPageDefinition => {
+  const id = toJournalPageId(workspaceId);
+
+  return {
+    ...page,
+    id,
+    kind: "journal",
+    slug: `/journal/${workspaceId}`,
+    breadcrumbs: ["home", "journal", id],
+  };
+};
+
 const updateJournalFooter = (
   page: AuthoredPublicPageDefinition,
 ): AuthoredPublicPageDefinition => {
@@ -82,12 +102,13 @@ export const runPublishJournalCommand: ContentCommandHandler = async (args) => {
     photosPath,
   );
 
-  const publishedPage = updateJournalFooter(page);
+  const pageWithIdentity = updateJournalIdentity(page, workspaceId);
+  const publishedPage = updateJournalFooter(pageWithIdentity);
 
   await writeCloudflareKvValue(
     config,
     config.cloudflareKvJournalsNamespaceId,
-    `journal:${publishedPage.id}`,
+    `page:${publishedPage.id}`,
     publishedPage,
   );
 
@@ -102,7 +123,7 @@ export const runPublishJournalCommand: ContentCommandHandler = async (args) => {
 
   await fs.rename(workspacePath, uploadedWorkspacePath);
 
-  console.log(`Journal KV: journal:${publishedPage.id}`);
+  console.log(`Journal KV: page:${publishedPage.id}`);
   console.log(`Photos published: ${publishedPhotos.length}`);
   console.log(`\nWorkspace moved:`);
   console.log(`  ${workspacePath}`);

@@ -34,7 +34,7 @@ export const requestOrchestrator = async (
 
   const routing = orchestrateRouteResolution(req, appState, preAppContext);
 
-  const appContext = appContextCreate(appState, routing);
+  const appContext = await appContextCreate(appState, routing, env);
 
   const appRenderContext = appRenderContextCreate(appContext, env);
 
