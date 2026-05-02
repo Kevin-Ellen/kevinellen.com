@@ -51,5 +51,5 @@ export const requestOrchestrator = async (
 
   const document = render(appRenderContext);
 
-  return createHtmlResponse(document, appRenderContext);
+  return createHtmlResponse(document, appRenderContext, env);
 };

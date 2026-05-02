@@ -332,7 +332,11 @@ describe("requestOrchestrator", () => {
 
     const appState = buildAppState();
     const preAppContext = { kind: "continue" };
-    const routing = { kind: "found", publicPageId: "about" };
+    const routing = {
+      kind: "found",
+      publicPageId: "about",
+      pagination: null,
+    };
     const appContext = { page: { id: "about" } };
     const appRenderContext = {
       responsePolicy: {
@@ -382,6 +386,7 @@ describe("requestOrchestrator", () => {
     expect(mockedCreateHtmlResponse).toHaveBeenCalledWith(
       document,
       appRenderContext,
+      env,
     );
 
     expect(result).toBe(htmlResponse);
@@ -398,7 +403,11 @@ describe("requestOrchestrator", () => {
 
     const appState = buildAppState();
     const preAppContext = { kind: "continue" };
-    const routing = { kind: "found", publicPageId: "about" };
+    const routing = {
+      kind: "found",
+      publicPageId: "about",
+      pagination: null,
+    };
     const appContext = { page: { id: "about" } };
     const appRenderContext = {
       responsePolicy: {
