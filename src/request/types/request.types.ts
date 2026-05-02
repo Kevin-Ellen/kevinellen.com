@@ -4,12 +4,22 @@ import type { RedirectMatch } from "@request/pre-app-context/redirects/redirects
 import type { ErrorPageStatus } from "@shared-types/page-definitions/shared/shared.error.page-definition.types";
 import type { PageIdPublic } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
+export type RoutingPagination = Readonly<{
+  currentPage: number;
+}>;
+
+export type RoutingResultFound = Readonly<{
+  kind: "found";
+  publicPageId: PageIdPublic;
+  pagination: RoutingPagination | null;
+}>;
+
 export type RequestResult =
   | { kind: "continue" }
   | { kind: "direct-response"; response: Response }
   | { kind: "redirect"; redirectMatch: RedirectMatch }
   | { kind: "error"; status: ErrorPageStatus }
-  | { kind: "found"; publicPageId: PageIdPublic };
+  | RoutingResultFound;
 
 export type PreRequestResult = Response | null;
 

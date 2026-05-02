@@ -1,0 +1,28 @@
+@use "../tokens" as tokens;
+
+.m-pagination {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) auto minmax(7rem, 1fr);
+  align-items: center;
+  gap: tokens.$space-md;
+  width: min(100%, 34rem);
+  margin-inline: auto;
+  margin-top: tokens.$space-xl;
+  padding-top: tokens.$space-md;
+  border-top: 1px solid tokens.$colour-rule;
+  font-size: tokens.$font-size-body-sm;
+
+  &__slot {
+    &--previous {
+      justify-self: start;
+    }
+
+    &--label {
+      justify-self: center;
+    }
+
+    &--next {
+      justify-self: end;
+    }
+  }
+}

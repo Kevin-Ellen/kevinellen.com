@@ -1,4 +1,4 @@
-// src/pages/public/static/authored.home.public.page.ts
+// src/pages/public/static/authored.journal.public.page.ts
 
 import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
@@ -12,45 +12,36 @@ export const authoredJournalPublicPage: AuthoredPublicPageDefinition =
     label: "Journal",
 
     metadata: {
-      pageTitle: "Journal",
+      pageTitle: "Wildlife Journal",
       metaDescription:
-        "Nature photography, field notes, journal writing, and technical architecture.",
+        "Wildlife photography field notes and encounters, documenting moments in nature through observation, patience, and timing.",
     },
 
     breadcrumbs: ["home", "journal"],
 
     content: {
       header: {
-        eyebrow: "Journal",
+        eyebrow: "Wildlife",
         title: "Journal",
         intro:
-          "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
+          "A field journal of wildlife encounters — capturing behaviour, fleeting moments, and the quiet details often missed at first glance.",
       },
 
       content: [
         {
           kind: "articleSection",
           heading: {
-            text: "Introduction",
+            text: "Journal entries",
             visuallyHidden: true,
             level: 2,
           },
           modules: [
             {
-              kind: "paragraph",
-              content: [
-                { kind: "text", value: "Homepage placeholder body content." },
-              ],
-            },
-            {
-              kind: "paragraph",
-              content: [
-                {
-                  kind: "text",
-                  value:
-                    "This section will later introduce featured photography, journal entries, and technical work.",
-                },
-              ],
+              kind: "journalListing",
+              flow: "content",
+              pagination: {
+                pageSize: 12,
+              },
             },
           ],
         },

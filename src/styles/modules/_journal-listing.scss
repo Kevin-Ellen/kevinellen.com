@@ -8,26 +8,30 @@
     padding-block: tokens.$space-lg;
     border-top: 1px solid tokens.$colour-rule;
 
+    &::before {
+      content: "";
+    }
+
     &:first-child {
+      padding-block-start: 0;
       border-top: none;
     }
 
     &--featured {
+      padding-block-end: tokens.$space-xl;
+
       .m-journal-listing__link {
         display: flex;
         flex-direction: column;
+        gap: tokens.$space-md;
+      }
+
+      .m-journal-listing__media {
+        aspect-ratio: 16 / 9;
       }
 
       .m-journal-listing__title {
         font-size: tokens.$font-size-h3;
-      }
-
-      .m-journal-listing__intro {
-        margin-top: tokens.$space-xs;
-      }
-
-      .m-journal-listing__content {
-        margin-top: tokens.$space-sm;
       }
     }
   }
@@ -55,7 +59,7 @@
     img {
       display: block;
       width: 100%;
-      height: auto;
+      height: 100%;
       object-fit: cover;
     }
   }
@@ -63,9 +67,5 @@
   &__content {
     display: flex;
     flex-direction: column;
-
-    @media (min-width: tokens.$bp-sm) {
-      margin-top: 0;
-    }
   }
 }

@@ -173,10 +173,16 @@ describe("appContextResolveBlockContentModule", () => {
   it("dispatches journal listing modules to the journal listing resolver", () => {
     const module = {
       kind: "journalListing",
+      flow: "content",
       pagination: {
         pageSize: 10,
+        currentPage: 1,
+        totalItems: 0,
+        totalPages: 1,
+        previousHref: null,
+        nextHref: null,
       },
-      flow: "content",
+      items: [],
     } as const;
 
     const resolved = module;

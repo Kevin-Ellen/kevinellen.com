@@ -37,9 +37,20 @@ export const appContextCreate = async (
 
   const pageState = resolvePageSourceAppContext(appState, routing);
 
-  const photoIds = appContextCollectPhotoIdsFromBlockContent(
+  const pagePhotoIds = appContextCollectPhotoIdsFromBlockContent(
     pageState.content.content,
   );
+
+  const listingPhotoIds =
+    pageState.kind === "listing"
+      ? appState.getPublicPages
+          .filter((page) => page.kind === "journal")
+          .flatMap((page) =>
+            appContextCollectPhotoIdsFromBlockContent(page.content.content),
+          )
+      : [];
+
+  const photoIds = [...new Set([...pagePhotoIds, ...listingPhotoIds])];
 
   const photos = await resolvePhotosAppContext({
     kv: env.KV_PHOTOS,
@@ -63,6 +74,8 @@ export const appContextCreate = async (
     metadataLabels: appState.metadataLabels,
     resolveInternalLink: (link) =>
       resolveInternalLinkAppContext(link, appState),
+    publicPages: appState.getPublicPages,
+    routingPagination: routing.kind === "found" ? routing.pagination : null,
   });
 
   const language = appState.siteConfig.language;

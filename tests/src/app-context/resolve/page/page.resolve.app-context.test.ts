@@ -64,6 +64,7 @@ describe("resolvePageAppContext", () => {
       {
         kind: "found",
         publicPageId: "about",
+        pagination: null,
       },
       context,
     );

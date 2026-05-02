@@ -382,4 +382,10 @@ describe("AppState", () => {
 
     expect(appState.metadataLabels).toBe(data.metadataLabels);
   });
+
+  it("returns getPublicPages", () => {
+    const appState = new AppState(data);
+
+    expect(appState.getPublicPages).toBe(data.pages.public);
+  });
 });
