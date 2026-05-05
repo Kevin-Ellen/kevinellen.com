@@ -57,6 +57,7 @@ describe("appStateResolvePageContentHead", () => {
       eyebrow: "Field Notes",
       title: "Photography Duck",
       intro: "Wildlife photography and technical architecture.",
+      showInBody: true,
     };
 
     expect(result).toEqual(expected);

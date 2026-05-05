@@ -21,6 +21,7 @@ describe("appStateResolveInternalLinkInlineContent", () => {
       kind: "internalLink",
       link: {
         kind: "internal",
+        text: null,
         id: "about",
         svgId: null,
         behaviour: {

@@ -7,6 +7,9 @@ import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 type Header = AppRenderContextBodyContent["header"];
 
 export const renderBodyContentHeader = (header: Header): string => {
+  if (header.showInBody === false) {
+    return ``;
+  }
   const eyebrow = header.eyebrow
     ? `<p class="m-heading__eyebrow">${escapeHtml(header.eyebrow)}</p>`
     : "";

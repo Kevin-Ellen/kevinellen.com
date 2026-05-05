@@ -20,6 +20,7 @@ const validLink = {
   kind: "social",
   id: "github",
   svgId: "icon-github",
+  text: null,
   behaviour: {
     openInNewTab: true,
   },
@@ -45,6 +46,7 @@ describe("resolveSocialLinkAppContext", () => {
       {
         kind: "social",
         id: "github",
+        text: null,
         svgId: null,
         behaviour: {
           openInNewTab: false,

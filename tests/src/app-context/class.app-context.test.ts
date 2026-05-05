@@ -149,6 +149,7 @@ describe("AppContext", () => {
         header: {
           eyebrow: "Kevin Ellen",
           title: "About me",
+          showInBody: true,
           intro:
             "This site brings together two long-standing interests: nature and technology.",
         },

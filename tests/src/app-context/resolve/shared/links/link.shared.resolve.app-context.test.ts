@@ -48,6 +48,7 @@ describe("resolveLinkAppContext", () => {
       kind: "internal",
       id: "about",
       svgId: null,
+      text: null,
       behaviour: {
         openInNewTab: false,
       },
@@ -101,6 +102,7 @@ describe("resolveLinkAppContext", () => {
       kind: "social",
       id: "github",
       svgId: "icon-github",
+      text: null,
       behaviour: {
         openInNewTab: true,
       },

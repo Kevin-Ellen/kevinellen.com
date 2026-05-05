@@ -7,6 +7,10 @@ import type { AppContextHeroBlockContentModule } from "@shared-types/page-conten
 import type { AppContextJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-context.journal-listing.block.page-content.types";
 import type { AppContextArticleSectionBlockContentModule } from "@shared-types/page-content/block/article-section/app-context.article-section.block.page-content.types";
 import type { AppContextPreBlockContentModule } from "@shared-types/page-content/block/pre/app-context.pre.block.page-content.types";
+import type { AppContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-context.homepage-hero.block.page-content.types";
+import type { AppContextImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-context.image-strip.block.page-content.types";
+import type { AppContextHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-context.homepage-journal-listing.block.types";
+import type { AppContextSectionLinksBlockContentModule } from "@shared-types/page-content/block/section-links/app-context.section-links.block.page-content.types";
 
 export type AppContextBlockContentModule =
   | AppContextParagraphBlockContentModule
@@ -15,4 +19,8 @@ export type AppContextBlockContentModule =
   | AppContextHeroBlockContentModule
   | AppContextJournalListingBlockContentModule
   | AppContextArticleSectionBlockContentModule
-  | AppContextPreBlockContentModule;
+  | AppContextPreBlockContentModule
+  | AppContextHomepageHeroBlockContentModule
+  | AppContextImageStripBlockContentModule
+  | AppContextHomepageJournalListingBlock
+  | AppContextSectionLinksBlockContentModule;

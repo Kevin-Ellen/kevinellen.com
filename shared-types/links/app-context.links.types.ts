@@ -17,8 +17,6 @@ type AppContextSocialLinkFields = Readonly<{
   text: string;
 }>;
 
-type AppContextExternalLinkFields = Readonly<{}>;
-
 export type AppContextInternalLink = Replace<
   AppStateInternalLink,
   AppContextInternalLinkFields
@@ -29,10 +27,7 @@ export type AppContextSocialLink = Replace<
   AppContextSocialLinkFields
 >;
 
-export type AppContextExternalLink = Replace<
-  AppStateExternalLink,
-  AppContextExternalLinkFields
->;
+export type AppContextExternalLink = AppStateExternalLink;
 
 export type AppContextLink =
   | AppContextInternalLink

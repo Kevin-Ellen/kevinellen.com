@@ -9,6 +9,7 @@ describe("appContextResolveInternalLinkInlineContent", () => {
       link: {
         kind: "internal",
         id: "about",
+        text: null,
         svgId: null,
         behaviour: {
           openInNewTab: false,

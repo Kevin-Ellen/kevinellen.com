@@ -13,6 +13,12 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
     flow: "content",
   } as const;
 
+  const articleSectionHeading = {
+    text: "Article section",
+    level: 2,
+    visuallyHidden: true,
+  } as const;
+
   const createJournalPage = ({
     id,
     slug,
@@ -42,6 +48,7 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
           : [
               {
                 kind: "articleSection",
+                heading: articleSectionHeading,
                 modules: [
                   {
                     kind: "hero",
@@ -64,38 +71,55 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
     },
   });
 
-  it("filters to journal pages, sorts newest first, slices by page size, and maps items", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
+  const createContext = ({
+    photos = [],
+    routingPagination = { currentPage: 1 },
+    publicPages,
+  }: {
+    photos?: readonly AppContextPhotoMetadata[];
+    routingPagination?: { currentPage: number } | null;
+    publicPages: readonly unknown[];
+  }) =>
+    ({
+      photos,
+      homepageStripPhotoIds: [],
       metadataLabels: {} as never,
       resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        {
-          id: "about",
-          kind: "static",
-          slug: "/about",
-        },
-        createJournalPage({
-          id: "journal:older",
-          slug: "/journal/older",
-          title: "Older",
-          publishedAt: "2026-01-01T00:00:00+00:00",
-        }),
-        createJournalPage({
-          id: "journal:newer",
-          slug: "/journal/newer",
-          title: "Newer",
-          publishedAt: "2026-02-01T00:00:00+00:00",
-        }),
-        createJournalPage({
-          id: "journal:newest",
-          slug: "/journal/newest",
-          title: "Newest",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-      ] as never,
-    });
+      routingPagination,
+      publicPages,
+    }) as never;
+
+  it("filters to journal pages, sorts newest first, slices by page size, and maps items", () => {
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        publicPages: [
+          {
+            id: "about",
+            kind: "static",
+            slug: "/about",
+          },
+          createJournalPage({
+            id: "journal:older",
+            slug: "/journal/older",
+            title: "Older",
+            publishedAt: "2026-01-01T00:00:00+00:00",
+          }),
+          createJournalPage({
+            id: "journal:newer",
+            slug: "/journal/newer",
+            title: "Newer",
+            publishedAt: "2026-02-01T00:00:00+00:00",
+          }),
+          createJournalPage({
+            id: "journal:newest",
+            slug: "/journal/newest",
+            title: "Newest",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+        ],
+      }),
+    );
 
     expect(result).toEqual({
       kind: "journalListing",
@@ -132,32 +156,32 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
   });
 
   it("uses routing pagination to return the requested page slice", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 2 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:newest",
-          slug: "/journal/newest",
-          title: "Newest",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-        createJournalPage({
-          id: "journal:newer",
-          slug: "/journal/newer",
-          title: "Newer",
-          publishedAt: "2026-02-01T00:00:00+00:00",
-        }),
-        createJournalPage({
-          id: "journal:older",
-          slug: "/journal/older",
-          title: "Older",
-          publishedAt: "2026-01-01T00:00:00+00:00",
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        routingPagination: { currentPage: 2 },
+        publicPages: [
+          createJournalPage({
+            id: "journal:newest",
+            slug: "/journal/newest",
+            title: "Newest",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+          createJournalPage({
+            id: "journal:newer",
+            slug: "/journal/newer",
+            title: "Newer",
+            publishedAt: "2026-02-01T00:00:00+00:00",
+          }),
+          createJournalPage({
+            id: "journal:older",
+            slug: "/journal/older",
+            title: "Older",
+            publishedAt: "2026-01-01T00:00:00+00:00",
+          }),
+        ],
+      }),
+    );
 
     expect(result.pagination).toEqual({
       pageSize: 2,
@@ -178,66 +202,65 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
       alt: "A bird in reeds",
     } as AppContextPhotoMetadata;
 
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [photo],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:with-photo",
-          slug: "/journal/with-photo",
-          title: "With photo",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-          photoId: "photo:one",
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        photos: [photo],
+        publicPages: [
+          createJournalPage({
+            id: "journal:with-photo",
+            slug: "/journal/with-photo",
+            title: "With photo",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+            photoId: "photo:one",
+          }),
+        ],
+      }),
+    );
 
     expect(result.items[0].image).toBe(photo);
   });
 
   it("uses null image when hero photo metadata is missing", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:with-missing-photo",
-          slug: "/journal/with-missing-photo",
-          title: "Missing photo",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-          photoId: "photo:missing",
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        photos: [],
+        publicPages: [
+          createJournalPage({
+            id: "journal:with-missing-photo",
+            slug: "/journal/with-missing-photo",
+            title: "Missing photo",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+            photoId: "photo:missing",
+          }),
+        ],
+      }),
+    );
 
     expect(result.items[0].image).toBeNull();
   });
 
   it("sorts entries without published dates last", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:no-date",
-          slug: "/journal/no-date",
-          title: "No date",
-          publishedAt: null,
-        }),
-        createJournalPage({
-          id: "journal:dated",
-          slug: "/journal/dated",
-          title: "Dated",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        publicPages: [
+          createJournalPage({
+            id: "journal:no-date",
+            slug: "/journal/no-date",
+            title: "No date",
+            publishedAt: null,
+          }),
+          createJournalPage({
+            id: "journal:dated",
+            slug: "/journal/dated",
+            title: "Dated",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+        ],
+      }),
+    );
 
     expect(result.items.map((item) => item.id)).toEqual([
       "journal:dated",
@@ -246,74 +269,72 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
   });
 
   it("ignores journal pages without slugs", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:with-slug",
-          slug: "/journal/with-slug",
-          title: "With slug",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-        {
-          ...createJournalPage({
-            id: "journal:no-slug",
-            slug: "/journal/no-slug",
-            title: "No slug",
-            publishedAt: "2026-04-01T00:00:00+00:00",
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        publicPages: [
+          createJournalPage({
+            id: "journal:with-slug",
+            slug: "/journal/with-slug",
+            title: "With slug",
+            publishedAt: "2026-03-01T00:00:00+00:00",
           }),
-          slug: null,
-        },
-      ] as never,
-    });
+          {
+            ...createJournalPage({
+              id: "journal:no-slug",
+              slug: "/journal/no-slug",
+              title: "No slug",
+              publishedAt: "2026-04-01T00:00:00+00:00",
+            }),
+            slug: null,
+          },
+        ],
+      }),
+    );
 
     expect(result.items).toHaveLength(1);
     expect(result.items[0].id).toBe("journal:with-slug");
   });
 
   it("defaults to page 1 when routing pagination is null", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: null,
-      publicPages: [
-        createJournalPage({
-          id: "journal:one",
-          slug: "/journal/one",
-          title: "One",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        routingPagination: null,
+        publicPages: [
+          createJournalPage({
+            id: "journal:one",
+            slug: "/journal/one",
+            title: "One",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+        ],
+      }),
+    );
 
     expect(result.pagination.currentPage).toBe(1);
   });
 
   it("sorts undated entries by id when both dates are missing", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:b",
-          slug: "/journal/b",
-          title: "B",
-          publishedAt: null,
-        }),
-        createJournalPage({
-          id: "journal:a",
-          slug: "/journal/a",
-          title: "A",
-          publishedAt: null,
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        publicPages: [
+          createJournalPage({
+            id: "journal:b",
+            slug: "/journal/b",
+            title: "B",
+            publishedAt: null,
+          }),
+          createJournalPage({
+            id: "journal:a",
+            slug: "/journal/a",
+            title: "A",
+            publishedAt: null,
+          }),
+        ],
+      }),
+    );
 
     expect(result.items.map((item) => item.id)).toEqual([
       "journal:a",
@@ -332,88 +353,88 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
       photoId: "photo:one",
     });
 
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [photo],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        {
-          ...page,
-          content: {
-            ...page.content,
-            content: [{ kind: "paragraph" }, ...page.content.content],
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        photos: [photo],
+        publicPages: [
+          {
+            ...page,
+            content: {
+              ...page.content,
+              content: [{ kind: "paragraph" }, ...page.content.content],
+            },
           },
-        },
-      ] as never,
-    });
+        ],
+      }),
+    );
 
     expect(result.items[0].image).toBe(photo);
   });
 
   it("uses null image when article sections contain no hero module", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        {
-          ...createJournalPage({
-            id: "journal:no-hero",
-            slug: "/journal/no-hero",
-            title: "No hero",
-            publishedAt: "2026-03-01T00:00:00+00:00",
-          }),
-          content: {
-            header: {
-              eyebrow: "Field Notes",
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        photos: [],
+        publicPages: [
+          {
+            ...createJournalPage({
+              id: "journal:no-hero",
+              slug: "/journal/no-hero",
               title: "No hero",
-              intro: "No hero intro",
-            },
-            content: [
-              {
-                kind: "articleSection",
-                modules: [{ kind: "paragraph" }],
+              publishedAt: "2026-03-01T00:00:00+00:00",
+            }),
+            content: {
+              header: {
+                eyebrow: "Field Notes",
+                title: "No hero",
+                intro: "No hero intro",
               },
-            ],
-            footer: [
-              {
-                kind: "journalEntryFooter",
-                publication: {
-                  publishedAt: "2026-03-01T00:00:00+00:00",
+              content: [
+                {
+                  kind: "articleSection",
+                  heading: articleSectionHeading,
+                  modules: [{ kind: "paragraph" }],
                 },
-              },
-            ],
+              ],
+              footer: [
+                {
+                  kind: "journalEntryFooter",
+                  publication: {
+                    publishedAt: "2026-03-01T00:00:00+00:00",
+                  },
+                },
+              ],
+            },
           },
-        },
-      ] as never,
-    });
+        ],
+      }),
+    );
 
     expect(result.items[0].image).toBeNull();
   });
 
   it("keeps dated entries before undated entries when undated entry is second", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:dated",
-          slug: "/journal/dated",
-          title: "Dated",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-        createJournalPage({
-          id: "journal:no-date",
-          slug: "/journal/no-date",
-          title: "No date",
-          publishedAt: null,
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        publicPages: [
+          createJournalPage({
+            id: "journal:dated",
+            slug: "/journal/dated",
+            title: "Dated",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+          createJournalPage({
+            id: "journal:no-date",
+            slug: "/journal/no-date",
+            title: "No date",
+            publishedAt: null,
+          }),
+        ],
+      }),
+    );
 
     expect(result.items.map((item) => item.id)).toEqual([
       "journal:dated",
@@ -422,26 +443,25 @@ describe("appContextResolveJournalListingBlockContentModule", () => {
   });
 
   it("sorts entries with the same published date by id", () => {
-    const result = appContextResolveJournalListingBlockContentModule(module, {
-      photos: [],
-      metadataLabels: {} as never,
-      resolveInternalLink: jest.fn(),
-      routingPagination: { currentPage: 1 },
-      publicPages: [
-        createJournalPage({
-          id: "journal:b",
-          slug: "/journal/b",
-          title: "B",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-        createJournalPage({
-          id: "journal:a",
-          slug: "/journal/a",
-          title: "A",
-          publishedAt: "2026-03-01T00:00:00+00:00",
-        }),
-      ] as never,
-    });
+    const result = appContextResolveJournalListingBlockContentModule(
+      module,
+      createContext({
+        publicPages: [
+          createJournalPage({
+            id: "journal:b",
+            slug: "/journal/b",
+            title: "B",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+          createJournalPage({
+            id: "journal:a",
+            slug: "/journal/a",
+            title: "A",
+            publishedAt: "2026-03-01T00:00:00+00:00",
+          }),
+        ],
+      }),
+    );
 
     expect(result.items.map((item) => item.id)).toEqual([
       "journal:a",

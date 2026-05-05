@@ -8,6 +8,7 @@ describe("renderBodyContentHeader", () => {
       eyebrow: null,
       title: "About",
       intro: null,
+      showInBody: true,
     });
 
     expect(html).toContain(`<header class="m-heading l-content">`);
@@ -19,6 +20,7 @@ describe("renderBodyContentHeader", () => {
       eyebrow: "Journal",
       title: "Unexpected encounters",
       intro: null,
+      showInBody: true,
     });
 
     expect(html).toContain(`<p class="m-heading__eyebrow">Journal</p>`);
@@ -29,6 +31,7 @@ describe("renderBodyContentHeader", () => {
       eyebrow: null,
       title: "Unexpected encounters",
       intro: "A field note from Mallorca.",
+      showInBody: true,
     });
 
     expect(html).toContain(
@@ -41,6 +44,7 @@ describe("renderBodyContentHeader", () => {
       eyebrow: null,
       title: "About",
       intro: null,
+      showInBody: true,
     });
 
     expect(html).not.toContain(`m-heading__eyebrow`);
@@ -52,6 +56,7 @@ describe("renderBodyContentHeader", () => {
       eyebrow: `Birds & <notes>`,
       title: `Kevin "Duck" <Ellen>`,
       intro: `Field notes & technical <architecture>.`,
+      showInBody: true,
     });
 
     expect(html).toContain(`Birds &amp; &lt;notes&gt;`);

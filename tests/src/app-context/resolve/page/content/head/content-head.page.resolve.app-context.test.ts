@@ -8,6 +8,7 @@ describe("appContextResolvePageContentHead", () => {
       title: "About",
       eyebrow: null,
       intro: null,
+      showInBody: true,
     } as const;
 
     const result = appContextResolvePageContentHead(head, {} as never);
@@ -20,6 +21,7 @@ describe("appContextResolvePageContentHead", () => {
       title: "Home",
       eyebrow: "Field notes",
       intro: "Welcome to the site",
+      showInBody: true,
     } as const;
 
     const result = appContextResolvePageContentHead(head, {} as never);

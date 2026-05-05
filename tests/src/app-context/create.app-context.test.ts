@@ -246,7 +246,9 @@ describe("appContextCreate", () => {
     );
     expect(
       mockedAppContextCollectPhotoIdsFromBlockContent,
-    ).toHaveBeenCalledWith(pageState.content.content);
+    ).toHaveBeenCalledWith(pageState.content.content, {
+      publicPages: appState.getPublicPages,
+    });
     expect(mockedResolvePhotosAppContext).toHaveBeenCalledWith({
       kv: env.KV_PHOTOS,
       photoIds: ["photo-page-1"],
@@ -285,6 +287,7 @@ describe("appContextCreate", () => {
     pageContextArg.resolveInternalLink({
       kind: "internal",
       id: "about",
+      text: null,
       svgId: null,
       behaviour: {
         openInNewTab: false,
@@ -295,6 +298,7 @@ describe("appContextCreate", () => {
       {
         kind: "internal",
         id: "about",
+        text: null,
         svgId: null,
         behaviour: {
           openInNewTab: false,
@@ -385,6 +389,11 @@ describe("appContextCreate", () => {
 
     const result = await appContextCreate(appState as never, routing, env);
 
+    expect(
+      mockedAppContextCollectPhotoIdsFromBlockContent,
+    ).toHaveBeenCalledWith(pageState.content.content, {
+      publicPages: appState.getPublicPages,
+    });
     expect(mockedResolvePhotosAppContext).toHaveBeenCalledWith({
       kv: env.KV_PHOTOS,
       photoIds: [],
@@ -472,6 +481,11 @@ describe("appContextCreate", () => {
 
     const result = await appContextCreate(appState as never, routing, env);
 
+    expect(
+      mockedAppContextCollectPhotoIdsFromBlockContent,
+    ).toHaveBeenCalledWith(pageState.content.content, {
+      publicPages: appState.getPublicPages,
+    });
     expect(mockedResolvePhotosAppContext).toHaveBeenCalledWith({
       kv: env.KV_PHOTOS,
       photoIds: [],
@@ -510,88 +524,6 @@ describe("appContextCreate", () => {
 
     expect(result.inspect.metadata).toBeUndefined();
     expect(result.inspect.robots).toBeUndefined();
-  });
-
-  it("collects photo ids from listing pages and listed journal pages", async () => {
-    const journalPage = {
-      id: "journal-entry",
-      kind: "journal",
-      content: {
-        content: [{ kind: "hero", photoId: "journal-photo" }],
-      },
-    };
-
-    const appState = {
-      ...createAppState(),
-      getPublicPages: [
-        journalPage,
-        {
-          id: "about",
-          kind: "static",
-          content: {
-            content: [{ kind: "hero", photoId: "ignored-static-photo" }],
-          },
-        },
-      ],
-    };
-
-    const routing = {
-      kind: "found",
-      publicPageId: "journal",
-      pagination: null,
-    } as never;
-
-    const pageState = {
-      id: "journal",
-      kind: "listing",
-      slug: "/journal",
-      metadata: {},
-      robots: {},
-      assets: { scripts: [], svg: [] },
-      breadcrumbs: [],
-      content: {
-        header: { title: "Journal", eyebrow: null, intro: null },
-        content: [{ kind: "hero", photoId: "listing-photo" }],
-        footer: [],
-      },
-    };
-
-    mockedResolveNavigationAppContext.mockReturnValue({} as never);
-    mockedResolveGlobalFooterAppContext.mockReturnValue({} as never);
-    mockedResolvePageSourceAppContext.mockReturnValue(pageState as never);
-    mockedResolveAssetsAppContext.mockReturnValue({
-      scripts: [],
-      svg: [],
-    } as never);
-    mockedResolveStructuredDataAppContext.mockReturnValue([] as never);
-    mockedResolveBreadcrumbsAppContext.mockReturnValue({ items: [] } as never);
-    mockedResolvePageAppContext.mockReturnValue({ id: "journal" } as never);
-
-    mockedAppContextCollectPhotoIdsFromBlockContent
-      .mockReturnValueOnce(["listing-photo"])
-      .mockReturnValueOnce(["journal-photo"]);
-
-    mockedResolvePhotosAppContext.mockResolvedValue({
-      "listing-photo": { id: "listing-photo" },
-      "journal-photo": { id: "journal-photo" },
-    } as never);
-
-    await appContextCreate(appState as never, routing, env);
-
-    expect(
-      mockedAppContextCollectPhotoIdsFromBlockContent,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      mockedAppContextCollectPhotoIdsFromBlockContent,
-    ).toHaveBeenNthCalledWith(1, pageState.content.content);
-    expect(
-      mockedAppContextCollectPhotoIdsFromBlockContent,
-    ).toHaveBeenNthCalledWith(2, journalPage.content.content);
-
-    expect(mockedResolvePhotosAppContext).toHaveBeenCalledWith({
-      kv: env.KV_PHOTOS,
-      photoIds: ["listing-photo", "journal-photo"],
-    });
   });
 
   it("deduplicates collected photo ids before resolving photos", async () => {
@@ -636,9 +568,74 @@ describe("appContextCreate", () => {
 
     await appContextCreate(appState as never, routing, env);
 
+    expect(
+      mockedAppContextCollectPhotoIdsFromBlockContent,
+    ).toHaveBeenCalledWith(pageState.content.content, {
+      publicPages: appState.getPublicPages,
+    });
     expect(mockedResolvePhotosAppContext).toHaveBeenCalledWith({
       kv: env.KV_PHOTOS,
       photoIds: ["shared-photo", "unique-photo"],
+    });
+  });
+
+  it("passes public pages into the photo id collector", async () => {
+    const appState = {
+      ...createAppState(),
+      getPublicPages: [
+        {
+          id: "journal-entry",
+          kind: "journal",
+        },
+      ],
+    };
+
+    const routing = {
+      kind: "found",
+      publicPageId: "journal",
+      pagination: null,
+    } as never;
+
+    const pageState = {
+      id: "journal",
+      kind: "listing",
+      slug: "/journal",
+      metadata: {},
+      robots: {},
+      assets: { scripts: [], svg: [] },
+      breadcrumbs: [],
+      content: {
+        header: { title: "Journal", eyebrow: null, intro: null },
+        content: [{ kind: "journalListing" }],
+        footer: [],
+      },
+    };
+
+    mockedResolveNavigationAppContext.mockReturnValue({} as never);
+    mockedResolveGlobalFooterAppContext.mockReturnValue({} as never);
+    mockedResolvePageSourceAppContext.mockReturnValue(pageState as never);
+    mockedResolveAssetsAppContext.mockReturnValue({
+      scripts: [],
+      svg: [],
+    } as never);
+    mockedResolveStructuredDataAppContext.mockReturnValue([] as never);
+    mockedResolveBreadcrumbsAppContext.mockReturnValue({ items: [] } as never);
+    mockedResolvePageAppContext.mockReturnValue({ id: "journal" } as never);
+    mockedAppContextCollectPhotoIdsFromBlockContent.mockReturnValue([
+      "journal-photo",
+    ]);
+
+    await appContextCreate(appState as never, routing, env);
+
+    expect(
+      mockedAppContextCollectPhotoIdsFromBlockContent,
+    ).toHaveBeenCalledWith(pageState.content.content, {
+      publicPages: appState.getPublicPages,
+    });
+
+    expect(mockedResolvePhotosAppContext).toHaveBeenCalledWith({
+      kv: env.KV_PHOTOS,
+      photoIds: ["journal-photo"],
     });
   });
 });

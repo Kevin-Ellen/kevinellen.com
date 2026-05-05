@@ -2,6 +2,11 @@
 
 import { appContextCollectPhotoIdsFromBlockContent } from "@app-context/resolve/page-content/collect-photo-ids.page-content.resolve.app-context";
 
+const createContext = (publicPages: readonly unknown[] = []) =>
+  ({
+    publicPages,
+  }) as never;
+
 describe("appContextCollectPhotoIdsFromBlockContent", () => {
   it("collects hero photo IDs", () => {
     const modules = [
@@ -13,9 +18,27 @@ describe("appContextCollectPhotoIdsFromBlockContent", () => {
       },
     ] as never;
 
-    expect(appContextCollectPhotoIdsFromBlockContent(modules)).toEqual([
-      "photo-hero-1",
-    ]);
+    expect(
+      appContextCollectPhotoIdsFromBlockContent(modules, createContext()),
+    ).toEqual(["photo-hero-1"]);
+  });
+
+  it("collects homepage hero photo IDs", () => {
+    const modules = [
+      {
+        kind: "homepageHero",
+        photoId: "homepage-hero-deer",
+        flow: "breakout",
+        eyebrow: "Wildlife",
+        title: "Kevin Ellen",
+        intro: [],
+        primaryLink: null,
+      },
+    ] as never;
+
+    expect(
+      appContextCollectPhotoIdsFromBlockContent(modules, createContext()),
+    ).toEqual(["homepage-hero-deer"]);
   });
 
   it("recurses through article section modules", () => {
@@ -43,9 +66,83 @@ describe("appContextCollectPhotoIdsFromBlockContent", () => {
       },
     ] as never;
 
-    expect(appContextCollectPhotoIdsFromBlockContent(modules)).toEqual([
-      "photo-nested-hero",
-    ]);
+    expect(
+      appContextCollectPhotoIdsFromBlockContent(modules, createContext()),
+    ).toEqual(["photo-nested-hero"]);
+  });
+
+  it("collects journal listing photo IDs from journal pages", () => {
+    const modules = [
+      {
+        kind: "journalListing",
+        flow: "content",
+        pagination: {
+          pageSize: 12,
+        },
+      },
+    ] as never;
+
+    const publicPages = [
+      {
+        id: "journal:a",
+        kind: "journal",
+        content: {
+          content: [
+            {
+              kind: "hero",
+              photoId: "journal-photo-a",
+              immersive: true,
+              flow: "breakout",
+            },
+          ],
+        },
+      },
+      {
+        id: "about",
+        kind: "static",
+        content: {
+          content: [
+            {
+              kind: "hero",
+              photoId: "ignored-static-photo",
+              immersive: false,
+              flow: "content",
+            },
+          ],
+        },
+      },
+      {
+        id: "journal:b",
+        kind: "journal",
+        content: {
+          content: [
+            {
+              kind: "articleSection",
+              heading: {
+                text: "Nested",
+                visuallyHidden: false,
+                level: 2,
+              },
+              modules: [
+                {
+                  kind: "hero",
+                  photoId: "journal-photo-b",
+                  immersive: false,
+                  flow: "content",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    expect(
+      appContextCollectPhotoIdsFromBlockContent(
+        modules,
+        createContext(publicPages),
+      ),
+    ).toEqual(["journal-photo-a", "journal-photo-b"]);
   });
 
   it("deduplicates photo IDs while preserving first-seen order", () => {
@@ -86,11 +183,9 @@ describe("appContextCollectPhotoIdsFromBlockContent", () => {
       },
     ] as never;
 
-    expect(appContextCollectPhotoIdsFromBlockContent(modules)).toEqual([
-      "photo-a",
-      "photo-b",
-      "photo-c",
-    ]);
+    expect(
+      appContextCollectPhotoIdsFromBlockContent(modules, createContext()),
+    ).toEqual(["photo-a", "photo-b", "photo-c"]);
   });
 
   it("ignores non-photo block modules", () => {
@@ -115,10 +210,14 @@ describe("appContextCollectPhotoIdsFromBlockContent", () => {
       },
     ] as never;
 
-    expect(appContextCollectPhotoIdsFromBlockContent(modules)).toEqual([]);
+    expect(
+      appContextCollectPhotoIdsFromBlockContent(modules, createContext()),
+    ).toEqual([]);
   });
 
   it("returns an empty array for empty module arrays", () => {
-    expect(appContextCollectPhotoIdsFromBlockContent([])).toEqual([]);
+    expect(
+      appContextCollectPhotoIdsFromBlockContent([], createContext()),
+    ).toEqual([]);
   });
 });

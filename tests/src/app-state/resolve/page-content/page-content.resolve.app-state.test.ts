@@ -55,6 +55,7 @@ describe("appStateResolvePageContent", () => {
 
     mockedAppStateResolvePageContentHead.mockReturnValue({
       title: "About",
+      showInBody: true,
       eyebrow: null,
       intro: null,
     });
@@ -93,6 +94,7 @@ describe("appStateResolvePageContent", () => {
       title: "Journal",
       eyebrow: null,
       intro: null,
+      showInBody: true,
     });
 
     mockedAppStateResolveBlockContentModule

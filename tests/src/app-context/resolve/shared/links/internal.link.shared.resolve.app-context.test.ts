@@ -19,6 +19,7 @@ const validLink = {
   kind: "internal",
   id: "about",
   svgId: null,
+  text: null,
   behaviour: {
     openInNewTab: false,
   },
@@ -47,6 +48,7 @@ describe("resolveInternalLinkAppContext", () => {
         kind: "internal",
         id: "about",
         svgId: "icon-home",
+        text: null,
         behaviour: {
           openInNewTab: true,
         },

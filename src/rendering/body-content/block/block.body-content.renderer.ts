@@ -9,6 +9,10 @@ import { renderHeroBlockContentModule } from "@rendering/body-content/block/hero
 import { renderJournalListingBlockContentModule } from "@rendering/body-content/block/journal-listing.body-content.renderer";
 import { renderPreBlockContentModule } from "@rendering/body-content/block/pre.body-content.renderer";
 import { renderArticleSectionBlockContentModule } from "@rendering/body-content/block/article-section.body-content.renderer";
+import { renderHomepageHeroContentModule } from "@rendering/body-content/block/homepage-hero.body-content.renderer";
+import { renderImageStripBlockContentModule } from "@rendering/body-content/block/image-strip.body-content.renderer";
+import { renderHomepageJournalListingBlock } from "@rendering/body-content/block/homepage-journal-listing.render.body-content";
+import { renderSectionLinksBlockContentModule } from "@rendering/body-content/block/section-links.body-content.renderer";
 
 type AppRenderContextBlockRendererMap = Readonly<{
   [K in AppRenderContextBlockContentModule["kind"]]: (
@@ -24,6 +28,10 @@ const blockContentModuleRenderers = {
   journalListing: renderJournalListingBlockContentModule,
   pre: renderPreBlockContentModule,
   articleSection: renderArticleSectionBlockContentModule,
+  homepageHero: renderHomepageHeroContentModule,
+  imageStrip: renderImageStripBlockContentModule,
+  homepageJournalListing: renderHomepageJournalListingBlock,
+  sectionLinks: renderSectionLinksBlockContentModule,
 } satisfies AppRenderContextBlockRendererMap;
 
 export const renderBlockContentModule = (

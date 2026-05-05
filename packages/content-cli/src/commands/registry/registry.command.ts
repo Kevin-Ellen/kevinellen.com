@@ -22,6 +22,7 @@ import { runGeneratePhotoCommand } from "@content-cli/content/photo/generate.pho
 import { runValidatePhotoCommand } from "@content-cli/content/photo/validate.photo.content";
 import { runPublishPhotoCommand } from "@content-cli/content/photo/publish.photo.content";
 import { runReadPhotoCommand } from "@content-cli/content/photo/read.photo.content";
+import { runRebuildHomepageStripPhotoCommand } from "@content-cli/content/photo/rebuild-homepage-strip.photo.content";
 
 export const contentCommandRegistry: Record<
   ContentCliEntity,
@@ -45,5 +46,6 @@ export const contentCommandRegistry: Record<
     publish: runPublishPhotoCommand,
     status: runStatusPhotoCommand,
     read: runReadPhotoCommand,
+    homepageStripRebuild: runRebuildHomepageStripPhotoCommand,
   },
 };

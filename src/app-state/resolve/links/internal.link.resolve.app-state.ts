@@ -9,6 +9,7 @@ export const appStateResolveInternalLink = (
   return {
     kind: "internal",
     id: link.id,
+    text: link.text ?? null,
     svgId: link.svgId ?? null,
     behaviour: link.behaviour ?? {
       openInNewTab: false,

@@ -24,6 +24,7 @@ export const makeAppStateInternalLink = (
   return {
     kind: "internal",
     id: "home",
+    text: null,
     svgId: null,
     behaviour: {
       openInNewTab: false,

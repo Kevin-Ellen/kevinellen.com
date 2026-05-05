@@ -6,6 +6,7 @@ import type { Replace } from "@shared-types/shared-types-utils/replace.shared.ty
 type AppStatePageContentHeadDeterministicFields = Readonly<{
   eyebrow: string | null;
   intro: string | null;
+  showInBody: boolean;
 }>;
 
 export type AppStatePageContentHead = Replace<

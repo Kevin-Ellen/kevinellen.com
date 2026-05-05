@@ -11,6 +11,10 @@ import { resolveHeroBlockContentModuleAppRenderContext } from "@app-render-conte
 import { resolveJournalListingBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/journal-listing.resolve.app-render-context";
 import { resolvePreBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/pre.resolve.app-render-context";
 import { resolveArticleSectionBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context";
+import { resolveHomepageHeroAppRenderContext } from "@app-render-context/resolve/body-content/block/homepage-hero.resolve.app-render-context";
+import { resolveImageStripBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/image-strip.resolve.app-render-context";
+import { resolveHomepageJournalListingBlockAppRenderContext } from "@app-render-context/resolve/body-content/block/homepage-journal-listing.resolve.app-render-context";
+import { resolveSectionLinksBlockContentModuleAppRenderContext } from "./section-links.resolve.app-render-context";
 
 type AppRenderContextBlockResolverMap = Readonly<{
   [K in AppContextBlockContentModule["kind"]]: (
@@ -27,6 +31,10 @@ const blockContentModuleResolvers = {
   journalListing: resolveJournalListingBlockContentModuleAppRenderContext,
   pre: resolvePreBlockContentModuleAppRenderContext,
   articleSection: resolveArticleSectionBlockContentModuleAppRenderContext,
+  homepageHero: resolveHomepageHeroAppRenderContext,
+  imageStrip: resolveImageStripBlockContentModuleAppRenderContext,
+  homepageJournalListing: resolveHomepageJournalListingBlockAppRenderContext,
+  sectionLinks: resolveSectionLinksBlockContentModuleAppRenderContext,
 } satisfies AppRenderContextBlockResolverMap;
 
 export const resolveBlockContentModuleAppRenderContext = (

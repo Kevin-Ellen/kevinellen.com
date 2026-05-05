@@ -21,6 +21,7 @@ export const makeAppStatePageContentHead = (
     title: "Default title",
     eyebrow: null,
     intro: null,
+    showInBody: true,
     ...overrides,
   };
 };

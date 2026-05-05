@@ -16,6 +16,11 @@ import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links
 import { appContextCollectPhotoIdsFromBlockContent } from "@app-context/resolve/page-content/collect-photo-ids.page-content.resolve.app-context";
 import { resolvePhotosAppContext } from "@app-context/resolve/photos/photos.resolve.app-context";
 
+import {
+  HOMEPAGE_STRIP_PHOTO_INDEX_KEY,
+  type HomepageStripPhotoIndex,
+} from "@shared-types/media/photo/indices.photo.types";
+
 const resolvePageRuntimeAppContext = (
   page: AppStatePageDefinition,
   origin: string,
@@ -25,6 +30,17 @@ const resolvePageRuntimeAppContext = (
     robots: page.robots,
     canonicalUrl: page.slug ? `${origin}${page.slug}` : null,
   };
+};
+
+const resolveHomepageStripPhotoIds = async (
+  kv: KVNamespace,
+): Promise<readonly string[]> => {
+  const index = await kv.get<HomepageStripPhotoIndex>(
+    HOMEPAGE_STRIP_PHOTO_INDEX_KEY,
+    "json",
+  );
+
+  return index?.photoIds ?? [];
 };
 
 export const appContextCreate = async (
@@ -37,20 +53,26 @@ export const appContextCreate = async (
 
   const pageState = resolvePageSourceAppContext(appState, routing);
 
-  const pagePhotoIds = appContextCollectPhotoIdsFromBlockContent(
+  const usedPhotoIds = appContextCollectPhotoIdsFromBlockContent(
     pageState.content.content,
+    {
+      publicPages: appState.getPublicPages,
+    },
   );
 
-  const listingPhotoIds =
-    pageState.kind === "listing"
-      ? appState.getPublicPages
-          .filter((page) => page.kind === "journal")
-          .flatMap((page) =>
-            appContextCollectPhotoIdsFromBlockContent(page.content.content),
-          )
-      : [];
+  const homepageStripPhotoIds = await resolveHomepageStripPhotoIds(
+    env.KV_PHOTOS,
+  );
 
-  const photoIds = [...new Set([...pagePhotoIds, ...listingPhotoIds])];
+  const usedPhotoIdSet = new Set(usedPhotoIds);
+
+  const availableHomepageStripPhotoIds = homepageStripPhotoIds.filter(
+    (photoId) => !usedPhotoIdSet.has(photoId),
+  );
+
+  const photoIds = [
+    ...new Set([...usedPhotoIds, ...availableHomepageStripPhotoIds]),
+  ];
 
   const photos = await resolvePhotosAppContext({
     kv: env.KV_PHOTOS,
@@ -71,6 +93,7 @@ export const appContextCreate = async (
 
   const page = resolvePageAppContext(pageState, routing, {
     photos,
+    homepageStripPhotoIds: availableHomepageStripPhotoIds,
     metadataLabels: appState.metadataLabels,
     resolveInternalLink: (link) =>
       resolveInternalLinkAppContext(link, appState),

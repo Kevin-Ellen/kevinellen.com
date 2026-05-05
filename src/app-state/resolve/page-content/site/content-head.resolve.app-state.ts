@@ -10,5 +10,6 @@ export const appStateResolvePageContentHead = (
     ...head,
     eyebrow: head.eyebrow ?? null,
     intro: head.intro ?? null,
+    showInBody: head.showInBody ?? true,
   };
 };

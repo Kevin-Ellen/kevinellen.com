@@ -4,4 +4,5 @@ export type AuthoredPageContentHead = Readonly<{
   eyebrow?: string;
   title: string;
   intro?: string;
+  showInBody?: boolean;
 }>;

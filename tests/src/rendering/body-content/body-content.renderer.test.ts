@@ -9,6 +9,7 @@ describe("renderBodyContent", () => {
         eyebrow: "Kevin Ellen",
         title: "About me",
         intro: "Nature and technology.",
+        showInBody: true,
       },
       content: [
         {

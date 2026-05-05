@@ -424,7 +424,6 @@ describe("requestOrchestrator", () => {
     mockedPreAppContextOrchestrator.mockResolvedValue(preAppContext as never);
     mockedOrchestrateRouteResolution.mockReturnValue(routing as never);
 
-    // ✅ FIX: async
     mockedAppContextCreate.mockResolvedValue(appContext as never);
 
     mockedAppRenderContextCreate.mockReturnValue(appRenderContext as never);

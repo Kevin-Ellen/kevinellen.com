@@ -49,6 +49,7 @@ describe("appContextResolvePageContent", () => {
         title: "About",
         eyebrow: null,
         intro: null,
+        showInBody: true,
       },
       content: [
         {
@@ -81,6 +82,7 @@ describe("appContextResolvePageContent", () => {
       title: "Resolved About",
       eyebrow: "Resolved eyebrow",
       intro: "Resolved intro",
+      showInBody: true,
     });
 
     mockedAppContextResolveBlockContentModule
@@ -190,6 +192,7 @@ describe("appContextResolvePageContent", () => {
         title: "Home",
         eyebrow: null,
         intro: null,
+        showInBody: true,
       },
       content: [],
       footer: [],

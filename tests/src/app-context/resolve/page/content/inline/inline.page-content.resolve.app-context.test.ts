@@ -163,6 +163,7 @@ describe("appContextResolveInlineContent", () => {
         kind: "internal",
         id: "about",
         svgId: null,
+        text: null,
         behaviour: {
           openInNewTab: false,
         },

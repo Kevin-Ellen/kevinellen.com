@@ -7,6 +7,10 @@ import type { AppStateHeroBlockContentModule } from "@shared-types/page-content/
 import type { AppStateJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-state.journal-listing.block.page-content.types";
 import type { AppStateArticleSectionBlockContentModule } from "@shared-types/page-content/block/article-section/app-state.article-section.block.page-content.types";
 import type { AppStatePreBlockContentModule } from "@shared-types/page-content/block/pre/app-state.pre.block.page-content.types";
+import type { AppStateHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-state.homepage-hero.block.page-content.types";
+import type { AppStateImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-state.image-strip.block.page-content.types";
+import type { AppStateHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-state.homepage-journal-listing.block.types";
+import type { AppStateSectionLinksBlockContentModule } from "./section-links/app-state.section-links.block.page-content.types";
 
 export type AppStateBlockContentModule =
   | AppStateParagraphBlockContentModule
@@ -15,4 +19,8 @@ export type AppStateBlockContentModule =
   | AppStateHeroBlockContentModule
   | AppStateJournalListingBlockContentModule
   | AppStateArticleSectionBlockContentModule
-  | AppStatePreBlockContentModule;
+  | AppStatePreBlockContentModule
+  | AppStateHomepageHeroBlockContentModule
+  | AppStateImageStripBlockContentModule
+  | AppStateHomepageJournalListingBlock
+  | AppStateSectionLinksBlockContentModule;

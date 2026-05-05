@@ -1,8 +1,16 @@
 // src/app-context/resolve/page-content/collect-photo-ids.page-content.resolve.app-context.ts
 
+import type { AppState } from "@app-state/class.app-state";
 import type { AppStateBlockContentModule } from "@shared-types/page-content/block/app-state.block.page-content.types";
 
-type PhotoIdCollector<TModule> = (module: TModule) => readonly string[];
+type PhotoIdCollectorContext = Readonly<{
+  publicPages: AppState["getPublicPages"];
+}>;
+
+type PhotoIdCollector<TModule> = (
+  module: TModule,
+  context: PhotoIdCollectorContext,
+) => readonly string[];
 
 type PhotoIdCollectorRegistry = {
   [TKind in AppStateBlockContentModule["kind"]]?: PhotoIdCollector<
@@ -12,6 +20,7 @@ type PhotoIdCollectorRegistry = {
 
 export const appContextCollectPhotoIdsFromBlockContent = (
   modules: readonly AppStateBlockContentModule[],
+  context: PhotoIdCollectorContext,
 ): readonly string[] => {
   const photoIds = new Set<string>();
 
@@ -22,9 +31,9 @@ export const appContextCollectPhotoIdsFromBlockContent = (
       return;
     }
 
-    const collectedPhotoIds = collector(module as never);
+    const collectedPhotoIds = collector(module as never, context);
 
-    collectedPhotoIds.forEach((photoId: string) => {
+    collectedPhotoIds.forEach((photoId) => {
       photoIds.add(photoId);
     });
   });
@@ -35,6 +44,30 @@ export const appContextCollectPhotoIdsFromBlockContent = (
 const PHOTO_ID_COLLECTORS: PhotoIdCollectorRegistry = {
   hero: (module) => [module.photoId],
 
-  articleSection: (module) =>
-    appContextCollectPhotoIdsFromBlockContent(module.modules),
+  homepageHero: (module) => [module.photoId],
+
+  // Only the first homepage journal entry renders an image.
+  homepageJournalListing: (_module, context) =>
+    context.publicPages
+      .filter((page) => page.kind === "journal")
+      .slice(0, 1)
+      .flatMap((page) =>
+        appContextCollectPhotoIdsFromBlockContent(
+          page.content.content,
+          context,
+        ),
+      ),
+
+  journalListing: (_module, context) =>
+    context.publicPages
+      .filter((page) => page.kind === "journal")
+      .flatMap((page) =>
+        appContextCollectPhotoIdsFromBlockContent(
+          page.content.content,
+          context,
+        ),
+      ),
+
+  articleSection: (module, context) =>
+    appContextCollectPhotoIdsFromBlockContent(module.modules, context),
 };

@@ -10,6 +10,10 @@ import { appStateResolveHeroBlockContentModule } from "@app-state/resolve/page-c
 import { appStateResolveJournalListingBlockContentModule } from "@app-state/resolve/page-content/block/journal-listing.resolve.app-state";
 import { appStateResolvePreBlockContentModule } from "@app-state/resolve/page-content/block/pre.resolve.app-state";
 import { appStateResolveArticleSectionBlockContentModule } from "@app-state/resolve/page-content/block/article-section.resolve.app-state";
+import { appStateResolveHomepageHeroBlockContentModule } from "@app-state/resolve/page-content/block/homepage-hero.resolve.app-state";
+import { appStateResolveImageStripBlockContentModule } from "@app-state/resolve/page-content/block/image-strip.resolve.app-state";
+import { appStateResolveHomepageJournalListingBlock } from "@app-state/resolve/page-content/block/homepage-journal-listing.resolve.app-state";
+import { appStateResolveSectionLinksBlockContentModule } from "@app-state/resolve/page-content/block/section-links.resolve.app-state";
 
 type AuthoredBlockContentModuleKind = AuthoredBlockContentModule["kind"];
 
@@ -36,6 +40,10 @@ const getAppStateBlockContentModuleResolver = <
     journalListing: appStateResolveJournalListingBlockContentModule,
     pre: appStateResolvePreBlockContentModule,
     articleSection: appStateResolveArticleSectionBlockContentModule,
+    homepageHero: appStateResolveHomepageHeroBlockContentModule,
+    imageStrip: appStateResolveImageStripBlockContentModule,
+    homepageJournalListing: appStateResolveHomepageJournalListingBlock,
+    sectionLinks: appStateResolveSectionLinksBlockContentModule,
   } satisfies AppStateBlockContentModuleResolverRegistry;
 
   return registry[kind];

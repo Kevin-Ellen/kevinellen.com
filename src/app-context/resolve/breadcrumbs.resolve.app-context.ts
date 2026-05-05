@@ -43,6 +43,7 @@ export const resolveBreadcrumbsAppContext = (
         {
           kind: "internal",
           id,
+          text: null,
           svgId: null,
           behaviour: {
             openInNewTab: false,

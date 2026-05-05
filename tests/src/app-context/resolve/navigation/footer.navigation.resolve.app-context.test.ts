@@ -47,6 +47,7 @@ describe("resolveFooterNavigationAppContext", () => {
             {
               kind: "internal",
               id: "about",
+              text: null,
               svgId: null,
               behaviour: { openInNewTab: false },
             },
@@ -59,6 +60,7 @@ describe("resolveFooterNavigationAppContext", () => {
             {
               kind: "social",
               id: "github",
+              text: null,
               svgId: null,
               behaviour: { openInNewTab: true },
             },

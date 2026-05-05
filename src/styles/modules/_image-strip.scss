@@ -1,0 +1,27 @@
+@use "../tokens" as tokens;
+
+.m-image-strip {
+  padding-top: tokens.$space-sm;
+
+  &__inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: tokens.$space-sm;
+
+    @media (min-width: tokens.$bp-sm) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (min-width: tokens.$bp-md) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+}
