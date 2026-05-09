@@ -121,7 +121,7 @@ const resolvePhotoMeta = (
   ];
 };
 
-export const resolvePhotoAppRenderContext = (
+export const appRenderContextResolvePhoto = (
   photo: AppContextPhotoMetadata,
   metadataLabels: AppStateMetadataLabels,
 ): AppRenderContextPhoto => {
@@ -135,9 +135,6 @@ export const resolvePhotoAppRenderContext = (
     id: photo.id,
     title: photo.title,
     alt: photo.alt,
-    commentary: photo.commentary,
-    readableLocation: photo.readableLocation,
-    capturedAt: photo.capturedAt,
     width: photo.width,
     height: photo.height,
     src: resolvePhotoUrl(photo.id),

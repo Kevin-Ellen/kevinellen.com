@@ -6,10 +6,10 @@ import type { AppContextStructuredDataEntry } from "@shared-types/structured-dat
 
 import { appContextResolveStructuredData } from "@app-context/resolve/structured-data/structured-data.resolve.app-context";
 
-import { appContextResolveGlobalStructuredData } from "@app-context/resolve/structured-data/global.structured-data.global.resolve.app-context";
+import { appContextResolveGlobalStructuredData } from "@app-context/resolve/structured-data/global.structured-data.resolve.app-context";
 
 jest.mock(
-  "@app-context/resolve/structured-data/global.structured-data.global.resolve.app-context",
+  "@app-context/resolve/structured-data/global.structured-data.resolve.app-context",
   () => ({
     appContextResolveGlobalStructuredData: jest.fn(),
   }),

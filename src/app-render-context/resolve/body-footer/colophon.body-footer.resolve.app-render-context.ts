@@ -1,9 +1,9 @@
-// src/app-render-context/resolve/body-footer/colophon.resolve.body-footer.app-render-context.ts
+// src/app-render-context/resolve/body-footer/colophon.body-footer.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyFooterColophon } from "@app-render-context/types/body-footer.app-render-context.types";
 
-export const resolveColophonBodyFooterAppRenderContext = (
+export const appRenderContextResolveBodyFooterColophon = (
   appContext: AppContext,
 ): AppRenderContextBodyFooterColophon => {
   const { colophon } = appContext.globalFooter;

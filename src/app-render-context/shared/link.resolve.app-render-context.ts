@@ -1,15 +1,50 @@
 // src/app-render-context/shared/link.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextLink } from "@shared-types/links/app-context.links.types";
-import type { AppRenderContextLink } from "@shared-types/links/app-render-context.links.types";
+import type {
+  AppContextInternalLink,
+  AppContextLink,
+} from "@shared-types/links/app-context.links.types";
+import type {
+  AppRenderContextInternalLink,
+  AppRenderContextLink,
+} from "@shared-types/links/app-render-context.links.types";
 
-import { resolveInternalLinkAppRenderContext } from "@app-render-context/shared/internal.link.resolve.app-render-context";
 import { resolveSvgReferenceByIdAppRenderContext } from "@app-render-context/shared/svg-reference-by-id.resolve.app-render-context";
 
-const resolveExternalLinkAppRenderContext = (
+type LinkKind = AppContextLink["kind"];
+
+type LinkByKind<TKind extends LinkKind> = Extract<
+  AppContextLink,
+  { kind: TKind }
+>;
+
+type RenderLinkByKind<TLink extends AppContextLink> =
+  TLink extends AppContextInternalLink
+    ? AppRenderContextInternalLink
+    : AppRenderContextLink;
+
+type LinkResolverRegistry = {
+  [TKind in LinkKind]: (
+    appContext: AppContext,
+    link: LinkByKind<TKind>,
+  ) => RenderLinkByKind<LinkByKind<TKind>>;
+};
+
+const appRenderContextResolveInternalLink = (
   appContext: AppContext,
-  link: Extract<AppContextLink, { kind: "external" }>,
+  link: LinkByKind<"internal">,
+): AppRenderContextInternalLink => ({
+  kind: link.kind,
+  href: link.href,
+  text: link.text,
+  openInNewTab: link.behaviour.openInNewTab,
+  svg: resolveSvgReferenceByIdAppRenderContext(appContext, link.svgId),
+});
+
+const appRenderContextResolveExternalLink = (
+  appContext: AppContext,
+  link: LinkByKind<"external">,
 ): AppRenderContextLink => ({
   kind: link.kind,
   href: link.href,
@@ -18,27 +53,22 @@ const resolveExternalLinkAppRenderContext = (
   svg: resolveSvgReferenceByIdAppRenderContext(appContext, link.svgId),
 });
 
-const resolveSocialLinkAppRenderContext = (
-  appContext: AppContext,
-  link: Extract<AppContextLink, { kind: "social" }>,
-): AppRenderContextLink => ({
-  kind: link.kind,
-  href: link.href,
-  text: link.text,
-  openInNewTab: true,
-  svg: resolveSvgReferenceByIdAppRenderContext(appContext, link.svgId),
-});
+const LINK_RESOLVERS: LinkResolverRegistry = {
+  internal: appRenderContextResolveInternalLink,
+  external: appRenderContextResolveExternalLink,
+};
 
-export const resolveLinkAppRenderContext = (
+export const appRenderContextResolveLink = <TLink extends AppContextLink>(
   appContext: AppContext,
-  link: AppContextLink,
-): AppRenderContextLink => {
-  switch (link.kind) {
-    case "internal":
-      return resolveInternalLinkAppRenderContext(appContext, link);
-    case "external":
-      return resolveExternalLinkAppRenderContext(appContext, link);
-    case "social":
-      return resolveSocialLinkAppRenderContext(appContext, link);
+  link: TLink,
+): RenderLinkByKind<TLink> => {
+  const resolver = LINK_RESOLVERS[link.kind];
+
+  if (!resolver) {
+    throw new Error(
+      `No AppRenderContext link resolver registered for kind: ${link.kind}`,
+    );
   }
+
+  return resolver(appContext, link as never) as RenderLinkByKind<TLink>;
 };

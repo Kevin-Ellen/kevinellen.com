@@ -1,4 +1,4 @@
-// src/app-render-context/resolve/body-header/branding.resolve.body-header.app-render-context.ts
+// src/app-render-context/resolve/body-header/branding.body-header.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyHeaderBranding } from "@app-render-context/types/body-header.app-render-context.types";
@@ -17,7 +17,7 @@ const resolveSvgReference = (appContext: AppContext, svgId: string) => {
   return svg;
 };
 
-export const resolveBrandingBodyHeaderAppRenderContext = (
+export const appRenderContextResolveBodyHeaderBranding = (
   appContext: AppContext,
 ): AppRenderContextBodyHeaderBranding => {
   const branding = appContext.headerBranding;

@@ -1,4 +1,4 @@
-// src/app-render-context/resolve/body-footer/affiliations.resolve.body-footer.app-render-context.ts
+// src/app-render-context/resolve/body-footer/affiliations.body-footer.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyFooterAffiliations } from "@app-render-context/types/body-footer.app-render-context.types";
@@ -6,7 +6,7 @@ import type { SvgAssetId } from "@shared-types/assets/svg/id.svg.assets.types";
 
 import { resolveSvgReferenceByIdAppRenderContext } from "@app-render-context/shared/svg-reference-by-id.resolve.app-render-context";
 
-const resolveAffiliationLogoOrThrow = (
+const appRenderContextResolveAffiliationLogoOrThrow = (
   appContext: AppContext,
   svgId: SvgAssetId,
 ) => {
@@ -21,7 +21,7 @@ const resolveAffiliationLogoOrThrow = (
   return logo;
 };
 
-export const resolveAffiliationsBodyFooterAppRenderContext = (
+export const appRenderContextResolveBodyFooterAffiliations = (
   appContext: AppContext,
 ): AppRenderContextBodyFooterAffiliations => {
   const { affiliations } = appContext.globalFooter;
@@ -30,7 +30,10 @@ export const resolveAffiliationsBodyFooterAppRenderContext = (
     items: affiliations.items.map((item) => ({
       ariaLabel: item.label,
       href: item.href,
-      logo: resolveAffiliationLogoOrThrow(appContext, item.svgId),
+      logo: appRenderContextResolveAffiliationLogoOrThrow(
+        appContext,
+        item.svgId,
+      ),
     })),
   };
 };

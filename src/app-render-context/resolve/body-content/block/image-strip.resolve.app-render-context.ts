@@ -1,19 +1,19 @@
 // src/app-render-context/resolve/body-content/block/image-strip.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-context.image-strip.block.types";
+import type { AppContextImageStripBlock } from "@shared-types/page-content/block/image-strip/app-context.image-strip.block.types";
 import type {
-  AppRenderContextImageStripBlockContentModule,
+  AppRenderContextImageStripBlock,
   AppRenderContextImageStripPhoto,
 } from "@shared-types/page-content/block/image-strip/app-render-context.image-strip.block.types";
 
-import { resolvePhotoAppRenderContext } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
+import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
 
-const resolveImageStripPhotoAppRenderContext = (
+const appRenderContextResolveImageStripPhoto = (
   appContext: AppContext,
-  photo: AppContextImageStripBlockContentModule["photos"][number],
+  photo: AppContextImageStripBlock["photos"][number],
 ): AppRenderContextImageStripPhoto => {
-  const resolvedPhoto = resolvePhotoAppRenderContext(
+  const resolvedPhoto = appRenderContextResolvePhoto(
     photo,
     appContext.metadataLabels,
   );
@@ -29,14 +29,12 @@ const resolveImageStripPhotoAppRenderContext = (
   };
 };
 
-export const resolveImageStripBlockContentModuleAppRenderContext = (
+export const appRenderContextResolveImageStripBlock = (
   appContext: AppContext,
-  module: AppContextImageStripBlockContentModule,
-): AppRenderContextImageStripBlockContentModule => {
-  return {
-    ...module,
-    photos: module.photos.map((photo) =>
-      resolveImageStripPhotoAppRenderContext(appContext, photo),
-    ),
-  };
-};
+  block: AppContextImageStripBlock,
+): AppRenderContextImageStripBlock => ({
+  ...block,
+  photos: block.photos.map((photo) =>
+    appRenderContextResolveImageStripPhoto(appContext, photo),
+  ),
+});

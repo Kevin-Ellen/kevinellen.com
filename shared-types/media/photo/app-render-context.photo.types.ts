@@ -21,7 +21,10 @@ type OmittedFields =
   | "longitude"
   | "resolvedLocation"
   | "photographer"
-  | "copyright";
+  | "copyright"
+  | "commentary"
+  | "readableLocation"
+  | "capturedAt";
 
 type ReplacementFields = Readonly<{
   src: string;

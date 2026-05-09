@@ -1,32 +1,27 @@
 // src/app-render-context/resolve/body-content/block/article-section.resolve.app-render-context.ts
 
-import type { AppContext } from "@app-context/class.app-context";
 import type {
-  AppContextArticleSectionBlockContentModule,
-  AppContextArticleSectionHeadingBlockContentModule,
+  AppContextArticleSectionBlock,
+  AppContextArticleSectionHeadingBlock,
 } from "@shared-types/page-content/block/article-section/app-context.article-section.block.types";
 import type {
-  AppRenderContextArticleSectionBlockContentModule,
-  AppRenderContextArticleSectionHeadingBlockContentModule,
+  AppRenderContextArticleSectionBlock,
+  AppRenderContextArticleSectionHeadingBlock,
 } from "@shared-types/page-content/block/article-section/app-render-context.article-section.block.types";
+import type { AppContext } from "@app-context/class.app-context";
 
-import { resolveBlockContentModuleAppRenderContext } from "./block.resolve.app-render-context";
+import { appRenderContextResolveBlock } from "./block.resolve.app-render-context";
 
-export const resolveArticleSectionHeadingBlockContentModuleAppRenderContext = (
-  _appContext: AppContext,
-  heading: AppContextArticleSectionHeadingBlockContentModule,
-): AppRenderContextArticleSectionHeadingBlockContentModule => {
-  return heading;
-};
+export const appRenderContextResolveArticleSectionHeadingBlock = (
+  heading: AppContextArticleSectionHeadingBlock,
+): AppRenderContextArticleSectionHeadingBlock => heading;
 
-export const resolveArticleSectionBlockContentModuleAppRenderContext = (
+export const appRenderContextResolveArticleSectionBlock = (
   appContext: AppContext,
-  module: AppContextArticleSectionBlockContentModule,
-): AppRenderContextArticleSectionBlockContentModule => {
-  return {
-    ...module,
-    modules: module.modules.map((childModule) =>
-      resolveBlockContentModuleAppRenderContext(appContext, childModule),
-    ),
-  };
-};
+  block: AppContextArticleSectionBlock,
+): AppRenderContextArticleSectionBlock => ({
+  ...block,
+  modules: block.modules.map((childBlock) =>
+    appRenderContextResolveBlock(appContext, childBlock),
+  ),
+});

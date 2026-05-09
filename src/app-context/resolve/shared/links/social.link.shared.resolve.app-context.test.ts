@@ -6,7 +6,7 @@ import type { AppStateSocialLink } from "@shared-types/links/app-state.links.typ
 import { appContextResolveSocialLink } from "./social.link.shared.resolve.app-context";
 
 describe("appContextResolveSocialLink", () => {
-  it("resolves a social link from app state social config", () => {
+  it("resolves a social link into an external app-context link", () => {
     const link: AppStateSocialLink = {
       kind: "social",
       id: "github",
@@ -26,10 +26,8 @@ describe("appContextResolveSocialLink", () => {
       },
     } as AppState;
 
-    const result = appContextResolveSocialLink(link, appState);
-
-    expect(result).toEqual({
-      kind: "social",
+    expect(appContextResolveSocialLink(link, appState)).toEqual({
+      kind: "external",
       id: "github",
       href: "https://github.com/example",
       text: "GitHub",

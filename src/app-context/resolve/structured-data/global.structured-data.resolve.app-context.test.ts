@@ -3,7 +3,7 @@
 import type { AppState } from "@app-state/class.app-state";
 import type { AppContextStructuredDataEntry } from "@shared-types/structured-data/app-context.structured-data.types";
 
-import { appContextResolveGlobalStructuredData } from "@app-context/resolve/structured-data/global.structured-data.global.resolve.app-context";
+import { appContextResolveGlobalStructuredData } from "@app-context/resolve/structured-data/global.structured-data.resolve.app-context";
 
 import { appContextResolveWebsiteStructuredData } from "@app-context/resolve/structured-data/website.structured-data.global.resolve.app-context";
 

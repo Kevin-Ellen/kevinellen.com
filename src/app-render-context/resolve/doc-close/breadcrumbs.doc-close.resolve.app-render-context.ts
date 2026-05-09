@@ -1,8 +1,8 @@
-// src/app-render-context/resolve/doc-close/breadcrumbs.structured-data.resolve.app-render-context.ts
+// src/app-render-context/resolve/doc-close/breadcrumbs.doc-close.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
 
-export const resolveBreadcrumbsStructuredDataAppRenderContext = (
+export const appRenderContextResolveDocCloseBreadcrumbsStructuredData = (
   appContext: AppContext,
   origin: string,
 ) => {

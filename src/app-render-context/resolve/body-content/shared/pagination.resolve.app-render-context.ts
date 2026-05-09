@@ -3,7 +3,7 @@
 import type { AppContextPagination } from "@shared-types/page-content/shared/pagination/app-context.pagination.shared.types";
 import type { AppRenderContextPagination } from "@shared-types/page-content/shared/pagination/app-render-context.pagination.shared.types";
 
-export const resolvePaginationAppRenderContext = (
+export const appRenderContextResolvePagination = (
   pagination: AppContextPagination,
 ): AppRenderContextPagination => ({
   ...pagination,

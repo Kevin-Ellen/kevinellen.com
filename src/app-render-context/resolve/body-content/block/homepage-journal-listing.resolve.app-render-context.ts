@@ -4,15 +4,16 @@ import type { AppContext } from "@app-context/class.app-context";
 import type { AppContextHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-context.homepage-journal-listing.block.types";
 import type { AppRenderContextHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-render-context.homepage-journal-listing.block.types";
 
-import { resolvePhotoAppRenderContext } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
+import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
 import { formatDate } from "@utils/date.format.util";
+import { appRenderContextResolveRenderImage } from "@app-render-context/resolve/media/render-image.resolve.app-render-context";
 
-export const resolveHomepageJournalListingBlockAppRenderContext = (
+export const appRenderContextResolveHomepageJournalListingBlock = (
   appContext: AppContext,
-  module: AppContextHomepageJournalListingBlock,
+  block: AppContextHomepageJournalListingBlock,
 ): AppRenderContextHomepageJournalListingBlock => ({
-  ...module, // ← THIS carries heading through
-  entries: module.entries.map((entry) => ({
+  ...block,
+  entries: block.entries.map((entry) => ({
     id: entry.id,
     href: entry.href,
     title: entry.title,
@@ -24,6 +25,11 @@ export const resolveHomepageJournalListingBlockAppRenderContext = (
     image:
       entry.image === null
         ? null
-        : resolvePhotoAppRenderContext(entry.image, appContext.metadataLabels),
+        : appRenderContextResolveRenderImage(
+            appRenderContextResolvePhoto(
+              entry.image,
+              appContext.metadataLabels,
+            ),
+          ),
   })),
 });

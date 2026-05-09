@@ -3,16 +3,16 @@
 import type { AppContext } from "@app-context/class.app-context";
 import type { AppRenderContextBodyFooter } from "@app-render-context/types/body-footer.app-render-context.types";
 
-import { resolveNavBodyFooterAppRenderContext } from "@app-render-context/resolve/body-footer/nav.resolve.body-footer.app-render-context";
-import { resolveAffiliationsBodyFooterAppRenderContext } from "@app-render-context/resolve/body-footer/affiliations.resolve.body-footer.app-render-context";
-import { resolveColophonBodyFooterAppRenderContext } from "@app-render-context/resolve/body-footer/colophon.resolve.body-footer.app-render-context";
+import { appRenderContextResolveBodyFooterAffiliations } from "@app-render-context/resolve/body-footer/affiliations.body-footer.resolve.app-render-context";
+import { appRenderContextResolveBodyFooterColophon } from "@app-render-context/resolve/body-footer/colophon.body-footer.resolve.app-render-context";
+import { appRenderContextResolveBodyFooterNav } from "@app-render-context/resolve/body-footer/nav.body-footer.resolve.app-render-context";
 
-export const resolveBodyFooterAppRenderContext = (
+export const appRenderContextResolveBodyFooter = (
   appContext: AppContext,
 ): AppRenderContextBodyFooter => {
   return {
-    nav: resolveNavBodyFooterAppRenderContext(appContext),
-    affiliations: resolveAffiliationsBodyFooterAppRenderContext(appContext),
-    colophon: resolveColophonBodyFooterAppRenderContext(appContext),
+    nav: appRenderContextResolveBodyFooterNav(appContext),
+    affiliations: appRenderContextResolveBodyFooterAffiliations(appContext),
+    colophon: appRenderContextResolveBodyFooterColophon(appContext),
   };
 };

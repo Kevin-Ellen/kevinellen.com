@@ -1,50 +1,60 @@
 // src/app-render-context/resolve/body-content/block/block.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextBlockContentModule } from "@shared-types/page-content/block/app-context.block.types";
-import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.types";
+import type { AppContextBlock } from "@shared-types/page-content/block/app-context.block.types";
+import type { AppRenderContextBlock } from "@shared-types/page-content/block/app-render-context.block.types";
 
-import { resolveParagraphBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/paragraph.resolve.app-render-context";
-import { resolveListBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/list.resolve.app-render-context";
-import { resolveQuoteBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/quote.resolve.app-render-context";
-import { resolveHeroBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/hero.resolve.app-render-context";
-import { resolveJournalListingBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/journal-listing.resolve.app-render-context";
-import { resolvePreBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/pre.resolve.app-render-context";
-import { resolveArticleSectionBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context";
-import { resolveHomepageHeroAppRenderContext } from "@app-render-context/resolve/body-content/block/homepage-hero.resolve.app-render-context";
-import { resolveImageStripBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/image-strip.resolve.app-render-context";
-import { resolveHomepageJournalListingBlockAppRenderContext } from "@app-render-context/resolve/body-content/block/homepage-journal-listing.resolve.app-render-context";
-import { resolveSectionLinksBlockContentModuleAppRenderContext } from "./section-links.resolve.app-render-context";
+import { appRenderContextResolveArticleSectionBlock } from "@app-render-context/resolve/body-content/block/article-section.resolve.app-render-context";
+import { appRenderContextResolveHeroBlock } from "@app-render-context/resolve/body-content/block/hero.resolve.app-render-context";
+import { appRenderContextResolveHomepageHeroBlock } from "@app-render-context/resolve/body-content/block/homepage-hero.resolve.app-render-context";
+import { appRenderContextResolveHomepageJournalListingBlock } from "@app-render-context/resolve/body-content/block/homepage-journal-listing.resolve.app-render-context";
+import { appRenderContextResolveImageStripBlock } from "@app-render-context/resolve/body-content/block/image-strip.resolve.app-render-context";
+import { appRenderContextResolveJournalListingBlock } from "@app-render-context/resolve/body-content/block/journal-listing.resolve.app-render-context";
+import { appRenderContextResolveListBlock } from "@app-render-context/resolve/body-content/block/list.resolve.app-render-context";
+import { appRenderContextResolveParagraphBlock } from "@app-render-context/resolve/body-content/block/paragraph.resolve.app-render-context";
+import { appRenderContextResolvePreBlock } from "@app-render-context/resolve/body-content/block/pre.resolve.app-render-context";
+import { appRenderContextResolveQuoteBlock } from "@app-render-context/resolve/body-content/block/quote.resolve.app-render-context";
+import { appRenderContextResolveSectionLinksBlock } from "@app-render-context/resolve/body-content/block/section-links.resolve.app-render-context";
 
-type AppRenderContextBlockResolverMap = Readonly<{
-  [K in AppContextBlockContentModule["kind"]]: (
+type BlockKind = AppContextBlock["kind"];
+
+type BlockByKind<TKind extends BlockKind> = Extract<
+  AppContextBlock,
+  { kind: TKind }
+>;
+
+type BlockResolverRegistry = {
+  [TKind in BlockKind]: (
     appContext: AppContext,
-    module: Extract<AppContextBlockContentModule, { kind: K }>,
-  ) => AppRenderContextBlockContentModule;
-}>;
+    block: BlockByKind<TKind>,
+  ) => AppRenderContextBlock;
+};
 
-const blockContentModuleResolvers = {
-  paragraph: resolveParagraphBlockContentModuleAppRenderContext,
-  list: resolveListBlockContentModuleAppRenderContext,
-  quote: resolveQuoteBlockContentModuleAppRenderContext,
-  hero: resolveHeroBlockContentModuleAppRenderContext,
-  journalListing: resolveJournalListingBlockContentModuleAppRenderContext,
-  pre: resolvePreBlockContentModuleAppRenderContext,
-  articleSection: resolveArticleSectionBlockContentModuleAppRenderContext,
-  homepageHero: resolveHomepageHeroAppRenderContext,
-  imageStrip: resolveImageStripBlockContentModuleAppRenderContext,
-  homepageJournalListing: resolveHomepageJournalListingBlockAppRenderContext,
-  sectionLinks: resolveSectionLinksBlockContentModuleAppRenderContext,
-} satisfies AppRenderContextBlockResolverMap;
+const BLOCK_RESOLVERS: BlockResolverRegistry = {
+  articleSection: appRenderContextResolveArticleSectionBlock,
+  hero: appRenderContextResolveHeroBlock,
+  homepageHero: appRenderContextResolveHomepageHeroBlock,
+  homepageJournalListing: appRenderContextResolveHomepageJournalListingBlock,
+  imageStrip: appRenderContextResolveImageStripBlock,
+  journalListing: appRenderContextResolveJournalListingBlock,
+  list: appRenderContextResolveListBlock,
+  paragraph: appRenderContextResolveParagraphBlock,
+  pre: (_appContext, block) => appRenderContextResolvePreBlock(block),
+  quote: (_appContext, block) => appRenderContextResolveQuoteBlock(block),
+  sectionLinks: appRenderContextResolveSectionLinksBlock,
+};
 
-export const resolveBlockContentModuleAppRenderContext = (
+export const appRenderContextResolveBlock = <TKind extends BlockKind>(
   appContext: AppContext,
-  module: AppContextBlockContentModule,
-): AppRenderContextBlockContentModule => {
-  const resolver = blockContentModuleResolvers[module.kind] as (
-    appContext: AppContext,
-    module: AppContextBlockContentModule,
-  ) => AppRenderContextBlockContentModule;
+  block: BlockByKind<TKind>,
+): AppRenderContextBlock => {
+  const resolver = BLOCK_RESOLVERS[block.kind];
 
-  return resolver(appContext, module);
+  if (!resolver) {
+    throw new Error(
+      `No AppRenderContext block resolver registered for kind: ${block.kind}`,
+    );
+  }
+
+  return resolver(appContext, block as never);
 };
