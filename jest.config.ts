@@ -6,7 +6,7 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 const config: Config = {
   testEnvironment: "node",
 
-  roots: ["<rootDir>/src"],
+  roots: ["<rootDir>/src", "<rootDir>/packages/content-cli"],
 
   testMatch: ["**/*.test.ts"],
 
@@ -14,7 +14,11 @@ const config: Config = {
     ...tsJestTransformCfg,
   },
 
-  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "packages/content-cli/**/*.ts",
+    "!src/**/*.d.ts",
+  ],
 
   moduleNameMapper: {
     "\\.css\\?raw$": "<rootDir>/tests/mocks/rawCss.mock.ts",
@@ -28,6 +32,7 @@ const config: Config = {
     "^@utils/(.*)$": "<rootDir>/src/utils/$1",
     "^@pages/(.*)$": "<rootDir>/src/pages/$1",
     "^@generated/(.*)\\?raw$": "<rootDir>/tests/stubs/rawText.stub.ts",
+    "^@content-cli/(.*)$": "<rootDir>/packages/content-cli/src/$1",
   },
 
   moduleFileExtensions: ["ts", "js", "json"],

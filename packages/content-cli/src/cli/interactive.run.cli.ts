@@ -10,11 +10,7 @@ import type { ParsedInteractiveCliArgs } from "@content-cli/types/parse-args.cli
 export const runInteractiveCli = async (
   parsedArgs: ParsedInteractiveCliArgs,
 ): Promise<void> => {
-  const state: InteractiveCliState = {
-    env: parsedArgs.env,
-  };
-
   intro("🪶 Kevin Ellen Content CLI");
 
-  await runMainInteractiveMenu(state);
+  await runMainInteractiveMenu({ env: parsedArgs.env });
 };

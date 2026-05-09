@@ -14,7 +14,7 @@ type CloudflareImagesUploadResponse = Readonly<{
   errors: readonly unknown[];
   messages: readonly unknown[];
   result?: {
-    id: string;
+    id?: string;
     filename?: string;
     uploaded?: string;
     requireSignedURLs?: boolean;
@@ -26,6 +26,33 @@ export type UploadedCloudflareImage = Readonly<{
   id: string;
   uploadedAt: string;
 }>;
+
+const isSuccess = (res: CloudflareImagesUploadResponse, ok: boolean): boolean =>
+  ok && res.success && !!res.result?.id;
+
+const isDuplicateError = (res: CloudflareImagesUploadResponse): boolean => {
+  const { errors } = res;
+
+  if (!errors || errors.length === 0) return false;
+
+  for (const err of errors) {
+    let errString: string;
+    try {
+      errString = JSON.stringify(err).toLowerCase();
+    } catch {
+      continue; // skip non-serializable errors
+    }
+
+    if (errString.includes("already exists")) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const getUploadedAt = (provided?: string): string =>
+  provided ?? new Date().toISOString();
 
 export const uploadCloudflareImage = async (
   config: ContentCliConfig,
@@ -40,7 +67,6 @@ export const uploadCloudflareImage = async (
     uploadFile.fileName,
   );
 
-  // ✅ enforce deterministic ID
   formData.append("id", metadata.photoId);
 
   formData.append(
@@ -67,32 +93,31 @@ export const uploadCloudflareImage = async (
 
   const data = (await response.json()) as CloudflareImagesUploadResponse;
 
-  // ✅ SUCCESS
-  if (response.ok && data.success && data.result?.id) {
+  if (isSuccess(data, response.ok)) {
     return {
-      id: data.result.id,
-      uploadedAt: data.result.uploaded ?? new Date().toISOString(),
+      id: data.result!.id!,
+      uploadedAt: getUploadedAt(data.result!.uploaded),
     };
   }
 
-  // ✅ DUPLICATE HANDLING (Option A)
-  const isDuplicate =
-    data.errors?.some((err) =>
-      JSON.stringify(err).toLowerCase().includes("already exists"),
-    ) ?? false;
-
-  if (isDuplicate) {
+  if (isDuplicateError(data)) {
     console.log(`  ↺ Image already exists, reusing ID: ${metadata.photoId}`);
-
     return {
       id: metadata.photoId,
-      uploadedAt: new Date().toISOString(), // we don’t get original timestamp
+      uploadedAt: getUploadedAt(),
     };
   }
 
-  // ❌ REAL FAILURE
+  const safeStringify = (obj: unknown): string => {
+    try {
+      return JSON.stringify(obj);
+    } catch {
+      return "[unserializable error object]";
+    }
+  };
+
   throw new Error(
-    `Cloudflare Images upload failed for ${uploadFile.fileName}: ${JSON.stringify(
+    `Cloudflare Images upload failed for ${uploadFile.fileName}: ${safeStringify(
       data.errors,
     )}`,
   );

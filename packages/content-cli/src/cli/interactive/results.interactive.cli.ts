@@ -7,15 +7,28 @@ import type {
 
 export const isJournalCreateCommandResult = (
   result: ContentCommandResult,
-): result is JournalCreateCommandResult =>
-  result.ok &&
-  "entity" in result &&
-  result.entity === "journal" &&
-  "action" in result &&
-  result.action === "create" &&
-  "workspaceId" in result &&
-  typeof result.workspaceId === "string" &&
-  "workspacePath" in result &&
-  typeof result.workspacePath === "string" &&
-  "photosPath" in result &&
-  typeof result.photosPath === "string";
+): result is JournalCreateCommandResult => {
+  if (
+    typeof result !== "object" ||
+    result === null ||
+    !("entity" in result) ||
+    !("action" in result)
+  ) {
+    return false;
+  }
+
+  if (!result.ok) return false;
+  if (result.entity !== "journal") return false;
+  if (result.action !== "create") return false;
+
+  // Ensure required string keys exist
+  const requiredStringKeys: Array<keyof JournalCreateCommandResult> = [
+    "workspaceId",
+    "workspacePath",
+    "photosPath",
+  ];
+
+  return requiredStringKeys.every(
+    (key) => key in result && typeof (result as any)[key] === "string",
+  );
+};

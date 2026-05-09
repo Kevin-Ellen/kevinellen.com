@@ -25,10 +25,7 @@
       "@utils/*": ["./src/utils/*"],
       "@pages/*": ["./src/pages/*"],
       "@tests/*": ["./tests/*"],
-
-      // "@shared-types/*": ["./packages/shared-types/src/*"],
       "@content-cli/*": ["./packages/content-cli/src/*"]
-      // "@app/*": ["./src/app/*"]
     }
   },
   "include": [

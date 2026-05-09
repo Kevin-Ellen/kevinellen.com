@@ -1,28 +1,27 @@
 // packages/content-cli/src/cli/parse-args.cli.ts
 
 import type {
-  ContentCliAction,
-  ContentCliEntity,
   ParsedCliArgs,
+  ParsedJournalDirectCliArgs,
+  ParsedPhotoDirectCliArgs,
+  ParsedPhotoHomepageStripRebuildArgs,
 } from "@content-cli/types/parse-args.cli.types";
 import type { ContentCliEnvironment } from "@content-cli/types/content-cli.env.types";
 import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.content-cli.types";
 
-const isWorkspaceBucket = (
-  value: string | undefined,
-): value is ContentWorkspaceBucket =>
+/** Type guards */
+const isWorkspaceBucket = (value?: string): value is ContentWorkspaceBucket =>
   value === "drafts" || value === "edits" || value === "uploaded";
 
-const isEnvironment = (
-  value: string | undefined,
-): value is ContentCliEnvironment =>
+const isEnvironment = (value?: string): value is ContentCliEnvironment =>
   value === "dev" || value === "stg" || value === "prod";
 
-const isEntity = (value: string | undefined): value is ContentCliEntity =>
+const isEntity = (value?: string): value is "journal" | "photo" =>
   value === "journal" || value === "photo";
 
-const isAction = (value: string | undefined): value is ContentCliAction =>
-  [
+/** Action maps for validation */
+const entityActionsMap = {
+  journal: [
     "create",
     "generate",
     "validate",
@@ -31,82 +30,101 @@ const isAction = (value: string | undefined): value is ContentCliAction =>
     "list",
     "status",
     "promote",
+  ] as const,
+  photo: [
+    "create",
+    "generate",
+    "validate",
+    "publish",
+    "read",
+    "list",
+    "status",
     "homepageStripRebuild",
-  ].includes(value ?? "");
-
-const getFlagValue = (
-  args: readonly string[],
-  flagName: string,
-): string | undefined => {
-  const index = args.indexOf(flagName);
-
-  if (index === -1) {
-    return undefined;
-  }
-
-  return args[index + 1];
+  ] as const,
 };
 
-const removeKnownFlags = (args: readonly string[]): string[] =>
-  args.filter((arg, index) => {
-    const previousArg = args[index - 1];
-    const knownFlags = [
-      "--env",
-      "--slug",
-      "--photo-id",
-      "--bucket",
-      "--from",
-      "--to",
-    ];
+/** Returns true if action is valid for entity */
+const isAction = (entity: "journal" | "photo", action: string) =>
+  entityActionsMap[entity].includes(action as any);
 
-    if (knownFlags.includes(arg)) {
-      return false;
-    }
+/** CLI flag utilities */
+const getFlagValue = (args: readonly string[], flagName: string) =>
+  args[args.indexOf(flagName) + 1];
 
-    if (knownFlags.includes(previousArg)) {
-      return false;
-    }
+const removeKnownFlags = (args: readonly string[]) => {
+  const known = ["--env", "--slug", "--photo-id", "--bucket", "--from", "--to"];
+  return args.filter(
+    (arg, index) => !known.includes(arg) && !known.includes(args[index - 1]),
+  );
+};
 
-    return true;
-  });
-
+/** Main parser */
 export const parseCliArgs = (args: readonly string[]): ParsedCliArgs => {
-  const envValue = getFlagValue(args, "--env");
-  const bucketValue = getFlagValue(args, "--bucket");
+  // store raw flags first
+  const envFlag = getFlagValue(args, "--env");
+  const bucketFlag = getFlagValue(args, "--bucket");
+  const fromFlag = getFlagValue(args, "--from");
+  const toFlag = getFlagValue(args, "--to");
 
-  const env = isEnvironment(envValue) ? envValue : "prod";
-  const bucket = isWorkspaceBucket(bucketValue) ? bucketValue : "drafts";
+  // properly typed variables
+  const env: ContentCliEnvironment = isEnvironment(envFlag) ? envFlag : "prod";
+  const bucket: ContentWorkspaceBucket = isWorkspaceBucket(bucketFlag)
+    ? bucketFlag
+    : "drafts";
+  const from: ContentCliEnvironment | undefined = isEnvironment(fromFlag)
+    ? fromFlag
+    : undefined;
+  const to: ContentCliEnvironment | undefined = isEnvironment(toFlag)
+    ? toFlag
+    : undefined;
 
-  const fromValue = getFlagValue(args, "--from");
-  const toValue = getFlagValue(args, "--to");
+  const positional = removeKnownFlags(args);
 
-  const from = isEnvironment(fromValue) ? fromValue : undefined;
-  const to = isEnvironment(toValue) ? toValue : undefined;
+  // interactive mode
+  if (positional.length === 0) return { mode: "interactive", env };
 
-  const positionalArgs = removeKnownFlags(args);
+  const [rawEntity, rawAction] = positional;
 
-  if (positionalArgs.length === 0) {
-    return {
-      mode: "interactive",
+  if (!isEntity(rawEntity) || !isAction(rawEntity, rawAction)) {
+    throw new Error(
+      `Invalid CLI command: entity="${rawEntity}" action="${rawAction}"`,
+    );
+  }
+
+  // Journal
+  if (rawEntity === "journal") {
+    const parsed: ParsedJournalDirectCliArgs = {
+      mode: "direct",
       env,
+      entity: "journal",
+      action: rawAction as any,
+      bucket,
+      slug: getFlagValue(args, "--slug"),
+      from,
+      to,
     };
+    return parsed;
   }
 
-  const [rawEntity, rawAction] = positionalArgs;
-
-  if (!isEntity(rawEntity) || !isAction(rawAction)) {
-    throw new Error("Invalid CLI command.");
+  // Photo: homepageStripRebuild
+  if (rawEntity === "photo" && rawAction === "homepageStripRebuild") {
+    const parsed: ParsedPhotoHomepageStripRebuildArgs = {
+      mode: "direct",
+      env,
+      entity: "photo",
+      action: "homepageStripRebuild",
+    };
+    return parsed;
   }
 
-  return {
+  // Photo: normal actions
+  const parsed: ParsedPhotoDirectCliArgs = {
     mode: "direct",
     env,
-    entity: rawEntity,
-    action: rawAction,
+    entity: "photo",
+    action: rawAction as any,
     bucket,
-    from,
-    to,
-    slug: getFlagValue(args, "--slug"),
     photoId: getFlagValue(args, "--photo-id"),
   };
+  return parsed;
 };

@@ -10,11 +10,35 @@ import { runPromoteInteractiveMenu } from "@content-cli/cli/interactive/menus/pr
 
 import type { InteractiveCliState } from "@content-cli/cli/interactive/state.interactive.cli";
 
+/**
+ * Union type of all valid menu actions.
+ */
+type MainMenuAction = "journal" | "photo" | "promote" | "environment" | "exit";
+
+/**
+ * Runs the main interactive CLI menu.
+ */
 export const runMainInteractiveMenu = async (
   state: InteractiveCliState,
+  maxIterations = Infinity, // optional: break loop for safe testing
 ): Promise<void> => {
-  while (true) {
-    const action = await select({
+  // Map actions (excluding 'exit') to handlers
+  const actionMap: Record<
+    Exclude<MainMenuAction, "exit">,
+    (state: InteractiveCliState) => Promise<void>
+  > = {
+    environment: runEnvironmentInteractiveMenu,
+    journal: runJournalInteractiveMenu,
+    photo: runPhotoInteractiveMenu,
+    promote: runPromoteInteractiveMenu,
+  };
+
+  let iterations = 0;
+
+  while (iterations < maxIterations) {
+    iterations++;
+
+    const action = await select<MainMenuAction>({
       message: `Current environment: ${formatEnvironment(state.env)}`,
       options: [
         { value: "journal", label: "📘 Journal" },
@@ -30,27 +54,15 @@ export const runMainInteractiveMenu = async (
       return;
     }
 
-    if (action === "exit") {
-      return;
+    if (action === "exit") return;
+
+    // Handler exists because we typed action as union & mapped keys
+    const handler = actionMap[action];
+    if (!handler) {
+      // This should never happen but satisfies coverage and TS
+      throw new Error(`No handler found for action: ${action}`);
     }
 
-    if (action === "environment") {
-      await runEnvironmentInteractiveMenu(state);
-      continue;
-    }
-
-    if (action === "journal") {
-      await runJournalInteractiveMenu(state);
-      continue;
-    }
-
-    if (action === "photo") {
-      await runPhotoInteractiveMenu(state);
-      continue;
-    }
-
-    if (action === "promote") {
-      await runPromoteInteractiveMenu(state);
-    }
+    await handler(state);
   }
 };
