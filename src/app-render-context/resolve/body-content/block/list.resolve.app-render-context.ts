@@ -1,6 +1,6 @@
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextListBlockContentModule } from "@shared-types/page-content/block/list/app-context.list.block.page-content.types";
-import type { AppRenderContextListBlockContentModule } from "@shared-types/page-content/block/list/app-render-context.list.block.page-content.types";
+import type { AppContextListBlockContentModule } from "@shared-types/page-content/block/list/app-context.list.block.types";
+import type { AppRenderContextListBlockContentModule } from "@shared-types/page-content/block/list/app-render-context.list.block.types";
 
 import { resolveInlineContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
 

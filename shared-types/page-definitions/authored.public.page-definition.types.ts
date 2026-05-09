@@ -11,7 +11,7 @@ import type { AuthoredStructuredDataEntry } from "@shared-types/structured-data/
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
-type AuthoredPublicPageDefinitionSpecialisedFields = Readonly<{
+type SpecialisedFields = Readonly<{
   id: PageIdPublic;
   kind: PublicPageKind;
   slug: `/${string}` | "/";
@@ -25,5 +25,5 @@ type AuthoredPublicPageDefinitionSpecialisedFields = Readonly<{
 
 export type AuthoredPublicPageDefinition = Replace<
   AuthoredBasePageDefinition,
-  AuthoredPublicPageDefinitionSpecialisedFields
+  SpecialisedFields
 >;

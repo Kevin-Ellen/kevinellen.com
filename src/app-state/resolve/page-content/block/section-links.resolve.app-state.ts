@@ -1,23 +1,18 @@
 // src/app-state/resolve/page-content/block/section-links.resolve.app-state.ts
 
-import type { AuthoredSectionLinksBlockContentModule } from "@shared-types/page-content/block/section-links/authored.section-links.block.page-content.types";
-import type { AppStateSectionLinksBlockContentModule } from "@shared-types/page-content/block/section-links/app-state.section-links.block.page-content.types";
+import type { AuthoredSectionLinksBlock } from "@shared-types/page-content/block/section-links/authored.section-links.block.types";
+import type { AppStateSectionLinksBlock } from "@shared-types/page-content/block/section-links/app-state.section-links.block.types";
 
-export const appStateResolveSectionLinksBlockContentModule = (
-  module: AuthoredSectionLinksBlockContentModule,
-): AppStateSectionLinksBlockContentModule => ({
+import { appStateResolveInternalLink } from "@app-state/resolve/links/internal.link.resolve.app-state";
+
+export const appStateResolveSectionLinksBlock = (
+  module: AuthoredSectionLinksBlock,
+): AppStateSectionLinksBlock => ({
   ...module,
   flow: "content",
   sections: module.sections.map((section) => ({
     ...section,
     intro: section.intro ?? null,
-    link: {
-      ...section.link,
-      text: section.link.text ?? null,
-      svgId: section.link.svgId ?? null,
-      behaviour: section.link.behaviour ?? {
-        openInNewTab: false,
-      },
-    },
+    link: appStateResolveInternalLink(section.link),
   })),
 });

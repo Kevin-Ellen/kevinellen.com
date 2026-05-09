@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/pre.body-content.renderer.ts
 
-import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.page-content.types";
+import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.types";
 
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 

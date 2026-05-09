@@ -4,15 +4,15 @@ import type { AuthoredPageContent } from "@shared-types/page-content/authored.pa
 import type { AppStatePageContent } from "@shared-types/page-content/app-state.page-content.types";
 
 import { appStateResolvePageContentHead } from "@app-state/resolve/page-content/site/content-head.resolve.app-state";
-import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
-import { appStateResolveFooterContentModule } from "@app-state/resolve/page-content/footer/footer.resolve.app-state";
+import { appStateResolveBlock } from "@app-state/resolve/page-content/block/block.resolve.app-state";
+import { appStateResolveFooter } from "@app-state/resolve/page-content/footer/footer.resolve.app-state";
 
 export const appStateResolvePageContent = (
   content: AuthoredPageContent,
 ): AppStatePageContent => {
   return {
-    header: appStateResolvePageContentHead(content.header),
-    content: content.content.map(appStateResolveBlockContentModule),
-    footer: (content.footer ?? []).map(appStateResolveFooterContentModule),
+    head: appStateResolvePageContentHead(content.head),
+    content: content.content.map(appStateResolveBlock),
+    footer: (content.footer ?? []).map(appStateResolveFooter),
   };
 };

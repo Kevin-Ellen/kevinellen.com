@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/article-section.body-content.renderer.ts
 
-import type { AppRenderContextArticleSectionBlockContentModule } from "@shared-types/page-content/block/article-section/app-render-context.article-section.block.page-content.types";
+import type { AppRenderContextArticleSectionBlockContentModule } from "@shared-types/page-content/block/article-section/app-render-context.article-section.block.types";
 
 import { renderBlockContentModule } from "@rendering/body-content/block/block.body-content.renderer";
 import { renderHeading } from "@rendering/shared/heading.body-content.renderer";

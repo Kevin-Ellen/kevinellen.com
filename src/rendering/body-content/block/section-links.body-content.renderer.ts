@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/section-links.body-content.renderer.ts
 
-import type { AppRenderContextSectionLinksBlockContentModule } from "@shared-types/page-content/block/section-links/app-render-context.section-links.block.page-content.types";
+import type { AppRenderContextSectionLinksBlockContentModule } from "@shared-types/page-content/block/section-links/app-render-context.section-links.block.types";
 
 import { renderHeading } from "@rendering/shared/heading.body-content.renderer";
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";

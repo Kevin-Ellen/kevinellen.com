@@ -21,7 +21,7 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
   content: {
     // Page identity only.
     // This should not drive the visible homepage hero layout.
-    header: {
+    head: {
       eyebrow: "Kevin Ellen",
       title: "Home",
       intro:

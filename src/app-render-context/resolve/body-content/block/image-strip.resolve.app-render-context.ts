@@ -1,11 +1,11 @@
 // src/app-render-context/resolve/body-content/block/image-strip.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-context.image-strip.block.page-content.types";
+import type { AppContextImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-context.image-strip.block.types";
 import type {
   AppRenderContextImageStripBlockContentModule,
   AppRenderContextImageStripPhoto,
-} from "@shared-types/page-content/block/image-strip/app-render-context.image-strip.block.page-content.types";
+} from "@shared-types/page-content/block/image-strip/app-render-context.image-strip.block.types";
 
 import { resolvePhotoAppRenderContext } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
 

@@ -1,41 +1,37 @@
 // src/app-state/resolve/page-content/footer/footer.resolve.app-state.ts
 
-import type { AuthoredPageContentFooterModule } from "@shared-types/page-content/footer/authored.page-footer.page-content.types";
-import type { AppStatePageContentFooterModule } from "@shared-types/page-content/footer/app-state.page-footer.page-content.types";
+import type { AuthoredPageContentFooter } from "@shared-types/page-content/footer/authored.page-footer.types";
+import type { AppStatePageContentFooter } from "@shared-types/page-content/footer/app-state.page-footer.types";
 
-import { appStateResolveJournalEntryFooterModule } from "@app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state";
+import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state";
 
-type AuthoredPageContentFooterModuleKind =
-  AuthoredPageContentFooterModule["kind"];
+type ModuleKind = AuthoredPageContentFooter["kind"];
 
-type AuthoredPageContentFooterModuleByKind<
-  TKey extends AuthoredPageContentFooterModuleKind,
-> = Extract<AuthoredPageContentFooterModule, { kind: TKey }>;
+type ModuleByKind<TKey extends ModuleKind> = Extract<
+  AuthoredPageContentFooter,
+  { kind: TKey }
+>;
 
-type AppStatePageContentFooterModuleResolverRegistry = {
-  [TKey in AuthoredPageContentFooterModuleKind]: (
-    module: AuthoredPageContentFooterModuleByKind<TKey>,
-  ) => AppStatePageContentFooterModule;
+type Registry = {
+  [TKey in ModuleKind]: (
+    module: ModuleByKind<TKey>,
+  ) => AppStatePageContentFooter;
 };
 
-const getAppStatePageContentFooterModuleResolver = <
-  TKind extends AuthoredPageContentFooterModuleKind,
->(
+const footerResolver = <TKind extends ModuleKind>(
   kind: TKind,
-): AppStatePageContentFooterModuleResolverRegistry[TKind] => {
+): Registry[TKind] => {
   const registry = {
-    journalEntryFooter: appStateResolveJournalEntryFooterModule,
-  } satisfies AppStatePageContentFooterModuleResolverRegistry;
+    journalEntryFooter: appStateResolveJournalEntryFooter,
+  } satisfies Registry;
 
   return registry[kind];
 };
 
-export const appStateResolveFooterContentModule = <
-  TKind extends AuthoredPageContentFooterModuleKind,
->(
-  module: AuthoredPageContentFooterModuleByKind<TKind>,
-): AppStatePageContentFooterModule => {
-  const resolver = getAppStatePageContentFooterModuleResolver(module.kind);
+export const appStateResolveFooter = <TKind extends ModuleKind>(
+  module: ModuleByKind<TKind>,
+): AppStatePageContentFooter => {
+  const resolver = footerResolver(module.kind);
 
   if (!resolver) {
     throw new Error(

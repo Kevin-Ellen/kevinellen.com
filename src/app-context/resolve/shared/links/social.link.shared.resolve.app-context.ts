@@ -4,7 +4,7 @@ import type { AppState } from "@app-state/class.app-state";
 import type { AppContextSocialLink } from "@shared-types/links/app-context.links.types";
 import type { AppStateSocialLink } from "@shared-types/links/app-state.links.types";
 
-export const resolveSocialLinkAppContext = (
+export const appContextResolveSocialLink = (
   link: AppStateSocialLink,
   appState: AppState,
 ): AppContextSocialLink => {

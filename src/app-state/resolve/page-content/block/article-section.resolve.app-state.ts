@@ -1,35 +1,33 @@
 // src/app-state/resolve/page-content/block/article-section.resolve.app-state.ts
 
 import type {
-  AuthoredArticleSectionHeadingBlockContentModule,
-  AuthoredArticleSectionBlockContentModule,
-} from "@shared-types/page-content/block/article-section/authored.article-section.block.page-content.types";
+  AuthoredArticleSectionHeadingBlock,
+  AuthoredArticleSectionBlock,
+} from "@shared-types/page-content/block/article-section/authored.article-section.block.types";
 import type {
-  AppStateArticleSectionHeadingBlockContentModule,
-  AppStateArticleSectionBlockContentModule,
-} from "@shared-types/page-content/block/article-section/app-state.article-section.block.page-content.types";
+  AppStateArticleSectionHeadingBlock,
+  AppStateArticleSectionBlock,
+} from "@shared-types/page-content/block/article-section/app-state.article-section.block.types";
 
-import { appStateResolveBlockContentModule } from "@app-state/resolve/page-content/block/block.page-content.resolve.app-state";
+import { appStateResolveBlock } from "@app-state/resolve/page-content/block/block.resolve.app-state";
 
-export const appStateResolveArticleSectionHeadingBlockContentModule = (
-  heading: AuthoredArticleSectionHeadingBlockContentModule,
-): AppStateArticleSectionHeadingBlockContentModule => {
+export const appStateResolveArticleSectionHeadingBlock = (
+  heading: AuthoredArticleSectionHeadingBlock,
+): AppStateArticleSectionHeadingBlock => {
   return {
     ...heading,
     visuallyHidden: heading.visuallyHidden ?? false,
   };
 };
 
-export const appStateResolveArticleSectionBlockContentModule = (
-  module: AuthoredArticleSectionBlockContentModule,
-): AppStateArticleSectionBlockContentModule => {
+export const appStateResolveArticleSectionBlock = (
+  module: AuthoredArticleSectionBlock,
+): AppStateArticleSectionBlock => {
   return {
     ...module,
-    heading: appStateResolveArticleSectionHeadingBlockContentModule(
-      module.heading,
-    ),
+    heading: appStateResolveArticleSectionHeadingBlock(module.heading),
     modules: module.modules.map((nestedModule) =>
-      appStateResolveBlockContentModule(nestedModule),
+      appStateResolveBlock(nestedModule),
     ),
   };
 };

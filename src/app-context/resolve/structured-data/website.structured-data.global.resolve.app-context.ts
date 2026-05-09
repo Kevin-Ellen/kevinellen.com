@@ -19,7 +19,7 @@ const resolveStructuredDataPageReferenceHref = (
   return `${appState.siteConfig.origin}${page.slug}${reference.hash ?? ""}`;
 };
 
-export const resolveWebsiteStructuredDataGlobalAppContext = (
+export const appContextResolveWebsiteStructuredData = (
   structuredData: AppStateWebSiteStructuredData,
   appState: AppState,
 ): AppContextStructuredDataEntry => {

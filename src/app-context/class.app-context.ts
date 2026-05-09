@@ -2,7 +2,7 @@
 
 import type { AppContextData } from "@app-context/app-context.types";
 import type { AppContextNavigation } from "@shared-types/config/navigation/app-context.navigation.types";
-import type { AppContextGlobalFooter } from "@shared-types/page-content/site/global-footer/app-context.global-footer.page-content.types";
+import type { AppContextGlobalFooter } from "@shared-types/page-content/site/global-footer/app-context.global-footer.types";
 import type { AppContextStructuredDataEntry } from "@shared-types/structured-data/app-context.structured-data.types";
 import type { PageMetadata } from "@shared-types/page-definitions/shared/shared.metadata.page-definition.types";
 import type { AppStatePageRobotsDirectives } from "@shared-types/page-definitions/robots/app-state.robots.page-definition.types";

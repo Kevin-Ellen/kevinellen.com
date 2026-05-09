@@ -1,6 +1,6 @@
 // src/rendering/body-content/inline/inline-content.body-content.renderer.ts
 
-import type { AppRenderContextInlineContent } from "@shared-types/page-content/inline/app-render-context.inline-content.page-content.types";
+import type { AppRenderContextInlineContent } from "@shared-types/page-content/inline/app-render-context.inline-content.types";
 
 import { renderTextInlineContent } from "@rendering/body-content/inline/text.inline-content.renderer";
 import { renderLinkInlineContent } from "@rendering/body-content/inline/link.inline-content.renderer";

@@ -20,7 +20,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "licensing"],
 
     content: {
-      header: {
+      head: {
         eyebrow: "Legal",
         title: "Photo Licensing",
         intro:

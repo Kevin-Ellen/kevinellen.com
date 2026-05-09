@@ -1,8 +1,8 @@
 // src/app-render-context/resolve/body-content/block/homepage-hero.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-context.homepage-hero.block.page-content.types";
-import type { AppRenderContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-render-context.homepage-hero.block.page-content.types";
+import type { AppContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-context.homepage-hero.block.types";
+import type { AppRenderContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-render-context.homepage-hero.block.types";
 
 import { resolveInlineContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
 import { resolvePhotoAppRenderContext } from "@app-render-context/resolve/media/photo.resolve.app-render-context";

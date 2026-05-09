@@ -12,13 +12,13 @@ import { appStateResolveExternalLink } from "@app-state/resolve/links/external.l
 import { appStateResolveInternalLink } from "@app-state/resolve/links/internal.link.resolve.app-state";
 import { appStateResolveSocialLink } from "@app-state/resolve/links/social.link.resolve.app-state";
 
-type AppStateLinkResolverRegistry = {
+type Registry = {
   internal: (link: AuthoredInternalLink) => AppStateLink;
   external: (link: AuthoredExternalLink) => AppStateLink;
   social: (link: AuthoredSocialLink) => AppStateLink;
 };
 
-const APP_STATE_LINK_TYPE_REGISTRY: AppStateLinkResolverRegistry = {
+const APP_STATE_LINK_TYPE_REGISTRY: Registry = {
   internal: appStateResolveInternalLink,
   external: appStateResolveExternalLink,
   social: appStateResolveSocialLink,

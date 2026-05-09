@@ -6,7 +6,7 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 const config: Config = {
   testEnvironment: "node",
 
-  roots: ["<rootDir>/tests"],
+  roots: ["<rootDir>/src"],
 
   testMatch: ["**/*.test.ts"],
 

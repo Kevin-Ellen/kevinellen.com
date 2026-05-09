@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/journal-listing.body-content.renderer.ts
 
-import type { AppRenderContextJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-render-context.journal-listing.block.page-content.types";
+import type { AppRenderContextJournalListingBlockContentModule } from "@shared-types/page-content/block/journal-listing/app-render-context.journal-listing.block.types";
 
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 import { renderPagination } from "@rendering/shared/pagination.shared.renderer";

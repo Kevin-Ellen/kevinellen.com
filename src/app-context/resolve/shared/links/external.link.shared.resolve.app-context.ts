@@ -3,7 +3,7 @@
 import type { AppContextExternalLink } from "@shared-types/links/app-context.links.types";
 import type { AppStateExternalLink } from "@shared-types/links/app-state.links.types";
 
-export const resolveExternalLinkAppContext = (
+export const appContextResolveExternalLink = (
   link: AppStateExternalLink,
 ): AppContextExternalLink => {
   return {

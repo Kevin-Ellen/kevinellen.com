@@ -37,7 +37,7 @@ const mergeSvgs = (
   });
 };
 
-export const resolveAssetsAppContext = (
+export const appContextResolveAssets = (
   globalAssets: AppStateAssets,
   pageAssets: AppStateAssets,
 ): AppContextAssets => {

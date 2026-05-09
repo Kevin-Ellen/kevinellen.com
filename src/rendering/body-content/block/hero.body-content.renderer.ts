@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/hero.body-content.renderer.ts
 
-import type { AppRenderContextHeroBlockContentModule } from "@shared-types/page-content/block/hero/app-render-context.hero.block.page-content.types";
+import type { AppRenderContextHeroBlockContentModule } from "@shared-types/page-content/block/hero/app-render-context.hero.block.types";
 import type {
   AppRenderContextPhotoMetaGroup,
   AppRenderContextPhotoMetaItem,

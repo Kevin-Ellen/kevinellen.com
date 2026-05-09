@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/image-strip.body-content.renderer.ts
 
-import type { AppRenderContextImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-render-context.image-strip.block.page-content.types";
+import type { AppRenderContextImageStripBlockContentModule } from "@shared-types/page-content/block/image-strip/app-render-context.image-strip.block.types";
 
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 import { getBlockFlowClass } from "@rendering/body-content/block/helpers/flow.block.body-content.helper";

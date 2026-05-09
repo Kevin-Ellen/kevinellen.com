@@ -1,8 +1,8 @@
 // src/app-render-context/resolve/body-content/footer/footer.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextPageContentFooterModule } from "@shared-types/page-content/footer/app-context.page-footer.page-content.types";
-import type { AppRenderContextPageContentFooterModule } from "@shared-types/page-content/footer/app-render-context.page-footer.page-content.types";
+import type { AppContextPageContentFooterModule } from "@shared-types/page-content/footer/app-context.page-footer.types";
+import type { AppRenderContextPageContentFooterModule } from "@shared-types/page-content/footer/app-render-context.page-footer.types";
 
 import { resolveJournalEntryFooterAppRenderContext } from "@app-render-context/resolve/body-content/footer/journal-entry-footer.resolve.app-render-context";
 

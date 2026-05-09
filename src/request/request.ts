@@ -2,16 +2,16 @@
 
 import { appStateCreate } from "@app-state/create.app-state";
 import { appContextCreate } from "@app-context/create.app-context";
-import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
+// import { appRenderContextCreate } from "@app-render-context/create.app-render-context";
 
 import { preRequestOrchestrator } from "@request/pre-request/pre-request.request";
 import { preAppContextOrchestrator } from "@request/pre-app-context/pre-app-context.request";
 import { orchestrateRouteResolution } from "@request/routing/orchestrate.route-resolution.request";
 import { inspectRequest } from "@request/inspect/inspect.request";
 
-import { createHtmlResponse } from "@request/response/create-html.response.request";
+// import { createHtmlResponse } from "@request/response/create-html.response.request";
 
-import { render } from "@rendering/renderer";
+// import { render } from "@rendering/renderer";
 
 export const requestOrchestrator = async (
   req: Request,
@@ -36,20 +36,22 @@ export const requestOrchestrator = async (
 
   const appContext = await appContextCreate(appState, routing, env);
 
-  const appRenderContext = appRenderContextCreate(appContext, env);
+  // const appRenderContext = appRenderContextCreate(appContext, env);
 
   const inspectResponse = inspectRequest(req, env, {
     appState,
     routing,
     appContext,
-    appRenderContext,
+    // appRenderContext,
   });
 
   if (inspectResponse) {
     return inspectResponse;
   }
 
-  const document = render(appRenderContext);
+  return new Response("hello");
 
-  return createHtmlResponse(document, appRenderContext, env);
+  // const document = render(appRenderContext);
+
+  // return createHtmlResponse(document, appRenderContext, env);
 };

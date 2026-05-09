@@ -4,13 +4,13 @@ import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-
 import type { AppContextPageContent } from "@shared-types/page-content/app-context.page-content.types";
 import type { ReplaceAndOmit } from "@shared-types/shared-types-utils/replace.shared.types";
 
-type AppContextPageDefinitionRuntimeFields = Readonly<{
+type RuntimeFields = Readonly<{
   content: AppContextPageContent;
 }>;
 
 export type AppContextPageDefinition = ReplaceAndOmit<
   AppStatePageDefinition,
-  AppContextPageDefinitionRuntimeFields,
+  RuntimeFields,
   | "structuredData"
   | "robotsTxt"
   | "sitemapXml"

@@ -9,9 +9,9 @@ import type {
 } from "@shared-types/links/app-state.links.types";
 import type { AppContextLink } from "@shared-types/links/app-context.links.types";
 
-import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
-import { resolveExternalLinkAppContext } from "@app-context/resolve/shared/links/external.link.shared.resolve.app-context";
-import { resolveSocialLinkAppContext } from "@app-context/resolve/shared/links/social.link.shared.resolve.app-context";
+import { appContextResolveInternalLink } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
+import { appContextResolveExternalLink } from "@app-context/resolve/shared/links/external.link.shared.resolve.app-context";
+import { appContextResolveSocialLink } from "@app-context/resolve/shared/links/social.link.shared.resolve.app-context";
 
 type AppContextLinkResolverRegistry = {
   internal: (link: AppStateInternalLink, appState: AppState) => AppContextLink;
@@ -20,12 +20,12 @@ type AppContextLinkResolverRegistry = {
 };
 
 const APP_CONTEXT_LINK_TYPE_REGISTRY: AppContextLinkResolverRegistry = {
-  internal: resolveInternalLinkAppContext,
-  external: resolveExternalLinkAppContext,
-  social: resolveSocialLinkAppContext,
+  internal: appContextResolveInternalLink,
+  external: appContextResolveExternalLink,
+  social: appContextResolveSocialLink,
 };
 
-export const resolveLinkAppContext = (
+export const appContextResolveLink = (
   link: AppStateLink,
   appState: AppState,
 ): AppContextLink => {

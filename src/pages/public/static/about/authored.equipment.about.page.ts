@@ -19,7 +19,7 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "about", "about-equipment"],
 
     content: {
-      header: {
+      head: {
         eyebrow: "About",
         title: "Equipment",
         intro:

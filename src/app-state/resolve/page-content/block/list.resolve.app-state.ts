@@ -1,32 +1,32 @@
 // src/app-state/resolve/page-content/block/list.resolve.app-state.ts
 
 import type {
-  AuthoredListItemBlockContentModule,
-  AuthoredListBlockContentModule,
-} from "@shared-types/page-content/block/list/authored.list.block.page-content.types";
+  AuthoredListItemBlock,
+  AuthoredListBlock,
+} from "@shared-types/page-content/block/list/authored.list.block.types";
 import type {
-  AppStateListItemBlockContentModule,
-  AppStateListBlockContentModule,
-} from "@shared-types/page-content/block/list/app-state.list.block.page-content.types";
+  AppStateListItemBlock,
+  AppStateListBlock,
+} from "@shared-types/page-content/block/list/app-state.list.block.types";
 
-import { appStateResolveInlineContent } from "@app-state/resolve/page-content/inline/inline.page-content.resolve.app-state";
+import { appStateResolveInline } from "@app-state/resolve/page-content/inline/inline.page-content.resolve.app-state";
 
-export const appStateResolveListItemBlockContentModule = (
-  item: AuthoredListItemBlockContentModule,
-): AppStateListItemBlockContentModule => {
+export const appStateResolveListItemBlock = (
+  item: AuthoredListItemBlock,
+): AppStateListItemBlock => {
   return {
     ...item,
-    content: item.content.map(appStateResolveInlineContent),
+    content: item.content.map(appStateResolveInline),
   };
 };
 
-export const appStateResolveListBlockContentModule = (
-  module: AuthoredListBlockContentModule,
-): AppStateListBlockContentModule => {
+export const appStateResolveListBlock = (
+  module: AuthoredListBlock,
+): AppStateListBlock => {
   return {
     ...module,
     flow: module.flow ?? "content",
     style: module.style ?? "unordered",
-    items: module.items.map(appStateResolveListItemBlockContentModule),
+    items: module.items.map(appStateResolveListItemBlock),
   };
 };

@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/block.body-content.renderer.ts
 
-import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.page-content.types";
+import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.types";
 
 import { renderParagraphBlockContentModule } from "@rendering/body-content/block/paragraph.body-content.renderer";
 import { renderListBlockContentModule } from "@rendering/body-content/block/list.body-content.renderer";

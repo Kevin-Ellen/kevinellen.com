@@ -1,7 +1,7 @@
 // src/app-state/resolve/page-content/site/content-head.resolve.app-state.ts
 
-import type { AuthoredPageContentHead } from "@shared-types/page-content/site/content-head/authored.content-head.page-content.types";
-import type { AppStatePageContentHead } from "@shared-types/page-content/site/content-head/app-state.content-head.page-content.types";
+import type { AuthoredPageContentHead } from "@shared-types/page-content/site/content-head/authored.content-head.types";
+import type { AppStatePageContentHead } from "@shared-types/page-content/site/content-head/app-state.content-head.types";
 
 export const appStateResolvePageContentHead = (
   head: AuthoredPageContentHead,

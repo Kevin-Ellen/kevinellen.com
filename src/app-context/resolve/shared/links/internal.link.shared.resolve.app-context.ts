@@ -28,7 +28,7 @@ const resolvePublicPageHref = (
   };
 };
 
-export const resolveInternalLinkAppContext = (
+export const appContextResolveInternalLink = (
   link: AppStateInternalLink,
   appState: AppState,
 ): AppContextInternalLink => {

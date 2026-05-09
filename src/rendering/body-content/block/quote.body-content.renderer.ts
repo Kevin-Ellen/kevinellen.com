@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/quote.body-content.renderer.ts
 
-import type { AppRenderContextQuoteBlockContentModule } from "@shared-types/page-content/block/quote/app-render-context.quote.block.page-content.types";
+import type { AppRenderContextQuoteBlockContentModule } from "@shared-types/page-content/block/quote/app-render-context.quote.block.types";
 
 import {
   escapeAttribute,

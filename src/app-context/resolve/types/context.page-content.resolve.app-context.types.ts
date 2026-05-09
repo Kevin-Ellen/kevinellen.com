@@ -15,4 +15,6 @@ export type AppContextPageContentResolverContext = Readonly<{
   resolveInternalLink: (link: AppStateInternalLink) => AppContextInternalLink;
   publicPages: readonly AppStatePageDefinition[];
   routingPagination: RoutingPagination | null;
+  resolvePhoto: (photoId: string) => AppContextPhotoMetadata | null;
+  currentPageSlug: string | null;
 }>;

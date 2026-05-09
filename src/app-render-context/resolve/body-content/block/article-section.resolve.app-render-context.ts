@@ -4,11 +4,11 @@ import type { AppContext } from "@app-context/class.app-context";
 import type {
   AppContextArticleSectionBlockContentModule,
   AppContextArticleSectionHeadingBlockContentModule,
-} from "@shared-types/page-content/block/article-section/app-context.article-section.block.page-content.types";
+} from "@shared-types/page-content/block/article-section/app-context.article-section.block.types";
 import type {
   AppRenderContextArticleSectionBlockContentModule,
   AppRenderContextArticleSectionHeadingBlockContentModule,
-} from "@shared-types/page-content/block/article-section/app-render-context.article-section.block.page-content.types";
+} from "@shared-types/page-content/block/article-section/app-render-context.article-section.block.types";
 
 import { resolveBlockContentModuleAppRenderContext } from "./block.resolve.app-render-context";
 

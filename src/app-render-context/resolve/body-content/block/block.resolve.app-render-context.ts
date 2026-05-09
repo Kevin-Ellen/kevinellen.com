@@ -1,8 +1,8 @@
 // src/app-render-context/resolve/body-content/block/block.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextBlockContentModule } from "@shared-types/page-content/block/app-context.block.page-content.types";
-import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.page-content.types";
+import type { AppContextBlockContentModule } from "@shared-types/page-content/block/app-context.block.types";
+import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.types";
 
 import { resolveParagraphBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/paragraph.resolve.app-render-context";
 import { resolveListBlockContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/block/list.resolve.app-render-context";

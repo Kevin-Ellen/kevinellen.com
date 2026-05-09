@@ -1,6 +1,6 @@
 // src/rendering/shared/pagination.shared.renderer.ts
 
-import type { AppRenderContextPagination } from "@shared-types/page-content/shared/pagination/app-render-context.pagination.page-content.types";
+import type { AppRenderContextPagination } from "@shared-types/page-content/shared/pagination/app-render-context.pagination.shared.types";
 
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 

@@ -1,6 +1,6 @@
 // src/rendering/body-content/footer/journal-entry-footer.body-content.renderer.ts
 
-import type { AppRenderContextJournalEntryFooterModule } from "@shared-types/page-content/footer/journal-entry-footer/app-render-context.journal-entry-footer.page-content.types";
+import type { AppRenderContextJournalEntryFooterModule } from "@shared-types/page-content/footer/journal-entry-footer/app-render-context.journal-entry-footer.types";
 
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 

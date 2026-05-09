@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/homepage-hero.body-content.renderer.ts
 
-import type { AppRenderContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-render-context.homepage-hero.block.page-content.types";
+import type { AppRenderContextHomepageHeroBlockContentModule } from "@shared-types/page-content/block/homepage-hero/app-render-context.homepage-hero.block.types";
 
 import { renderInlineContent } from "@rendering/body-content/inline/inline-content.body-content.renderer";
 import { renderTextLink } from "@rendering/shared/link.shared.renderer";

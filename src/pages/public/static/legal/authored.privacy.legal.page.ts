@@ -20,7 +20,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "privacy"],
 
     content: {
-      header: {
+      head: {
         eyebrow: "Legal",
         title: "Privacy",
         intro:

@@ -3,7 +3,7 @@
 import type {
   AppRenderContextListBlockContentModule,
   AppRenderContextListModuleItem,
-} from "@shared-types/page-content/block/list/app-render-context.list.block.page-content.types";
+} from "@shared-types/page-content/block/list/app-render-context.list.block.types";
 
 import { renderInlineContent } from "@rendering/body-content/inline/inline-content.body-content.renderer";
 import { getBlockFlowClass } from "@rendering/body-content/block/helpers/flow.block.body-content.helper";

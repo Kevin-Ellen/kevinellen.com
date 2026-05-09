@@ -16,11 +16,11 @@ export type AppRenderContextHomepageJournalListingItem = Readonly<{
   image: AppRenderContextPhoto | null;
 }>;
 
-type AppRenderContextHomepageJournalListingBlockResolvedFields = Readonly<{
+type ResolvedFields = Readonly<{
   entries: readonly AppRenderContextHomepageJournalListingItem[];
 }>;
 
 export type AppRenderContextHomepageJournalListingBlock = Replace<
   AppContextHomepageJournalListingBlock,
-  AppRenderContextHomepageJournalListingBlockResolvedFields
+  ResolvedFields
 >;

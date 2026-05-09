@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/helpers/flow.block.body-content.helper.ts
 
-import type { BlockContentModuleFlow } from "@shared-types/page-content/block/shared.block.content.types";
+import type { BlockContentModuleFlow } from "@shared-types/page-content/block/shared.block.types";
 
 import { escapeAttribute } from "@rendering/utils/html.escape.util.renderer";
 

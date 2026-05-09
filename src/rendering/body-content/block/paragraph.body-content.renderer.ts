@@ -1,6 +1,6 @@
 // src/rendering/body-content/block/paragraph.body-content.renderer.ts
 
-import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.page-content.types";
+import type { AppRenderContextBlockContentModule } from "@shared-types/page-content/block/app-render-context.block.types";
 
 import { renderInlineContent } from "@rendering/body-content/inline/inline-content.body-content.renderer";
 import { getBlockFlowClass } from "@rendering/body-content/block/helpers/flow.block.body-content.helper";

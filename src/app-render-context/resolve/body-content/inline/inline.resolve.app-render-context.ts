@@ -1,8 +1,8 @@
 // src/app-render-context/resolve/body-content/inline/inline.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextInlineContent } from "@shared-types/page-content/inline/app-context.inline-content.page-content.types";
-import type { AppRenderContextInlineContent } from "@shared-types/page-content/inline/app-render-context.inline-content.page-content.types";
+import type { AppContextInlineContent } from "@shared-types/page-content/inline/app-context.inline-content.types";
+import type { AppRenderContextInlineContent } from "@shared-types/page-content/inline/app-render-context.inline-content.types";
 
 import { resolveCodeInlineContentAppRenderContext } from "./code.resolve.app-render-context";
 import { resolveEmphasisInlineContentAppRenderContext } from "./emphasis.resolve.app-render-context";
