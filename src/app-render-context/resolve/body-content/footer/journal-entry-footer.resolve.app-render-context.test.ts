@@ -19,7 +19,6 @@ describe("appRenderContextResolveJournalEntryFooter", () => {
   it("formats publication dates", () => {
     mockedFormatDate
       .mockReturnValueOnce("9 May 2026")
-      .mockReturnValueOnce("10 May 2026")
       .mockReturnValueOnce("11 May 2026");
 
     const footer: AppContextJournalEntryFooter = {
@@ -41,7 +40,7 @@ describe("appRenderContextResolveJournalEntryFooter", () => {
       publication: {
         author: "kevin",
         publishedAt: "9 May 2026",
-        updatedAt: ["10 May 2026", "11 May 2026"],
+        updatedAt: "11 May 2026",
       },
     });
 
@@ -51,16 +50,14 @@ describe("appRenderContextResolveJournalEntryFooter", () => {
     );
     expect(mockedFormatDate).toHaveBeenNthCalledWith(
       2,
-      "2026-05-10T08:00:00.000Z",
-    );
-    expect(mockedFormatDate).toHaveBeenNthCalledWith(
-      3,
       "2026-05-11T08:00:00.000Z",
     );
   });
 
-  it("preserves an empty updatedAt list", () => {
-    mockedFormatDate.mockReturnValue("9 May 2026");
+  it("falls back to publishedAt when there are no updatedAt values", () => {
+    mockedFormatDate
+      .mockReturnValueOnce("9 May 2026")
+      .mockReturnValueOnce("9 May 2026");
 
     const footer: AppContextJournalEntryFooter = {
       kind: "journalEntryFooter",
@@ -81,11 +78,18 @@ describe("appRenderContextResolveJournalEntryFooter", () => {
       publication: {
         author: "kevin",
         publishedAt: "9 May 2026",
-        updatedAt: [],
+        updatedAt: "9 May 2026",
       },
     });
 
-    expect(mockedFormatDate).toHaveBeenCalledTimes(1);
-    expect(mockedFormatDate).toHaveBeenCalledWith("2026-05-09T08:00:00.000Z");
+    expect(mockedFormatDate).toHaveBeenCalledTimes(2);
+    expect(mockedFormatDate).toHaveBeenNthCalledWith(
+      1,
+      "2026-05-09T08:00:00.000Z",
+    );
+    expect(mockedFormatDate).toHaveBeenNthCalledWith(
+      2,
+      "2026-05-09T08:00:00.000Z",
+    );
   });
 });

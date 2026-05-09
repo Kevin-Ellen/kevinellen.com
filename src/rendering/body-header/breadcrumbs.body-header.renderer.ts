@@ -6,24 +6,26 @@ import type { AppRenderContextBreadcrumbs } from "@shared-types/breadcrumbs/app-
 import { renderTextLink } from "@rendering/shared/link.shared.renderer";
 import { escapeHtml } from "@rendering/utils/html.escape.util.renderer";
 
-const renderBreadcrumbItem = (item: AppRenderContextLink): string => {
-  return `<li class="l-header__breadcrumb-item">
-    ${renderTextLink({
+const renderBreadcrumbItem = (item: AppRenderContextLink): string =>
+  [
+    `<li class="l-header__breadcrumb-item">`,
+    renderTextLink({
       ...item,
       className: "l-header__breadcrumb-link",
-    })}
-  </li>`;
-};
+    }),
+    `</li>`,
+  ].join("");
 
 export const renderBodyHeaderBreadcrumbs = (
   breadcrumbs: AppRenderContextBreadcrumbs,
-): string => {
-  return `<nav class="l-header__breadcrumb" aria-label="Breadcrumb">
-    <ol class="l-header__breadcrumb-list">
-      ${breadcrumbs.items.map(renderBreadcrumbItem).join("")}
-      <li class="l-header__breadcrumb-item" aria-current="page">
-        ${escapeHtml(breadcrumbs.current)}
-      </li>
-    </ol>
-  </nav>`;
-};
+): string =>
+  [
+    `<nav class="l-header__breadcrumb" aria-label="Breadcrumb">`,
+    `<ol class="l-header__breadcrumb-list">`,
+    breadcrumbs.items.map(renderBreadcrumbItem).join(""),
+    `<li class="l-header__breadcrumb-item" aria-current="page">${escapeHtml(
+      breadcrumbs.current,
+    )}</li>`,
+    `</ol>`,
+    `</nav>`,
+  ].join("");

@@ -143,5 +143,6 @@ export const appRenderContextResolvePhoto = (
     attribution: resolveAttribution(photo),
     ratio: normaliseDimensionsToBase(photo.width, photo.height),
     meta: resolvePhotoMeta(photo, metadataLabels),
+    commentary: photo.commentary,
   };
 };

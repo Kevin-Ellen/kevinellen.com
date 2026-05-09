@@ -7,13 +7,17 @@ import { formatDate } from "@utils/date.format.util";
 
 export const appRenderContextResolveJournalEntryFooter = (
   footer: AppContextJournalEntryFooter,
-): AppRenderContextJournalEntryFooter => ({
-  ...footer,
-  publication: {
-    ...footer.publication,
-    publishedAt: formatDate(footer.publication.publishedAt),
-    updatedAt: footer.publication.updatedAt.map((updatedAt) =>
-      formatDate(updatedAt),
-    ),
-  },
-});
+): AppRenderContextJournalEntryFooter => {
+  const lastUpdated =
+    footer.publication.updatedAt[footer.publication.updatedAt.length - 1] ??
+    footer.publication.publishedAt;
+
+  return {
+    ...footer,
+    publication: {
+      ...footer.publication,
+      publishedAt: formatDate(footer.publication.publishedAt),
+      updatedAt: formatDate(lastUpdated),
+    },
+  };
+};

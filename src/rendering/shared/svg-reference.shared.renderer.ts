@@ -8,6 +8,8 @@ export const renderSvgReference = (
   svg: AppRenderContextSvgReference,
   className: string,
 ): string =>
-  `<svg class="${escapeAttribute(className)}" aria-hidden="true" width="${svg.width}" height="${svg.height}">
-    <use href="#${escapeAttribute(svg.id)}"></use>
-  </svg>`;
+  [
+    `<svg class="${escapeAttribute(className)}" aria-hidden="true" width="${svg.width}" height="${svg.height}">`,
+    `<use href="#${escapeAttribute(svg.id)}"></use>`,
+    `</svg>`,
+  ].join("");

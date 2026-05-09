@@ -22,7 +22,6 @@ type OmittedFields =
   | "resolvedLocation"
   | "photographer"
   | "copyright"
-  | "commentary"
   | "readableLocation"
   | "capturedAt";
 
