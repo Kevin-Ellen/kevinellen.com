@@ -16,21 +16,12 @@ const getFileNameFromPathname = (pathname: string): string => {
 };
 
 const getExtensionFromFileName = (
-  fileName: string,
-): "png" | "svg" | "ico" | null => {
-  if (fileName.endsWith(".png")) {
-    return "png";
-  }
+  fileName: resolveStaticAssetIcon,
+): "png" | "svg" | "ico" => {
+  if (fileName.endsWith(".png")) return "png";
+  if (fileName.endsWith(".svg")) return "svg";
 
-  if (fileName.endsWith(".svg")) {
-    return "svg";
-  }
-
-  if (fileName.endsWith(".ico")) {
-    return "ico";
-  }
-
-  return null;
+  return "ico";
 };
 
 const getContentTypeFromExtension = (
@@ -39,22 +30,35 @@ const getContentTypeFromExtension = (
   switch (extension) {
     case "png":
       return "image/png";
+
     case "svg":
       return "image/svg+xml";
+
     case "ico":
       return "image/x-icon";
   }
 };
 
+const resolveIconAssetPath = (
+  pathname: string,
+): `/assets/icons/${resolveStaticAssetIcon}` | null => {
+  const aliasedAssetPath = STATIC_ASSETS_ICON_ROOT_ALIASES[pathname];
+
+  if (aliasedAssetPath) {
+    return aliasedAssetPath;
+  }
+
+  if (pathname.startsWith("/assets/icons/")) {
+    return pathname as `/assets/icons/${resolveStaticAssetIcon}`;
+  }
+
+  return null;
+};
+
 export const staticAssetResolverIcon: StaticAssetRequestResolver = (
   pathname,
 ) => {
-  const aliasedAssetPath = STATIC_ASSETS_ICON_ROOT_ALIASES[pathname];
-  const assetPath = aliasedAssetPath
-    ? aliasedAssetPath
-    : pathname.startsWith("/assets/icons/")
-      ? (pathname as `/assets/icons/${resolveStaticAssetIcon}`)
-      : null;
+  const assetPath = resolveIconAssetPath(pathname);
 
   if (!assetPath) {
     return null;
@@ -67,10 +71,6 @@ export const staticAssetResolverIcon: StaticAssetRequestResolver = (
   }
 
   const extension = getExtensionFromFileName(fileName);
-
-  if (!extension) {
-    return null;
-  }
 
   return {
     family: "icon",
