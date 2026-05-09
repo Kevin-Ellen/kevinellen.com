@@ -40,7 +40,12 @@ export const createDraftPhotoMetadata = (
   commentary: REQUIRED_PLACEHOLDER,
   readableLocation: resolvedLocation?.displayName ?? REQUIRED_PLACEHOLDER,
 
-  capturedAt: exif.capturedAt,
+  capturedAt: exif.capturedAt
+    ? {
+        utc: exif.capturedAt,
+        timezone: null,
+      }
+    : null,
 
   photographer: exif.photographer,
   copyright: exif.copyright,

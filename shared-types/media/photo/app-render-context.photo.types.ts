@@ -42,6 +42,7 @@ export type AppRenderContextPhotoMetaItem = Readonly<{
   label: string;
   description: string | null;
   value: string;
+  datetime?: string;
 }>;
 
 export type AppRenderContextPhotoMetaGroup = Readonly<{

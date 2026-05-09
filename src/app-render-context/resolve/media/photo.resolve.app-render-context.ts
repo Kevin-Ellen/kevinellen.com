@@ -71,7 +71,11 @@ const resolvePhotoMeta = (
       id: "capturedAt",
       label: metadataLabels.capturedAt.label,
       description: metadataLabels.capturedAt.description ?? null,
-      value: formatDate(photo.capturedAt),
+      value: formatDate(photo.capturedAt.utc, {
+        includeTime: true,
+        timeZone: photo.capturedAt.timezone ?? undefined,
+      }),
+      datetime: photo.capturedAt.utc,
     });
   }
 

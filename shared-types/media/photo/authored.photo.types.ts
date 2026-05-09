@@ -2,6 +2,11 @@
 
 import type { AuthoredResolvedLocation } from "@shared-types/media/photo/location.photo.types";
 
+export type AuthoredPhotoCapturedAt = Readonly<{
+  utc: string;
+  timezone: string | null;
+}>;
+
 export type AuthoredPhotoMetadata = Readonly<{
   id: string;
   sourceFileName: string;
@@ -14,7 +19,7 @@ export type AuthoredPhotoMetadata = Readonly<{
   commentary: string;
   readableLocation: string;
 
-  capturedAt: string | null;
+  capturedAt: AuthoredPhotoCapturedAt | null;
 
   photographer: string | null;
   copyright: string | null;
