@@ -9,6 +9,7 @@ import { runPhotoPublishFlow } from "@content-cli/cli/interactive/flows/photo/pu
 import { runPhotoReadFlow } from "@content-cli/cli/interactive/flows/photo/read.photo.flow.interactive.cli";
 import { runPhotoListFlow } from "@content-cli/cli/interactive/flows/photo/list.photo.flow.interactive.cli";
 import { runPhotoStatusFlow } from "@content-cli/cli/interactive/flows/photo/status.photo.flow.interactive.cli";
+import { runPhotoHomepageStripRebuildFlow } from "@content-cli/cli/interactive/flows/photo/homepage-strip-rebuild.photo.flow.interactive.cli";
 
 import type { InteractiveCliState } from "@content-cli/cli/interactive/state.interactive.cli";
 
@@ -26,6 +27,10 @@ export const runPhotoInteractiveMenu = async (
         { value: "read", label: "Read from KV" },
         { value: "list", label: "List" },
         { value: "status", label: "Status" },
+        {
+          value: "homepageStripRebuild",
+          label: "Rebuild homepage strip index",
+        },
         { value: "back", label: "Back" },
       ],
     });
@@ -43,5 +48,8 @@ export const runPhotoInteractiveMenu = async (
     if (action === "read") await runPhotoReadFlow(state);
     if (action === "list") await runPhotoListFlow(state);
     if (action === "status") await runPhotoStatusFlow(state);
+    if (action === "homepageStripRebuild") {
+      await runPhotoHomepageStripRebuildFlow(state);
+    }
   }
 };

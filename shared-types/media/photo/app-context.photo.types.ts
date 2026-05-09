@@ -4,11 +4,11 @@ import type { AuthoredPhotoMetadata } from "@shared-types/media/photo/authored.p
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
-type AppContextPhotoMetadataDeterministicFields = Readonly<{
+type DeterministicFields = Readonly<{
   cloudflareImageId: string;
 }>;
 
 export type AppContextPhotoMetadata = Replace<
   AuthoredPhotoMetadata,
-  AppContextPhotoMetadataDeterministicFields
+  DeterministicFields
 >;

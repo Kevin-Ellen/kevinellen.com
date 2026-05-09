@@ -1,20 +1,20 @@
+// src/app-render-context/resolve/body-content/block/list.resolve.app-render-context.ts
+
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextListBlockContentModule } from "@shared-types/page-content/block/list/app-context.list.block.page-content.types";
-import type { AppRenderContextListBlockContentModule } from "@shared-types/page-content/block/list/app-render-context.list.block.page-content.types";
+import type { AppContextListBlock } from "@shared-types/page-content/block/list/app-context.list.block.types";
+import type { AppRenderContextListBlock } from "@shared-types/page-content/block/list/app-render-context.list.block.types";
 
-import { resolveInlineContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
+import { appRenderContextResolveInline } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
 
-export const resolveListBlockContentModuleAppRenderContext = (
+export const appRenderContextResolveListBlock = (
   appContext: AppContext,
-  module: AppContextListBlockContentModule,
-): AppRenderContextListBlockContentModule => {
-  return {
-    ...module,
-    items: module.items.map((item) => ({
-      ...item,
-      content: item.content.map((inlineItem) =>
-        resolveInlineContentModuleAppRenderContext(appContext, inlineItem),
-      ),
-    })),
-  };
-};
+  block: AppContextListBlock,
+): AppRenderContextListBlock => ({
+  ...block,
+  items: block.items.map((item) => ({
+    ...item,
+    content: item.content.map((inlineItem) =>
+      appRenderContextResolveInline(appContext, inlineItem),
+    ),
+  })),
+});

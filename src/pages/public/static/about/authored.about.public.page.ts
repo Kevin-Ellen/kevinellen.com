@@ -19,7 +19,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
   breadcrumbs: ["home", "about"],
 
   content: {
-    header: {
+    head: {
       eyebrow: "Kevin Ellen",
       title: "About me",
       intro:

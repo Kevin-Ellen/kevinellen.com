@@ -16,7 +16,7 @@ import type { PageMetadata } from "@shared-types/page-definitions/shared/shared.
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
-type AppStatePageDefinitionDeterministicFields = Readonly<{
+type DeterministicFields = Readonly<{
   id: PageId;
   kind: PublicPageKind | null;
   slug: `/${string}` | "/" | null;
@@ -34,5 +34,5 @@ type AppStatePageDefinitionDeterministicFields = Readonly<{
 
 export type AppStatePageDefinition = Replace<
   AuthoredPageDefinition,
-  AppStatePageDefinitionDeterministicFields
+  DeterministicFields
 >;

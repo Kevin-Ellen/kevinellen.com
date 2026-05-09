@@ -1,7 +1,7 @@
 // src/app-context/resolve/photos/photos.resolve.app-context.ts
 
-import type { AuthoredPhotoMetadata } from "@shared-types/media/photo/authored.photo.types";
 import type { AppContextPhotoMetadata } from "@shared-types/media/photo/app-context.photo.types";
+import type { AuthoredPhotoMetadata } from "@shared-types/media/photo/authored.photo.types";
 
 const isAuthoredPhotoMetadata = (
   value: unknown,
@@ -24,7 +24,7 @@ const isAuthoredPhotoMetadata = (
   );
 };
 
-const resolvePhotoAppContext = (
+const appContextResolvePhoto = (
   photo: AuthoredPhotoMetadata,
 ): AppContextPhotoMetadata => {
   if (!photo.cloudflareImageId) {
@@ -39,7 +39,7 @@ const resolvePhotoAppContext = (
   };
 };
 
-export const resolvePhotosAppContext = async ({
+export const appContextResolvePhotos = async ({
   kv,
   photoIds,
 }: Readonly<{
@@ -47,7 +47,8 @@ export const resolvePhotosAppContext = async ({
   photoIds: readonly string[];
 }>): Promise<readonly AppContextPhotoMetadata[]> => {
   const uniquePhotoIds = [...new Set(photoIds)];
-  const photos = await Promise.all(
+
+  return Promise.all(
     uniquePhotoIds.map(async (photoId) => {
       const value = await kv.get(`photo:${photoId}`, "json");
 
@@ -55,9 +56,7 @@ export const resolvePhotosAppContext = async ({
         throw new Error(`Photo '${photoId}' could not be resolved from KV.`);
       }
 
-      return resolvePhotoAppContext(value);
+      return appContextResolvePhoto(value);
     }),
   );
-
-  return photos;
 };

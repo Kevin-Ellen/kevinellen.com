@@ -31,10 +31,16 @@ export const preAppContextResolveRedirects = (
       };
     }
 
-    effectiveUrl = new URL(
+    const redirectTargetUrl = new URL(
       systemRedirect.redirectMatch.to,
       effectiveUrl.origin,
     );
+
+    if (redirectTargetUrl.search === "") {
+      redirectTargetUrl.search = effectiveUrl.search;
+    }
+
+    effectiveUrl = redirectTargetUrl;
     redirectStatus = systemRedirect.redirectMatch.redirectStatusCode;
   }
 

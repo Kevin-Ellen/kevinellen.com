@@ -13,63 +13,71 @@ type AppRenderContextBodyHeaderNavigationLink =
 
 const renderPrimaryLink = (
   link: AppRenderContextBodyHeaderNavigationLink,
-): string => {
-  return `<li class="l-header__item">
-    ${renderTextLink({
+): string =>
+  [
+    `<li class="l-header__item">`,
+    renderTextLink({
       ...link,
       className: "l-header__link",
-    })}
-  </li>`;
-};
+    }),
+    `</li>`,
+  ].join("");
 
 const renderSocialLink = (
   link: AppRenderContextBodyHeaderNavigationLink,
 ): string => {
   if (!link.svg) {
-    return `<li class="l-header__item">
-      ${renderTextLink({
+    return [
+      `<li class="l-header__item">`,
+      renderTextLink({
         ...link,
         className: "l-header__link",
-      })}
-    </li>`;
+      }),
+      `</li>`,
+    ].join("");
   }
 
-  return `<li class="l-header__item">
-    <a ${renderLinkAttributes({
+  return [
+    `<li class="l-header__item">`,
+    `<a ${renderLinkAttributes({
       ...link,
       className: "l-header__link",
       ariaLabel: link.text,
-    })}>
-      ${renderSvgReference(link.svg, "l-header__icon")}
-    </a>
-  </li>`;
+    })}>`,
+    renderSvgReference(link.svg, "l-header__icon"),
+    `</a>`,
+    `</li>`,
+  ].join("");
 };
 
 const renderPrimaryNavigation = (
   links: AppRenderContextBodyHeaderNavigation["primary"],
-): string => {
-  return `<div class="l-header__nav">
-    <ul class="l-header__list">
-      ${links.map(renderPrimaryLink).join("")}
-    </ul>
-  </div>`;
-};
+): string =>
+  [
+    `<div class="l-header__nav">`,
+    `<ul class="l-header__list">`,
+    links.map(renderPrimaryLink).join(""),
+    `</ul>`,
+    `</div>`,
+  ].join("");
 
 const renderSocialNavigation = (
   links: AppRenderContextBodyHeaderNavigation["social"],
-): string => {
-  return `<div class="l-header__social">
-    <ul class="l-header__list l-header__list--social">
-      ${links.map(renderSocialLink).join("")}
-    </ul>
-  </div>`;
-};
+): string =>
+  [
+    `<div class="l-header__social">`,
+    `<ul class="l-header__list l-header__list--social">`,
+    links.map(renderSocialLink).join(""),
+    `</ul>`,
+    `</div>`,
+  ].join("");
 
 export const renderBodyHeaderNavigation = (
   navigation: AppRenderContextBodyHeaderNavigation,
-): string => {
-  return `<nav class="l-header__primary" aria-label="Primary">
-    ${renderPrimaryNavigation(navigation.primary)}
-    ${renderSocialNavigation(navigation.social)}
-  </nav>`;
-};
+): string =>
+  [
+    `<nav class="l-header__primary" aria-label="Primary">`,
+    renderPrimaryNavigation(navigation.primary),
+    renderSocialNavigation(navigation.social),
+    `</nav>`,
+  ].join("");

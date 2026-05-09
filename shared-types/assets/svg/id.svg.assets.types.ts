@@ -3,6 +3,8 @@
 export type SvgAssetId =
   | "logo-monogram-ke"
   | "icon-home"
+  | "icon-newspaper"
+  | "icon-pencil"
   | "icon-github"
   | "icon-instagram"
   | "icon-linkedin"

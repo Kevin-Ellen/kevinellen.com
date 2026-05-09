@@ -11,6 +11,7 @@ import {
 } from "@content-cli/content/photo/path.photo.content";
 import { renderPhotoDraftFile } from "@content-cli/content/photo/render.photo.content";
 import { publishPhotoDrafts } from "@content-cli/content/shared/publish-drafts.photo.content";
+import { updateHomepageStripPhotoIndex } from "@content-cli/content/photo/utils/homepage-strip.index.photo.util.contents";
 
 import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
 
@@ -21,7 +22,15 @@ export const runPublishPhotoCommand: ContentCommandHandler = async (args) => {
     throw new Error("Photo publish requires --slug <workspace-id>.");
   }
 
-  const config = loadContentCliConfig(args.env);
+  if (args.env && args.env !== "prod") {
+    throw new Error("Photo publishing is only supported in prod.");
+  }
+
+  if (args.env !== "prod") {
+    throw new Error("Photo publishing is only supported in prod.");
+  }
+
+  const config = loadContentCliConfig("prod");
 
   const workspacePath = getPhotoWorkspacePath(args.bucket, workspaceId);
   const photosPath = getPhotoAssetDirectoryPath(args.bucket, workspaceId);
@@ -41,6 +50,11 @@ export const runPublishPhotoCommand: ContentCommandHandler = async (args) => {
   if (publishedPhotos.length === 0) {
     throw new Error("No photo draft files found.");
   }
+
+  await updateHomepageStripPhotoIndex(
+    config,
+    publishedPhotos.map((photo) => photo.id),
+  );
 
   await fs.rm(uploadedWorkspacePath, {
     recursive: true,

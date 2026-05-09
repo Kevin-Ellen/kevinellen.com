@@ -8,15 +8,16 @@ import { renderBodyHeaderBreadcrumbs } from "@rendering/body-header/breadcrumbs.
 
 export const renderBodyHeader = (
   bodyHeader: AppRenderContextBodyHeader,
-): string => {
-  return `<header class="l-header">
-    <div class="l-page__frame">
-      <div class="l-header__top">
-        ${renderBodyHeaderBranding(bodyHeader.branding)}
-        ${renderBodyHeaderNavigation(bodyHeader.navigation)}
-      </div>
-      ${renderBodyHeaderBreadcrumbs(bodyHeader.breadcrumbs)}
-    </div>
-  </header>
-  <div class="l-header-sentinel" aria-hidden="true"></div>`;
-};
+): string =>
+  [
+    `<header class="l-header">`,
+    `<div class="l-page__frame">`,
+    `<div class="l-header__top">`,
+    renderBodyHeaderBranding(bodyHeader.branding),
+    renderBodyHeaderNavigation(bodyHeader.navigation),
+    `</div>`,
+    renderBodyHeaderBreadcrumbs(bodyHeader.breadcrumbs),
+    `</div>`,
+    `</header>`,
+    `<div class="l-header-sentinel" aria-hidden="true"></div>`,
+  ].join("");

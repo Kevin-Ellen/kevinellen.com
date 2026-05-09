@@ -17,7 +17,7 @@ export const authoredGoneErrorPage: AuthoredErrorPageDefinition = deepFreeze({
   breadcrumbs: ["home", "error-410"],
 
   content: {
-    header: {
+    head: {
       eyebrow: "410",
       title: "Gone",
       intro:

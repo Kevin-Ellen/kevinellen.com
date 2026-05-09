@@ -3,7 +3,6 @@
 import type {
   AppContextExternalLink,
   AppContextInternalLink,
-  AppContextSocialLink,
 } from "@shared-types/links/app-context.links.types";
 import type { AppRenderContextSvgReference } from "@shared-types/assets/svg/app-render-context.svg.assets.types";
 import type { ReplaceAndOmit } from "@shared-types/shared-types-utils/replace.shared.types";
@@ -19,12 +18,6 @@ export type AppRenderContextInternalLink = ReplaceAndOmit<
   "id" | "svgId" | "behaviour"
 >;
 
-export type AppRenderContextSocialLink = ReplaceAndOmit<
-  AppContextSocialLink,
-  AppRenderContextLinkFields,
-  "id" | "svgId" | "behaviour"
->;
-
 export type AppRenderContextExternalLink = ReplaceAndOmit<
   AppContextExternalLink,
   AppRenderContextLinkFields,
@@ -33,5 +26,4 @@ export type AppRenderContextExternalLink = ReplaceAndOmit<
 
 export type AppRenderContextLink =
   | AppRenderContextInternalLink
-  | AppRenderContextSocialLink
   | AppRenderContextExternalLink;

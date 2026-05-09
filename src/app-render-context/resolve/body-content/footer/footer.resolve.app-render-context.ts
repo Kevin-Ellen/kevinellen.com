@@ -1,42 +1,41 @@
 // src/app-render-context/resolve/body-content/footer/footer.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextPageContentFooterModule } from "@shared-types/page-content/footer/app-context.page-footer.page-content.types";
-import type { AppRenderContextPageContentFooterModule } from "@shared-types/page-content/footer/app-render-context.page-footer.page-content.types";
+import type { AppContextPageContentFooter } from "@shared-types/page-content/footer/app-context.page-footer.types";
+import type { AppRenderContextPageContentFooter } from "@shared-types/page-content/footer/app-render-context.page-footer.types";
 
-import { resolveJournalEntryFooterAppRenderContext } from "@app-render-context/resolve/body-content/footer/journal-entry-footer.resolve.app-render-context";
+import { appRenderContextResolveJournalEntryFooter } from "@app-render-context/resolve/body-content/footer/journal-entry-footer.resolve.app-render-context";
 
-type FooterModuleKind = AppContextPageContentFooterModule["kind"];
+type FooterKind = AppContextPageContentFooter["kind"];
 
-type FooterModuleByKind<TKind extends FooterModuleKind> = Extract<
-  AppContextPageContentFooterModule,
+type FooterByKind<TKind extends FooterKind> = Extract<
+  AppContextPageContentFooter,
   { kind: TKind }
 >;
 
 type FooterResolverRegistry = {
-  [TKind in FooterModuleKind]: (
+  [TKind in FooterKind]: (
     appContext: AppContext,
-    module: FooterModuleByKind<TKind>,
-  ) => AppRenderContextPageContentFooterModule;
+    footer: FooterByKind<TKind>,
+  ) => AppRenderContextPageContentFooter;
 };
 
 const FOOTER_RESOLVERS: FooterResolverRegistry = {
-  journalEntryFooter: resolveJournalEntryFooterAppRenderContext,
+  journalEntryFooter: (_appContext, footer) =>
+    appRenderContextResolveJournalEntryFooter(footer),
 };
 
-export const resolveFooterContentModuleAppRenderContext = <
-  TKind extends FooterModuleKind,
->(
+export const appRenderContextResolveFooter = <TKind extends FooterKind>(
   appContext: AppContext,
-  module: FooterModuleByKind<TKind>,
-): AppRenderContextPageContentFooterModule => {
-  const resolver = FOOTER_RESOLVERS[module.kind];
+  footer: FooterByKind<TKind>,
+): AppRenderContextPageContentFooter => {
+  const resolver = FOOTER_RESOLVERS[footer.kind];
 
   if (!resolver) {
     throw new Error(
-      `No AppRenderContext footer content resolver registered for kind: ${module.kind}`,
+      `No AppRenderContext footer resolver registered for kind: ${footer.kind}`,
     );
   }
 
-  return resolver(appContext, module as never);
+  return resolver(appContext, footer as never);
 };

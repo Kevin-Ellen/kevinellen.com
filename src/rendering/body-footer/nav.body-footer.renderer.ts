@@ -10,27 +10,26 @@ import {
   escapeHtml,
 } from "@rendering/utils/html.escape.util.renderer";
 
-const renderFooterNavLink = (link: AppRenderContextLink): string => {
-  return `<li>
-    ${renderTextLink(link)}
-  </li>`;
-};
+const renderFooterNavLink = (link: AppRenderContextLink): string =>
+  [`<li>`, renderTextLink(link), `</li>`].join("");
 
 const renderFooterNavSection = (
   section: AppRenderContextFooterNavigation["sections"][number],
-): string => {
-  return `<section class="l-footer__group l-footer__group--${escapeAttribute(section.id)}">
-    <h3 class="l-footer__heading">${escapeHtml(section.label)}</h3>
-    <ul class="l-footer__list">
-      ${section.items.map(renderFooterNavLink).join("")}
-    </ul>
-  </section>`;
-};
+): string =>
+  [
+    `<section class="l-footer__group l-footer__group--${escapeAttribute(section.id)}">`,
+    `<h3 class="l-footer__heading">${escapeHtml(section.label)}</h3>`,
+    `<ul class="l-footer__list">`,
+    section.items.map(renderFooterNavLink).join(""),
+    `</ul>`,
+    `</section>`,
+  ].join("");
 
 export const renderBodyFooterNav = (
   nav: AppRenderContextFooterNavigation,
-): string => {
-  return `<div class="l-footer__grid">
-    ${nav.sections.map(renderFooterNavSection).join("")}
-  </div>`;
-};
+): string =>
+  [
+    `<div class="l-footer__grid">`,
+    nav.sections.map(renderFooterNavSection).join(""),
+    `</div>`,
+  ].join("");

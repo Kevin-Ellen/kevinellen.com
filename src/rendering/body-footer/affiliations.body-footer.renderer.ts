@@ -7,28 +7,30 @@ import { renderSvgReference } from "@rendering/shared/svg-reference.shared.rende
 
 const renderAffiliationItem = (
   item: AppRenderContextBodyFooterAffiliations["items"][number],
-): string => {
-  return `<li>
-    <a ${renderLinkAttributes({
+): string =>
+  [
+    `<li>`,
+    `<a ${renderLinkAttributes({
       kind: "external",
       href: item.href,
       text: item.ariaLabel,
       openInNewTab: true,
       svg: null,
       ariaLabel: item.ariaLabel,
-    })}>
-      ${renderSvgReference(item.logo, "l-footer__icon")}
-    </a>
-  </li>`;
-};
+    })}>`,
+    renderSvgReference(item.logo, "l-footer__icon"),
+    `</a>`,
+    `</li>`,
+  ].join("");
 
 export const renderBodyFooterAffiliations = (
   affiliations: AppRenderContextBodyFooterAffiliations,
-): string => {
-  return `<section class="l-footer__conservation" aria-labelledby="footer-conservation-heading">
-    <h3 id="footer-conservation-heading" class="l-footer__heading">Conservation</h3>
-    <ul class="l-footer__logos" aria-label="Supported organisations">
-      ${affiliations.items.map(renderAffiliationItem).join("")}
-    </ul>
-  </section>`;
-};
+): string =>
+  [
+    `<section class="l-footer__conservation" aria-labelledby="footer-conservation-heading">`,
+    `<h3 id="footer-conservation-heading" class="l-footer__heading">Conservation</h3>`,
+    `<ul class="l-footer__logos" aria-label="Supported organisations">`,
+    affiliations.items.map(renderAffiliationItem).join(""),
+    `</ul>`,
+    `</section>`,
+  ].join("");

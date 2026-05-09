@@ -6,6 +6,7 @@ import type { AppRenderContextDocClose } from "@app-render-context/types/doc-clo
 import type { AppRenderContextData } from "@app-render-context/app-render-context.types";
 import type { AppRenderContextBodyHeader } from "@app-render-context/types/body-header.app-render-context.types";
 import type { AppRenderContextBodyFooter } from "@app-render-context/types/body-footer.app-render-context.types";
+import type { AppRenderContextBodyContent } from "@app-render-context/types/body-content.app-render-context.types";
 import type { AppRenderContextResponsePolicy } from "@app-render-context/types/response-policy.app-render-context.types";
 
 export class AppRenderContext {
@@ -31,7 +32,7 @@ export class AppRenderContext {
     return this.#data.bodyHeader;
   }
 
-  public get bodyContent(): any {
+  public get bodyContent(): AppRenderContextBodyContent {
     return this.#data.bodyContent;
   }
 

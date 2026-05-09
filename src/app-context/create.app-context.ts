@@ -1,30 +1,45 @@
 // src/app-context/create.app-context.ts
 
-import type { RoutingResult } from "@request/types/request.types";
 import type { AppState } from "@app-state/class.app-state";
 import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
+import type { RoutingResult } from "@request/types/request.types";
 
 import { AppContext } from "@app-context/class.app-context";
-import { resolveNavigationAppContext } from "@app-context/resolve/navigation/navigation.resolve.app-context";
-import { resolveGlobalFooterAppContext } from "@app-context/resolve/page-content/global-footer.resolve.app-context";
-import { resolvePageSourceAppContext } from "@app-context/resolve/page/source.page.resolve.app-context";
-import { resolvePageAppContext } from "@app-context/resolve/page/page.resolve.app-context";
-import { resolveAssetsAppContext } from "@app-context/resolve/assets.resolve.app-context";
-import { resolveStructuredDataAppContext } from "@app-context/resolve/structured-data.resolve.app-context";
-import { resolveBreadcrumbsAppContext } from "@app-context/resolve/breadcrumbs.resolve.app-context";
-import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
-import { appContextCollectPhotoIdsFromBlockContent } from "@app-context/resolve/page-content/collect-photo-ids.page-content.resolve.app-context";
-import { resolvePhotosAppContext } from "@app-context/resolve/photos/photos.resolve.app-context";
 
-const resolvePageRuntimeAppContext = (
+import { appContextResolveNavigation } from "@app-context/resolve/shell/navigation/navigation.resolve.app-context";
+import { appContextResolveGlobalFooter } from "@app-context/resolve/shell/footer/global-footer.resolve.app-context";
+import { appContextResolvePageSource } from "@app-context/resolve/source.resolve.app-context";
+import { appContextResolvePage } from "@app-context/resolve/page.resolve.app-context";
+import { appContextResolveAssets } from "@app-context/resolve/assets.resolve.app-context";
+import { appContextResolveStructuredData } from "@app-context/resolve/structured-data/structured-data.resolve.app-context";
+import { appContextResolveBreadcrumbs } from "@app-context/resolve/breadcrumbs.resolve.app-context";
+import { appContextResolveInternalLink } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
+import { appContextCollectPhotoIds } from "@app-context/resolve/page-content/shared/collect-photo-ids.resolve.app-context";
+import { appContextResolvePhotos } from "@app-context/resolve/photos/photos.resolve.app-context";
+
+import {
+  HOMEPAGE_STRIP_PHOTO_INDEX_KEY,
+  type HomepageStripPhotoIndex,
+} from "@shared-types/media/photo/indices.photo.types";
+
+const appContextResolvePageRuntime = (
   page: AppStatePageDefinition,
   origin: string,
-) => {
-  return {
-    metadata: page.metadata,
-    robots: page.robots,
-    canonicalUrl: page.slug ? `${origin}${page.slug}` : null,
-  };
+) => ({
+  metadata: page.metadata,
+  robots: page.robots,
+  canonicalUrl: page.slug ? `${origin}${page.slug}` : null,
+});
+
+const appContextResolveHomepageStripPhotoIds = async (
+  kv: KVNamespace,
+): Promise<readonly string[]> => {
+  const index = await kv.get<HomepageStripPhotoIndex>(
+    HOMEPAGE_STRIP_PHOTO_INDEX_KEY,
+    "json",
+  );
+
+  return index?.photoIds ?? [];
 };
 
 export const appContextCreate = async (
@@ -32,58 +47,58 @@ export const appContextCreate = async (
   routing: RoutingResult,
   env: Env,
 ): Promise<AppContext> => {
-  const navigation = resolveNavigationAppContext(appState.navigation, appState);
-  const globalFooter = resolveGlobalFooterAppContext(appState.globalFooter);
+  const navigation = appContextResolveNavigation(appState.navigation, appState);
+  const globalFooter = appContextResolveGlobalFooter(appState.globalFooter);
 
-  const pageState = resolvePageSourceAppContext(appState, routing);
+  const pageState = appContextResolvePageSource(appState, routing);
 
-  const pagePhotoIds = appContextCollectPhotoIdsFromBlockContent(
-    pageState.content.content,
+  const usedPhotoIds = appContextCollectPhotoIds(pageState.content.content, {
+    publicPages: appState.getPublicPages,
+  });
+
+  const homepageStripPhotoIds = await appContextResolveHomepageStripPhotoIds(
+    env.KV_PHOTOS,
   );
 
-  const listingPhotoIds =
-    pageState.kind === "listing"
-      ? appState.getPublicPages
-          .filter((page) => page.kind === "journal")
-          .flatMap((page) =>
-            appContextCollectPhotoIdsFromBlockContent(page.content.content),
-          )
-      : [];
+  const usedPhotoIdSet = new Set(usedPhotoIds);
 
-  const photoIds = [...new Set([...pagePhotoIds, ...listingPhotoIds])];
+  const availableHomepageStripPhotoIds = homepageStripPhotoIds.filter(
+    (photoId) => !usedPhotoIdSet.has(photoId),
+  );
 
-  const photos = await resolvePhotosAppContext({
+  const photoIds = [
+    ...new Set([...usedPhotoIds, ...availableHomepageStripPhotoIds]),
+  ];
+
+  const photos = await appContextResolvePhotos({
     kv: env.KV_PHOTOS,
     photoIds,
   });
 
-  const { metadata, robots, canonicalUrl } = resolvePageRuntimeAppContext(
+  const { metadata, robots, canonicalUrl } = appContextResolvePageRuntime(
     pageState,
     appState.siteConfig.origin,
   );
 
-  const assets = resolveAssetsAppContext(appState.assets, pageState.assets);
-  const structuredData = resolveStructuredDataAppContext(appState, pageState);
-  const breadcrumbs = resolveBreadcrumbsAppContext(
+  const assets = appContextResolveAssets(appState.assets, pageState.assets);
+  const structuredData = appContextResolveStructuredData(appState, pageState);
+  const breadcrumbs = appContextResolveBreadcrumbs(
     pageState.breadcrumbs,
     appState,
   );
 
-  const page = resolvePageAppContext(pageState, routing, {
+  const page = appContextResolvePage(pageState, routing, {
     photos,
+    homepageStripPhotoIds: availableHomepageStripPhotoIds,
     metadataLabels: appState.metadataLabels,
     resolveInternalLink: (link) =>
-      resolveInternalLinkAppContext(link, appState),
+      appContextResolveInternalLink(link, appState),
+    resolvePhoto: (photoId) =>
+      photos.find((photo) => photo.id === photoId) ?? null,
     publicPages: appState.getPublicPages,
+    currentPageSlug: pageState.slug,
     routingPagination: routing.kind === "found" ? routing.pagination : null,
   });
-
-  const language = appState.siteConfig.language;
-  const headAssets = appState.siteConfig.headAssets;
-  const themeColour = appState.manifest.backgroundColor;
-  const headerBranding = appState.siteConfig.headerBranding;
-  const preload = appState.siteConfig.preload;
-  const metadataLabels = appState.metadataLabels;
 
   return new AppContext({
     navigation,
@@ -95,11 +110,11 @@ export const appContextCreate = async (
     metadata,
     robots,
     canonicalUrl,
-    language,
-    headAssets,
-    preload,
-    themeColour,
-    headerBranding,
-    metadataLabels,
+    language: appState.siteConfig.language,
+    headAssets: appState.siteConfig.headAssets,
+    preload: appState.siteConfig.preload,
+    themeColour: appState.manifest.backgroundColor,
+    headerBranding: appState.siteConfig.headerBranding,
+    metadataLabels: appState.metadataLabels,
   });
 };

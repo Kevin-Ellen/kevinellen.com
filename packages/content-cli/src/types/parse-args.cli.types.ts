@@ -15,7 +15,8 @@ export type ContentCliAction =
   | "read"
   | "list"
   | "status"
-  | "promote";
+  | "promote"
+  | "homepageStripRebuild";
 
 export type ParsedInteractiveCliArgs = Readonly<{
   mode: "interactive";

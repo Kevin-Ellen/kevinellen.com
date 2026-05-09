@@ -1,11 +1,11 @@
 // src/app-state/resolve/page-content/block/quote.resolve.app-state.ts
 
-import type { AuthoredQuoteBlockContentModule } from "@shared-types/page-content/block/quote/authored.quote.block.page-content.types";
-import type { AppStateQuoteBlockContentModule } from "@shared-types/page-content/block/quote/app-state.quote.block.page-content.types";
+import type { AuthoredQuoteBlock } from "@shared-types/page-content/block/quote/authored.quote.block.types";
+import type { AppStateQuoteBlock } from "@shared-types/page-content/block/quote/app-state.quote.block.types";
 
-export const appStateResolveQuoteBlockContentModule = (
-  module: AuthoredQuoteBlockContentModule,
-): AppStateQuoteBlockContentModule => {
+export const appStateResolveQuoteBlock = (
+  module: AuthoredQuoteBlock,
+): AppStateQuoteBlock => {
   return {
     ...module,
     flow: module.flow ?? "content",

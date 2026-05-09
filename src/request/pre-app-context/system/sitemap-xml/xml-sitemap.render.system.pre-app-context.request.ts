@@ -1,4 +1,4 @@
-// src/request/pre-app-context/system/xml-sitemap/xml-sitemap.render.system.pre-app-context.request.ts
+// src/request/pre-app-context/system/sitemap-xml/xml-sitemap.render.system.pre-app-context.request.ts
 
 import type { PreAppContextResult } from "@request/types/request.types";
 import type { ResolvedXmlSitemapSystem } from "@request/pre-app-context/system/sitemap-xml/xml-sitemap.resolver.system.pre-app-context.request";

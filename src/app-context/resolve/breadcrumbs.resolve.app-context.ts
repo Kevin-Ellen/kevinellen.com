@@ -7,7 +7,7 @@ import type {
   PageIdError,
 } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
-import { resolveInternalLinkAppContext } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
+import { appContextResolveInternalLink } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
 
 const resolvePageById = (id: PageId, appState: AppState) => {
   return (
@@ -26,7 +26,7 @@ const resolveBreadcrumbLabel = (id: PageId, appState: AppState): string => {
   return page.label;
 };
 
-export const resolveBreadcrumbsAppContext = (
+export const appContextResolveBreadcrumbs = (
   breadcrumbIds: readonly PageId[],
   appState: AppState,
 ): AppContextBreadcrumbs => {
@@ -39,10 +39,11 @@ export const resolveBreadcrumbsAppContext = (
 
   return {
     items: parentIds.map((id) =>
-      resolveInternalLinkAppContext(
+      appContextResolveInternalLink(
         {
           kind: "internal",
           id,
+          text: null,
           svgId: null,
           behaviour: {
             openInNewTab: false,

@@ -1,9 +1,9 @@
 // src/app-render-context/resolve/body-content/shared/pagination.resolve.app-render-context.ts
 
-import type { AppContextPagination } from "@shared-types/page-content/shared/pagination/app-context.pagination.page-content.types";
-import type { AppRenderContextPagination } from "@shared-types/page-content/shared/pagination/app-render-context.pagination.page-content.types";
+import type { AppContextPagination } from "@shared-types/page-content/shared/pagination/app-context.pagination.shared.types";
+import type { AppRenderContextPagination } from "@shared-types/page-content/shared/pagination/app-render-context.pagination.shared.types";
 
-export const resolvePaginationAppRenderContext = (
+export const appRenderContextResolvePagination = (
   pagination: AppContextPagination,
 ): AppRenderContextPagination => ({
   ...pagination,

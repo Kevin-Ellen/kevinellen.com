@@ -5,12 +5,12 @@ import type { ErrorPageStatus } from "@shared-types/page-definitions/shared/shar
 import type { PageIdError } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
-type AuthoredErrorPageDefinitionSpecialisedFields = Readonly<{
+type SpecialisedFields = Readonly<{
   id: PageIdError;
   status: ErrorPageStatus;
 }>;
 
 export type AuthoredErrorPageDefinition = Replace<
   AuthoredBasePageDefinition,
-  AuthoredErrorPageDefinitionSpecialisedFields
+  SpecialisedFields
 >;

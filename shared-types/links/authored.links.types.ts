@@ -8,6 +8,7 @@ import type { LinkOpenBehaviour } from "@shared-types/links/shared.links.types";
 export type AuthoredInternalLink = Readonly<{
   kind: "internal";
   id: PageIdPublic;
+  text?: string;
   svgId?: SvgAssetId;
   behaviour?: LinkOpenBehaviour;
 }>;

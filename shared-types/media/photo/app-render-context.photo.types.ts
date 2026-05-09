@@ -5,7 +5,7 @@ import type { MetadataLabelId } from "@shared-types/config/metadata-labels/id.me
 
 import type { ReplaceAndOmit } from "@shared-types/shared-types-utils/replace.shared.types";
 
-type AppRenderContextPhotoOmittedFields =
+type OmittedFields =
   | "sourceFileName"
   | "cloudflareImageId"
   | "cloudflareUploadedAt"
@@ -21,9 +21,11 @@ type AppRenderContextPhotoOmittedFields =
   | "longitude"
   | "resolvedLocation"
   | "photographer"
-  | "copyright";
+  | "copyright"
+  | "readableLocation"
+  | "capturedAt";
 
-type AppRenderContextPhotoReplacementFields = Readonly<{
+type ReplacementFields = Readonly<{
   src: string;
   srcset: readonly string[];
   sizes: string;
@@ -49,6 +51,6 @@ export type AppRenderContextPhotoMetaGroup = Readonly<{
 
 export type AppRenderContextPhoto = ReplaceAndOmit<
   AppContextPhotoMetadata,
-  AppRenderContextPhotoReplacementFields,
-  AppRenderContextPhotoOmittedFields
+  ReplacementFields,
+  OmittedFields
 >;

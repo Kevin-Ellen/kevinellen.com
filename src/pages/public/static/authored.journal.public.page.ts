@@ -20,7 +20,7 @@ export const authoredJournalPublicPage: AuthoredPublicPageDefinition =
     breadcrumbs: ["home", "journal"],
 
     content: {
-      header: {
+      head: {
         eyebrow: "Wildlife",
         title: "Journal",
         intro:

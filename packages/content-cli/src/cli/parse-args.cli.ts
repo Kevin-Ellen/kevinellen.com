@@ -31,6 +31,7 @@ const isAction = (value: string | undefined): value is ContentCliAction =>
     "list",
     "status",
     "promote",
+    "homepageStripRebuild",
   ].includes(value ?? "");
 
 const getFlagValue = (

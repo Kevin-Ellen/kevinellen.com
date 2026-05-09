@@ -18,7 +18,7 @@ export const authoredInternalErrorPage: AuthoredErrorPageDefinition =
     breadcrumbs: ["home", "error-500"],
 
     content: {
-      header: {
+      head: {
         eyebrow: "500",
         title: "Internal server error",
         intro: "Something went wrong while trying to load this page.",

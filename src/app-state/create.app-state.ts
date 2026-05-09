@@ -6,12 +6,12 @@ import { appStateResolveSiteConfig } from "@app-state/resolve/site-config.resolv
 import { appStateResolveWebmanifest } from "@app-state/resolve/webmanifest.resolve.app-state";
 import { appStateResolveSystem } from "@app-state/resolve/system.resolve.app-state";
 import { appStateResolveAssets } from "@app-state/resolve/assets.resolve.app-state";
-import { appStateResolveGlobalFooter } from "@app-state/resolve/page-content/global-footer.resolve.app-state";
+import { appStateResolveGlobalFooter } from "@app-state/resolve/page-content/site/global-footer.resolve.app-state";
 import { appStateResolveSocial } from "@app-state/resolve/social.resolve.app-state";
 import { appStateResolveMetadataLabels } from "@app-state/resolve/metadata-labels.resolve.app-state";
 import { appStateResolveNavigation } from "@app-state/resolve/navigation.resolve.app-state";
 import { appStateResolveStructuredData } from "@app-state/resolve/structured-data.resolve.app-state";
-import { appStateResolvePages } from "./resolve/pages.resolve.app-state";
+import { appStateResolvePages } from "@app-state/resolve/pages.resolve.app-state";
 
 export const appStateCreate = async (env: Env): Promise<AppState> => {
   const siteConfig = appStateResolveSiteConfig(env);

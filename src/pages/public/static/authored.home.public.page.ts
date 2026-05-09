@@ -19,40 +19,111 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
   breadcrumbs: ["home"],
 
   content: {
-    header: {
+    // Page identity only.
+    // This should not drive the visible homepage hero layout.
+    head: {
       eyebrow: "Kevin Ellen",
-      title: "Nature photography, writing, and technical architecture",
+      title: "Home",
       intro:
-        "A personal platform for photography, journal entries, articles, and transparent technical thinking.",
+        "Wildlife photography, field notes, articles, and transparent technical architecture.",
+      showInBody: false,
     },
 
     content: [
       {
-        kind: "articleSection",
+        kind: "homepageHero",
+        eyebrow: "Wildlife & Technology",
+        title: "Kevin Ellen",
+        intro: [
+          {
+            kind: "text",
+            value:
+              "A field journal of wildlife encounters — capturing behaviour, fleeting moments, and the quiet details often missed at first glance.",
+          },
+        ],
+
+        photoId: "juvenile-robin-magpie-krabi-thailand",
+        primaryLink: {
+          kind: "internal",
+          id: "about",
+          text: "Learn more about this site",
+        },
+      },
+
+      {
+        kind: "imageStrip",
         heading: {
-          text: "Introduction",
+          text: "Example photos",
           visuallyHidden: true,
           level: 2,
         },
-        modules: [
+        source: "homepage-strip",
+        itemCount: 6,
+        excludePagePhotos: true,
+      },
+      {
+        kind: "homepageJournalListing",
+        heading: {
+          text: "Latest field notes",
+          level: 2,
+        },
+        itemCount: 5,
+      },
+      {
+        kind: "sectionLinks",
+        heading: {
+          text: "Main sections on the website",
+          level: 2,
+          visuallyHidden: true,
+        },
+        sections: [
           {
-            kind: "paragraph",
-            content: [
-              { kind: "text", value: "Homepage placeholder body content." },
-            ],
+            heading: {
+              text: "Journal",
+
+              level: 3,
+            },
+            intro:
+              "A field journal of wildlife encounters and observations from around the world.",
+            link: {
+              kind: "internal",
+              id: "journal",
+              text: "Browse journal",
+            },
+            icon: "icon-newspaper",
           },
           {
-            kind: "paragraph",
-            content: [
-              {
-                kind: "text",
-                value:
-                  "This section will later introduce featured photography, journal entries, and technical work.",
-              },
-            ],
+            heading: {
+              text: "Articles",
+
+              level: 3,
+            },
+            intro:
+              "A field journal of wildlife encounters and observations from around the world.",
+            link: {
+              kind: "internal",
+              id: "journal",
+              text: "Read articles",
+            },
+            icon: "icon-pencil",
           },
         ],
       },
+
+      /*
+      {
+        kind: "articlesListing",
+        heading: "Latest articles",
+        itemCount: 3,
+        emptyState: [
+          {
+            kind: "text",
+            value:
+              "Articles are coming soon — thoughts on systems, photography, and digital craft.",
+          },
+        ],
+      },
+      */
     ],
   },
 });

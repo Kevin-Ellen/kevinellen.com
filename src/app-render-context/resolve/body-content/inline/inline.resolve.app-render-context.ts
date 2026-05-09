@@ -1,42 +1,53 @@
 // src/app-render-context/resolve/body-content/inline/inline.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextInlineContent } from "@shared-types/page-content/inline/app-context.inline-content.page-content.types";
-import type { AppRenderContextInlineContent } from "@shared-types/page-content/inline/app-render-context.inline-content.page-content.types";
+import type { AppContextInline } from "@shared-types/page-content/inline/app-context.inline-content.types";
+import type { AppRenderContextInline } from "@shared-types/page-content/inline/app-render-context.inline-content.types";
 
-import { resolveCodeInlineContentAppRenderContext } from "./code.resolve.app-render-context";
-import { resolveEmphasisInlineContentAppRenderContext } from "./emphasis.resolve.app-render-context";
-import { resolveExternalLinkInlineContentAppRenderContext } from "./external-link.resolve.app-render-context";
-import { resolveInternalLinkInlineContentAppRenderContext } from "./internal-link.resolve.app-render-context";
-import { resolveLineBreakInlineContentAppRenderContext } from "./line-break.resolve.app-render-context";
-import { resolveStrongInlineContentAppRenderContext } from "./strong.resolve.app-render-context";
-import { resolveTextInlineContentAppRenderContext } from "./text.resolve.app-render-context";
+import { appRenderContextResolveCodeInline } from "@app-render-context/resolve/body-content/inline/code.resolve.app-render-context";
+import { appRenderContextResolveEmphasisInline } from "@app-render-context/resolve/body-content/inline/emphasis.resolve.app-render-context";
+import { appRenderContextResolveExternalLinkInline } from "@app-render-context/resolve/body-content/inline/external-link.resolve.app-render-context";
+import { appRenderContextResolveInternalLinkInline } from "@app-render-context/resolve/body-content/inline/internal-link.resolve.app-render-context";
+import { appRenderContextResolveLineBreakInline } from "@app-render-context/resolve/body-content/inline/line-break.resolve.app-render-context";
+import { appRenderContextResolveStrongInline } from "@app-render-context/resolve/body-content/inline/strong.resolve.app-render-context";
+import { appRenderContextResolveTextInline } from "@app-render-context/resolve/body-content/inline/text.resolve.app-render-context";
 
-type AppRenderContextInlineResolverMap = Readonly<{
-  [K in AppContextInlineContent["kind"]]: (
+type InlineKind = AppContextInline["kind"];
+
+type InlineByKind<TKind extends InlineKind> = Extract<
+  AppContextInline,
+  { kind: TKind }
+>;
+
+type InlineResolverRegistry = {
+  [TKind in InlineKind]: (
     appContext: AppContext,
-    module: Extract<AppContextInlineContent, { kind: K }>,
-  ) => AppRenderContextInlineContent;
-}>;
+    inline: InlineByKind<TKind>,
+  ) => AppRenderContextInline;
+};
 
-const inlineContentResolvers = {
-  code: resolveCodeInlineContentAppRenderContext,
-  emphasis: resolveEmphasisInlineContentAppRenderContext,
-  externalLink: resolveExternalLinkInlineContentAppRenderContext,
-  internalLink: resolveInternalLinkInlineContentAppRenderContext,
-  lineBreak: resolveLineBreakInlineContentAppRenderContext,
-  strong: resolveStrongInlineContentAppRenderContext,
-  text: resolveTextInlineContentAppRenderContext,
-} satisfies AppRenderContextInlineResolverMap;
+const INLINE_RESOLVERS: InlineResolverRegistry = {
+  code: (_appContext, inline) => appRenderContextResolveCodeInline(inline),
+  emphasis: appRenderContextResolveEmphasisInline,
+  externalLink: appRenderContextResolveExternalLinkInline,
+  internalLink: appRenderContextResolveInternalLinkInline,
+  lineBreak: (_appContext, inline) =>
+    appRenderContextResolveLineBreakInline(inline),
+  strong: appRenderContextResolveStrongInline,
+  text: (_appContext, inline) => appRenderContextResolveTextInline(inline),
+};
 
-export const resolveInlineContentModuleAppRenderContext = (
+export const appRenderContextResolveInline = <TKind extends InlineKind>(
   appContext: AppContext,
-  module: AppContextInlineContent,
-): AppRenderContextInlineContent => {
-  const resolver = inlineContentResolvers[module.kind] as (
-    appContext: AppContext,
-    module: AppContextInlineContent,
-  ) => AppRenderContextInlineContent;
+  inline: InlineByKind<TKind>,
+): AppRenderContextInline => {
+  const resolver = INLINE_RESOLVERS[inline.kind];
 
-  return resolver(appContext, module);
+  if (!resolver) {
+    throw new Error(
+      `No AppRenderContext inline resolver registered for kind: ${inline.kind}`,
+    );
+  }
+
+  return resolver(appContext, inline as never);
 };

@@ -1,19 +1,17 @@
 // src/app-render-context/resolve/body-content/inline/strong.resolve.app-render-context.ts
 
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextStrongInlineContent } from "@shared-types/page-content/inline/strong/app-context.strong.inline-content.page-content.types";
-import type { AppRenderContextStrongInlineContent } from "@shared-types/page-content/inline/strong/app-render-context.strong.inline-content.page-content.types";
+import type { AppContextStrongInline } from "@shared-types/page-content/inline/strong/app-context.strong.inline-content.types";
+import type { AppRenderContextStrongInline } from "@shared-types/page-content/inline/strong/app-render-context.strong.inline-content.types";
 
-import { resolveInlineContentModuleAppRenderContext } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
+import { appRenderContextResolveInline } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
 
-export const resolveStrongInlineContentAppRenderContext = (
+export const appRenderContextResolveStrongInline = (
   appContext: AppContext,
-  module: AppContextStrongInlineContent,
-): AppRenderContextStrongInlineContent => {
-  return {
-    ...module,
-    content: module.content.map((item) =>
-      resolveInlineContentModuleAppRenderContext(appContext, item),
-    ),
-  };
-};
+  inline: AppContextStrongInline,
+): AppRenderContextStrongInline => ({
+  ...inline,
+  content: inline.content.map((item) =>
+    appRenderContextResolveInline(appContext, item),
+  ),
+});

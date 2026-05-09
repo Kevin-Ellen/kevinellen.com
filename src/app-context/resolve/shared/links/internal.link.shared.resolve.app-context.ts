@@ -24,11 +24,11 @@ const resolvePublicPageHref = (
 
   return {
     href: page.slug,
-    text: page.label,
+    text: link.text ?? page.label,
   };
 };
 
-export const resolveInternalLinkAppContext = (
+export const appContextResolveInternalLink = (
   link: AppStateInternalLink,
   appState: AppState,
 ): AppContextInternalLink => {

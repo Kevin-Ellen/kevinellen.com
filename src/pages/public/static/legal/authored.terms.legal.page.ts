@@ -19,7 +19,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
   breadcrumbs: ["home", "terms"],
 
   content: {
-    header: {
+    head: {
       eyebrow: "Legal",
       title: "Terms of Use",
       intro:

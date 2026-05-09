@@ -2,12 +2,12 @@
 
 import type { SystemRedirectRule } from "@shared-types/config/system/redirect-rules.system.types";
 
-type RedirectMatchAdditionaFields = Readonly<{
+type RedirectMatchAdditionalFields = Readonly<{
   isInternal: boolean;
 }>;
 
 export type RedirectMatch = Readonly<
-  SystemRedirectRule & RedirectMatchAdditionaFields
+  SystemRedirectRule & RedirectMatchAdditionalFields
 >;
 
 export type SystemRedirectResolution = {

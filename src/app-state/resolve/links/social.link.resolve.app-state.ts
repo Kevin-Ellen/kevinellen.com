@@ -9,6 +9,7 @@ export const appStateResolveSocialLink = (
   return {
     kind: "social",
     id: link.id,
+    text: null,
     svgId: link.svgId ?? null,
     behaviour: {
       openInNewTab: true,

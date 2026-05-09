@@ -20,7 +20,7 @@ const DIRECT_ROBOTS_KEYS = [
   "noimageindex",
 ] as const satisfies readonly AppRenderContextRobotsDirective[];
 
-export const resolveRobotsAppRenderContext = (
+export const appRenderContextResolveRobots = (
   robots: AppContextPageRobotsDirectives | null,
 ): AppRenderContextRobotsDirectives => {
   if (robots === null) {

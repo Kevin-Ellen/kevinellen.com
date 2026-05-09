@@ -10,6 +10,7 @@ import type { LinkOpenBehaviour } from "@shared-types/links/shared.links.types";
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type AppStateLinkDeterministicFields = Readonly<{
+  text: string | null;
   svgId: SvgAssetId | null;
   behaviour: LinkOpenBehaviour;
 }>;
@@ -26,7 +27,9 @@ export type AppStateSocialLink = Replace<
 
 export type AppStateExternalLink = Replace<
   AuthoredExternalLink,
-  AppStateLinkDeterministicFields
+  AppStateLinkDeterministicFields & {
+    text: string;
+  }
 >;
 
 export type AppStateLink =

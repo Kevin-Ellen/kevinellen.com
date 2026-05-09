@@ -24,7 +24,7 @@ export const createDraftJournalDefinition = (
     breadcrumbs: ["home", "journal"],
 
     content: {
-      header: {
+      head: {
         eyebrow: "Journal",
         title: "__REQUIRED__",
         intro: "__REQUIRED__",

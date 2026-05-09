@@ -11,15 +11,15 @@ type ResolveScriptsAppRenderContextContext = Readonly<{
   nonce: string;
 }>;
 
-export type ResolvedScriptsAppRenderContext = Readonly<{
+export type AppRenderContextResolveScriptsContext = Readonly<{
   inlineScripts: readonly AppRenderContextInlineScript[];
   linkScripts: readonly AppRenderContextLinkScript[];
 }>;
 
-export const resolveScriptsAppRenderContext = (
+export const appRenderContextResolveScripts = (
   appContext: AppContext,
   context: ResolveScriptsAppRenderContextContext,
-): ResolvedScriptsAppRenderContext => {
+): AppRenderContextResolveScriptsContext => {
   const scriptsForLocation = appContext.assets.scripts.filter(
     (script) => script.location === context.location,
   );
