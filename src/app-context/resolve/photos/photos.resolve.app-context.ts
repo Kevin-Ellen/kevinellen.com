@@ -3,6 +3,27 @@
 import type { AppContextPhotoMetadata } from "@shared-types/media/photo/app-context.photo.types";
 import type { AuthoredPhotoMetadata } from "@shared-types/media/photo/authored.photo.types";
 
+const isAuthoredPhotoCapturedAt = (
+  value: unknown,
+): value is AuthoredPhotoMetadata["capturedAt"] => {
+  if (value === null) {
+    return true;
+  }
+
+  if (typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<
+    NonNullable<AuthoredPhotoMetadata["capturedAt"]>
+  >;
+
+  return (
+    typeof candidate.utc === "string" &&
+    (typeof candidate.timezone === "string" || candidate.timezone === null)
+  );
+};
+
 const isAuthoredPhotoMetadata = (
   value: unknown,
 ): value is AuthoredPhotoMetadata => {
@@ -19,6 +40,7 @@ const isAuthoredPhotoMetadata = (
     typeof candidate.alt === "string" &&
     typeof candidate.commentary === "string" &&
     typeof candidate.readableLocation === "string" &&
+    isAuthoredPhotoCapturedAt(candidate.capturedAt) &&
     typeof candidate.width === "number" &&
     typeof candidate.height === "number"
   );

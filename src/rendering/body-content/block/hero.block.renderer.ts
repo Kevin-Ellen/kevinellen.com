@@ -23,10 +23,20 @@ const renderPhotoMetaTerm = (item: AppRenderContextPhotoMetaItem): string => {
   )}</abbr>`;
 };
 
+const renderPhotoMetaDetail = (item: AppRenderContextPhotoMetaItem): string => {
+  if (!item.datetime) {
+    return escapeHtml(item.value);
+  }
+
+  return `<time datetime="${escapeAttribute(item.datetime)}">${escapeHtml(
+    item.value,
+  )}</time>`;
+};
+
 const renderPhotoMetaItem = (item: AppRenderContextPhotoMetaItem): string =>
   `<div class="m-photo__meta-item">
     <dt class="m-photo__meta-term">${renderPhotoMetaTerm(item)}</dt>
-    <dd class="m-photo__meta-detail">${escapeHtml(item.value)}</dd>
+    <dd class="m-photo__meta-detail">${renderPhotoMetaDetail(item)}</dd>
   </div>`;
 
 const renderPhotoMetaGroup = (group: AppRenderContextPhotoMetaGroup): string =>

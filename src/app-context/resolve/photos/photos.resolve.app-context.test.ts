@@ -21,7 +21,10 @@ const createPhoto = (
     cameraMake: "Canon",
     cameraModel: "Canon EOS R7",
     lensModel: "RF 100-500mm",
-    capturedAt: "2025-05-10T10:00:00.000Z",
+    capturedAt: {
+      utc: "2025-05-10T10:00:00.000Z",
+      timezone: "Europe/London",
+    },
     ...overrides,
   }) as AuthoredPhotoMetadata;
 
@@ -110,5 +113,78 @@ describe("appContextResolvePhotos", () => {
         photoIds: ["broken-photo"],
       }),
     ).rejects.toThrow("Photo 'broken-photo' could not be resolved from KV.");
+  });
+
+  it("throws when capturedAt is not an object or null", async () => {
+    const kv = {
+      get: jest.fn().mockResolvedValue({
+        ...createPhoto(),
+        capturedAt: "2025-05-10T10:00:00.000Z",
+      }),
+    } as unknown as KVNamespace;
+
+    await expect(
+      appContextResolvePhotos({
+        kv,
+        photoIds: ["coot"],
+      }),
+    ).rejects.toThrow("Photo 'coot' could not be resolved from KV.");
+  });
+
+  it("throws when capturedAt utc is missing", async () => {
+    const kv = {
+      get: jest.fn().mockResolvedValue({
+        ...createPhoto(),
+        capturedAt: {
+          timezone: "Europe/London",
+        },
+      }),
+    } as unknown as KVNamespace;
+
+    await expect(
+      appContextResolvePhotos({
+        kv,
+        photoIds: ["coot"],
+      }),
+    ).rejects.toThrow("Photo 'coot' could not be resolved from KV.");
+  });
+
+  it("throws when capturedAt timezone is invalid", async () => {
+    const kv = {
+      get: jest.fn().mockResolvedValue({
+        ...createPhoto(),
+        capturedAt: {
+          utc: "2025-05-10T10:00:00.000Z",
+          timezone: 123,
+        },
+      }),
+    } as unknown as KVNamespace;
+
+    await expect(
+      appContextResolvePhotos({
+        kv,
+        photoIds: ["coot"],
+      }),
+    ).rejects.toThrow("Photo 'coot' could not be resolved from KV.");
+  });
+
+  it("resolves photos with missing capturedAt", async () => {
+    const photo = createPhoto({ capturedAt: null });
+
+    const kv = {
+      get: jest.fn().mockResolvedValue(photo),
+    } as unknown as KVNamespace;
+
+    await expect(
+      appContextResolvePhotos({
+        kv,
+        photoIds: ["coot"],
+      }),
+    ).resolves.toEqual([
+      {
+        ...photo,
+        cloudflareImageId: "cloudflare-coot",
+      },
+    ]);
   });
 });

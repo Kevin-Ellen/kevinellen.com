@@ -10,6 +10,7 @@ import { writeCloudflareKvValue } from "@content-cli/cloudflare/kv/kv.client.clo
 import { uploadCloudflareImage } from "@content-cli/cloudflare/images/images.client.cloudflare.content-cli";
 import { importPhotoDraft } from "@content-cli/content/photo/utils/import.draft.photo.util.content";
 import { preparePhotoUploadFile } from "@content-cli/content/photo/utils/prepare-upload.photo.util.content";
+import { enrichPhotoCapturedAtTimezone } from "@content-cli/content/photo/utils/captured-at-timezone.photo.util.content";
 
 const isDraftFile = (fileName: string): boolean =>
   fileName.endsWith(".draft.ts") && fileName !== "journal.draft.ts";
@@ -45,11 +46,13 @@ export const publishPhotoDrafts = async (
       creator: photo.photographer ?? "Kevin Ellen",
     });
 
-    const publishedPhoto: AuthoredPhotoMetadata = {
-      ...photo,
-      cloudflareImageId: uploadedImage.id,
-      cloudflareUploadedAt: uploadedImage.uploadedAt,
-    };
+    const publishedPhoto: AuthoredPhotoMetadata = enrichPhotoCapturedAtTimezone(
+      {
+        ...photo,
+        cloudflareImageId: uploadedImage.id,
+        cloudflareUploadedAt: uploadedImage.uploadedAt,
+      },
+    );
 
     await writeCloudflareKvValue(
       config,

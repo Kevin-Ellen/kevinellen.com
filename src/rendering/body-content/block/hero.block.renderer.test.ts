@@ -200,4 +200,34 @@ describe("renderHeroBlockContentModule", () => {
       `<dd class="m-photo__meta-detail">Value &lt;bad&gt;</dd>`,
     );
   });
+
+  it("renders datetime metadata values as time elements", () => {
+    const result = normaliseHtml(
+      renderHeroBlock(
+        createModule({
+          photo: {
+            ...createModule().photo,
+            meta: [
+              {
+                kind: "context",
+                items: [
+                  {
+                    id: "capturedAt",
+                    label: "Captured",
+                    description: "When the photo was taken.",
+                    value: "27 May 2025, 12:15",
+                    datetime: "2025-05-27T10:15:43.000Z",
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      ),
+    );
+
+    expect(result).toContain(
+      `<dd class="m-photo__meta-detail"><time datetime="2025-05-27T10:15:43.000Z">27 May 2025, 12:15</time></dd>`,
+    );
+  });
 });

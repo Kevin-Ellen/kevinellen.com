@@ -3,14 +3,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import type { AuthoredPhotoMetadata } from "@shared-types/media/photo/authored.photo.types";
+import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.content-cli.types";
+
 import { getPhotoMetadataFilePath } from "@content-cli/content/photo/path.photo.content";
 import { createDraftPhotoMetadata } from "@content-cli/content/photo/draft.create.photo.content";
 import { renderPhotoDraftFile } from "@content-cli/content/photo/render.photo.content";
 import { extractPhotoExif } from "@content-cli/content/photo/utils/exif.photo.util.content";
 import { resolvePhotoLocation } from "@content-cli/content/photo/utils/location.photo.util.content";
-
-import type { AuthoredPhotoMetadata } from "@shared-types/media/photo/authored.photo.types";
-import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.content-cli.types";
 
 const SUPPORTED_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"];
 

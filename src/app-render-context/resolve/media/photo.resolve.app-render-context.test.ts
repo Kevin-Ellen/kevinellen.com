@@ -52,7 +52,10 @@ const createPhoto = (
     alt: "A coot swimming through soft light.",
     commentary: "ARC commentary.",
     readableLocation: "Epping Forest, Essex",
-    capturedAt: "2026-05-09T08:00:00.000Z",
+    capturedAt: {
+      utc: "2026-05-09T08:00:00.000Z",
+      timezone: "Europe/London",
+    },
     width: 1600,
     height: 1000,
     src: null,
@@ -136,6 +139,7 @@ describe("appRenderContextResolvePhoto", () => {
               label: "Captured",
               description: "When the photo was taken.",
               value: "9 May 2026",
+              datetime: "2026-05-09T08:00:00.000Z",
             },
           ],
         },
@@ -171,7 +175,10 @@ describe("appRenderContextResolvePhoto", () => {
       ],
     });
 
-    expect(mockedFormatDate).toHaveBeenCalledWith("2026-05-09T08:00:00.000Z");
+    expect(mockedFormatDate).toHaveBeenCalledWith("2026-05-09T08:00:00.000Z", {
+      includeTime: true,
+      timeZone: "Europe/London",
+    });
     expect(mockedNormaliseDimensionsToBase).toHaveBeenCalledWith(1600, 1000);
   });
 
@@ -307,6 +314,7 @@ describe("appRenderContextResolvePhoto", () => {
             label: "Captured",
             description: null,
             value: "9 May 2026",
+            datetime: "2026-05-09T08:00:00.000Z",
           },
         ],
       },
@@ -340,5 +348,22 @@ describe("appRenderContextResolvePhoto", () => {
         ],
       },
     ]);
+  });
+
+  it("formats captured date without timezone when captured timezone is missing", () => {
+    appRenderContextResolvePhoto(
+      createPhoto({
+        capturedAt: {
+          utc: "2026-05-09T08:00:00.000Z",
+          timezone: null,
+        },
+      }),
+      createMetadataLabels(),
+    );
+
+    expect(mockedFormatDate).toHaveBeenCalledWith("2026-05-09T08:00:00.000Z", {
+      includeTime: true,
+      timeZone: undefined,
+    });
   });
 });

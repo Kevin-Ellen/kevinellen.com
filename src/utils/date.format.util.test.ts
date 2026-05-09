@@ -22,6 +22,24 @@ describe("formatDate", () => {
     expect(result).toMatch(/\d{2}:\d{2}/);
   });
 
+  it("formats using provided timezone", () => {
+    expect(
+      formatDate("2025-05-10T14:30:00.000Z", {
+        includeTime: true,
+        timeZone: "Europe/Madrid",
+      }),
+    ).toBe("10 May 2025, 16:30");
+  });
+
+  it("does not include time when includeTime is false, even with timezone", () => {
+    expect(
+      formatDate("2025-05-10T14:30:00.000Z", {
+        includeTime: false,
+        timeZone: "Asia/Bangkok",
+      }),
+    ).toBe("10 May 2025");
+  });
+
   it("throws for invalid string dates", () => {
     expect(() => formatDate("absolutely-not-a-date")).toThrow(
       'Invalid date value: "absolutely-not-a-date"',
