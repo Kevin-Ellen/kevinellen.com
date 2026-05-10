@@ -8,6 +8,7 @@ import type {
   ParsedDirectCliArgs,
   JournalCliAction,
   PhotoCliAction,
+  NoteCliAction,
 } from "@content-cli/types/parse-args.cli.types";
 import type { ContentCliEnvironment } from "@content-cli/types/content-cli.env.types";
 import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.content-cli.types";
@@ -24,15 +25,25 @@ export type RunInteractiveContentCommandArgs<
       from?: ContentCliEnvironment;
       to?: ContentCliEnvironment;
     }
-  : {
-      env: ContentCliEnvironment;
-      entity: "photo";
-      action: PhotoCliAction;
-      bucket?: ContentWorkspaceBucket;
-      photoId?: string;
-    };
+  : E extends "photo"
+    ? {
+        env: ContentCliEnvironment;
+        entity: "photo";
+        action: PhotoCliAction;
+        bucket?: ContentWorkspaceBucket;
+        photoId?: string;
+      }
+    : {
+        env: ContentCliEnvironment;
+        entity: "note";
+        action: NoteCliAction;
+        bucket?: ContentWorkspaceBucket;
+        slug?: string;
+        from?: ContentCliEnvironment;
+        to?: ContentCliEnvironment;
+      };
 
-// --- helpers as arrow functions ---
+// --- helpers ---
 const buildJournalArgs = (
   args: RunInteractiveContentCommandArgs<"journal">,
   env: ContentCliEnvironment,
@@ -48,15 +59,49 @@ const buildPhotoArgs = (
   env: ContentCliEnvironment,
   entity: "photo",
   action: PhotoCliAction,
-): ParsedDirectCliArgs =>
-  action === "homepageStripRebuild"
-    ? { mode: "direct", env, entity, action: "homepageStripRebuild" }
-    : (() => {
-        const { bucket = "drafts", photoId } = args;
-        return { mode: "direct", env, entity, action, bucket, photoId };
-      })();
+): ParsedDirectCliArgs => {
+  const { bucket = "drafts", photoId } = args;
 
-// --- main function ---
+  if (action === "homepageStripRebuild") {
+    return { mode: "direct", env, entity, action };
+  }
+
+  if (action === "create") {
+    return { mode: "direct", env, entity, action, bucket };
+  }
+
+  if (action === "read") {
+    if (!photoId) {
+      throw new Error("Photo read requires photoId.");
+    }
+
+    return { mode: "direct", env, entity, action, bucket, photoId };
+  }
+
+  if (action === "list" || action === "status") {
+    return { mode: "direct", env, entity, action, bucket };
+  }
+
+  const slug = photoId;
+
+  if (!slug) {
+    throw new Error(`Photo ${action} requires photoId.`);
+  }
+
+  return { mode: "direct", env, entity, action, bucket, slug };
+};
+
+const buildNoteArgs = (
+  args: RunInteractiveContentCommandArgs<"note">,
+  env: ContentCliEnvironment,
+  entity: "note",
+  action: NoteCliAction,
+): ParsedDirectCliArgs => {
+  const { bucket = "drafts", slug, from, to } = args;
+  return { mode: "direct", env, entity, action, bucket, slug, from, to };
+};
+
+// --- main ---
 export const runInteractiveContentCommand = async <E extends ContentCliEntity>(
   args: RunInteractiveContentCommandArgs<E>,
 ): Promise<ContentCommandResult> => {
@@ -70,12 +115,19 @@ export const runInteractiveContentCommand = async <E extends ContentCliEntity>(
           entity,
           action as JournalCliAction,
         )
-      : buildPhotoArgs(
-          args as RunInteractiveContentCommandArgs<"photo">,
-          env,
-          entity,
-          action as PhotoCliAction,
-        );
+      : entity === "photo"
+        ? buildPhotoArgs(
+            args as RunInteractiveContentCommandArgs<"photo">,
+            env,
+            entity,
+            action as PhotoCliAction,
+          )
+        : buildNoteArgs(
+            args as RunInteractiveContentCommandArgs<"note">,
+            env,
+            entity,
+            action as NoteCliAction,
+          );
 
   return runDirectCli(directArgs);
 };

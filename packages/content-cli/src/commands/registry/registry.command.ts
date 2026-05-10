@@ -24,10 +24,21 @@ import { runPublishPhotoCommand } from "@content-cli/content/photo/publish.photo
 import { runReadPhotoCommand } from "@content-cli/content/photo/read.photo.content";
 import { runRebuildHomepageStripPhotoCommand } from "@content-cli/content/photo/rebuild-homepage-strip.photo.content";
 
-export const contentCommandRegistry: Record<
+import { runCreateNoteCommand } from "@content-cli/content/notes/create.note.content";
+import { runGenerateNoteCommand } from "@content-cli/content/notes/generate.note.content";
+import { runListNoteCommand } from "@content-cli/content/notes/list.note.content";
+import { runValidateNoteCommand } from "@content-cli/content/notes/validate.note.content";
+import { runPublishNoteCommand } from "@content-cli/content/notes/publish.note.content";
+import { runStatusNoteCommand } from "@content-cli/content/notes/status.note.content";
+import { runReadNoteCommand } from "@content-cli/content/notes/read.note.content";
+import { runPromoteNoteCommand } from "@content-cli/content/notes/promote.note.content";
+
+type ContentCommandRegistry = Record<
   ContentCliEntity,
-  Partial<Record<ContentCliAction, ContentCommandHandler>>
-> = {
+  Partial<Record<ContentCliAction, ContentCommandHandler<any>>>
+>;
+
+export const contentCommandRegistry = {
   journal: {
     create: runCreateJournalCommand,
     generate: runGenerateJournalCommand,
@@ -48,4 +59,14 @@ export const contentCommandRegistry: Record<
     read: runReadPhotoCommand,
     homepageStripRebuild: runRebuildHomepageStripPhotoCommand,
   },
-};
+  note: {
+    create: runCreateNoteCommand,
+    generate: runGenerateNoteCommand,
+    list: runListNoteCommand,
+    validate: runValidateNoteCommand,
+    publish: runPublishNoteCommand,
+    status: runStatusNoteCommand,
+    read: runReadNoteCommand,
+    promote: runPromoteNoteCommand,
+  },
+} satisfies ContentCommandRegistry;

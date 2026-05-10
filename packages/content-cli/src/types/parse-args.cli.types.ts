@@ -5,7 +5,7 @@ import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.conten
 
 export type ContentCliMode = "interactive" | "direct";
 
-export type ContentCliEntity = "journal" | "photo";
+export type ContentCliEntity = "journal" | "photo" | "note";
 
 export type JournalCliAction =
   | "create"
@@ -27,6 +27,21 @@ export type PhotoCliAction =
   | "status"
   | "homepageStripRebuild";
 
+export type NoteCliAction =
+  | "create"
+  | "generate"
+  | "validate"
+  | "publish"
+  | "read"
+  | "list"
+  | "status"
+  | "promote";
+
+export type ContentCliAction =
+  | JournalCliAction
+  | PhotoCliAction
+  | NoteCliAction;
+
 type ParsedDirectCliArgsBase = Readonly<{
   mode: "direct";
   env: ContentCliEnvironment;
@@ -36,6 +51,16 @@ export type ParsedJournalDirectCliArgs = ParsedDirectCliArgsBase &
   Readonly<{
     entity: "journal";
     action: JournalCliAction;
+    bucket: ContentWorkspaceBucket;
+    slug?: string;
+    from?: ContentCliEnvironment;
+    to?: ContentCliEnvironment;
+  }>;
+
+export type ParsedNoteDirectCliArgs = ParsedDirectCliArgsBase &
+  Readonly<{
+    entity: "note";
+    action: NoteCliAction;
     bucket: ContentWorkspaceBucket;
     slug?: string;
     from?: ContentCliEnvironment;
@@ -84,6 +109,7 @@ export type ParsedPhotoDirectCliArgs =
 
 export type ParsedDirectCliArgs =
   | ParsedJournalDirectCliArgs
+  | ParsedNoteDirectCliArgs
   | ParsedPhotoDirectCliArgs
   | ParsedPhotoHomepageStripRebuildArgs;
 

@@ -3,9 +3,11 @@
 import { cancel, isCancel, select } from "@clack/prompts";
 
 import { formatEnvironment } from "@content-cli/cli/interactive/format.interactive.cli";
+
 import { runEnvironmentInteractiveMenu } from "@content-cli/cli/interactive/menus/environment.menu.interactive.cli";
 import { runJournalInteractiveMenu } from "@content-cli/cli/interactive/menus/journal.menu.interactive.cli";
 import { runPhotoInteractiveMenu } from "@content-cli/cli/interactive/menus/photo.menu.interactive.cli";
+import { runNoteInteractiveMenu } from "@content-cli/cli/interactive/menus/note.menu.interactive.cli";
 import { runPromoteInteractiveMenu } from "@content-cli/cli/interactive/menus/promote.menu.interactive.cli";
 
 import type { InteractiveCliState } from "@content-cli/cli/interactive/state.interactive.cli";
@@ -13,16 +15,21 @@ import type { InteractiveCliState } from "@content-cli/cli/interactive/state.int
 /**
  * Union type of all valid menu actions.
  */
-type MainMenuAction = "journal" | "photo" | "promote" | "environment" | "exit";
+type MainMenuAction =
+  | "journal"
+  | "photo"
+  | "note"
+  | "promote"
+  | "environment"
+  | "exit";
 
 /**
  * Runs the main interactive CLI menu.
  */
 export const runMainInteractiveMenu = async (
   state: InteractiveCliState,
-  maxIterations = Infinity, // optional: break loop for safe testing
+  maxIterations = Infinity,
 ): Promise<void> => {
-  // Map actions (excluding 'exit') to handlers
   const actionMap: Record<
     Exclude<MainMenuAction, "exit">,
     (state: InteractiveCliState) => Promise<void>
@@ -30,6 +37,7 @@ export const runMainInteractiveMenu = async (
     environment: runEnvironmentInteractiveMenu,
     journal: runJournalInteractiveMenu,
     photo: runPhotoInteractiveMenu,
+    note: runNoteInteractiveMenu,
     promote: runPromoteInteractiveMenu,
   };
 
@@ -43,6 +51,7 @@ export const runMainInteractiveMenu = async (
       options: [
         { value: "journal", label: "📘 Journal" },
         { value: "photo", label: "📷 Photo" },
+        { value: "note", label: "📝 Note" },
         { value: "promote", label: "🐦 Promote" },
         { value: "environment", label: "🌍 Environment" },
         { value: "exit", label: "🚪 Exit" },
@@ -54,12 +63,13 @@ export const runMainInteractiveMenu = async (
       return;
     }
 
-    if (action === "exit") return;
+    if (action === "exit") {
+      return;
+    }
 
-    // Handler exists because we typed action as union & mapped keys
     const handler = actionMap[action];
+
     if (!handler) {
-      // This should never happen but satisfies coverage and TS
       throw new Error(`No handler found for action: ${action}`);
     }
 

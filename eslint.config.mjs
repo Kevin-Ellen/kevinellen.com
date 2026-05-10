@@ -18,6 +18,7 @@ export default [
       "content-pipeline/journal/uploaded/**",
       "content-pipeline/photo/uploaded/**",
       "content-pipeline/journal copy/**",
+      "content-pipeline/note/uploaded/**",
     ],
   },
 

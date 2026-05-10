@@ -15,19 +15,17 @@ describe("runInteractiveContentCommand", () => {
   });
 
   it("calls runDirectCli with journal action and all fields", async () => {
-    const args = {
-      env: "dev" as const,
-      entity: "journal" as const,
-      action: "create" as const,
-      bucket: "drafts" as const,
-      slug: "my-journal",
-      from: "dev" as const,
-      to: "stg" as const,
-    };
-
     mockRunDirectCli.mockResolvedValue({ ok: true });
 
-    const result = await runInteractiveContentCommand(args);
+    const result = await runInteractiveContentCommand({
+      env: "dev",
+      entity: "journal",
+      action: "create",
+      bucket: "drafts",
+      slug: "my-journal",
+      from: "dev",
+      to: "stg",
+    });
 
     expect(result).toEqual({ ok: true });
     expect(mockRunDirectCli).toHaveBeenCalledWith({
@@ -43,17 +41,14 @@ describe("runInteractiveContentCommand", () => {
   });
 
   it("applies defaults for missing optional journal fields", async () => {
-    const args = {
-      env: "dev" as const,
-      entity: "journal" as const,
-      action: "create" as const,
-    };
-
     mockRunDirectCli.mockResolvedValue({ ok: true });
 
-    await runInteractiveContentCommand(args);
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "journal",
+      action: "create",
+    });
 
-    // bucket should default to "drafts", slug/from/to undefined
     expect(mockRunDirectCli).toHaveBeenCalledWith({
       mode: "direct",
       env: "dev",
@@ -66,38 +61,34 @@ describe("runInteractiveContentCommand", () => {
     });
   });
 
-  it("calls runDirectCli with photo action correctly", async () => {
-    const args = {
-      env: "dev" as const,
-      entity: "photo" as const,
-      action: "publish" as const,
-      photoId: "photo-123",
-    };
-
+  it("calls runDirectCli with photo workspace action correctly", async () => {
     mockRunDirectCli.mockResolvedValue({ ok: true });
 
-    await runInteractiveContentCommand(args);
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "photo",
+      action: "publish",
+      photoId: "photo-123",
+    });
 
     expect(mockRunDirectCli).toHaveBeenCalledWith({
       mode: "direct",
       env: "dev",
       entity: "photo",
       action: "publish",
-      bucket: "drafts", // default applied
-      photoId: "photo-123",
+      bucket: "drafts",
+      slug: "photo-123",
     });
   });
 
   it("calls runDirectCli for photo homepageStripRebuild correctly", async () => {
-    const args = {
-      env: "prod" as const,
-      entity: "photo" as const,
-      action: "homepageStripRebuild" as const,
-    };
-
     mockRunDirectCli.mockResolvedValue({ ok: true });
 
-    await runInteractiveContentCommand(args);
+    await runInteractiveContentCommand({
+      env: "prod",
+      entity: "photo",
+      action: "homepageStripRebuild",
+    });
 
     expect(mockRunDirectCli).toHaveBeenCalledWith({
       mode: "direct",
@@ -107,17 +98,15 @@ describe("runInteractiveContentCommand", () => {
     });
   });
 
-  it("applies default bucket for photo if missing", async () => {
-    const args = {
-      env: "dev" as const,
-      entity: "photo" as const,
-      action: "publish" as const,
-      photoId: "photo-456",
-    };
-
+  it("applies default bucket for photo workspace actions", async () => {
     mockRunDirectCli.mockResolvedValue({ ok: true });
 
-    await runInteractiveContentCommand(args);
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "photo",
+      action: "publish",
+      photoId: "photo-456",
+    });
 
     expect(mockRunDirectCli).toHaveBeenCalledWith({
       mode: "direct",
@@ -125,7 +114,130 @@ describe("runInteractiveContentCommand", () => {
       entity: "photo",
       action: "publish",
       bucket: "drafts",
-      photoId: "photo-456",
+      slug: "photo-456",
+    });
+  });
+
+  it("throws when photo read is missing photoId", async () => {
+    await expect(
+      runInteractiveContentCommand({
+        env: "dev",
+        entity: "photo",
+        action: "read",
+      }),
+    ).rejects.toThrow("Photo read requires photoId.");
+  });
+
+  it("calls runDirectCli with note action and all fields", async () => {
+    mockRunDirectCli.mockResolvedValue({ ok: true });
+
+    const result = await runInteractiveContentCommand({
+      env: "dev",
+      entity: "note",
+      action: "promote",
+      bucket: "drafts",
+      slug: "my-note",
+      from: "dev",
+      to: "stg",
+    });
+
+    expect(result).toEqual({ ok: true });
+    expect(mockRunDirectCli).toHaveBeenCalledWith({
+      mode: "direct",
+      env: "dev",
+      entity: "note",
+      action: "promote",
+      bucket: "drafts",
+      slug: "my-note",
+      from: "dev",
+      to: "stg",
+    });
+  });
+
+  it("calls runDirectCli with photo create action", async () => {
+    mockRunDirectCli.mockResolvedValue({ ok: true });
+
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "photo",
+      action: "create",
+    });
+
+    expect(mockRunDirectCli).toHaveBeenCalledWith({
+      mode: "direct",
+      env: "dev",
+      entity: "photo",
+      action: "create",
+      bucket: "drafts",
+    });
+  });
+
+  it("calls runDirectCli with photo read action", async () => {
+    mockRunDirectCli.mockResolvedValue({ ok: true });
+
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "photo",
+      action: "read",
+      photoId: "photo-123",
+    });
+
+    expect(mockRunDirectCli).toHaveBeenCalledWith({
+      mode: "direct",
+      env: "dev",
+      entity: "photo",
+      action: "read",
+      bucket: "drafts",
+      photoId: "photo-123",
+    });
+  });
+
+  it("calls runDirectCli with photo list action", async () => {
+    mockRunDirectCli.mockResolvedValue({ ok: true });
+
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "photo",
+      action: "list",
+    });
+
+    expect(mockRunDirectCli).toHaveBeenCalledWith({
+      mode: "direct",
+      env: "dev",
+      entity: "photo",
+      action: "list",
+      bucket: "drafts",
+    });
+  });
+
+  it("throws when photo workspace action is missing photoId", async () => {
+    await expect(
+      runInteractiveContentCommand({
+        env: "dev",
+        entity: "photo",
+        action: "publish",
+      }),
+    ).rejects.toThrow("Photo publish requires photoId.");
+  });
+
+  it("applies default bucket for note actions", async () => {
+    mockRunDirectCli.mockResolvedValue({ ok: true });
+
+    await runInteractiveContentCommand({
+      env: "dev",
+      entity: "note",
+      action: "create",
+    });
+
+    expect(mockRunDirectCli).toHaveBeenCalledWith({
+      mode: "direct",
+      env: "dev",
+      entity: "note",
+      action: "create",
+      bucket: "drafts",
+      slug: undefined,
+      from: undefined,
+      to: undefined,
     });
   });
 });
