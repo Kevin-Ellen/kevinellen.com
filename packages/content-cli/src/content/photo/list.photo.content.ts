@@ -2,10 +2,14 @@
 
 import { getPhotoWorkspaceStatus } from "@content-cli/content/photo/workspace.status.photo.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ParsedPhotoSimpleArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 
-export const runListPhotoCommand: ContentCommandHandler = async (args) => {
+export const runListPhotoCommand = async (
+  args: ParsedPhotoSimpleArgs,
+): Promise<ContentCommandResult> => {
   const status = await getPhotoWorkspaceStatus(args.env);
+
   const bucket = status.find((entry) => entry.bucket === args.bucket);
 
   if (!bucket) {
@@ -16,6 +20,7 @@ export const runListPhotoCommand: ContentCommandHandler = async (args) => {
 
   if (bucket.workspaceIds.length === 0) {
     console.log("  none\n");
+
     return { ok: true };
   }
 

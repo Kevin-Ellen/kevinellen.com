@@ -16,9 +16,19 @@ type PhotoWorkspaceStatusBucket = Readonly<{
   workspaceIds: readonly string[];
 }>;
 
-const getWorkspaceIds = async (directoryPath: string): Promise<string[]> => {
+const PHOTO_BUCKETS: readonly ContentWorkspaceBucket[] = [
+  "drafts",
+  "edits",
+  "uploaded",
+];
+
+const getWorkspaceIds = async (
+  directoryPath: string,
+): Promise<readonly string[]> => {
   try {
-    const entries = await fs.readdir(directoryPath, { withFileTypes: true });
+    const entries = await fs.readdir(directoryPath, {
+      withFileTypes: true,
+    });
 
     return entries
       .filter((entry) => entry.isDirectory())
@@ -31,16 +41,11 @@ const getWorkspaceIds = async (directoryPath: string): Promise<string[]> => {
 
 export const getPhotoWorkspaceStatus = async (
   env: ContentCliEnvironment,
-): Promise<readonly PhotoWorkspaceStatusBucket[]> => {
-  const buckets: readonly ContentWorkspaceBucket[] = [
-    "drafts",
-    "edits",
-    "uploaded",
-  ];
-
-  return Promise.all(
-    buckets.map(async (bucket) => {
+): Promise<readonly PhotoWorkspaceStatusBucket[]> =>
+  Promise.all(
+    PHOTO_BUCKETS.map(async (bucket) => {
       const directoryPath = path.join(PHOTO_WORKSPACE_ROOT, bucket);
+
       const workspaceIds = await getWorkspaceIds(directoryPath);
 
       return {
@@ -52,4 +57,3 @@ export const getPhotoWorkspaceStatus = async (
       };
     }),
   );
-};

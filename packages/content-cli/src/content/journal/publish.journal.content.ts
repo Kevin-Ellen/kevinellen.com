@@ -3,8 +3,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
 import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
+import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 
 import { writeCloudflareKvValue } from "@content-cli/cloudflare/kv/kv.client.cloudflare.content-cli";
 import { loadContentCliConfig } from "@content-cli/config/load.content-cli.config";
@@ -17,61 +18,83 @@ import { publishPhotoDrafts } from "@content-cli/content/shared/publish-drafts.p
 import { runValidateJournalCommand } from "@content-cli/content/journal/validate.journal.content";
 import { formatLocalDateTimeWithOffset } from "@content-cli/utils/format.local.date.time.with.offset.util";
 
+type JournalPublishCommandResult = Readonly<
+  ContentCommandResult & {
+    ok: true;
+    workspaceId: string;
+    journalId: string;
+    publishedPhotos: number;
+    workspacePath: string;
+    uploadedWorkspacePath: string;
+  }
+>;
+
 const JOURNAL_PAGE_ID_PREFIX = "journal:";
 
 const toJournalPageId = (workspaceId: string): `journal:${string}` =>
   `${JOURNAL_PAGE_ID_PREFIX}${workspaceId}`;
 
+/**
+ * Update the page identity (id, slug, breadcrumbs)
+ */
 const updateJournalIdentity = (
   page: AuthoredPublicPageDefinition,
   workspaceId: string,
-): AuthoredPublicPageDefinition => {
-  const id = toJournalPageId(workspaceId);
+): AuthoredPublicPageDefinition => ({
+  ...page,
+  id: toJournalPageId(workspaceId),
+  kind: "journal",
+  slug: `/journal/${workspaceId}`,
+  breadcrumbs: ["home", "journal", toJournalPageId(workspaceId)],
+});
 
-  return {
-    ...page,
-    id,
-    kind: "journal",
-    slug: `/journal/${workspaceId}`,
-    breadcrumbs: ["home", "journal", id],
-  };
-};
-
+/**
+ * Append a new updatedAt timestamp to the journalEntryFooter(s)
+ */
 const updateJournalFooter = (
   page: AuthoredPublicPageDefinition,
 ): AuthoredPublicPageDefinition => {
   const updatedAt = formatLocalDateTimeWithOffset(new Date());
 
+  const footer = page.content.footer ?? [];
+  const updatedFooter = [];
+
+  for (const module of footer) {
+    if (module.kind === "journalEntryFooter") {
+      updatedFooter.push({
+        ...module,
+        publication: {
+          ...module.publication,
+          updatedAt: [...module.publication.updatedAt, updatedAt],
+        },
+      });
+    } else {
+      updatedFooter.push(module);
+    }
+  }
+
   return {
     ...page,
     content: {
       ...page.content,
-      footer: (page.content.footer ?? []).map((module) => {
-        if (module.kind !== "journalEntryFooter") {
-          return module;
-        }
-
-        return {
-          ...module,
-          publication: {
-            ...module.publication,
-            updatedAt: [...module.publication.updatedAt, updatedAt],
-          },
-        };
-      }),
+      footer: updatedFooter,
     },
   };
 };
-
-export const runPublishJournalCommand: ContentCommandHandler = async (args) => {
+/**
+ * Publish a journal: validate, publish photos, update KV, and move workspace.
+ */
+export const runPublishJournalCommand = async (
+  args: ParsedJournalDirectCliArgs,
+): Promise<JournalPublishCommandResult> => {
   const workspaceId = args.slug;
-
-  if (!workspaceId) {
+  if (!workspaceId)
     throw new Error("Journal publish requires --slug <workspace-id>.");
-  }
 
+  // Step 1: validate the draft
   await runValidateJournalCommand(args);
 
+  // Step 2: load config and define paths
   const config = loadContentCliConfig(args.env);
 
   const workspacePath = getJournalWorkspacePath(
@@ -79,22 +102,22 @@ export const runPublishJournalCommand: ContentCommandHandler = async (args) => {
     args.bucket,
     workspaceId,
   );
-
   const photosPath = path.join(workspacePath, "photos");
-
   const uploadedWorkspacePath = getJournalWorkspacePath(
     args.env,
     "uploaded",
     workspaceId,
   );
-
   const journalPath = getJournalFilePath(args.env, args.bucket, workspaceId);
+
+  // Step 3: import the draft
   const page = await importJournalDraft(journalPath);
 
-  console.log("\nPublish journal draft\n");
-  console.log(`Workspace: ${workspaceId}`);
-  console.log(`Path: ${workspacePath}\n`);
+  console.log(`\nPublishing journal ${workspaceId}...`);
+  console.log(`Workspace path: ${workspacePath}`);
+  console.log(`Journal file path: ${journalPath}\n`);
 
+  // Step 4: publish photos
   const publishedPhotos = await publishPhotoDrafts(
     config,
     workspaceId,
@@ -102,9 +125,12 @@ export const runPublishJournalCommand: ContentCommandHandler = async (args) => {
     photosPath,
   );
 
-  const pageWithIdentity = updateJournalIdentity(page, workspaceId);
-  const publishedPage = updateJournalFooter(pageWithIdentity);
+  // Step 5: update page identity and footer
+  const publishedPage = updateJournalFooter(
+    updateJournalIdentity(page, workspaceId),
+  );
 
+  // Step 6: write to KV
   await writeCloudflareKvValue(
     config,
     config.cloudflareKvJournalsNamespaceId,
@@ -112,22 +138,21 @@ export const runPublishJournalCommand: ContentCommandHandler = async (args) => {
     publishedPage,
   );
 
-  await fs.rm(uploadedWorkspacePath, {
-    recursive: true,
-    force: true,
-  });
-
-  await fs.mkdir(path.dirname(uploadedWorkspacePath), {
-    recursive: true,
-  });
-
+  // Step 7: move workspace to "uploaded"
+  await fs.rm(uploadedWorkspacePath, { recursive: true, force: true });
+  await fs.mkdir(path.dirname(uploadedWorkspacePath), { recursive: true });
   await fs.rename(workspacePath, uploadedWorkspacePath);
 
   console.log(`Journal KV: page:${publishedPage.id}`);
   console.log(`Photos published: ${publishedPhotos.length}`);
-  console.log(`\nWorkspace moved:`);
-  console.log(`  ${workspacePath}`);
-  console.log(`  → ${uploadedWorkspacePath}\n`);
+  console.log(`Workspace moved: ${workspacePath} → ${uploadedWorkspacePath}\n`);
 
-  return { ok: true };
+  return {
+    ok: true,
+    workspaceId,
+    journalId: publishedPage.id,
+    publishedPhotos: publishedPhotos.length,
+    workspacePath,
+    uploadedWorkspacePath,
+  };
 };

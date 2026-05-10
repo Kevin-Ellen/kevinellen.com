@@ -42,12 +42,32 @@ export type ParsedJournalDirectCliArgs = ParsedDirectCliArgsBase &
     to?: ContentCliEnvironment;
   }>;
 
-export type ParsedPhotoDirectCliArgs = ParsedDirectCliArgsBase &
+type ParsedPhotoDirectCliArgsBase = ParsedDirectCliArgsBase &
   Readonly<{
     entity: "photo";
-    action: Exclude<PhotoCliAction, "homepageStripRebuild">;
     bucket: ContentWorkspaceBucket;
-    photoId?: string;
+  }>;
+
+export type ParsedPhotoCreateArgs = ParsedPhotoDirectCliArgsBase &
+  Readonly<{
+    action: "create";
+  }>;
+
+export type ParsedPhotoWorkspaceArgs = ParsedPhotoDirectCliArgsBase &
+  Readonly<{
+    action: "generate" | "validate" | "publish";
+    slug: string;
+  }>;
+
+export type ParsedPhotoReadArgs = ParsedPhotoDirectCliArgsBase &
+  Readonly<{
+    action: "read";
+    photoId: string;
+  }>;
+
+export type ParsedPhotoSimpleArgs = ParsedPhotoDirectCliArgsBase &
+  Readonly<{
+    action: "list" | "status";
   }>;
 
 export type ParsedPhotoHomepageStripRebuildArgs = ParsedDirectCliArgsBase &
@@ -55,6 +75,12 @@ export type ParsedPhotoHomepageStripRebuildArgs = ParsedDirectCliArgsBase &
     entity: "photo";
     action: "homepageStripRebuild";
   }>;
+
+export type ParsedPhotoDirectCliArgs =
+  | ParsedPhotoCreateArgs
+  | ParsedPhotoWorkspaceArgs
+  | ParsedPhotoReadArgs
+  | ParsedPhotoSimpleArgs;
 
 export type ParsedDirectCliArgs =
   | ParsedJournalDirectCliArgs

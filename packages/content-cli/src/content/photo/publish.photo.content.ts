@@ -10,21 +10,16 @@ import {
   getPhotoWorkspacePath,
 } from "@content-cli/content/photo/path.photo.content";
 import { renderPhotoDraftFile } from "@content-cli/content/photo/render.photo.content";
-import { publishPhotoDrafts } from "@content-cli/content/shared/publish-drafts.photo.content";
 import { updateHomepageStripPhotoIndex } from "@content-cli/content/photo/utils/homepage-strip.index.photo.util.contents";
+import { publishPhotoDrafts } from "@content-cli/content/shared/publish-drafts.photo.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ParsedPhotoWorkspaceArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 
-export const runPublishPhotoCommand: ContentCommandHandler = async (args) => {
+export const runPublishPhotoCommand = async (
+  args: ParsedPhotoWorkspaceArgs,
+): Promise<ContentCommandResult> => {
   const workspaceId = args.slug;
-
-  if (!workspaceId) {
-    throw new Error("Photo publish requires --slug <workspace-id>.");
-  }
-
-  if (args.env && args.env !== "prod") {
-    throw new Error("Photo publishing is only supported in prod.");
-  }
 
   if (args.env !== "prod") {
     throw new Error("Photo publishing is only supported in prod.");
@@ -33,7 +28,9 @@ export const runPublishPhotoCommand: ContentCommandHandler = async (args) => {
   const config = loadContentCliConfig("prod");
 
   const workspacePath = getPhotoWorkspacePath(args.bucket, workspaceId);
+
   const photosPath = getPhotoAssetDirectoryPath(args.bucket, workspaceId);
+
   const uploadedWorkspacePath = getPhotoWorkspacePath("uploaded", workspaceId);
 
   console.log("\nPublish photo drafts\n");
@@ -90,7 +87,7 @@ export const runPublishPhotoCommand: ContentCommandHandler = async (args) => {
     console.log(`Saved: ${uploadedPath}`);
   }
 
-  console.log(`\nWorkspace moved:`);
+  console.log("\nWorkspace moved:");
   console.log(`  ${workspacePath}`);
   console.log(`  → ${uploadedWorkspacePath}\n`);
 

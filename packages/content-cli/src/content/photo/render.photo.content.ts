@@ -12,6 +12,19 @@ const renderNullableString = (value: string | null): string =>
 const renderNullableNumber = (value: number | null): string =>
   value === null ? "null" : String(value);
 
+const renderCapturedAt = (
+  value: AuthoredPhotoMetadata["capturedAt"],
+): string => {
+  if (value === null) {
+    return "null";
+  }
+
+  return `{
+    utc: ${renderString(value.utc)},
+    timezone: ${renderNullableString(value.timezone)},
+  }`;
+};
+
 const renderResolvedLocation = (
   value: AuthoredPhotoMetadata["resolvedLocation"],
 ): string => {
@@ -49,7 +62,7 @@ export const photo: AuthoredPhotoMetadata = {
   commentary: ${renderString(photo.commentary)},
   readableLocation: ${renderString(photo.readableLocation)},
 
-  capturedAt: ${renderNullableString(photo.capturedAt)},
+  capturedAt: ${renderCapturedAt(photo.capturedAt)},
 
   photographer: ${renderNullableString(photo.photographer)},
   copyright: ${renderNullableString(photo.copyright)},

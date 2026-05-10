@@ -4,10 +4,25 @@ import { readCloudflareKvValue } from "@content-cli/cloudflare/kv/read.client.cl
 import { writeCloudflareKvValue } from "@content-cli/cloudflare/kv/kv.client.cloudflare.content-cli";
 import { loadContentCliConfig } from "@content-cli/config/load.content-cli.config";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
+import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
 import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
-export const runPromoteJournalCommand: ContentCommandHandler = async (args) => {
+type JournalPromoteCommandResult = Readonly<
+  ContentCommandResult & {
+    ok: true;
+    entity: "journal";
+    action: "promote";
+    journalId: string;
+    key: string;
+    from: NonNullable<ParsedJournalDirectCliArgs["from"]>;
+    to: NonNullable<ParsedJournalDirectCliArgs["to"]>;
+  }
+>;
+
+export const runPromoteJournalCommand = async (
+  args: ParsedJournalDirectCliArgs,
+): Promise<JournalPromoteCommandResult> => {
   const journalId = args.slug;
 
   if (!journalId) {
@@ -24,8 +39,11 @@ export const runPromoteJournalCommand: ContentCommandHandler = async (args) => {
     );
   }
 
-  const fromConfig = loadContentCliConfig(args.from);
-  const toConfig = loadContentCliConfig(args.to);
+  const from = args.from;
+  const to = args.to;
+
+  const fromConfig = loadContentCliConfig(from);
+  const toConfig = loadContentCliConfig(to);
 
   const key = `page:journal:${journalId}`;
 
@@ -44,8 +62,16 @@ export const runPromoteJournalCommand: ContentCommandHandler = async (args) => {
 
   console.log("\nJournal promoted\n");
   console.log(`Key: ${key}`);
-  console.log(`From: ${args.from}`);
-  console.log(`To: ${args.to}\n`);
+  console.log(`From: ${from}`);
+  console.log(`To: ${to}\n`);
 
-  return { ok: true };
+  return {
+    ok: true,
+    entity: "journal",
+    action: "promote",
+    journalId,
+    key,
+    from,
+    to,
+  };
 };

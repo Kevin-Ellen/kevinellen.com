@@ -40,8 +40,8 @@ export const runRebuildHomepageStripPhotoCommand: ContentCommandHandler =
 
     const photoIds = photos
       .sort((a, b) => {
-        const aDate = a.capturedAt ?? "";
-        const bDate = b.capturedAt ?? "";
+        const aDate = a.capturedAt?.utc ?? "";
+        const bDate = b.capturedAt?.utc ?? "";
 
         return bDate.localeCompare(aDate) || a.id.localeCompare(b.id);
       })

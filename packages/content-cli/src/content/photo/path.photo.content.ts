@@ -8,6 +8,12 @@ import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.conten
 
 export const PHOTO_WORKSPACE_ROOT = path.join(CONTENT_WORKSPACE_ROOT, "photo");
 
+const PHOTO_FILE_SUFFIX: Record<ContentWorkspaceBucket, string> = {
+  drafts: "draft",
+  edits: "edit",
+  uploaded: "uploaded",
+};
+
 export const getPhotoBucketPath = (bucket: ContentWorkspaceBucket): string =>
   path.join(PHOTO_WORKSPACE_ROOT, bucket);
 
@@ -15,18 +21,6 @@ export const getPhotoWorkspacePath = (
   bucket: ContentWorkspaceBucket,
   workspaceId: string,
 ): string => path.join(getPhotoBucketPath(bucket), workspaceId);
-
-const getPhotoFileSuffix = (bucket: ContentWorkspaceBucket): string => {
-  if (bucket === "drafts") {
-    return "draft";
-  }
-
-  if (bucket === "edits") {
-    return "edit";
-  }
-
-  return "uploaded";
-};
 
 export const getPhotoAssetDirectoryPath = (
   bucket: ContentWorkspaceBucket,
@@ -40,7 +34,7 @@ export const getPhotoMetadataFilePath = (
 ): string =>
   path.join(
     getPhotoWorkspacePath(bucket, workspaceId),
-    `${photoSlug}.${getPhotoFileSuffix(bucket)}.ts`,
+    `${photoSlug}.${PHOTO_FILE_SUFFIX[bucket]}.ts`,
   );
 
 export const getPhotoAssetFilePath = (
