@@ -1,14 +1,14 @@
-// packages/content-cli/src/content/journal/render.journal.content.ts
+// packages/content-cli/src/content/notes/render.note.content.ts
 
 import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
-export const renderJournalDraftFile = (
-  journal: AuthoredPublicPageDefinition,
+export const renderNoteDraftFile = (
+  note: AuthoredPublicPageDefinition,
 ): string => {
   return `import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
 export const page: AuthoredPublicPageDefinition = ${JSON.stringify(
-    journal,
+    note,
     null,
     2,
   )} satisfies AuthoredPublicPageDefinition;

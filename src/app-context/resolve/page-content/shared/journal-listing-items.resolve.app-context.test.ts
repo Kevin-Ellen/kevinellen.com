@@ -82,7 +82,7 @@ describe("appContextResolveJournalListingItems", () => {
         }),
         createJournalPage({
           id: "article",
-          kind: "article",
+          kind: "note",
           slug: "/articles/example",
         }),
       ],

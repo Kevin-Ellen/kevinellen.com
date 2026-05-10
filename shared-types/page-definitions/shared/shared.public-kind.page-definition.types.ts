@@ -4,7 +4,7 @@ export const PUBLIC_PAGE_KINDS = [
   "home",
   "static",
   "listing",
-  "article",
+  "note",
   "journal",
 ] as const;
 

@@ -20,6 +20,7 @@ describe("loadContentCliConfig", () => {
     process.env.CONTENT_PIPELINE_DEV_CF_KV_PHOTOS_NAMESPACE_ID = "ns-photos";
     process.env.CONTENT_PIPELINE_DEV_CF_KV_JOURNALS_NAMESPACE_ID =
       "ns-journals";
+    process.env.CONTENT_PIPELINE_DEV_CF_KV_NOTES_NAMESPACE_ID = "ns-notes";
 
     const config = loadContentCliConfig("dev");
 
@@ -29,6 +30,7 @@ describe("loadContentCliConfig", () => {
       cloudflareKvApiToken: "kv-token",
       cloudflareKvPhotosNamespaceId: "ns-photos",
       cloudflareKvJournalsNamespaceId: "ns-journals",
+      cloudflareKvNotesNamespaceId: "ns-notes",
     });
   });
 
@@ -39,6 +41,7 @@ describe("loadContentCliConfig", () => {
     process.env.CONTENT_PIPELINE_STG_CF_KV_PHOTOS_NAMESPACE_ID = "ns-photos";
     process.env.CONTENT_PIPELINE_STG_CF_KV_JOURNALS_NAMESPACE_ID =
       "ns-journals";
+    process.env.CONTENT_PIPELINE_STG_CF_KV_NOTES_NAMESPACE_ID = "ns-notes";
 
     expect(() => loadContentCliConfig("stg")).toThrow(
       /Missing required environment variables for stg: CONTENT_PIPELINE_STG_CF_IMAGES_API_TOKEN/,
@@ -53,6 +56,7 @@ describe("loadContentCliConfig", () => {
       "  ns-photos  ";
     process.env.CONTENT_PIPELINE_PROD_CF_KV_JOURNALS_NAMESPACE_ID =
       "  ns-journals  ";
+    process.env.CONTENT_PIPELINE_PROD_CF_KV_NOTES_NAMESPACE_ID = "  ns-notes  ";
 
     const config = loadContentCliConfig("prod");
 
@@ -62,6 +66,7 @@ describe("loadContentCliConfig", () => {
       cloudflareKvApiToken: "  kv-token  ",
       cloudflareKvPhotosNamespaceId: "  ns-photos  ",
       cloudflareKvJournalsNamespaceId: "  ns-journals  ",
+      cloudflareKvNotesNamespaceId: "  ns-notes  ",
     });
   });
 });

@@ -12,4 +12,6 @@ export const JOURNAL_WORKSPACE_ROOT = path.join(
   "journal",
 );
 
+export const NOTE_WORKSPACE_ROOT = path.join(CONTENT_WORKSPACE_ROOT, "note");
+
 export const PHOTO_WORKSPACE_ROOT = path.join(CONTENT_WORKSPACE_ROOT, "photo");

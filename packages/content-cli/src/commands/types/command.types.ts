@@ -6,6 +6,7 @@ export type ContentCommandResult = Readonly<{
   ok: boolean;
 }>;
 
+/** Journal results */
 export type JournalCreateCommandResult = ContentCommandResult &
   Readonly<{
     entity: "journal";
@@ -15,6 +16,7 @@ export type JournalCreateCommandResult = ContentCommandResult &
     photosPath: string;
   }>;
 
+/** Photo results */
 export type PhotoCreateCommandResult = ContentCommandResult &
   Readonly<{
     entity: "photo";
@@ -23,6 +25,16 @@ export type PhotoCreateCommandResult = ContentCommandResult &
     workspacePath: string;
   }>;
 
-export type ContentCommandHandler = (
-  args: ParsedDirectCliArgs,
+/** Note results */
+export type NoteCreateCommandResult = ContentCommandResult &
+  Readonly<{
+    entity: "note";
+    action: "create";
+    workspaceId: string;
+    workspacePath: string;
+  }>;
+
+/** Generic command handler */
+export type ContentCommandHandler<TArgs = ParsedDirectCliArgs> = (
+  args: TArgs,
 ) => Promise<ContentCommandResult>;

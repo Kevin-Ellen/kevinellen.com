@@ -8,6 +8,7 @@ export type ContentCliConfig = Readonly<{
   cloudflareKvApiToken: string;
   cloudflareKvPhotosNamespaceId: string;
   cloudflareKvJournalsNamespaceId: string;
+  cloudflareKvNotesNamespaceId: string;
 }>;
 
 const getEnvironmentPrefix = (env: ContentCliEnvironment): string =>
@@ -24,6 +25,7 @@ const getRequiredKeys = (
     cloudflareKvApiToken: `${prefix}_CF_KV_API_TOKEN`,
     cloudflareKvPhotosNamespaceId: `${prefix}_CF_KV_PHOTOS_NAMESPACE_ID`,
     cloudflareKvJournalsNamespaceId: `${prefix}_CF_KV_JOURNALS_NAMESPACE_ID`,
+    cloudflareKvNotesNamespaceId: `${prefix}_CF_KV_NOTES_NAMESPACE_ID`,
   };
 };
 
@@ -52,5 +54,7 @@ export const loadContentCliConfig = (
       process.env[keys.cloudflareKvPhotosNamespaceId]!,
     cloudflareKvJournalsNamespaceId:
       process.env[keys.cloudflareKvJournalsNamespaceId]!,
+    cloudflareKvNotesNamespaceId:
+      process.env[keys.cloudflareKvNotesNamespaceId]!,
   };
 };

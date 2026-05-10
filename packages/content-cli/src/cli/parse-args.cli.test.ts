@@ -58,19 +58,22 @@ describe("parseCliArgs", () => {
 
   it.each([
     {
-      args: [
-        "photo",
-        "publish",
-        "--bucket",
-        "uploaded",
-        "--photo-id",
-        "abc123",
-      ],
+      args: ["photo", "publish", "--bucket", "uploaded", "--slug", "abc123"],
       expected: {
         mode: "direct",
         entity: "photo",
         action: "publish",
         bucket: "uploaded",
+        slug: "abc123",
+      },
+    },
+    {
+      args: ["photo", "read", "--photo-id", "abc123"],
+      expected: {
+        mode: "direct",
+        entity: "photo",
+        action: "read",
+        bucket: "drafts",
         photoId: "abc123",
       },
     },
@@ -80,6 +83,125 @@ describe("parseCliArgs", () => {
         mode: "direct",
         entity: "photo",
         action: "validate",
+        bucket: "drafts",
+      },
+    },
+    {
+      args: ["photo", "homepageStripRebuild"],
+      expected: {
+        mode: "direct",
+        env: "prod",
+        entity: "photo",
+        action: "homepageStripRebuild",
+      },
+    },
+  ])("parses photo commands %#", ({ args, expected }) => {
+    expect(parseCliArgs(args)).toMatchObject(expected);
+  });
+
+  it.each([
+    {
+      args: [
+        "note",
+        "publish",
+        "--env",
+        "stg",
+        "--bucket",
+        "edits",
+        "--slug",
+        "my-note",
+      ],
+      expected: {
+        mode: "direct",
+        env: "stg",
+        entity: "note",
+        action: "publish",
+        bucket: "edits",
+        slug: "my-note",
+        from: undefined,
+        to: undefined,
+      },
+    },
+    {
+      args: ["note", "validate"],
+      expected: {
+        mode: "direct",
+        entity: "note",
+        action: "validate",
+        bucket: "drafts",
+      },
+    },
+    {
+      args: ["note", "promote", "--from", "dev", "--to", "stg"],
+      expected: {
+        mode: "direct",
+        entity: "note",
+        action: "promote",
+        from: "dev",
+        to: "stg",
+      },
+    },
+  ])("parses note commands %#", ({ args, expected }) => {
+    expect(parseCliArgs(args)).toMatchObject(expected);
+  });
+
+  it.each([
+    {
+      args: ["photo", "create"],
+      expected: {
+        mode: "direct",
+        env: "prod",
+        entity: "photo",
+        action: "create",
+        bucket: "drafts",
+      },
+    },
+    {
+      args: ["photo", "publish", "--bucket", "uploaded", "--slug", "abc123"],
+      expected: {
+        mode: "direct",
+        entity: "photo",
+        action: "publish",
+        bucket: "uploaded",
+        slug: "abc123",
+      },
+    },
+    {
+      args: ["photo", "read", "--photo-id", "abc123"],
+      expected: {
+        mode: "direct",
+        entity: "photo",
+        action: "read",
+        bucket: "drafts",
+        photoId: "abc123",
+      },
+    },
+    {
+      args: ["photo", "validate"],
+      expected: {
+        mode: "direct",
+        entity: "photo",
+        action: "validate",
+        bucket: "drafts",
+      },
+    },
+    {
+      args: ["photo", "list"],
+      expected: {
+        mode: "direct",
+        env: "prod",
+        entity: "photo",
+        action: "list",
+        bucket: "drafts",
+      },
+    },
+    {
+      args: ["photo", "status"],
+      expected: {
+        mode: "direct",
+        env: "prod",
+        entity: "photo",
+        action: "status",
         bucket: "drafts",
       },
     },
@@ -109,6 +231,10 @@ describe("parseCliArgs", () => {
     {
       args: ["photo", "nonexistent-action"],
       error: /Invalid CLI command: entity="photo" action="nonexistent-action"/,
+    },
+    {
+      args: ["note", "homepageStripRebuild"],
+      error: /Invalid CLI command: entity="note" action="homepageStripRebuild"/,
     },
   ])("throws for invalid commands %#", ({ args, error }) => {
     expect(() => parseCliArgs(args)).toThrow(error);

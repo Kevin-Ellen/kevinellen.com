@@ -11,15 +11,24 @@ describe("renderJournalDraftFile", () => {
       kind: "journal",
       slug: "/journal/rye-house",
       label: "Rye House",
-      metadata: { pageTitle: "Rye House", metaDescription: "Test" },
+      metadata: {
+        pageTitle: "Rye House",
+        metaDescription: "Test",
+      },
       breadcrumbs: ["home", "journal"],
-      content: { head: { title: "Rye House" }, content: [], footer: [] },
+      content: {
+        head: {
+          title: "Rye House",
+        },
+        content: [],
+        footer: [],
+      },
     };
 
     const output = renderJournalDraftFile(journal);
 
     expect(output).toContain(
-      `export const page:AuthoredPublicPageDefinition =`,
+      `export const page: AuthoredPublicPageDefinition =`,
     );
     expect(output).toContain(`"id": "journal:rye-house"`);
     expect(output).toContain(`"kind": "journal"`);
