@@ -1,15 +1,18 @@
 // packages/content-cli/src/cli/interactive/menus/promote.menu.interactive.cli.ts
 
+import type { InteractiveCliState } from "@content-cli/cli/interactive/state.interactive.cli";
+import type { ContentCliEnvironment } from "@content-cli/types/content-cli.env.types";
+
 import { cancel, isCancel, select } from "@clack/prompts";
 
 import { runJournalPromoteFlow } from "@content-cli/cli/interactive/flows/journal/promote.journal.flow.interactive.cli";
 
-import type { InteractiveCliState } from "@content-cli/cli/interactive/state.interactive.cli";
+type PromoteMenuAction = "dev-stg" | "stg-prod" | "dev-prod" | "back";
 
 export const runPromoteInteractiveMenu = async (
   state: InteractiveCliState,
 ): Promise<void> => {
-  const action = await select({
+  const action = await select<PromoteMenuAction>({
     message: "🐦 Promote",
     options: [
       { value: "dev-stg", label: "Journal DEV → STG" },
@@ -26,15 +29,19 @@ export const runPromoteInteractiveMenu = async (
 
   if (action === "back") return;
 
-  if (action === "dev-stg") {
-    await runJournalPromoteFlow(state, "dev", "stg");
+  const actionMap: Record<
+    Exclude<PromoteMenuAction, "back">,
+    [from: ContentCliEnvironment, to: ContentCliEnvironment]
+  > = {
+    "dev-stg": ["dev", "stg"],
+    "stg-prod": ["stg", "prod"],
+    "dev-prod": ["dev", "prod"],
+  };
+
+  const flowArgs = actionMap[action];
+  if (!flowArgs) {
+    throw new Error(`No promote flow defined for action: ${action}`);
   }
 
-  if (action === "stg-prod") {
-    await runJournalPromoteFlow(state, "stg", "prod");
-  }
-
-  if (action === "dev-prod") {
-    await runJournalPromoteFlow(state, "dev", "prod");
-  }
+  await runJournalPromoteFlow(state, flowArgs[0], flowArgs[1]);
 };

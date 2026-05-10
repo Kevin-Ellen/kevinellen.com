@@ -42,7 +42,7 @@ describe("appRenderContextResolveFooter", () => {
       publication: {
         author: "kevin",
         publishedAt: "9 May 2026",
-        updatedAt: [],
+        updatedAt: "2026-05-09T08:00:00.000Z",
       },
     };
 

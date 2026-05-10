@@ -2,9 +2,24 @@
 
 import { getJournalWorkspaceStatus } from "@content-cli/content/journal/workspace.status.journal.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
+import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.content-cli.types";
 
-export const runListJournalCommand: ContentCommandHandler = async (args) => {
+type JournalListCommandResult = Readonly<
+  ContentCommandResult & {
+    ok: true;
+    entity: "journal";
+    action: "list";
+    env: ParsedJournalDirectCliArgs["env"];
+    bucket: ContentWorkspaceBucket;
+    workspaceIds: readonly string[];
+  }
+>;
+
+export const runListJournalCommand = async (
+  args: ParsedJournalDirectCliArgs,
+): Promise<JournalListCommandResult> => {
   const status = await getJournalWorkspaceStatus(args.env);
   const bucket = status.find((entry) => entry.bucket === args.bucket);
 
@@ -16,7 +31,15 @@ export const runListJournalCommand: ContentCommandHandler = async (args) => {
 
   if (bucket.workspaceIds.length === 0) {
     console.log("  none\n");
-    return { ok: true };
+
+    return {
+      ok: true,
+      entity: "journal",
+      action: "list",
+      env: args.env,
+      bucket: args.bucket,
+      workspaceIds: [],
+    };
   }
 
   for (const workspaceId of bucket.workspaceIds) {
@@ -25,5 +48,12 @@ export const runListJournalCommand: ContentCommandHandler = async (args) => {
 
   console.log();
 
-  return { ok: true };
+  return {
+    ok: true,
+    entity: "journal",
+    action: "list",
+    env: args.env,
+    bucket: args.bucket,
+    workspaceIds: bucket.workspaceIds,
+  };
 };

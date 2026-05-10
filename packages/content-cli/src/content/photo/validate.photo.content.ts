@@ -9,7 +9,8 @@ import {
 } from "@content-cli/content/photo/path.photo.content";
 import { importPhotoDraft } from "@content-cli/content/photo/utils/import.draft.photo.util.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
+import type { ParsedPhotoWorkspaceArgs } from "@content-cli/types/parse-args.cli.types";
 
 const REQUIRED_PLACEHOLDER = "__REQUIRED__";
 
@@ -26,11 +27,16 @@ const resolveWorkspaceId = (slug: string | undefined): string => {
   return workspaceId;
 };
 
-export const runValidatePhotoCommand: ContentCommandHandler = async (args) => {
+export const runValidatePhotoCommand = async (
+  args: ParsedPhotoWorkspaceArgs,
+): Promise<ContentCommandResult> => {
   const workspaceId = resolveWorkspaceId(args.slug);
 
   const workspacePath = getPhotoWorkspacePath(args.bucket, workspaceId);
-  const entries = await fs.readdir(workspacePath, { withFileTypes: true });
+
+  const entries = await fs.readdir(workspacePath, {
+    withFileTypes: true,
+  });
 
   const draftFiles = entries
     .filter((entry) => entry.isFile())
@@ -50,6 +56,7 @@ export const runValidatePhotoCommand: ContentCommandHandler = async (args) => {
 
   for (const draftFile of draftFiles) {
     const draftPath = path.join(workspacePath, draftFile);
+
     const photo = await importPhotoDraft(draftPath);
 
     const requiredFields = {
@@ -84,8 +91,10 @@ export const runValidatePhotoCommand: ContentCommandHandler = async (args) => {
 
     if (missingFields.length > 0) {
       errorCount += 1;
+
       console.log(`  ✗ ${draftFile}`);
       console.log(`    Missing/invalid: ${missingFields.join(", ")}`);
+
       continue;
     }
 

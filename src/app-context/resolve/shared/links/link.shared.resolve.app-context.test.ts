@@ -9,7 +9,6 @@ import type {
 import type {
   AppContextExternalLink,
   AppContextInternalLink,
-  AppContextSocialLink,
 } from "@shared-types/links/app-context.links.types";
 
 import { appContextResolveLink } from "./link.shared.resolve.app-context";
@@ -131,13 +130,12 @@ describe("appContextResolveLink", () => {
     };
 
     const resolvedLink = {
-      kind: "social",
-      id: "github",
+      kind: "external",
       href: "https://example.com/social",
       text: "GitHub",
       svgId: "icon-github",
       behaviour: { openInNewTab: true },
-    } satisfies AppContextSocialLink;
+    } satisfies AppContextExternalLink;
 
     mockedResolveSocialLinkAppContext.mockReturnValue(resolvedLink);
 

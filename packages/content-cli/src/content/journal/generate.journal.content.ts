@@ -8,11 +8,25 @@ import { getJournalWorkspacePath } from "@content-cli/content/journal/path.journ
 import { renderJournalDraftFile } from "@content-cli/content/journal/render.journal.content";
 import { generatePhotoDrafts } from "@content-cli/content/shared/generate-drafts.photo.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
+import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
 
-export const runGenerateJournalCommand: ContentCommandHandler = async (
-  args,
-) => {
+type JournalGenerateCommandResult = Readonly<
+  ContentCommandResult & {
+    ok: true;
+    entity: "journal";
+    action: "generate";
+    workspaceId: string;
+    workspacePath: string;
+    journalPath: string;
+    photosPath: string;
+    heroPhotoId: string | null;
+  }
+>;
+
+export const runGenerateJournalCommand = async (
+  args: ParsedJournalDirectCliArgs,
+): Promise<JournalGenerateCommandResult> => {
   const workspaceId = args.slug;
 
   if (!workspaceId) {
@@ -36,9 +50,8 @@ export const runGenerateJournalCommand: ContentCommandHandler = async (
     photosPath,
   );
 
-  const firstPhotoId = generatedPhotos[0]?.id ?? null;
-
-  const journal = createDraftJournalDefinition(workspaceId, firstPhotoId);
+  const heroPhotoId = generatedPhotos[0]?.id ?? null;
+  const journal = createDraftJournalDefinition(workspaceId, heroPhotoId);
   const journalPath = path.join(workspacePath, "journal.draft.ts");
 
   await fs.writeFile(journalPath, renderJournalDraftFile(journal), "utf8");
@@ -51,7 +64,16 @@ export const runGenerateJournalCommand: ContentCommandHandler = async (
     console.log(`  ✓ photo: ${photo.id}`);
   }
 
-  console.log(`Hero photo: ${firstPhotoId ?? "none"}\n`);
+  console.log(`Hero photo: ${heroPhotoId ?? "none"}\n`);
 
-  return { ok: true };
+  return {
+    ok: true,
+    entity: "journal",
+    action: "generate",
+    workspaceId,
+    workspacePath,
+    journalPath,
+    photosPath,
+    heroPhotoId,
+  };
 };

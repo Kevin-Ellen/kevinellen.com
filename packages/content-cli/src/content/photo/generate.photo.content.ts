@@ -1,14 +1,17 @@
 // packages/content-cli/src/content/photo/generate.photo.content.ts
 
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
+import type { ParsedPhotoWorkspaceArgs } from "@content-cli/types/parse-args.cli.types";
+
 import {
   getPhotoAssetDirectoryPath,
   getPhotoWorkspacePath,
 } from "@content-cli/content/photo/path.photo.content";
 import { generatePhotoDrafts } from "@content-cli/content/shared/generate-drafts.photo.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
-
-export const runGeneratePhotoCommand: ContentCommandHandler = async (args) => {
+export const runGeneratePhotoCommand = async (
+  args: ParsedPhotoWorkspaceArgs,
+): Promise<ContentCommandResult> => {
   const workspaceId = args.slug;
 
   if (!workspaceId) {
@@ -16,6 +19,7 @@ export const runGeneratePhotoCommand: ContentCommandHandler = async (args) => {
   }
 
   const workspacePath = getPhotoWorkspacePath(args.bucket, workspaceId);
+
   const photosPath = getPhotoAssetDirectoryPath(args.bucket, workspaceId);
 
   console.log("\nGenerate photo drafts\n");
@@ -31,6 +35,7 @@ export const runGeneratePhotoCommand: ContentCommandHandler = async (args) => {
 
   if (photos.length === 0) {
     console.log("No supported image files found.\n");
+
     return { ok: true };
   }
 

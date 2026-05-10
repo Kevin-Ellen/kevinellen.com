@@ -7,6 +7,12 @@ import { JOURNAL_WORKSPACE_ROOT } from "@content-cli/config/paths.config.content
 import type { ContentCliEnvironment } from "@content-cli/types/content-cli.env.types";
 import type { ContentWorkspaceBucket } from "@content-cli/types/workspace.content-cli.types";
 
+const JOURNAL_FILE_NAMES: Readonly<Record<ContentWorkspaceBucket, string>> = {
+  drafts: "journal.draft.ts",
+  edits: "journal.edit.ts",
+  uploaded: "journal.uploaded.ts",
+};
+
 export const getJournalBucketPath = (
   env: ContentCliEnvironment,
   bucket: ContentWorkspaceBucket,
@@ -18,18 +24,6 @@ export const getJournalWorkspacePath = (
   workspaceId: string,
 ): string => path.join(getJournalBucketPath(env, bucket), workspaceId);
 
-const getJournalFileName = (bucket: ContentWorkspaceBucket): string => {
-  if (bucket === "drafts") {
-    return "journal.draft.ts";
-  }
-
-  if (bucket === "edits") {
-    return "journal.edit.ts";
-  }
-
-  return "journal.uploaded.ts";
-};
-
 export const getJournalFilePath = (
   env: ContentCliEnvironment,
   bucket: ContentWorkspaceBucket,
@@ -37,5 +31,5 @@ export const getJournalFilePath = (
 ): string =>
   path.join(
     getJournalWorkspacePath(env, bucket, workspaceId),
-    getJournalFileName(bucket),
+    JOURNAL_FILE_NAMES[bucket],
   );

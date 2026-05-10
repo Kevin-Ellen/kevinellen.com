@@ -61,8 +61,7 @@ describe("appContextResolveHeaderNavigation", () => {
         },
       })
       .mockReturnValueOnce({
-        kind: "social",
-        id: "github",
+        kind: "external",
         href: "https://github.com/example",
         text: "GitHub",
         svgId: "icon-github",
@@ -88,8 +87,7 @@ describe("appContextResolveHeaderNavigation", () => {
       ],
       social: [
         {
-          kind: "social",
-          id: "github",
+          kind: "external",
           href: "https://github.com/example",
           text: "GitHub",
           svgId: "icon-github",

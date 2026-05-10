@@ -9,29 +9,22 @@ import {
 } from "@content-cli/content/journal/path.journal.content";
 import { importJournalDraft } from "@content-cli/content/journal/utils/import.draft.journal.util.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
+import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 
 const REQUIRED_PLACEHOLDER = "__REQUIRED__";
 
 const containsRequiredPlaceholder = (value: unknown): boolean => {
-  if (typeof value === "string") {
+  if (typeof value === "string")
     return value === REQUIRED_PLACEHOLDER || value.trim().length === 0;
-  }
-
-  if (Array.isArray(value)) {
-    return value.some(containsRequiredPlaceholder);
-  }
-
-  if (value && typeof value === "object") {
+  if (Array.isArray(value)) return value.some(containsRequiredPlaceholder);
+  if (value && typeof value === "object")
     return Object.values(value).some(containsRequiredPlaceholder);
-  }
-
   return false;
 };
 
 const collectHeroPhotoIds = (page: unknown): string[] => {
   const ids: string[] = [];
-
   const visit = (value: unknown): void => {
     if (!value || typeof value !== "object") return;
 
@@ -45,16 +38,11 @@ const collectHeroPhotoIds = (page: unknown): string[] => {
     }
 
     for (const child of Object.values(value)) {
-      if (Array.isArray(child)) {
-        child.forEach(visit);
-      } else {
-        visit(child);
-      }
+      if (Array.isArray(child)) child.forEach(visit);
+      else visit(child);
     }
   };
-
   visit(page);
-
   return ids;
 };
 
@@ -71,29 +59,24 @@ const photoMetadataExists = async (
     try {
       await fs.access(candidate);
       return true;
-    } catch {
-      // keep checking
-    }
+    } catch {}
   }
 
   return false;
 };
 
-export const runValidateJournalCommand: ContentCommandHandler = async (
-  args,
-) => {
+export const runValidateJournalCommand = async (
+  args: ParsedJournalDirectCliArgs,
+): Promise<ContentCommandResult> => {
   const workspaceId = args.slug;
-
-  if (!workspaceId) {
+  if (!workspaceId)
     throw new Error("Journal validate requires --slug <workspace-id>.");
-  }
 
   const workspacePath = getJournalWorkspacePath(
     args.env,
     args.bucket,
     workspaceId,
   );
-
   const journalPath = getJournalFilePath(args.env, args.bucket, workspaceId);
   const page = await importJournalDraft(journalPath);
 
@@ -103,12 +86,10 @@ export const runValidateJournalCommand: ContentCommandHandler = async (
 
   const errors: string[] = [];
 
-  if (containsRequiredPlaceholder(page)) {
+  if (containsRequiredPlaceholder(page))
     errors.push("required placeholders remain");
-  }
 
   const heroPhotoIds = collectHeroPhotoIds(page);
-
   for (const photoId of heroPhotoIds) {
     if (!(await photoMetadataExists(workspacePath, photoId))) {
       errors.push(`missing photo metadata for hero photoId: ${photoId}`);
@@ -119,23 +100,15 @@ export const runValidateJournalCommand: ContentCommandHandler = async (
   const journalFooter = footer.find(
     (module) => module.kind === "journalEntryFooter",
   );
-
-  if (!journalFooter) {
-    errors.push("missing journalEntryFooter");
-  }
+  if (!journalFooter) errors.push("missing journalEntryFooter");
 
   if (errors.length > 0) {
-    for (const error of errors) {
-      console.log(`  ✗ ${error}`);
-    }
-
+    for (const error of errors) console.log(`  ✗ ${error}`);
     console.log();
-    throw new Error(
-      `Journal validation failed with ${errors.length} error(s).`,
-    );
+    // Join all error messages so tests can match specific errors
+    throw new Error(`Journal validation failed: ${errors.join("; ")}`);
   }
 
   console.log("  ✓ journal draft valid\n");
-
   return { ok: true };
 };

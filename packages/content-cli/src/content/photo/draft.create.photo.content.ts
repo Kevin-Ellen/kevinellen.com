@@ -22,7 +22,7 @@ const toTitleFromFileName = (fileName: string): string =>
     .name.replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+    .replace(/(^|\s)\w/g, (char) => char.toUpperCase());
 
 export const createDraftPhotoMetadata = (
   sourceFileName: string,

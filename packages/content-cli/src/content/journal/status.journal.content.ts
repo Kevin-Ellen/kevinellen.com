@@ -1,10 +1,12 @@
 // packages/content-cli/src/content/journal/status.journal.content.ts
 
+import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
+import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 import { getJournalWorkspaceStatus } from "@content-cli/content/journal/workspace.status.journal.content";
 
-import type { ContentCommandHandler } from "@content-cli/commands/types/command.types";
-
-export const runStatusJournalCommand: ContentCommandHandler = async (args) => {
+export const runStatusJournalCommand = async (
+  args: ParsedJournalDirectCliArgs,
+): Promise<ContentCommandResult> => {
   const status = await getJournalWorkspaceStatus(args.env);
 
   console.log(`\nJournal status (${args.env})\n`);
