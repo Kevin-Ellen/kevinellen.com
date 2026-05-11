@@ -11,6 +11,8 @@ import type { AuthoredHomepageHeroBlock } from "@shared-types/page-content/block
 import type { AuthoredImageStripBlock } from "@shared-types/page-content/block/image-strip/authored.image-strip.block.types";
 import type { AuthoredHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/authored.homepage-journal-listing.block.types";
 import type { AuthoredSectionLinksBlock } from "@shared-types/page-content/block/section-links/authored.section-links.block.types";
+import type { AuthoredNoteListingBlock } from "@shared-types/page-content/block/note-listing/authored.note-listing.block.types";
+import type { AuthoredHomepageNoteListingBlock } from "@shared-types/page-content/block/homepage-note-listing/authored.homepage-note-listing.block.types";
 
 export type AuthoredBlock =
   | AuthoredParagraphBlock
@@ -23,4 +25,6 @@ export type AuthoredBlock =
   | AuthoredHomepageHeroBlock
   | AuthoredImageStripBlock
   | AuthoredHomepageJournalListingBlock
-  | AuthoredSectionLinksBlock;
+  | AuthoredSectionLinksBlock
+  | AuthoredNoteListingBlock
+  | AuthoredHomepageNoteListingBlock;

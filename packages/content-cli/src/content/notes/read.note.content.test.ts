@@ -41,7 +41,7 @@ describe("runReadNoteCommand", () => {
     expect(readCloudflareKvValue).toHaveBeenCalledWith(
       { cloudflareKvNotesNamespaceId: "notes-dev" },
       "notes-dev",
-      "page:note:my-note",
+      "page:my-note",
     );
 
     expect(result).toEqual({ ok: true });

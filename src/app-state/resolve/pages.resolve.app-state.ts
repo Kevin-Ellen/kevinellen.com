@@ -6,12 +6,14 @@ import { appStateResolvePublicPages } from "@app-state/resolve/pages/public.page
 import { appStateResolveErrorPages } from "@app-state/resolve/pages/error.pages.resolve.app-state";
 
 type AppStateResolvePagesArgs = Readonly<{
-  kv: KVNamespace;
+  journalKv: KVNamespace;
+  notesKv: KVNamespace;
 }>;
 
 export const appStateResolvePages = async ({
-  kv,
+  journalKv,
+  notesKv,
 }: AppStateResolvePagesArgs): Promise<AppStatePages> => ({
-  public: await appStateResolvePublicPages({ kv }),
+  public: await appStateResolvePublicPages({ journalKv, notesKv }),
   error: appStateResolveErrorPages(),
 });

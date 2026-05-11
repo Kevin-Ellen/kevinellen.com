@@ -80,13 +80,13 @@ describe("runPhotoPublishFlow", () => {
       env: "dev",
       entity: "photo",
       action: "validate",
-      slug: "workspace",
+      photoId: "workspace",
     });
     expect(runInteractiveContentCommand).toHaveBeenNthCalledWith(2, {
       env: "dev",
       entity: "photo",
       action: "publish",
-      slug: "workspace",
+      photoId: "workspace",
     });
   });
 
@@ -102,13 +102,13 @@ describe("runPhotoPublishFlow", () => {
       env: "prod",
       entity: "photo",
       action: "validate",
-      slug: "workspace",
+      photoId: "workspace",
     });
     expect(runInteractiveContentCommand).toHaveBeenNthCalledWith(2, {
       env: "prod",
       entity: "photo",
       action: "publish",
-      slug: "workspace",
+      photoId: "workspace",
     });
   });
 });

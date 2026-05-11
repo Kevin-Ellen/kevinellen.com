@@ -75,7 +75,7 @@ describe("runPublishNoteCommand", () => {
       content: [],
       footer: [
         {
-          kind: "journalEntryFooter",
+          kind: "noteEntryFooter",
           publication: {
             author: "Kevin Ellen",
             publishedAt: "2026-05-10T22:00:00+01:00",
@@ -137,7 +137,7 @@ describe("runPublishNoteCommand", () => {
           ...validPage.content,
           footer: [
             {
-              kind: "journalEntryFooter",
+              kind: "noteEntryFooter",
               publication: {
                 author: "Kevin Ellen",
                 publishedAt: "2026-05-10T22:00:00+01:00",

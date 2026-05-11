@@ -4,17 +4,19 @@ import type { AppContextPageContentResolverContext } from "@app-context/resolve/
 import type { AppContextBlock } from "@shared-types/page-content/block/app-context.block.types";
 import type { AppStateBlock } from "@shared-types/page-content/block/app-state.block.types";
 
-import { appContextResolveArticleSectionBlock } from "@app-context/resolve/page-content/block/article-section.resolve.app-context";
-import { appContextResolveHeroBlock } from "@app-context/resolve/page-content/block/hero.resolve.app-context";
-import { appContextResolveHomepageHero } from "@app-context/resolve/page-content/block/homepage-hero.resolve.app-context";
-import { appContextResolveHomepageJournalListingBlock } from "@app-context/resolve/page-content/block/homepage-journal-listing.resolve.app-context";
-import { appContextResolveImageStripBlock } from "@app-context/resolve/page-content/block/image-strip.resolve.app-context";
-import { appContextResolveJournalListingBlock } from "@app-context/resolve/page-content/block/journal-listing.resolve.app-context";
-import { appContextResolveListBlock } from "@app-context/resolve/page-content/block/list.resolve.app-context";
-import { appContextResolveParagraphBlock } from "@app-context/resolve/page-content/block/paragraph.resolve.app-context";
-import { appContextResolvePreBlock } from "@app-context/resolve/page-content/block/pre.resolve.app-context";
-import { appContextResolveQuoteBlock } from "@app-context/resolve/page-content/block/quote.resolve.app-context";
-import { appContextResolveSectionLinksBlock } from "@app-context/resolve/page-content/block/section-links.resolve.app-context";
+import { appContextResolveArticleSectionBlock } from "@app-context/resolve/page-content/block/article-section/article-section.resolve.app-context";
+import { appContextResolveHeroBlock } from "@app-context/resolve/page-content/block/hero/hero.resolve.app-context";
+import { appContextResolveHomepageHero } from "@app-context/resolve/page-content/block/homepage-hero/homepage-hero.resolve.app-context";
+import { appContextResolveHomepageJournalListingBlock } from "@app-context/resolve/page-content/block/homepage-journal-listing/homepage-journal-listing.resolve.app-context";
+import { appContextResolveImageStripBlock } from "@app-context/resolve/page-content/block/image-strip/image-strip.resolve.app-context";
+import { appContextResolveJournalListingBlock } from "@app-context/resolve/page-content/block/journal-listing/journal-listing.resolve.app-context";
+import { appContextResolveListBlock } from "@app-context/resolve/page-content/block/list/list.resolve.app-context";
+import { appContextResolveParagraphBlock } from "@app-context/resolve/page-content/block/paragraph/paragraph.resolve.app-context";
+import { appContextResolvePreBlock } from "@app-context/resolve/page-content/block/pre/pre.resolve.app-context";
+import { appContextResolveQuoteBlock } from "@app-context/resolve/page-content/block/quote/quote.resolve.app-context";
+import { appContextResolveSectionLinksBlock } from "@app-context/resolve/page-content/block/section-links/section-links.resolve.app-context";
+import { appContextResolveNoteListingBlock } from "@app-context/resolve/page-content/block/note-listing/note-listing.resolve.app-context";
+import { appContextResolveHomepageNoteListingBlock } from "@app-context/resolve/page-content/block/homepage-note-listing/homepage-note-listing.resolve.app-context";
 
 type AppStateBlockKind = AppStateBlock["kind"];
 
@@ -42,6 +44,8 @@ const APP_CONTEXT_BLOCK_RESOLVER_REGISTRY = {
   imageStrip: appContextResolveImageStripBlock,
   homepageJournalListing: appContextResolveHomepageJournalListingBlock,
   sectionLinks: appContextResolveSectionLinksBlock,
+  noteListing: appContextResolveNoteListingBlock,
+  homepageNoteListing: appContextResolveHomepageNoteListingBlock,
 } satisfies AppContextBlockResolverRegistry;
 
 export const appContextResolveBlock = <TKind extends AppStateBlockKind>(

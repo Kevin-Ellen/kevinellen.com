@@ -30,6 +30,6 @@ export const runPhotoGenerateFlow = async (
     env: state.env,
     entity: "photo",
     action: "generate",
-    slug,
+    photoId: slug,
   });
 };

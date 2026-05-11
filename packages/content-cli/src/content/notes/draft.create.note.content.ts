@@ -53,12 +53,13 @@ export const createDraftNoteDefinition = (
 
       footer: [
         {
-          kind: "journalEntryFooter",
+          kind: "noteEntryFooter",
           publication: {
             author: "Kevin Ellen",
             publishedAt,
             updatedAt: [publishedAt],
           },
+          topic: "__REQUIRED__",
           tags: [],
         },
       ],

@@ -4,70 +4,98 @@ import type { AppRenderContextBlock } from "@shared-types/page-content/block/app
 
 import { renderBlock } from "@rendering/body-content/block/block.renderer";
 
-import { renderArticleSectionBlock } from "@rendering/body-content/block/article-section.block.renderer";
-import { renderHeroBlock } from "@rendering/body-content/block/hero.block.renderer";
-import { renderHomepageHeroBlock } from "@rendering/body-content/block/homepage-hero.block.renderer";
-import { renderHomepageJournalListingBlock } from "@rendering/body-content/block/homepage-journal-listing.block.renderer";
-import { renderImageStripBlock } from "@rendering/body-content/block/image-strip.block.renderer";
-import { renderJournalListingBlock } from "@rendering/body-content/block/journal-listing.block.renderer";
-import { renderListBlock } from "@rendering/body-content/block/list.block.renderer";
-import { renderParagraphBlock } from "@rendering/body-content/block/paragraph.block.renderer";
-import { renderPreBlock } from "@rendering/body-content/block/pre.block.renderer";
-import { renderQuoteBlock } from "@rendering/body-content/block/quote.block.renderer";
-import { renderSectionLinksBlock } from "@rendering/body-content/block/section-links.block.renderer";
+import { renderArticleSectionBlock } from "@rendering/body-content/block/article-section/article-section.block.renderer";
+import { renderHeroBlock } from "@rendering/body-content/block/hero/hero.block.renderer";
+import { renderHomepageHeroBlock } from "@rendering/body-content/block/homepage-hero/homepage-hero.block.renderer";
+import { renderHomepageJournalListingBlock } from "@rendering/body-content/block/homepage-journal-listing/homepage-journal-listing.block.renderer";
+import { renderHomepageNoteListingBlock } from "@rendering/body-content/block/homepage-note-listing/homepage-note-listing.block.renderer";
+import { renderImageStripBlock } from "@rendering/body-content/block/image-strip/image-strip.block.renderer";
+import { renderJournalListingBlock } from "@rendering/body-content/block/journal-listing/journal-listing.block.renderer";
+import { renderNoteListingBlock } from "@rendering/body-content/block/note-listing/note-listing.block.renderer";
+import { renderListBlock } from "@rendering/body-content/block/list/list.block.renderer";
+import { renderParagraphBlock } from "@rendering/body-content/block/paragraph/paragraph.block.renderer";
+import { renderPreBlock } from "@rendering/body-content/block/pre/pre.block.renderer";
+import { renderQuoteBlock } from "@rendering/body-content/block/quote/quote.block.renderer";
+import { renderSectionLinksBlock } from "@rendering/body-content/block/section-links/section-links.block.renderer";
 
 jest.mock(
-  "@rendering/body-content/block/article-section.block.renderer",
+  "@rendering/body-content/block/article-section/article-section.block.renderer",
   () => ({
     renderArticleSectionBlock: jest.fn(),
   }),
 );
 
-jest.mock("@rendering/body-content/block/hero.block.renderer", () => ({
+jest.mock("@rendering/body-content/block/hero/hero.block.renderer", () => ({
   renderHeroBlock: jest.fn(),
 }));
 
-jest.mock("@rendering/body-content/block/homepage-hero.block.renderer", () => ({
-  renderHomepageHeroBlock: jest.fn(),
-}));
+jest.mock(
+  "@rendering/body-content/block/homepage-hero/homepage-hero.block.renderer",
+  () => ({
+    renderHomepageHeroBlock: jest.fn(),
+  }),
+);
 
 jest.mock(
-  "@rendering/body-content/block/homepage-journal-listing.block.renderer",
+  "@rendering/body-content/block/homepage-journal-listing/homepage-journal-listing.block.renderer",
   () => ({
     renderHomepageJournalListingBlock: jest.fn(),
   }),
 );
 
-jest.mock("@rendering/body-content/block/image-strip.block.renderer", () => ({
-  renderImageStripBlock: jest.fn(),
-}));
+jest.mock(
+  "@rendering/body-content/block/homepage-note-listing/homepage-note-listing.block.renderer",
+  () => ({
+    renderHomepageNoteListingBlock: jest.fn(),
+  }),
+);
 
 jest.mock(
-  "@rendering/body-content/block/journal-listing.block.renderer",
+  "@rendering/body-content/block/image-strip/image-strip.block.renderer",
+  () => ({
+    renderImageStripBlock: jest.fn(),
+  }),
+);
+
+jest.mock(
+  "@rendering/body-content/block/journal-listing/journal-listing.block.renderer",
   () => ({
     renderJournalListingBlock: jest.fn(),
   }),
 );
 
-jest.mock("@rendering/body-content/block/list.block.renderer", () => ({
+jest.mock(
+  "@rendering/body-content/block/note-listing/note-listing.block.renderer",
+  () => ({
+    renderNoteListingBlock: jest.fn(),
+  }),
+);
+
+jest.mock("@rendering/body-content/block/list/list.block.renderer", () => ({
   renderListBlock: jest.fn(),
 }));
 
-jest.mock("@rendering/body-content/block/paragraph.block.renderer", () => ({
-  renderParagraphBlock: jest.fn(),
-}));
+jest.mock(
+  "@rendering/body-content/block/paragraph/paragraph.block.renderer",
+  () => ({
+    renderParagraphBlock: jest.fn(),
+  }),
+);
 
-jest.mock("@rendering/body-content/block/pre.block.renderer", () => ({
+jest.mock("@rendering/body-content/block/pre/pre.block.renderer", () => ({
   renderPreBlock: jest.fn(),
 }));
 
-jest.mock("@rendering/body-content/block/quote.block.renderer", () => ({
+jest.mock("@rendering/body-content/block/quote/quote.block.renderer", () => ({
   renderQuoteBlock: jest.fn(),
 }));
 
-jest.mock("@rendering/body-content/block/section-links.block.renderer", () => ({
-  renderSectionLinksBlock: jest.fn(),
-}));
+jest.mock(
+  "@rendering/body-content/block/section-links/section-links.block.renderer",
+  () => ({
+    renderSectionLinksBlock: jest.fn(),
+  }),
+);
 
 describe("renderBlock", () => {
   beforeEach(() => {
@@ -84,11 +112,17 @@ describe("renderBlock", () => {
       .mocked(renderHomepageJournalListingBlock)
       .mockReturnValue("<section>homepage journal listing</section>");
     jest
+      .mocked(renderHomepageNoteListingBlock)
+      .mockReturnValue("<section>homepage note listing</section>");
+    jest
       .mocked(renderImageStripBlock)
       .mockReturnValue("<section>image strip</section>");
     jest
       .mocked(renderJournalListingBlock)
       .mockReturnValue("<section>journal listing</section>");
+    jest
+      .mocked(renderNoteListingBlock)
+      .mockReturnValue("<section>note listing</section>");
     jest.mocked(renderListBlock).mockReturnValue("<ul>list</ul>");
     jest.mocked(renderParagraphBlock).mockReturnValue("<p>paragraph</p>");
     jest.mocked(renderPreBlock).mockReturnValue("<pre>pre</pre>");
@@ -108,6 +142,7 @@ describe("renderBlock", () => {
       renderJournalListingBlock,
       "<section>journal listing</section>",
     ],
+    ["noteListing", renderNoteListingBlock, "<section>note listing</section>"],
     ["pre", renderPreBlock, "<pre>pre</pre>"],
     [
       "articleSection",
@@ -124,6 +159,11 @@ describe("renderBlock", () => {
       "homepageJournalListing",
       renderHomepageJournalListingBlock,
       "<section>homepage journal listing</section>",
+    ],
+    [
+      "homepageNoteListing",
+      renderHomepageNoteListingBlock,
+      "<section>homepage note listing</section>",
     ],
     [
       "sectionLinks",

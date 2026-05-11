@@ -14,6 +14,8 @@ import { authoredTechnologyAboutPage } from "@pages/public/static/about/authored
 
 import { authoredJournalPublicPage } from "@pages/public/static/authored.journal.public.page";
 
+import { authoredNotesPublicPage } from "@pages/public/static/authored.notes.public.page";
+
 describe("APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC", () => {
   it("contains the static authored public pages", () => {
     expect(APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC).toEqual([
@@ -25,6 +27,7 @@ describe("APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC", () => {
       authoredEquipmentAboutPage,
       authoredTechnologyAboutPage,
       authoredJournalPublicPage,
+      authoredNotesPublicPage,
     ]);
   });
 

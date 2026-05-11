@@ -43,7 +43,7 @@ describe("runPhotoValidateFlow", () => {
     expect(runInteractiveContentCommand).not.toHaveBeenCalled();
   });
 
-  it("calls runInteractiveContentCommand with valid slug", async () => {
+  it("calls runInteractiveContentCommand with valid photoId", async () => {
     (text as unknown as jest.Mock).mockResolvedValueOnce(" my-workspace ");
     (isCancel as unknown as jest.Mock).mockReturnValueOnce(false);
 
@@ -53,7 +53,7 @@ describe("runPhotoValidateFlow", () => {
       env: "dev",
       entity: "photo",
       action: "validate",
-      slug: "my-workspace",
+      photoId: "my-workspace",
     });
   });
 });

@@ -2,10 +2,9 @@
 
 import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
 
-const KV_PUBLIC_PAGE_KEY_PREFIX = "page:";
-
 type PublicKvPageRegistryLoaderArgs = Readonly<{
   kv: KVNamespace;
+  prefix: string;
 }>;
 
 const isAuthoredPublicPageDefinition = (
@@ -33,11 +32,12 @@ const isAuthoredPublicPageDefinition = (
 
 export const loadKvPublicPageRegistry = async ({
   kv,
+  prefix,
 }: PublicKvPageRegistryLoaderArgs): Promise<
   readonly AuthoredPublicPageDefinition[]
 > => {
   const listedKeys = await kv.list({
-    prefix: KV_PUBLIC_PAGE_KEY_PREFIX,
+    prefix,
   });
 
   const pages = await Promise.all(

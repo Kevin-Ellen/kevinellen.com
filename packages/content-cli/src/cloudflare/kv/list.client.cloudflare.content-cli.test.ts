@@ -9,6 +9,7 @@ describe("listCloudflareKvKeys", () => {
     cloudflareImagesApiToken: "fake-images-token",
     cloudflareKvPhotosNamespaceId: "fake-photos-ns",
     cloudflareKvJournalsNamespaceId: "fake-journals-ns",
+    cloudflareKvNotesNamespaceId: "fake-notes-ns",
   } as const;
 
   beforeEach(() => {

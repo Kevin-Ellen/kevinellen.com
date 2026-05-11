@@ -6,15 +6,24 @@ import { loadKvPublicPageRegistry } from "@app-state/resolve/pages/registries/pu
 import { APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC } from "@app-state/resolve/pages/registries/public.static.registry.pages.app-state";
 
 type LoadMergedPublicPageRegistryArgs = Readonly<{
-  kv: KVNamespace;
+  journalKv: KVNamespace;
+  notesKv: KVNamespace;
 }>;
 
 export const loadMergedPublicPageRegistry = async ({
-  kv,
+  journalKv,
+  notesKv,
 }: LoadMergedPublicPageRegistryArgs): Promise<
   readonly AuthoredPublicPageDefinition[]
 > => {
-  const kvPages = await loadKvPublicPageRegistry({ kv });
+  const [journalPages, notePages] = await Promise.all([
+    loadKvPublicPageRegistry({ kv: journalKv, prefix: "page:" }),
+    loadKvPublicPageRegistry({ kv: notesKv, prefix: "page:" }),
+  ]);
 
-  return [...APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC, ...kvPages];
+  return [
+    ...APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC,
+    ...journalPages,
+    ...notePages,
+  ];
 };

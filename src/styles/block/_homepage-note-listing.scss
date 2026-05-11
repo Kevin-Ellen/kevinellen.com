@@ -1,0 +1,83 @@
+@use "../tokens" as tokens;
+
+.m-homepage-note-listing {
+  display: grid;
+  row-gap: tokens.$space-lg;
+  padding-block: tokens.$space-2xl;
+
+  &__heading,
+  &__meta,
+  &__featured-title,
+  &__featured-intro,
+  &__title,
+  &__intro {
+    margin: 0;
+  }
+
+  &__heading {
+    font-family: tokens.$font-family-heading;
+    font-size: tokens.$font-size-h3;
+    font-weight: tokens.$font-weight-h3;
+    line-height: tokens.$line-height-h3;
+    color: tokens.$colour-type-heading;
+  }
+
+  &__featured {
+    display: grid;
+  }
+
+  &__featured-content,
+  &__item {
+    display: grid;
+    row-gap: tokens.$space-sm;
+    max-width: 58ch;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: tokens.$space-xs;
+    align-items: center;
+    font-family: tokens.$font-family-meta;
+    font-size: tokens.$font-size-meta;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-type-meta;
+  }
+
+  &__featured-title {
+    font-family: tokens.$font-family-heading;
+    font-size: tokens.$font-size-h4;
+    font-weight: tokens.$font-weight-h4;
+    line-height: tokens.$line-height-h4;
+    color: tokens.$colour-type-heading;
+  }
+
+  &__title {
+    font-family: tokens.$font-family-heading;
+    font-size: tokens.$font-size-h5;
+    font-weight: tokens.$font-weight-h5;
+    line-height: tokens.$line-height-h5;
+    color: tokens.$colour-type-heading;
+  }
+
+  &__featured-link,
+  &__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__featured-intro,
+  &__intro {
+    max-width: 52ch;
+  }
+
+  &__action,
+  &__item-action {
+    justify-self: start;
+  }
+
+  &__list {
+    display: grid;
+    row-gap: tokens.$space-xl;
+  }
+}
