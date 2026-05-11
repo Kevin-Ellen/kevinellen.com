@@ -12,6 +12,7 @@ import type { AppRenderContextImageStripBlock } from "@shared-types/page-content
 import type { AppRenderContextHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-render-context.homepage-journal-listing.block.types";
 import type { AppRenderContextSectionLinksBlock } from "@shared-types/page-content/block/section-links/app-render-context.section-links.block.types";
 import type { AppRenderContextNoteListingBlock } from "@shared-types/page-content/block/note-listing/app-render-context.note-listing.block.types";
+import type { AppRenderContextHomepageNoteListingBlock } from "@shared-types/page-content/block/homepage-note-listing/app-render-context.homepage-note-listing.block.types";
 
 export type AppRenderContextBlock =
   | AppRenderContextParagraphBlock
@@ -25,4 +26,5 @@ export type AppRenderContextBlock =
   | AppRenderContextImageStripBlock
   | AppRenderContextHomepageJournalListingBlock
   | AppRenderContextSectionLinksBlock
-  | AppRenderContextNoteListingBlock;
+  | AppRenderContextNoteListingBlock
+  | AppRenderContextHomepageNoteListingBlock;

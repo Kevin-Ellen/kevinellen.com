@@ -60,13 +60,13 @@ describe("runPromoteNoteCommand", () => {
     expect(readCloudflareKvValue).toHaveBeenCalledWith(
       fromConfig,
       "notes-dev",
-      "page:note:my-note",
+      "page:my-note",
     );
 
     expect(writeCloudflareKvValue).toHaveBeenCalledWith(
       toConfig,
       "notes-stg",
-      "page:note:my-note",
+      "page:my-note",
       { id: "note:my-note" },
     );
 
@@ -75,7 +75,7 @@ describe("runPromoteNoteCommand", () => {
       entity: "note",
       action: "promote",
       noteId: "my-note",
-      key: "page:note:my-note",
+      key: "page:my-note",
       from: "dev",
       to: "stg",
     });

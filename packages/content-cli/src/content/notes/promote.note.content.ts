@@ -46,7 +46,7 @@ export const runPromoteNoteCommand = async (
   const fromConfig = loadContentCliConfig(from);
   const toConfig = loadContentCliConfig(to);
 
-  const key = `page:note:${noteId}`;
+  const key = `page:${noteId}`;
 
   const note = await readCloudflareKvValue<AuthoredPublicPageDefinition>(
     fromConfig,

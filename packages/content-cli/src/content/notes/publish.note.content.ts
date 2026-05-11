@@ -59,7 +59,7 @@ const updateNoteFooter = (
     content: {
       ...page.content,
       footer: footer.map((module) => {
-        if (module.kind !== "journalEntryFooter") {
+        if (module.kind !== "noteEntryFooter") {
           return module;
         }
 

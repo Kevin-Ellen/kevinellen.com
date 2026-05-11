@@ -21,7 +21,7 @@ export const runReadNoteCommand = async (
   const note = await readCloudflareKvValue<AuthoredPublicPageDefinition>(
     config,
     config.cloudflareKvNotesNamespaceId,
-    `page:note:${noteId}`,
+    `page:${noteId}`,
   );
 
   console.log("\nNote from KV\n");

@@ -44,10 +44,10 @@ describe("loadKvPublicPageRegistry", () => {
 
     await loadKvPublicPageRegistry({
       kv: kv as never,
-      prefix: "page:note:",
+      prefix: "page:",
     });
 
-    expect(kv.list).toHaveBeenCalledWith({ prefix: "page:note:" });
+    expect(kv.list).toHaveBeenCalledWith({ prefix: "page:" });
   });
 
   it("filters invalid KV values", async () => {

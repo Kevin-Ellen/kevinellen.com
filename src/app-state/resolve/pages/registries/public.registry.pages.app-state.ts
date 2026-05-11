@@ -17,8 +17,8 @@ export const loadMergedPublicPageRegistry = async ({
   readonly AuthoredPublicPageDefinition[]
 > => {
   const [journalPages, notePages] = await Promise.all([
-    loadKvPublicPageRegistry({ kv: journalKv, prefix: "page:journal:" }),
-    loadKvPublicPageRegistry({ kv: notesKv, prefix: "page:note:" }),
+    loadKvPublicPageRegistry({ kv: journalKv, prefix: "page:" }),
+    loadKvPublicPageRegistry({ kv: notesKv, prefix: "page:" }),
   ]);
 
   return [

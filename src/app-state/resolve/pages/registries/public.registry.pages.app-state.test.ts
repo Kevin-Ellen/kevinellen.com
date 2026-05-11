@@ -64,12 +64,12 @@ describe("loadMergedPublicPageRegistry", () => {
 
     expect(loadKvPublicPageRegistry).toHaveBeenNthCalledWith(1, {
       kv: journalKv,
-      prefix: "page:journal:",
+      prefix: "page:",
     });
 
     expect(loadKvPublicPageRegistry).toHaveBeenNthCalledWith(2, {
       kv: notesKv,
-      prefix: "page:note:",
+      prefix: "page:",
     });
   });
 });

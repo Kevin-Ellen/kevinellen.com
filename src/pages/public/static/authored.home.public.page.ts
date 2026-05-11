@@ -110,10 +110,12 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
         ],
       },
 
-      /*
       {
-        kind: "articlesListing",
-        heading: "Latest articles",
+        kind: "homepageNoteListing",
+        heading: {
+          text: "Latest articles",
+          level: 2,
+        },
         itemCount: 3,
         emptyState: [
           {
@@ -123,7 +125,6 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
           },
         ],
       },
-      */
     ],
   },
 });
