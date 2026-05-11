@@ -4,6 +4,13 @@
   display: flex;
   flex-direction: column;
 
+  &__list {
+    display: contents;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
   &__item {
     padding-block: tokens.$space-lg;
     border-top: 1px solid tokens.$colour-rule;
@@ -30,8 +37,9 @@
         aspect-ratio: 16 / 9;
       }
 
-      .m-journal-listing__title {
+      .m-heading__title {
         font-size: tokens.$font-size-h3;
+        line-height: tokens.$line-height-h3;
       }
     }
   }
@@ -43,7 +51,7 @@
 
     @media (min-width: tokens.$bp-sm) {
       display: grid;
-      grid-template-columns: 120px 1fr;
+      grid-template-columns: 120px minmax(0, 1fr);
       gap: tokens.$space-md;
       align-items: start;
     }

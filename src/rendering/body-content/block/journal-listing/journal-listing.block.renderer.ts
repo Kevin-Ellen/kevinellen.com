@@ -37,8 +37,8 @@ const renderJournalListingItem = (
   const isFeatured = index === 0 && currentPage === 1;
 
   const itemClass = isFeatured
-    ? "m-journal-listing__item m-journal-listing__item--featured"
-    : "m-journal-listing__item";
+    ? "m-journal-listing__item m-journal-listing__item--featured l-content"
+    : "m-journal-listing__item l-content";
 
   return [
     `<li class="${itemClass}">`,
@@ -72,7 +72,9 @@ export const renderJournalListingBlock = (
     `<ul class="m-journal-listing__list">`,
     items,
     `</ul>`,
+    `<div class="m-contentBlock--content">`,
     renderPagination(module.pagination, "Journal pagination"),
+    `</div>`,
     `</section>`,
   ].join("");
 };

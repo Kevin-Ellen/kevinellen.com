@@ -94,15 +94,14 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
           },
           {
             heading: {
-              text: "Articles",
+              text: "Notes",
 
               level: 3,
             },
-            intro:
-              "A field journal of wildlife encounters and observations from around the world.",
+            intro: "A mix of engineering notes and philosophy.",
             link: {
               kind: "internal",
-              id: "journal",
+              id: "notes",
               text: "Read articles",
             },
             icon: "icon-pencil",

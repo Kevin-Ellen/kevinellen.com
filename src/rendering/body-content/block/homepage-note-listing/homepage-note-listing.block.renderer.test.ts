@@ -63,7 +63,7 @@ describe("renderHomepageNoteListingBlock", () => {
 
   it("renders homepage note listing block", () => {
     expect(renderHomepageNoteListingBlock(createModule())).toBe(
-      `<section class="m-homepage-note-listing l-content"><h2 class="m-homepage-note-listing__heading">Latest notes</h2><article class="m-homepage-note-listing__featured"><div class="m-homepage-note-listing__featured-content"><p class="m-homepage-note-listing__topic">Architecture</p><p class="m-homepage-note-listing__date">10 May 2026</p><h3 class="m-homepage-note-listing__featured-title"><a class="m-homepage-note-listing__featured-link" href="/notes/building-this-website-was-worth-it">Building this website was worth it</a></h3><p class="m-homepage-note-listing__featured-intro">A note about building the site.</p><a class="m-homepage-note-listing__action" href="/notes/building-this-website-was-worth-it">Read note</a></div></article><div class="m-homepage-note-listing__list"><article class="m-homepage-note-listing__item"><p class="m-homepage-note-listing__topic">TypeScript</p><p class="m-homepage-note-listing__item-date">9 May 2026</p><h3 class="m-homepage-note-listing__title"><a class="m-homepage-note-listing__link" href="/notes/quiet-note">Quiet Note</a></h3><a class="m-homepage-note-listing__item-action" href="/notes/quiet-note">Read note</a></article></div></section>`,
+      `<section class="m-homepage-note-listing l-content"><h2 class="m-homepage-note-listing__heading">Latest notes</h2><article class="m-homepage-note-listing__featured"><div class="m-homepage-note-listing__featured-content"><p class="m-homepage-note-listing__meta"><span>Architecture</span><span aria-hidden="true">·</span><time datetime="2026-05-10T22:14:49+01:00">10 May 2026</time></p><h3 class="m-homepage-note-listing__featured-title"><a class="m-homepage-note-listing__featured-link" href="/notes/building-this-website-was-worth-it">Building this website was worth it</a></h3><p class="m-homepage-note-listing__featured-intro">A note about building the site.</p><a class="m-homepage-note-listing__action" href="/notes/building-this-website-was-worth-it">Read note</a></div></article><div class="m-homepage-note-listing__list"><article class="m-homepage-note-listing__item"><p class="m-homepage-note-listing__meta"><span>TypeScript</span><span aria-hidden="true">·</span><time datetime="2026-05-09T22:14:49+01:00">9 May 2026</time></p><h3 class="m-homepage-note-listing__title"><a class="m-homepage-note-listing__link" href="/notes/quiet-note">Quiet Note</a></h3><a class="m-homepage-note-listing__item-action" href="/notes/quiet-note">Read note</a></article></div></section>`,
     );
 
     expect(mockedRenderHeading).toHaveBeenCalledWith(createModule().heading, {
@@ -108,7 +108,7 @@ describe("renderHomepageNoteListingBlock", () => {
       }),
     );
 
-    expect(result).not.toContain("m-homepage-note-listing__topic");
+    expect(result).not.toContain(`<span>Architecture</span>`);
   });
 
   it("escapes rendered values", () => {
@@ -146,7 +146,8 @@ describe("renderHomepageNoteListingBlock", () => {
       }),
     );
 
-    expect(result).not.toContain("m-homepage-note-listing__date");
+    expect(result).not.toContain(`<time`);
+    expect(result).not.toContain(`10 May 2026`);
   });
 
   it("omits standard item published label when not present", () => {
@@ -167,7 +168,8 @@ describe("renderHomepageNoteListingBlock", () => {
       }),
     );
 
-    expect(result).not.toContain("m-homepage-note-listing__item-date");
+    expect(result).not.toContain(`datetime="2026-05-09T22:14:49+01:00"`);
+    expect(result).not.toContain(`9 May 2026`);
   });
 
   it("omits standard item topic when not present", () => {
@@ -186,8 +188,45 @@ describe("renderHomepageNoteListingBlock", () => {
       }),
     );
 
-    expect(result).not.toContain(
-      `<p class="m-homepage-note-listing__topic">TypeScript</p>`,
+    expect(result).not.toContain(`<span>TypeScript</span>`);
+  });
+
+  it("omits meta when topic and published label are missing", () => {
+    const result = renderHomepageNoteListingBlock(
+      createModule({
+        notes: [
+          createNote({
+            topic: null,
+            publishedAt: null,
+            publishedLabel: null,
+          }),
+        ],
+      }),
+    );
+
+    expect(result).not.toContain("m-homepage-note-listing__meta");
+  });
+
+  it("renders standard item intro when present", () => {
+    const result = renderHomepageNoteListingBlock(
+      createModule({
+        notes: [
+          createNote(),
+          createNote({
+            id: "note:quiet-note",
+            href: "/notes/quiet-note",
+            title: "Quiet Note",
+            intro: "A short standard note intro.",
+            topic: null,
+            publishedAt: null,
+            publishedLabel: null,
+          }),
+        ],
+      }),
+    );
+
+    expect(result).toContain(
+      `<p class="m-homepage-note-listing__intro">A short standard note intro.</p>`,
     );
   });
 });

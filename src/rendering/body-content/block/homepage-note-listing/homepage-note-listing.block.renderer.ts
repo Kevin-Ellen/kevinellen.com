@@ -9,17 +9,28 @@ import {
   escapeHtml,
 } from "@rendering/utils/html.escape.util.renderer";
 
-const renderHomepageNoteListingItem = (
-  note: AppRenderContextHomepageNoteListingBlock["notes"][number],
-): string =>
+type HomepageNoteListingNote =
+  AppRenderContextHomepageNoteListingBlock["notes"][number];
+
+const renderNoteMeta = (note: HomepageNoteListingNote): string => {
+  const items = [
+    note.topic ? `<span>${escapeHtml(note.topic)}</span>` : "",
+    note.publishedAt && note.publishedLabel
+      ? `<time datetime="${escapeAttribute(note.publishedAt)}">${escapeHtml(note.publishedLabel)}</time>`
+      : "",
+  ].filter((item) => item.length > 0);
+
+  if (items.length === 0) return "";
+
+  return `<p class="m-homepage-note-listing__meta">${items.join(
+    `<span aria-hidden="true">·</span>`,
+  )}</p>`;
+};
+
+const renderHomepageNoteListingItem = (note: HomepageNoteListingNote): string =>
   [
     `<article class="m-homepage-note-listing__item">`,
-    note.topic
-      ? `<p class="m-homepage-note-listing__topic">${escapeHtml(note.topic)}</p>`
-      : "",
-    note.publishedLabel
-      ? `<p class="m-homepage-note-listing__item-date">${escapeHtml(note.publishedLabel)}</p>`
-      : "",
+    renderNoteMeta(note),
     `<h3 class="m-homepage-note-listing__title">`,
     `<a class="m-homepage-note-listing__link" href="${escapeAttribute(note.href)}">${escapeHtml(note.title)}</a>`,
     `</h3>`,
@@ -46,12 +57,7 @@ export const renderHomepageNoteListingBlock = (
     }),
     `<article class="m-homepage-note-listing__featured">`,
     `<div class="m-homepage-note-listing__featured-content">`,
-    featured.topic
-      ? `<p class="m-homepage-note-listing__topic">${escapeHtml(featured.topic)}</p>`
-      : "",
-    featured.publishedLabel
-      ? `<p class="m-homepage-note-listing__date">${escapeHtml(featured.publishedLabel)}</p>`
-      : "",
+    renderNoteMeta(featured),
     `<h3 class="m-homepage-note-listing__featured-title">`,
     `<a class="m-homepage-note-listing__featured-link" href="${escapeAttribute(featured.href)}">${escapeHtml(featured.title)}</a>`,
     `</h3>`,

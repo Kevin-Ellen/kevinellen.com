@@ -71,13 +71,26 @@ describe("renderNoteListingBlock", () => {
 
   it("renders note listing block", () => {
     expect(renderNoteListingBlock(createModule())).toBe(
-      `<section class="m-contentBlock m-note-listing" aria-label="Notes listing"><ul class="m-note-listing__list"><li class="m-note-listing__item"><a class="m-note-listing__link" href="/notes/building-this-website-was-worth-it"><div class="m-note-listing__content m-heading"><p class="m-heading__eyebrow">Architecture</p><h3 class="m-heading__title">Building this website was worth it</h3><p class="m-heading__intro">A note about building the site.</p><time class="m-note-listing__date" datetime="2026-05-10T22:14:49+01:00">10 May 2026</time></div></a></li><li class="m-note-listing__item"><a class="m-note-listing__link" href="/notes/quiet-note"><div class="m-note-listing__content m-heading"><p class="m-heading__eyebrow">TypeScript</p><h3 class="m-heading__title">Quiet Note</h3><time class="m-note-listing__date" datetime="2026-05-09T22:14:49+01:00">9 May 2026</time></div></a></li></ul><nav class="m-pagination" aria-label="Notes pagination"></nav></section>`,
+      `<section class="m-contentBlock m-note-listing" aria-label="Notes listing"><ul class="m-note-listing__list"><li class="m-note-listing__item m-note-listing__item--featured l-content"><a class="m-note-listing__link" href="/notes/building-this-website-was-worth-it"><div class="m-note-listing__content m-heading"><p class="m-heading__eyebrow m-note-listing__meta"><span>Architecture</span><span aria-hidden="true">·</span><time datetime="2026-05-10T22:14:49+01:00">10 May 2026</time></p><h3 class="m-heading__title">Building this website was worth it</h3><p class="m-heading__intro">A note about building the site.</p></div></a></li><li class="m-note-listing__item l-content"><a class="m-note-listing__link" href="/notes/quiet-note"><div class="m-note-listing__content m-heading"><p class="m-heading__eyebrow m-note-listing__meta"><span>TypeScript</span><span aria-hidden="true">·</span><time datetime="2026-05-09T22:14:49+01:00">9 May 2026</time></p><h3 class="m-heading__title">Quiet Note</h3></div></a></li></ul><nav class="m-pagination" aria-label="Notes pagination"></nav></section>`,
     );
 
     expect(mockedRenderPagination).toHaveBeenCalledWith(
       createModule().pagination,
       "Notes pagination",
     );
+  });
+
+  it("does not feature the first item after page one", () => {
+    const result = renderNoteListingBlock(
+      createModule({
+        pagination: {
+          ...createModule().pagination,
+          currentPage: 2,
+        },
+      }),
+    );
+
+    expect(result).not.toContain("m-note-listing__item--featured");
   });
 
   it("omits optional topic, intro, and published time", () => {
@@ -94,7 +107,7 @@ describe("renderNoteListingBlock", () => {
       }),
     );
 
-    expect(result).not.toContain(`m-heading__eyebrow`);
+    expect(result).not.toContain(`m-note-listing__meta`);
     expect(result).not.toContain(`m-heading__intro`);
     expect(result).not.toContain(`<time`);
   });
@@ -149,8 +162,6 @@ describe("renderNoteListingBlock", () => {
       }),
     );
 
-    expect(result).toContain(
-      `<time class="m-note-listing__date" datetime="">Undated</time>`,
-    );
+    expect(result).toContain(`<time datetime="">Undated</time>`);
   });
 });

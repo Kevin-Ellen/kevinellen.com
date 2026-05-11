@@ -97,7 +97,7 @@ describe("renderJournalListingBlock", () => {
 
   it("renders journal listing block", () => {
     expect(renderJournalListingBlock(createModule())).toBe(
-      `<section class="m-contentBlock m-journal-listing" aria-label="Journal listing"><ul class="m-journal-listing__list"><li class="m-journal-listing__item m-journal-listing__item--featured"><a class="m-journal-listing__link" href="/journal/coot-in-soft-light"><div class="m-journal-listing__media"><img src="/media/photo/coot-in-soft-light" srcset="/media/photo/coot-in-soft-light/640/400 640w, /media/photo/coot-in-soft-light/960/600 960w" sizes="(min-width: 1200px) 1200px, 100vw" alt="A coot swimming through soft light." width="1600" height="1000" loading="lazy"></div><div class="m-journal-listing__content m-heading"><time class="m-heading__eyebrow" datetime="2026-05-09T08:00:00.000Z">9 May 2026</time><h3 class="m-heading__title">Coot in soft light</h3><p class="m-heading__intro">A calm evening encounter in soft light.</p></div></a></li><li class="m-journal-listing__item"><a class="m-journal-listing__link" href="/journal/misty-morning"><div class="m-journal-listing__content m-heading"><time class="m-heading__eyebrow" datetime="2026-05-08T08:00:00.000Z">8 May 2026</time><h3 class="m-heading__title">Misty morning</h3></div></a></li></ul><nav class="m-pagination" aria-label="Journal pagination"></nav></section>`,
+      `<section class="m-contentBlock m-journal-listing" aria-label="Journal listing"><ul class="m-journal-listing__list"><li class="m-journal-listing__item m-journal-listing__item--featured l-content"><a class="m-journal-listing__link" href="/journal/coot-in-soft-light"><div class="m-journal-listing__media"><img src="/media/photo/coot-in-soft-light" srcset="/media/photo/coot-in-soft-light/640/400 640w, /media/photo/coot-in-soft-light/960/600 960w" sizes="(min-width: 1200px) 1200px, 100vw" alt="A coot swimming through soft light." width="1600" height="1000" loading="lazy"></div><div class="m-journal-listing__content m-heading"><time class="m-heading__eyebrow" datetime="2026-05-09T08:00:00.000Z">9 May 2026</time><h3 class="m-heading__title">Coot in soft light</h3><p class="m-heading__intro">A calm evening encounter in soft light.</p></div></a></li><li class="m-journal-listing__item l-content"><a class="m-journal-listing__link" href="/journal/misty-morning"><div class="m-journal-listing__content m-heading"><time class="m-heading__eyebrow" datetime="2026-05-08T08:00:00.000Z">8 May 2026</time><h3 class="m-heading__title">Misty morning</h3></div></a></li></ul><div class="m-contentBlock--content"><nav class="m-pagination" aria-label="Journal pagination"></nav></div></section>`,
     );
 
     expect(mockedRenderPagination).toHaveBeenCalledWith(
@@ -143,7 +143,7 @@ describe("renderJournalListingBlock", () => {
         }),
       ),
     ).toBe(
-      `<section class="m-contentBlock m-journal-listing" aria-label="Journal listing"><ul class="m-journal-listing__list"></ul><nav class="m-pagination" aria-label="Journal pagination"></nav></section>`,
+      `<section class="m-contentBlock m-journal-listing" aria-label="Journal listing"><ul class="m-journal-listing__list"></ul><div class="m-contentBlock--content"><nav class="m-pagination" aria-label="Journal pagination"></nav></div></section>`,
     );
   });
 

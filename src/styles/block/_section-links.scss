@@ -17,7 +17,8 @@
     &:first-child {
       @media (min-width: tokens.$bp-sm) {
         padding-right: tokens.$space-2xl;
-        border-right: 1px solid tokens.$colour-rule;
+        border-right: 1px solid
+          color-mix(in srgb, tokens.$colour-rule 60%, transparent);
       }
     }
 
@@ -46,7 +47,6 @@
   &__content {
     display: grid;
     gap: tokens.$space-sm;
-    grid-template-rows: auto 1fr auto;
   }
 
   &__heading,
