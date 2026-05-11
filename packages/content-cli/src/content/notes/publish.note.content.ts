@@ -7,7 +7,7 @@ import type { AuthoredPublicPageDefinition } from "@shared-types/page-definition
 import type { ParsedNoteDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
 import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 
-import { writeCloudflareKvValue } from "@content-cli/cloudflare/kv/kv.client.cloudflare.content-cli";
+import { publishContentWithBackfill } from "@content-cli/content/shared/publish-backfill.shared.content";
 import { loadContentCliConfig } from "@content-cli/config/load.content-cli.config";
 
 import {
@@ -111,12 +111,13 @@ export const runPublishNoteCommand = async (
   console.log(`Workspace path: ${workspacePath}`);
   console.log(`Note file path: ${notePath}\n`);
 
-  await writeCloudflareKvValue(
-    config,
-    config.cloudflareKvNotesNamespaceId,
-    `page:${publishedPage.id}`,
-    publishedPage,
-  );
+  await publishContentWithBackfill({
+    env: args.env,
+    primaryConfig: config,
+    getNamespaceId: (config) => config.cloudflareKvNotesNamespaceId,
+    key: `page:${publishedPage.id}`,
+    value: publishedPage,
+  });
 
   await fs.rm(uploadedWorkspacePath, {
     recursive: true,

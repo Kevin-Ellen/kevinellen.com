@@ -7,7 +7,7 @@ import type { AuthoredPublicPageDefinition } from "@shared-types/page-definition
 import type { ParsedJournalDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
 import type { ContentCommandResult } from "@content-cli/commands/types/command.types";
 
-import { writeCloudflareKvValue } from "@content-cli/cloudflare/kv/kv.client.cloudflare.content-cli";
+import { publishContentWithBackfill } from "@content-cli/content/shared/publish-backfill.shared.content";
 import { loadContentCliConfig } from "@content-cli/config/load.content-cli.config";
 import {
   getJournalFilePath,
@@ -131,12 +131,13 @@ export const runPublishJournalCommand = async (
   );
 
   // Step 6: write to KV
-  await writeCloudflareKvValue(
-    config,
-    config.cloudflareKvJournalsNamespaceId,
-    `page:${publishedPage.id}`,
-    publishedPage,
-  );
+  await publishContentWithBackfill({
+    env: args.env,
+    primaryConfig: config,
+    getNamespaceId: (config) => config.cloudflareKvJournalsNamespaceId,
+    key: `page:${publishedPage.id}`,
+    value: publishedPage,
+  });
 
   // Step 7: move workspace to "uploaded"
   await fs.rm(uploadedWorkspacePath, { recursive: true, force: true });
