@@ -30,6 +30,6 @@ export const runPhotoValidateFlow = async (
     env: state.env,
     entity: "photo",
     action: "validate",
-    slug,
+    photoId: slug,
   });
 };

@@ -11,6 +11,7 @@ import type { AppContextHomepageHeroBlock } from "@shared-types/page-content/blo
 import type { AppContextImageStripBlock } from "@shared-types/page-content/block/image-strip/app-context.image-strip.block.types";
 import type { AppContextHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-context.homepage-journal-listing.block.types";
 import type { AppContextSectionLinksBlock } from "@shared-types/page-content/block/section-links/app-context.section-links.block.types";
+import type { AppContextNoteListingBlock } from "@shared-types/page-content/block/note-listing/app-context.note-listing.block.types";
 
 export type AppContextBlock =
   | AppContextParagraphBlock
@@ -23,4 +24,5 @@ export type AppContextBlock =
   | AppContextHomepageHeroBlock
   | AppContextImageStripBlock
   | AppContextHomepageJournalListingBlock
-  | AppContextSectionLinksBlock;
+  | AppContextSectionLinksBlock
+  | AppContextNoteListingBlock;

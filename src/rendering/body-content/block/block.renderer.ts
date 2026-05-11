@@ -13,6 +13,7 @@ import { renderParagraphBlock } from "@rendering/body-content/block/paragraph.bl
 import { renderPreBlock } from "@rendering/body-content/block/pre.block.renderer";
 import { renderQuoteBlock } from "@rendering/body-content/block/quote.block.renderer";
 import { renderSectionLinksBlock } from "@rendering/body-content/block/section-links.block.renderer";
+import { renderNoteListingBlock } from "@rendering/body-content/block/note-listing.block.renderer";
 
 type BlockRendererMap = Readonly<{
   [K in AppRenderContextBlock["kind"]]: (
@@ -32,6 +33,7 @@ const blockRenderers = {
   imageStrip: renderImageStripBlock,
   homepageJournalListing: renderHomepageJournalListingBlock,
   sectionLinks: renderSectionLinksBlock,
+  noteListing: renderNoteListingBlock,
 } satisfies BlockRendererMap;
 
 export const renderBlock = (module: AppRenderContextBlock): string => {

@@ -2,10 +2,10 @@
 
 import { appStateResolveFooter } from "@app-state/resolve/page-content/footer/footer.resolve.app-state";
 
-import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state";
+import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-state";
 
 jest.mock(
-  "@app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state",
+  "@app-state/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-state",
   () => ({
     appStateResolveJournalEntryFooter: jest.fn(),
   }),

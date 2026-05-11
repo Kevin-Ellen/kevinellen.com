@@ -58,12 +58,13 @@ describe("createDraftNoteDefinition", () => {
         ],
         footer: [
           {
-            kind: "journalEntryFooter",
+            kind: "noteEntryFooter",
             publication: {
               author: "Kevin Ellen",
               publishedAt: "2026-05-10T23:03:37+01:00",
               updatedAt: ["2026-05-10T23:03:37+01:00"],
             },
+            topic: "__REQUIRED__",
             tags: [],
           },
         ],

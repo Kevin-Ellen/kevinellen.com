@@ -3,7 +3,8 @@
 import type { AuthoredPageContentFooter } from "@shared-types/page-content/footer/authored.page-footer.types";
 import type { AppStatePageContentFooter } from "@shared-types/page-content/footer/app-state.page-footer.types";
 
-import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state";
+import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-state";
+import { appStateResolveNoteEntryFooter } from "@app-state/resolve/page-content/footer/note-entry-footer/note-entry-footer.resolve.app-state";
 
 type ModuleKind = AuthoredPageContentFooter["kind"];
 
@@ -23,6 +24,7 @@ const footerResolver = <TKind extends ModuleKind>(
 ): Registry[TKind] => {
   const registry = {
     journalEntryFooter: appStateResolveJournalEntryFooter,
+    noteEntryFooter: appStateResolveNoteEntryFooter,
   } satisfies Registry;
 
   return registry[kind];

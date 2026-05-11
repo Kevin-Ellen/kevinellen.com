@@ -17,6 +17,9 @@ import { authoredTechnologyAboutPage } from "@pages/public/static/about/authored
 // Journal
 import { authoredJournalPublicPage } from "@pages/public/static/authored.journal.public.page";
 
+// Notes
+import { authoredNotesPublicPage } from "@pages/public/static/authored.notes.public.page";
+
 export const APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC: readonly AuthoredPublicPageDefinition[] =
   [
     authoredHomePublicPage,
@@ -27,4 +30,5 @@ export const APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC: readonly AuthoredPublicPageD
     authoredEquipmentAboutPage,
     authoredTechnologyAboutPage,
     authoredJournalPublicPage,
+    authoredNotesPublicPage,
   ] as const;

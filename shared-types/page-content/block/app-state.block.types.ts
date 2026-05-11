@@ -10,7 +10,8 @@ import type { AppStatePreBlock } from "@shared-types/page-content/block/pre/app-
 import type { AppStateHomepageHeroBlock } from "@shared-types/page-content/block/homepage-hero/app-state.homepage-hero.block.types";
 import type { AppStateImageStripBlock } from "@shared-types/page-content/block/image-strip/app-state.image-strip.block.types";
 import type { AppStateHomepageJournalListingBlock } from "@shared-types/page-content/block/homepage-journal-listing/app-state.homepage-journal-listing.block.types";
-import type { AppStateSectionLinksBlock } from "./section-links/app-state.section-links.block.types";
+import type { AppStateSectionLinksBlock } from "@shared-types/page-content/block/section-links/app-state.section-links.block.types";
+import type { AppStateNoteListingBlock } from "@shared-types/page-content/block/note-listing/app-state.note-listing.block.types";
 
 export type AppStateBlock =
   | AppStateParagraphBlock
@@ -23,4 +24,5 @@ export type AppStateBlock =
   | AppStateHomepageHeroBlock
   | AppStateImageStripBlock
   | AppStateHomepageJournalListingBlock
-  | AppStateSectionLinksBlock;
+  | AppStateSectionLinksBlock
+  | AppStateNoteListingBlock;

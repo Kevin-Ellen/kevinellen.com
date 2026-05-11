@@ -15,6 +15,7 @@ import { appRenderContextResolveParagraphBlock } from "@app-render-context/resol
 import { appRenderContextResolvePreBlock } from "@app-render-context/resolve/body-content/block/pre.resolve.app-render-context";
 import { appRenderContextResolveQuoteBlock } from "@app-render-context/resolve/body-content/block/quote.resolve.app-render-context";
 import { appRenderContextResolveSectionLinksBlock } from "@app-render-context/resolve/body-content/block/section-links.resolve.app-render-context";
+import { appRenderContextResolveNoteListingBlock } from "@app-render-context/resolve/body-content/block/note-listing.resolve.app-render-context";
 
 type BlockKind = AppContextBlock["kind"];
 
@@ -42,6 +43,7 @@ const BLOCK_RESOLVERS: BlockResolverRegistry = {
   pre: (_appContext, block) => appRenderContextResolvePreBlock(block),
   quote: (_appContext, block) => appRenderContextResolveQuoteBlock(block),
   sectionLinks: appRenderContextResolveSectionLinksBlock,
+  noteListing: appRenderContextResolveNoteListingBlock,
 };
 
 export const appRenderContextResolveBlock = <TKind extends BlockKind>(

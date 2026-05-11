@@ -28,6 +28,7 @@
     "lint:styles:fix": "stylelint \"src/styles/**/*.scss\" --fix",
     "styles:watch": "sass --watch src/styles/main.scss:.build/generated/styles.css",
     "prepare": "husky",
+    "validate": "npm run format:check && npm run format:tf:check && npm run lint && npm run lint:styles && npm run type-check:all && npm run test",
     "content": "tsx packages/content-cli/src/cli/content.cli.ts"
   },
   "keywords": [],

@@ -1,9 +1,9 @@
-// src/app-context/resolve/page-content/footer/journal-entry-footer.resolve.app-context.test.ts
+// src/app-context/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-context.test.ts
 
 import type { AppContextPageContentResolverContext } from "@app-context/resolve/types/context.page-content.resolve.app-context.types";
 import type { AppStateJournalEntryFooter } from "@shared-types/page-content/footer/journal-entry-footer/app-state.journal-entry-footer.types";
 
-import { appContextResolveJournalEntryFooter } from "@app-context/resolve/page-content/footer/journal-entry-footer.resolve.app-context";
+import { appContextResolveJournalEntryFooter } from "@app-context/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-context";
 
 describe("appContextResolveJournalEntryFooterModule", () => {
   it("collects unique camera and lens labels", () => {

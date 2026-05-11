@@ -4,18 +4,18 @@ import {
   uploadCloudflareImage,
   CloudflareImageUploadMetadata,
 } from "@content-cli/cloudflare/images/images.client.cloudflare.content-cli";
-import type { ContentCliConfig } from "@content-cli/config/load.content-cli.config";
 import type { PreparedPhotoUpload } from "@content-cli/content/photo/utils/prepare-upload.photo.util.content";
 
 describe("uploadCloudflareImage full branch coverage", () => {
   let fetchMock: jest.Mock;
 
-  const mockConfig: ContentCliConfig = {
-    cloudflareAccountId: "acct-123",
-    cloudflareImagesApiToken: "token-abc",
-    cloudflareKvApiToken: "fake-kv",
-    cloudflareKvPhotosNamespaceId: "ns-photos",
-    cloudflareKvJournalsNamespaceId: "ns-journals",
+  const mockConfig = {
+    cloudflareAccountId: "fake-account",
+    cloudflareKvApiToken: "fake-token",
+    cloudflareImagesApiToken: "fake-images-token",
+    cloudflareKvPhotosNamespaceId: "fake-photos-ns",
+    cloudflareKvJournalsNamespaceId: "fake-journals-ns",
+    cloudflareKvNotesNamespaceId: "fake-notes-ns",
   } as const;
 
   const mockUpload: PreparedPhotoUpload = {

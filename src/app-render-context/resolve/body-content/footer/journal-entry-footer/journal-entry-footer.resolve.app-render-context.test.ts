@@ -2,7 +2,7 @@
 
 import type { AppContextJournalEntryFooter } from "@shared-types/page-content/footer/journal-entry-footer/app-context.journal-entry-footer.types";
 
-import { appRenderContextResolveJournalEntryFooter } from "@app-render-context/resolve/body-content/footer/journal-entry-footer.resolve.app-render-context";
+import { appRenderContextResolveJournalEntryFooter } from "@app-render-context/resolve/body-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-render-context";
 import { formatDate } from "@utils/date.format.util";
 
 jest.mock("@utils/date.format.util", () => ({

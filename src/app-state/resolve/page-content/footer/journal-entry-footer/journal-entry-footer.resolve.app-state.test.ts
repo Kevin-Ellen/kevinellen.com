@@ -1,7 +1,7 @@
-// src/app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state.test.ts
+// src/app-state/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-state.test.ts
 
 import type { AuthoredJournalEntryFooter } from "@shared-types/page-content/footer/journal-entry-footer/authored.journal-entry-footer.types";
-import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer.resolve.app-state";
+import { appStateResolveJournalEntryFooter } from "@app-state/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-state";
 
 describe("appStateResolveJournalEntryFooter", () => {
   it("returns the authored journal entry footer unchanged", () => {

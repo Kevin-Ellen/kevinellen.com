@@ -8,6 +8,7 @@ import { deepFreeze } from "@utils/deepFreeze.util";
 export const authoredHeaderNavigation: AuthoredHeaderNavigation = deepFreeze({
   primary: [
     { kind: "internal", id: "journal" as PageIdPublic },
+    { kind: "internal", id: "notes" as PageIdPublic, text: "Notes" },
     { kind: "internal", id: "about" as PageIdPublic },
   ],
   social: [

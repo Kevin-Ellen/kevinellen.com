@@ -1,8 +1,11 @@
 // src/rendering/body-content/footer/footer.renderer.ts
 
+// src/rendering/body-content/footer/footer.renderer.ts
+
 import type { AppRenderContextPageContentFooter } from "@shared-types/page-content/footer/app-render-context.page-footer.types";
 
-import { renderJournalEntryFooter } from "@rendering/body-content/footer/journal-entry-footer.footer.renderer";
+import { renderJournalEntryFooter } from "@rendering/body-content/footer/journal-entry-footer/journal-entry-footer.footer.renderer";
+import { renderNoteEntryFooter } from "@rendering/body-content/footer/note-entry-footer/note-entry-footer.footer.renderer";
 
 type AppRenderContextFooterRendererMap = Readonly<{
   [K in AppRenderContextPageContentFooter["kind"]]: (
@@ -12,6 +15,7 @@ type AppRenderContextFooterRendererMap = Readonly<{
 
 const footerContentModuleRenderers = {
   journalEntryFooter: renderJournalEntryFooter,
+  noteEntryFooter: renderNoteEntryFooter,
 } satisfies AppRenderContextFooterRendererMap;
 
 export const renderBodyContentFooter = (

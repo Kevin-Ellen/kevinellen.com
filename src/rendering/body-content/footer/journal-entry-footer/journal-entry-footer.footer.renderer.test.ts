@@ -2,7 +2,7 @@
 
 import type { AppRenderContextJournalEntryFooter } from "@shared-types/page-content/footer/journal-entry-footer/app-render-context.journal-entry-footer.types";
 
-import { renderJournalEntryFooter } from "@rendering/body-content/footer/journal-entry-footer.footer.renderer";
+import { renderJournalEntryFooter } from "@rendering/body-content/footer/journal-entry-footer/journal-entry-footer.footer.renderer";
 
 const createModule = (
   overrides: Partial<AppRenderContextJournalEntryFooter> = {},

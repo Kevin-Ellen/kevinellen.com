@@ -41,13 +41,13 @@ export const runPhotoPublishFlow = async (
     env: state.env,
     entity: "photo",
     action: "validate",
-    slug,
+    photoId: slug,
   });
 
   await runInteractiveContentCommand({
     env: state.env,
     entity: "photo",
     action: "publish",
-    slug,
+    photoId: slug,
   });
 };

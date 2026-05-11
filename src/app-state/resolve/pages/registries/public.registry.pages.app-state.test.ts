@@ -28,24 +28,48 @@ describe("loadMergedPublicPageRegistry", () => {
     jest.clearAllMocks();
   });
 
-  it("merges static and KV public page registries", async () => {
-    const kvPages = [
+  it("merges static, journal KV, and notes KV public page registries", async () => {
+    const journalPages = [
       {
-        id: "journal",
+        id: "journal:entry-one",
       },
     ];
 
-    jest.mocked(loadKvPublicPageRegistry).mockResolvedValue(kvPages as never);
+    const notePages = [
+      {
+        id: "note:entry-one",
+      },
+    ];
 
-    const kv = {} as KVNamespace;
+    jest
+      .mocked(loadKvPublicPageRegistry)
+      .mockResolvedValueOnce(journalPages as never)
+      .mockResolvedValueOnce(notePages as never);
 
-    await expect(loadMergedPublicPageRegistry({ kv })).resolves.toEqual([
+    const journalKv = {} as KVNamespace;
+    const notesKv = {} as KVNamespace;
+
+    await expect(
+      loadMergedPublicPageRegistry({
+        journalKv,
+        notesKv,
+      }),
+    ).resolves.toEqual([
       ...APP_STATE_PAGE_REGISTRY_STATIC_PUBLIC,
-      ...kvPages,
+      ...journalPages,
+      ...notePages,
     ]);
 
-    expect(loadKvPublicPageRegistry).toHaveBeenCalledWith({
-      kv,
+    expect(loadKvPublicPageRegistry).toHaveBeenCalledTimes(2);
+
+    expect(loadKvPublicPageRegistry).toHaveBeenNthCalledWith(1, {
+      kv: journalKv,
+      prefix: "page:journal:",
+    });
+
+    expect(loadKvPublicPageRegistry).toHaveBeenNthCalledWith(2, {
+      kv: notesKv,
+      prefix: "page:note:",
     });
   });
 });

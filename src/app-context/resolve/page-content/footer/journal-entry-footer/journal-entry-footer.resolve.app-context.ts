@@ -1,4 +1,4 @@
-// src/app-context/resolve/page-content/footer/journal-entry-footer.resolve.app-context.ts
+// src/app-context/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-context.ts
 
 import type { AppStateJournalEntryFooter } from "@shared-types/page-content/footer/journal-entry-footer/app-state.journal-entry-footer.types";
 import type { AppContextJournalEntryFooter } from "@shared-types/page-content/footer/journal-entry-footer/app-context.journal-entry-footer.types";

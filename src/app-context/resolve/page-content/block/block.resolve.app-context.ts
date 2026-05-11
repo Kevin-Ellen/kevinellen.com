@@ -15,6 +15,7 @@ import { appContextResolveParagraphBlock } from "@app-context/resolve/page-conte
 import { appContextResolvePreBlock } from "@app-context/resolve/page-content/block/pre.resolve.app-context";
 import { appContextResolveQuoteBlock } from "@app-context/resolve/page-content/block/quote.resolve.app-context";
 import { appContextResolveSectionLinksBlock } from "@app-context/resolve/page-content/block/section-links.resolve.app-context";
+import { appContextResolveNoteListingBlock } from "@app-context/resolve/page-content/block/note-listing.resolve.app-context";
 
 type AppStateBlockKind = AppStateBlock["kind"];
 
@@ -42,6 +43,7 @@ const APP_CONTEXT_BLOCK_RESOLVER_REGISTRY = {
   imageStrip: appContextResolveImageStripBlock,
   homepageJournalListing: appContextResolveHomepageJournalListingBlock,
   sectionLinks: appContextResolveSectionLinksBlock,
+  noteListing: appContextResolveNoteListingBlock,
 } satisfies AppContextBlockResolverRegistry;
 
 export const appContextResolveBlock = <TKind extends AppStateBlockKind>(

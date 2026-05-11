@@ -1,9 +1,8 @@
 // src/app-state/resolve/pages/public.pages.resolve.app-state.test.ts
 
 import { appStateResolvePublicPages } from "@app-state/resolve/pages/public.pages.resolve.app-state";
-
-import { loadMergedPublicPageRegistry } from "@app-state/resolve/pages/registries/public.registry.pages.app-state";
 import { appStateResolvePublicPage } from "@app-state/resolve/pages/public/public.page.resolve.app-state";
+import { loadMergedPublicPageRegistry } from "@app-state/resolve/pages/registries/public.registry.pages.app-state";
 
 jest.mock(
   "@app-state/resolve/pages/registries/public.registry.pages.app-state",
@@ -25,37 +24,64 @@ describe("appStateResolvePublicPages", () => {
   });
 
   it("loads and resolves merged public page registry entries", async () => {
-    const kv = {} as KVNamespace;
+    const journalKv = {} as KVNamespace;
+    const notesKv = {} as KVNamespace;
 
-    const authoredPage = {
-      id: "journal",
-    };
+    const publicPageRegistry = [
+      {
+        id: "journal:one",
+        kind: "journal",
+      },
+      {
+        id: "note:one",
+        kind: "note",
+      },
+    ];
 
-    const resolvedPage = {
-      id: "journal",
-      status: null,
-    };
-
-    const registry = [authoredPage];
+    const resolvedPages = [
+      {
+        id: "journal:one",
+        kind: "journal",
+      },
+      {
+        id: "note:one",
+        kind: "note",
+      },
+    ];
 
     jest
       .mocked(loadMergedPublicPageRegistry)
-      .mockResolvedValue(registry as never);
+      .mockResolvedValue(publicPageRegistry as never);
 
     jest
       .mocked(appStateResolvePublicPage)
-      .mockReturnValue(resolvedPage as never);
+      .mockReturnValueOnce(resolvedPages[0] as never)
+      .mockReturnValueOnce(resolvedPages[1] as never);
 
-    await expect(appStateResolvePublicPages({ kv })).resolves.toEqual([
-      resolvedPage,
-    ]);
+    await expect(
+      appStateResolvePublicPages({
+        journalKv,
+        notesKv,
+      }),
+    ).resolves.toEqual(resolvedPages);
 
-    expect(loadMergedPublicPageRegistry).toHaveBeenCalledWith({ kv });
+    expect(loadMergedPublicPageRegistry).toHaveBeenCalledWith({
+      journalKv,
+      notesKv,
+    });
 
-    expect(appStateResolvePublicPage).toHaveBeenCalledWith(
-      authoredPage,
+    expect(appStateResolvePublicPage).toHaveBeenNthCalledWith(
+      1,
+      publicPageRegistry[0],
       0,
-      registry,
+      publicPageRegistry,
+    );
+
+    expect(appStateResolvePublicPage).toHaveBeenNthCalledWith(
+      2,
+      publicPageRegistry[1],
+      1,
+      publicPageRegistry,
     );
   });
 });

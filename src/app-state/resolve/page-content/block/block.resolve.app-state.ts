@@ -14,6 +14,7 @@ import { appStateResolveHomepageHeroBlock } from "@app-state/resolve/page-conten
 import { appStateResolveImageStripBlock } from "@app-state/resolve/page-content/block/image-strip.resolve.app-state";
 import { appStateResolveHomepageJournalListingBlock } from "@app-state/resolve/page-content/block/homepage-journal-listing.resolve.app-state";
 import { appStateResolveSectionLinksBlock } from "@app-state/resolve/page-content/block/section-links.resolve.app-state";
+import { appStateResolveNoteListingBlock } from "@app-state/resolve/page-content/block/note-listing.resolve.app-state";
 
 type BlockKind = AuthoredBlock["kind"];
 
@@ -41,6 +42,7 @@ const blockResolver = <TKind extends BlockKind>(
     imageStrip: appStateResolveImageStripBlock,
     homepageJournalListing: appStateResolveHomepageJournalListingBlock,
     sectionLinks: appStateResolveSectionLinksBlock,
+    noteListing: appStateResolveNoteListingBlock,
   } satisfies AppStateBlockContentModuleResolverRegistry;
 
   return registry[kind];

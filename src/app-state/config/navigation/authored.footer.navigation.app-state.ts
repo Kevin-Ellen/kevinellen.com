@@ -1,7 +1,7 @@
 // src/app-state/config/navigation/authored.footer.navigation.app-state.ts
 
 import type { AuthoredFooterNavigation } from "@shared-types/config/navigation/footer/authored.footer.navigation.types";
-import type { PageId } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
+import type { PageIdPublic } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
@@ -11,8 +11,9 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
       id: "site",
       label: "Site",
       items: [
-        { kind: "internal", id: "journal" as PageId, text: "Journal" },
-        { kind: "internal", id: "about" as PageId, text: "About" },
+        { kind: "internal", id: "journal" as PageIdPublic, text: "Journal" },
+        { kind: "internal", id: "notes" as PageIdPublic, text: "Notes" },
+        { kind: "internal", id: "about" as PageIdPublic, text: "About" },
       ],
     },
 
@@ -22,7 +23,7 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
       items: [
         {
           kind: "internal",
-          id: "about-equipment" as PageId,
+          id: "about-equipment" as PageIdPublic,
           text: "Equipment",
         },
       ],
@@ -52,11 +53,11 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
       id: "legal",
       label: "Legal",
       items: [
-        { kind: "internal", id: "privacy" as PageId, text: "Privacy" },
-        { kind: "internal", id: "terms" as PageId, text: "Terms of Use" },
+        { kind: "internal", id: "privacy" as PageIdPublic, text: "Privacy" },
+        { kind: "internal", id: "terms" as PageIdPublic, text: "Terms of Use" },
         {
           kind: "internal",
-          id: "licensing" as PageId,
+          id: "licensing" as PageIdPublic,
           text: "Photo Licensing",
         },
       ],

@@ -14,7 +14,8 @@ jest.mock("@app-state/resolve/pages/error.pages.resolve.app-state", () => ({
 
 describe("appStateResolvePages", () => {
   it("resolves public and error pages", async () => {
-    const kv = {} as KVNamespace;
+    const journalKv = {} as KVNamespace;
+    const notesKv = {} as KVNamespace;
 
     const publicPages = [{ id: "home" }];
     const errorPages = [{ id: "not-found" }];
@@ -24,12 +25,17 @@ describe("appStateResolvePages", () => {
       .mockResolvedValue(publicPages as never);
     jest.mocked(appStateResolveErrorPages).mockReturnValue(errorPages as never);
 
-    await expect(appStateResolvePages({ kv })).resolves.toEqual({
-      public: publicPages,
-      error: errorPages,
-    });
+    await expect(appStateResolvePages({ journalKv, notesKv })).resolves.toEqual(
+      {
+        public: publicPages,
+        error: errorPages,
+      },
+    );
 
-    expect(appStateResolvePublicPages).toHaveBeenCalledWith({ kv });
+    expect(appStateResolvePublicPages).toHaveBeenCalledWith({
+      journalKv,
+      notesKv,
+    });
     expect(appStateResolveErrorPages).toHaveBeenCalledWith();
   });
 });

@@ -1,4 +1,4 @@
-// src/app-state.create.app-state.ts
+// src/app-state/create.app-state.ts
 
 import { AppState } from "@app-state/class.app-state";
 
@@ -27,7 +27,8 @@ export const appStateCreate = async (env: Env): Promise<AppState> => {
   const structuredData = appStateResolveStructuredData(siteConfig);
 
   const pages = await appStateResolvePages({
-    kv: env.KV_JOURNALS,
+    journalKv: env.KV_JOURNALS,
+    notesKv: env.KV_NOTES,
   });
 
   return new AppState({
