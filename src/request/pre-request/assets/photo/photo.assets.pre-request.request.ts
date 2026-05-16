@@ -38,5 +38,5 @@ export const photoAssetOrchestrator = async (
     return null;
   }
 
-  return photoAssetResponsePolicy(upstreamResponse);
+  return photoAssetResponsePolicy(upstreamResponse, env);
 };

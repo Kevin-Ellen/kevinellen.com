@@ -11,9 +11,9 @@ export const authoredEquipmentAboutPage: AuthoredPublicPageDefinition =
     slug: "/about/equipment",
 
     metadata: {
-      pageTitle: "Equipment",
+      pageTitle: "Photography Equipment | Kevin Ellen",
       metaDescription:
-        "The camera bodies, lenses, and field kit Kevin Ellen uses for wildlife, macro, and nature photography.",
+        "The Canon camera bodies, lenses, accessories, and field kit Kevin Ellen uses for wildlife, macro, travel, and nature photography.",
     },
 
     breadcrumbs: ["home", "about", "about-equipment"],

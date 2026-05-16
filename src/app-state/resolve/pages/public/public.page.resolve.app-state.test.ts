@@ -65,7 +65,7 @@ describe("appStateResolvePublicPage", () => {
       slug: "/journal",
       label: "Journal",
       metadata: {
-        title: "Journal",
+        pageTitle: "Journal | Kevin Ellen",
         description: "Field notes.",
       },
       robots: { allowIndex: true },

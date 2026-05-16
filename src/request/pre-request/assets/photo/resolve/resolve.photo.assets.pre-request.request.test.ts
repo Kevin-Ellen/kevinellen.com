@@ -22,12 +22,12 @@ describe("photoAssetResolver", () => {
       outcome: "asset",
       asset: {
         imageId: "test-photo",
-        variant: "public",
+        variant: "w=1200,h=800,fit=cover,format=auto",
       },
     });
   });
 
-  it("resolves a resized photo asset variant", () => {
+  it("resolves a resized photo asset variant with automatic format negotiation", () => {
     const result = photoAssetResolver(
       new Request("https://example.com/media/photo/test-photo/1200/800"),
     );
@@ -36,7 +36,21 @@ describe("photoAssetResolver", () => {
       outcome: "asset",
       asset: {
         imageId: "test-photo",
-        variant: "w=1200,h=800,fit=cover",
+        variant: "w=1200,h=800,fit=cover,format=auto",
+      },
+    });
+  });
+
+  it("keeps resized photo variant delivery policy explicit", () => {
+    const result = photoAssetResolver(
+      new Request("https://example.com/media/photo/test-photo/801/534"),
+    );
+
+    expect(result).toEqual({
+      outcome: "asset",
+      asset: {
+        imageId: "test-photo",
+        variant: "w=801,h=534,fit=cover,format=auto",
       },
     });
   });
@@ -52,7 +66,7 @@ describe("photoAssetResolver", () => {
       outcome: "asset",
       asset: {
         imageId: "test-photo",
-        variant: "w=1200,h=800,fit=cover",
+        variant: "w=1200,h=800,fit=cover,format=auto",
       },
     });
   });
@@ -66,7 +80,7 @@ describe("photoAssetResolver", () => {
       outcome: "asset",
       asset: {
         imageId: "test.photo-v2",
-        variant: "public",
+        variant: "w=1200,h=800,fit=cover,format=auto",
       },
     });
   });

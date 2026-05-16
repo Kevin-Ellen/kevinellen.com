@@ -14,7 +14,7 @@ export const authoredPrivacyLegalPage: AuthoredPublicPageDefinition =
     metadata: {
       pageTitle: "Privacy | Kevin Ellen",
       metaDescription:
-        "Privacy information for kevinellen.com, including what data may be processed, why it is used, and how to get in touch about it.",
+        "Privacy information for kevinellen.com, including what data may be processed, why it is used, analytics handling, and how to get in touch.",
     },
 
     breadcrumbs: ["home", "privacy"],

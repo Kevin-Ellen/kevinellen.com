@@ -47,8 +47,8 @@ describe("appStateResolveErrorPage", () => {
         status: 404,
         label: "Not found",
         metadata: {
-          title: "Not found",
-          description: "This page could not be found.",
+          pageTitle: "Not found",
+          metaDescription: "This page could not be found.",
         },
         content,
       } as never),
@@ -57,8 +57,8 @@ describe("appStateResolveErrorPage", () => {
       status: 404,
       label: "Not found",
       metadata: {
-        title: "Not found",
-        description: "This page could not be found.",
+        pageTitle: "Not found | Kevin Ellen",
+        metaDescription: "This page could not be found.",
       },
       content: resolvedContent,
 

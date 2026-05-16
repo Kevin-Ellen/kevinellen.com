@@ -12,9 +12,9 @@ export const authoredNotesPublicPage: AuthoredPublicPageDefinition = deepFreeze(
     label: "Notes",
 
     metadata: {
-      pageTitle: "Technical Notes",
+      pageTitle: "Technical Notes | Kevin Ellen",
       metaDescription:
-        "Technical notes, architectural thoughts, and working ideas covering engineering, systems design, SEO, and development.",
+        "Technical notes on architecture, engineering, SEO, development, automation, and the practical decisions behind building maintainable systems.",
     },
 
     breadcrumbs: ["home", "notes"],

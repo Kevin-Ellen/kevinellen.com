@@ -12,9 +12,9 @@ export const authoredTechnologyAboutPage: AuthoredPublicPageDefinition =
     slug: "/about/technology",
 
     metadata: {
-      pageTitle: "Technology",
+      pageTitle: "Technology Behind This Site | Kevin Ellen",
       metaDescription:
-        "How this site is built using Cloudflare Workers, TypeScript, and a structured rendering pipeline.",
+        "A transparent look at how this site is built with Cloudflare Workers, TypeScript, SASS, KV, Cloudflare Images, Terraform, and structured rendering.",
     },
 
     breadcrumbs: ["home", "about", "about-technology"],
