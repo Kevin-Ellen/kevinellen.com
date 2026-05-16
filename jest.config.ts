@@ -34,6 +34,7 @@ const config: Config = {
     "^@pages/(.*)$": "<rootDir>/src/pages/$1",
     "^@generated/(.*)\\?raw$": "<rootDir>/tests/stubs/rawText.stub.ts",
     "^@content-cli/(.*)$": "<rootDir>/packages/content-cli/src/$1",
+    "^@assets/(.*)$": "<rootDir>/src/assets/$1",
   },
 
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
