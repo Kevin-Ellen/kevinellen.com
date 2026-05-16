@@ -5,6 +5,13 @@ import type { AppStateImageStripBlock } from "@shared-types/page-content/block/i
 
 import { appContextResolveImageStripBlock } from "@app-context/resolve/page-content/block/image-strip/image-strip.resolve.app-context";
 
+const imageDelivery = {
+  homepageImageStrip: {
+    sizes: "(min-width: 1200px) 310px, (min-width: 768px) 33vw, 85vw",
+    widths: [320, 480, 640, 960],
+  },
+} as const;
+
 const createModule = (itemCount: number): AppStateImageStripBlock => ({
   kind: "imageStrip",
   source: "homepage-strip",
@@ -32,6 +39,7 @@ describe("appContextResolveImageStripBlock", () => {
     };
 
     const context = {
+      imageDelivery,
       homepageStripPhotoIds: ["coot", "heron"],
       resolvePhoto: jest.fn((photoId: string) => {
         if (photoId === "coot") return photoOne;
@@ -47,7 +55,16 @@ describe("appContextResolveImageStripBlock", () => {
 
     expect(result).toEqual({
       ...module,
-      photos: expect.arrayContaining([photoOne, photoTwo]),
+      photos: expect.arrayContaining([
+        {
+          metadata: photoOne,
+          delivery: imageDelivery.homepageImageStrip,
+        },
+        {
+          metadata: photoTwo,
+          delivery: imageDelivery.homepageImageStrip,
+        },
+      ]),
     });
 
     expect(result.photos).toHaveLength(2);
@@ -56,6 +73,7 @@ describe("appContextResolveImageStripBlock", () => {
 
   it("limits photos to the configured item count", () => {
     const context = {
+      imageDelivery,
       homepageStripPhotoIds: ["one", "two", "three"],
       resolvePhoto: jest.fn((photoId: string) => ({
         id: photoId,
@@ -70,7 +88,10 @@ describe("appContextResolveImageStripBlock", () => {
       ...module,
       photos: [
         {
-          id: expect.any(String),
+          metadata: {
+            id: expect.any(String),
+          },
+          delivery: imageDelivery.homepageImageStrip,
         },
       ],
     });
@@ -80,6 +101,7 @@ describe("appContextResolveImageStripBlock", () => {
 
   it("throws when a selected photo cannot be resolved", () => {
     const context = {
+      imageDelivery,
       homepageStripPhotoIds: ["missing-photo"],
       resolvePhoto: jest.fn(() => null),
     } as unknown as AppContextPageContentResolverContext;

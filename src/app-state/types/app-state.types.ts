@@ -9,6 +9,7 @@ import type { AppStateSocial } from "@shared-types/config/social/app-state.socia
 import type { AppStateMetadataLabels } from "@shared-types/config/metadata-labels/app-state.metadata-labels.types";
 import type { AppStateNavigation } from "@shared-types/config/navigation/app-state.navigation.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";
+import type { AppStateImageDeliveryConfig } from "@shared-types/config/image-delivery/app-state.image-delivery.types";
 
 import type { AppStatePages } from "@app-state/types/pages.app-state.types";
 
@@ -23,4 +24,5 @@ export type AppStateData = {
   navigation: AppStateNavigation;
   structuredData: AppStateStructuredData;
   pages: AppStatePages;
+  imageDelivery: AppStateImageDeliveryConfig;
 };

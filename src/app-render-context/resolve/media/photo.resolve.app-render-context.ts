@@ -7,11 +7,10 @@ import type {
   AppRenderContextPhotoMetaItem,
 } from "@shared-types/media/photo/app-render-context.photo.types";
 import type { AppStateMetadataLabels } from "@shared-types/config/metadata-labels/app-state.metadata-labels.types";
+import type { AppContextResolvedPhoto } from "@shared-types/media/render-image/app-context.render-image.types";
 
 import { normaliseDimensionsToBase } from "@utils/normaliseDimensions.util";
 import { formatDate } from "@utils/date.format.util";
-
-const PHOTO_SRCSET_WIDTHS = [640, 960, 1440, 1920] as const;
 
 const resolvePhotoHeight = (
   width: number,
@@ -126,10 +125,13 @@ const resolvePhotoMeta = (
 };
 
 export const appRenderContextResolvePhoto = (
-  photo: AppContextPhotoMetadata,
+  resolvedPhoto: AppContextResolvedPhoto,
   metadataLabels: AppStateMetadataLabels,
 ): AppRenderContextPhoto => {
-  const srcset = PHOTO_SRCSET_WIDTHS.map((width) => {
+  const photo = resolvedPhoto.metadata;
+  const delivery = resolvedPhoto.delivery;
+
+  const srcset = delivery.widths.map((width) => {
     const height = resolvePhotoHeight(width, photo.width, photo.height);
 
     return `${resolvePhotoUrl(photo.id, width, height)} ${width}w`;
@@ -143,7 +145,7 @@ export const appRenderContextResolvePhoto = (
     height: photo.height,
     src: resolvePhotoUrl(photo.id),
     srcset,
-    sizes: "(min-width: 1200px) 1200px, 100vw",
+    sizes: delivery.sizes,
     attribution: resolveAttribution(photo),
     ratio: normaliseDimensionsToBase(photo.width, photo.height),
     meta: resolvePhotoMeta(photo, metadataLabels),

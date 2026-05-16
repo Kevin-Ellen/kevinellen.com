@@ -98,6 +98,7 @@ export const appContextCreate = async (
     publicPages: appState.getPublicPages,
     currentPageSlug: pageState.slug,
     routingPagination: routing.kind === "found" ? routing.pagination : null,
+    imageDelivery: appState.imageDelivery,
   });
 
   return new AppContext({

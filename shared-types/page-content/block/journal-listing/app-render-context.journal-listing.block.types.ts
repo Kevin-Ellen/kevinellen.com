@@ -1,10 +1,10 @@
 // shared-types/page-content/block/journal-listing/app-render-context.journal-listing.block.types.ts
 
 import type { AppContextJournalListingBlock } from "@shared-types/page-content/block/journal-listing/app-context.journal-listing.block.types";
+import type { AppRenderContextRenderImage } from "@shared-types/media/render-image/app-render-context.render-image.types";
 import type { AppRenderContextPagination } from "@shared-types/page-content/shared/pagination/app-render-context.pagination.shared.types";
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
-import type { AppRenderContextPhoto } from "@shared-types/media/photo/app-render-context.photo.types";
 
 export type AppRenderContextJournalListingItem = Readonly<{
   id: string;
@@ -14,7 +14,7 @@ export type AppRenderContextJournalListingItem = Readonly<{
   eyebrow: string | null;
   publishedAt: string | null;
   publishedLabel: string | null;
-  image: AppRenderContextPhoto | null;
+  image: AppRenderContextRenderImage | null;
 }>;
 
 type RuntimeFields = Readonly<{

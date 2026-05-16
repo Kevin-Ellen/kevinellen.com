@@ -44,7 +44,6 @@ ul {
 ul li,
 ol li {
   display: grid;
-  grid-template-columns: 1.1rem 1fr;
   column-gap: tokens.$space-sm;
   align-items: start;
   margin-bottom: tokens.$space-sm;

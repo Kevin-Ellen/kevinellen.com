@@ -12,9 +12,9 @@ export const appContextResolveHomepageJournalListingBlock = (
 ): AppContextHomepageJournalListingBlock => {
   return {
     ...module,
-    entries: appContextResolveJournalListingItems(context).slice(
-      0,
-      module.itemCount,
-    ),
+    entries: appContextResolveJournalListingItems(
+      context,
+      context.imageDelivery.homepageJournalFeature,
+    ).slice(0, module.itemCount),
   };
 };

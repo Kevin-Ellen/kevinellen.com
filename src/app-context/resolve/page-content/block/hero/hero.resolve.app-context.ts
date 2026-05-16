@@ -18,7 +18,14 @@ export const appContextResolveHeroBlock = (
   }
 
   return {
-    ...module,
-    photo,
+    kind: module.kind,
+    immersive: module.immersive,
+    flow: module.flow,
+    photo: {
+      metadata: photo,
+      delivery: module.immersive
+        ? context.imageDelivery.fullBleed
+        : context.imageDelivery.contentWidth,
+    },
   };
 };

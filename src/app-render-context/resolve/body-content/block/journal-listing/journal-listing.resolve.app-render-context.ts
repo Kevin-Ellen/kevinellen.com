@@ -1,12 +1,36 @@
 // src/app-render-context/resolve/body-content/block/journal-listing/journal-listing.resolve.app-render-context.ts
 
+// src/app-render-context/resolve/body-content/block/journal-listing/journal-listing.resolve.app-render-context.ts
+
 import type { AppContext } from "@app-context/class.app-context";
-import type { AppContextJournalListingBlock } from "@shared-types/page-content/block/journal-listing/app-context.journal-listing.block.types";
-import type { AppRenderContextJournalListingBlock } from "@shared-types/page-content/block/journal-listing/app-render-context.journal-listing.block.types";
+import type {
+  AppContextJournalListingBlock,
+  AppContextJournalListingItem,
+} from "@shared-types/page-content/block/journal-listing/app-context.journal-listing.block.types";
+import type {
+  AppRenderContextJournalListingBlock,
+  AppRenderContextJournalListingItem,
+} from "@shared-types/page-content/block/journal-listing/app-render-context.journal-listing.block.types";
 
 import { formatDate } from "@utils/date.format.util";
 import { appRenderContextResolvePagination } from "@app-render-context/resolve/body-content/shared/pagination.resolve.app-render-context";
 import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
+import { appRenderContextResolveRenderImage } from "@app-render-context/resolve/media/render-image.resolve.app-render-context";
+
+const appRenderContextResolveJournalListingItem = (
+  appContext: AppContext,
+  item: AppContextJournalListingItem,
+): AppRenderContextJournalListingItem => ({
+  ...item,
+  image:
+    item.image === null
+      ? null
+      : appRenderContextResolveRenderImage(
+          appRenderContextResolvePhoto(item.image, appContext.metadataLabels),
+        ),
+  publishedLabel:
+    item.publishedAt === null ? null : formatDate(item.publishedAt),
+});
 
 export const appRenderContextResolveJournalListingBlock = (
   appContext: AppContext,
@@ -14,13 +38,7 @@ export const appRenderContextResolveJournalListingBlock = (
 ): AppRenderContextJournalListingBlock => ({
   ...block,
   pagination: appRenderContextResolvePagination(block.pagination),
-  items: block.items.map((item) => ({
-    ...item,
-    image:
-      item.image === null
-        ? null
-        : appRenderContextResolvePhoto(item.image, appContext.metadataLabels),
-    publishedLabel:
-      item.publishedAt === null ? null : formatDate(item.publishedAt),
-  })),
+  items: block.items.map((item) =>
+    appRenderContextResolveJournalListingItem(appContext, item),
+  ),
 });

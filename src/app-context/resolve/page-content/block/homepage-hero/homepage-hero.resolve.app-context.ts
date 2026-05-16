@@ -29,7 +29,10 @@ export const appContextResolveHomepageHero = (
     intro: module.intro.map((content) =>
       appContextResolveInline(content, context),
     ),
-    photo,
+    photo: {
+      metadata: photo,
+      delivery: context.imageDelivery.homepageHero,
+    },
     primaryLink: module.primaryLink
       ? context.resolveInternalLink(module.primaryLink)
       : null,

@@ -1,9 +1,46 @@
 // src/app-context/resolve/page-content/shared/journal-listing-items.resolve.app-context.test.ts
 
 import type { AppContextPageContentResolverContext } from "@app-context/resolve/types/context.page-content.resolve.app-context.types";
+import type { AppContextPhotoMetadata } from "@shared-types/media/photo/app-context.photo.types";
 import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 
 import { appContextResolveJournalListingItems } from "@app-context/resolve/page-content/shared/journal-listing-items.resolve.app-context";
+
+const imageDelivery = {
+  sizes: "(min-width: 768px) 220px, 33vw",
+  widths: [320, 480, 640, 960],
+} as const;
+
+const createPhoto = (
+  overrides: Partial<AppContextPhotoMetadata> = {},
+): AppContextPhotoMetadata =>
+  ({
+    id: "hero-photo",
+    sourceFileName: "hero-photo.jpg",
+    cloudflareImageId: "hero-photo",
+    cloudflareUploadedAt: null,
+    title: "Hero photo",
+    alt: "Hero photo alt",
+    commentary: "Hero photo commentary",
+    readableLocation: "Epping Forest",
+    capturedAt: null,
+    photographer: "Kevin Ellen",
+    copyright: "Kevin Ellen",
+    cameraMake: null,
+    cameraModel: null,
+    lensModel: null,
+    exposureTime: null,
+    aperture: null,
+    iso: null,
+    focalLength: null,
+    focalLength35mm: null,
+    width: 1200,
+    height: 800,
+    latitude: null,
+    longitude: null,
+    resolvedLocation: null,
+    ...overrides,
+  }) as AppContextPhotoMetadata;
 
 const createJournalPage = (
   overrides: Partial<AppStatePageDefinition> = {},
@@ -65,7 +102,9 @@ describe("appContextResolveJournalListingItems", () => {
     } as unknown as AppContextPageContentResolverContext;
 
     expect(
-      appContextResolveJournalListingItems(context).map((item) => item.id),
+      appContextResolveJournalListingItems(context, imageDelivery).map(
+        (item) => item.id,
+      ),
     ).toEqual(["newer-entry", "older-entry"]);
   });
 
@@ -89,7 +128,9 @@ describe("appContextResolveJournalListingItems", () => {
       resolvePhoto: jest.fn(() => null),
     } as unknown as AppContextPageContentResolverContext;
 
-    expect(appContextResolveJournalListingItems(context)).toEqual([
+    expect(
+      appContextResolveJournalListingItems(context, imageDelivery),
+    ).toEqual([
       {
         id: "valid",
         href: "/journal/valid",
@@ -119,15 +160,14 @@ describe("appContextResolveJournalListingItems", () => {
     } as unknown as AppContextPageContentResolverContext;
 
     expect(
-      appContextResolveJournalListingItems(context).map((item) => item.id),
+      appContextResolveJournalListingItems(context, imageDelivery).map(
+        (item) => item.id,
+      ),
     ).toEqual(["dated-entry", "a-entry", "z-entry"]);
   });
 
   it("resolves the first hero photo found inside article sections", () => {
-    const photo = {
-      id: "hero-photo",
-      title: "Hero photo",
-    };
+    const photo = createPhoto();
 
     const page = createJournalPage({
       content: {
@@ -171,14 +211,19 @@ describe("appContextResolveJournalListingItems", () => {
       ),
     } as unknown as AppContextPageContentResolverContext;
 
-    expect(appContextResolveJournalListingItems(context)[0]).toEqual({
+    expect(
+      appContextResolveJournalListingItems(context, imageDelivery)[0],
+    ).toEqual({
       id: "journal-one",
       href: "/journal/one",
       title: "Hero listing image",
       intro: "Intro",
       eyebrow: "Journal",
       publishedAt: null,
-      image: photo,
+      image: {
+        metadata: photo,
+        delivery: imageDelivery,
+      },
     });
 
     expect(context.resolvePhoto).toHaveBeenCalledWith("hero-photo");
@@ -192,7 +237,55 @@ describe("appContextResolveJournalListingItems", () => {
       resolvePhoto: jest.fn(() => null),
     } as unknown as AppContextPageContentResolverContext;
 
-    expect(appContextResolveJournalListingItems(context)[0].image).toBeNull();
+    expect(
+      appContextResolveJournalListingItems(context, imageDelivery)[0].image,
+    ).toBeNull();
+
     expect(context.resolvePhoto).not.toHaveBeenCalled();
+  });
+
+  it("throws when a referenced listing photo is missing from context", () => {
+    const page = createJournalPage({
+      content: {
+        head: {
+          title: "Missing image",
+          intro: "Intro",
+          eyebrow: "Journal",
+          showInBody: true,
+        },
+        content: [
+          {
+            kind: "articleSection",
+            heading: {
+              text: "Section",
+              level: 2,
+              visuallyHidden: false,
+            },
+            modules: [
+              {
+                kind: "hero",
+                photoId: "missing-photo",
+                immersive: false,
+                flow: "content",
+              },
+            ],
+          },
+        ],
+        footer: [],
+      },
+    });
+
+    const context = {
+      publicPages: [page],
+      resolvePhoto: jest.fn(() => null),
+    } as unknown as AppContextPageContentResolverContext;
+
+    expect(() =>
+      appContextResolveJournalListingItems(context, imageDelivery),
+    ).toThrow(
+      "No AppContext photo resolved for journal listing photoId: missing-photo",
+    );
+
+    expect(context.resolvePhoto).toHaveBeenCalledWith("missing-photo");
   });
 });

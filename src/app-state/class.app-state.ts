@@ -17,6 +17,7 @@ import type { AppStateGlobalFooter } from "@shared-types/page-content/site/globa
 import type { AppStateAssets } from "@shared-types/assets/app-state.assets.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";
 import type { AppStateMetadataLabels } from "@shared-types/config/metadata-labels/app-state.metadata-labels.types";
+import type { AppStateImageDeliveryConfig } from "@shared-types/config/image-delivery/app-state.image-delivery.types";
 
 const isPublicPageDefinition = (
   page: AppStatePageDefinition,
@@ -122,6 +123,10 @@ export class AppState {
 
   public get metadataLabels(): AppStateMetadataLabels {
     return this.#data.metadataLabels;
+  }
+
+  public get imageDelivery(): AppStateImageDeliveryConfig {
+    return this.#data.imageDelivery;
   }
 
   public get structuredData(): AppStateStructuredData {

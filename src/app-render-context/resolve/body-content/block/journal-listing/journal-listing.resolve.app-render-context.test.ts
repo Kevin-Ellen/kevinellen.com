@@ -80,15 +80,47 @@ describe("appRenderContextResolveJournalListingBlock", () => {
     mockedFormatDate.mockReturnValue("9 May 2026");
 
     const sourceImage = {
+      metadata: {
+        id: "coot-entry-image",
+      },
+      delivery: {
+        sizes: "(min-width: 768px) 220px, 33vw",
+        widths: [320, 480, 640, 960],
+      },
+    };
+
+    const resolvedPhoto = {
       id: "coot-entry-image",
+      title: "Coot entry image",
+      commentary: "A coot entry image.",
+      src: "/media/photo/coot-entry-image",
+      srcset: ["/media/photo/coot-entry-image/640/400 640w"],
+      sizes: "(min-width: 768px) 220px, 33vw",
+      alt: "Coot entry image",
+      width: 1600,
+      height: 1000,
+      ratio: {
+        width: 8,
+        height: 5,
+      },
+      attribution: null,
+      meta: [],
     };
 
     const resolvedImage = {
-      id: "coot-entry-image",
       src: "/media/photo/coot-entry-image",
+      srcset: ["/media/photo/coot-entry-image/640/400 640w"],
+      sizes: "(min-width: 768px) 220px, 33vw",
+      alt: "Coot entry image",
+      width: 1600,
+      height: 1000,
+      ratio: {
+        width: 8,
+        height: 5,
+      },
     };
 
-    mockedAppRenderContextResolvePhoto.mockReturnValue(resolvedImage as never);
+    mockedAppRenderContextResolvePhoto.mockReturnValue(resolvedPhoto as never);
 
     const block = createBlock({
       pagination: {

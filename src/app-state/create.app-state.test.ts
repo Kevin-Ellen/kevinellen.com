@@ -110,6 +110,7 @@ describe("appStateCreate", () => {
       globalFooter,
       social: expect.anything(),
       metadataLabels: expect.anything(),
+      imageDelivery: expect.anything(),
       navigation: expect.anything(),
       structuredData,
       pages,

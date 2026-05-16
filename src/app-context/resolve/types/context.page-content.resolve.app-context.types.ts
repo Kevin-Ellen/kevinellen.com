@@ -7,6 +7,7 @@ import type { AppStateMetadataLabels } from "@shared-types/config/metadata-label
 import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 import type { PhotoId } from "@shared-types/media/photo/id.photo.types";
 import type { RoutingPagination } from "@request/types/request.types";
+import type { AppContextImageDeliveryConfig } from "@shared-types/config/image-delivery/app-context.image-delivery.types";
 
 export type AppContextPageContentResolverContext = Readonly<{
   photos: readonly AppContextPhotoMetadata[];
@@ -17,4 +18,5 @@ export type AppContextPageContentResolverContext = Readonly<{
   routingPagination: RoutingPagination | null;
   resolvePhoto: (photoId: string) => AppContextPhotoMetadata | null;
   currentPageSlug: string | null;
+  imageDelivery: AppContextImageDeliveryConfig;
 }>;

@@ -42,7 +42,10 @@ export const appContextResolveImageStripBlock = (
       );
     }
 
-    return photo;
+    return {
+      metadata: photo,
+      delivery: context.imageDelivery.homepageImageStrip,
+    };
   });
 
   return {
