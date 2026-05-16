@@ -2,7 +2,7 @@
 
 import type { BlockFlow } from "@shared-types/page-content/block/shared.block.types";
 
-export const renderBlockFlowClass = (
+export const getBlockFlowClassName = (
   flow: BlockFlow | null | undefined,
 ): string => {
   const resolvedFlow = flow ?? "content";
