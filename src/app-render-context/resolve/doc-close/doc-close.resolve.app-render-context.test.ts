@@ -3,12 +3,12 @@
 import type { AppContext } from "@app-context/class.app-context";
 
 import { appRenderContextResolveDocClose } from "@app-render-context/resolve/doc-close/doc-close.resolve.app-render-context";
-import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context";
-import { resolveSvgSpritesAppRenderContext } from "@app-render-context/shared/svg.resolve.app-render-context";
 import { appRenderContextResolveDocCloseStructuredData } from "@app-render-context/resolve/doc-close/structured-data.doc-close.resolve.app-render-context";
+import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.resolve.app-render-context";
+import { resolveSvgSpritesAppRenderContext } from "@app-render-context/shared/svg.resolve.app-render-context";
 
 jest.mock(
-  "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context",
+  "@app-render-context/resolve/shared/scripts.resolve.app-render-context",
   () => ({
     appRenderContextResolveScripts: jest.fn(),
   }),
@@ -33,20 +33,39 @@ describe("appRenderContextResolveDocClose", () => {
   it("resolves footer scripts, SVG sprites, and structured data", () => {
     const appContext = {} as unknown as AppContext;
 
+    const inlineScripts = [
+      {
+        nonce: "nonce-one",
+        content: "console.log(1);",
+      },
+    ];
+
+    const linkScripts = [
+      {
+        src: "/script.js",
+        loading: "defer",
+        nonce: "nonce-one",
+      },
+    ];
+
+    const svg = [{ id: "logo", content: "<symbol />" }];
+
+    const structuredData = [
+      { "@context": "https://schema.org", "@type": "WebPage" },
+    ];
+
     jest.mocked(appRenderContextResolveScripts).mockReturnValue({
-      inlineScripts: [{ nonce: "nonce-one", content: "console.log(1);" }],
-      linkScripts: [{ src: "/script.js", defer: true }],
+      inlineScripts,
+      linkScripts,
     } as never);
 
     jest
       .mocked(resolveSvgSpritesAppRenderContext)
-      .mockReturnValue([{ id: "logo", content: "<symbol />" }] as never);
+      .mockReturnValue(svg as never);
 
     jest
       .mocked(appRenderContextResolveDocCloseStructuredData)
-      .mockReturnValue([
-        { "@context": "https://schema.org", "@type": "WebPage" },
-      ] as never);
+      .mockReturnValue(structuredData as never);
 
     expect(
       appRenderContextResolveDocClose(appContext, {
@@ -54,12 +73,10 @@ describe("appRenderContextResolveDocClose", () => {
         origin: "https://kevinellen.com",
       }),
     ).toEqual({
-      inlineScripts: [{ nonce: "nonce-one", content: "console.log(1);" }],
-      linkScripts: [{ src: "/script.js", defer: true }],
-      svg: [{ id: "logo", content: "<symbol />" }],
-      structuredData: [
-        { "@context": "https://schema.org", "@type": "WebPage" },
-      ],
+      inlineScripts,
+      linkScripts,
+      svg,
+      structuredData,
     });
 
     expect(appRenderContextResolveScripts).toHaveBeenCalledWith(appContext, {

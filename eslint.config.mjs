@@ -10,19 +10,29 @@ export default [
       "coverage/**",
       "node_modules/**",
       "worker-configuration.d.ts",
-      "src/xxx___app/**",
-      "xxx___src/**",
-      "__OLD/**",
       "tests/**",
       "packages/**",
       "content-pipeline/journal/uploaded/**",
       "content-pipeline/photo/uploaded/**",
       "content-pipeline/journal copy/**",
       "content-pipeline/note/uploaded/**",
+      "src/assets/scripts/generated/**",
     ],
   },
 
   js.configs.recommended,
+
+  {
+    files: ["src/assets/scripts/authored/**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        document: "readonly",
+        IntersectionObserver: "readonly",
+      },
+    },
+  },
 
   {
     files: ["scripts/**/*.mjs", "eslint.config.mjs"],

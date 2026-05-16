@@ -2,7 +2,7 @@
 
 import type { AppContext } from "@app-context/class.app-context";
 
-import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context";
+import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.resolve.app-render-context";
 
 describe("appRenderContextResolveScripts", () => {
   it("resolves inline and link scripts for the requested location", () => {

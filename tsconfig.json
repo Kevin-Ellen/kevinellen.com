@@ -26,6 +26,7 @@
       "@utils/*": ["./src/utils/*"],
       "@pages/*": ["./src/pages/*"],
       "@tests/*": ["./tests/*"],
+      "@assets/*": ["./src/assets/*"],
       "@content-cli/*": ["./packages/content-cli/src/*"]
     }
   },

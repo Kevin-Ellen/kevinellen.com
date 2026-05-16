@@ -5,10 +5,10 @@ import type { AppContext } from "@app-context/class.app-context";
 import { appRenderContextResolveDocOpen } from "@app-render-context/resolve/doc-open/doc-open.resolve.app-render-context";
 import { appRenderContextResolveDocOpenHeadLinks } from "@app-render-context/resolve/doc-open/head-links.doc-open.resolve.app-render-context";
 import { appRenderContextResolveDocOpenPreload } from "@app-render-context/resolve/doc-open/preload.doc-open.resolve.app-render-context";
-import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context";
+import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.resolve.app-render-context";
 
 jest.mock(
-  "@app-render-context/resolve/shared/scripts.assets.resolve.app-render-context",
+  "@app-render-context/resolve/shared/scripts.resolve.app-render-context",
   () => ({
     appRenderContextResolveScripts: jest.fn(),
   }),
@@ -43,14 +43,27 @@ describe("appRenderContextResolveDocOpen", () => {
       themeColour: "#ffffff",
     } as unknown as AppContext;
 
+    const inlineScripts = [
+      {
+        content: "console.log(1);",
+        nonce: "nonce-one",
+      },
+    ];
+
+    const linkScripts = [
+      {
+        src: "/header.js",
+        loading: "defer",
+        nonce: "nonce-one",
+      },
+    ];
+
     const links = [{ rel: "icon", href: "/favicon.ico" }];
     const preload = [{ rel: "preload", href: "/fonts/site.woff2", as: "font" }];
 
     jest.mocked(appRenderContextResolveScripts).mockReturnValue({
-      inlineScripts: [{ nonce: "nonce-one", content: "console.log(1);" }],
-      linkScripts: [
-        { src: "/header.js", loading: "defer", nonce: "nonce-one" },
-      ],
+      inlineScripts,
+      linkScripts,
     } as never);
 
     jest
@@ -71,10 +84,8 @@ describe("appRenderContextResolveDocOpen", () => {
       },
       language: "en-GB",
       canonicalUrl: "https://kevinellen.com/",
-      inlineScripts: [{ nonce: "nonce-one", content: "console.log(1);" }],
-      linkScripts: [
-        { src: "/header.js", loading: "defer", nonce: "nonce-one" },
-      ],
+      inlineScripts,
+      linkScripts,
       links,
       preload,
       nonce: "nonce-one",
