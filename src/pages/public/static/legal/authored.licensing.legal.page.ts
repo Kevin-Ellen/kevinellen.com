@@ -14,7 +14,7 @@ export const authoredLicensingLegalPage: AuthoredPublicPageDefinition =
     metadata: {
       pageTitle: "Photo Licensing | Kevin Ellen",
       metaDescription:
-        "Photo licensing and usage terms for images published on kevinellen.com.",
+        "Photo licensing and usage terms for images published on kevinellen.com, including permitted personal use, restrictions, copyright, and contact details.",
     },
 
     breadcrumbs: ["home", "licensing"],

@@ -77,6 +77,8 @@ describe("photoAssetOrchestrator", () => {
   });
 
   it("fetches the Cloudflare Images URL and applies photo response policy", async () => {
+    const env = createEnv();
+
     const upstreamResponse = new Response("image-body", {
       status: 200,
       headers: {
@@ -100,14 +102,16 @@ describe("photoAssetOrchestrator", () => {
     mockedPhotoAssetResponsePolicy.mockReturnValue(policyResponse);
 
     await expect(
-      photoAssetOrchestrator(createRequest(), createEnv(), createCtx()),
+      photoAssetOrchestrator(createRequest(), env, createCtx()),
     ).resolves.toBe(policyResponse);
 
     expect(mockedFetch).toHaveBeenCalledWith(
       "https://imagedelivery.net/account-hash/test-photo/w=1200,h=800,fit=cover",
     );
+
     expect(mockedPhotoAssetResponsePolicy).toHaveBeenCalledWith(
       upstreamResponse,
+      env,
     );
   });
 

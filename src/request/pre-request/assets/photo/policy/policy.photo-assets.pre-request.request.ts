@@ -15,6 +15,8 @@ export const photoAssetResponsePolicy = (
 
   if (robotsHeader !== null) {
     headers.set("x-robots-tag", robotsHeader);
+  } else {
+    headers.delete("x-robots-tag");
   }
 
   return new Response(response.body, {

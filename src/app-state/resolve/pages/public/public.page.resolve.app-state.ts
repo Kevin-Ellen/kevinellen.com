@@ -11,12 +11,15 @@ import { appStateResolvePageContent } from "@app-state/resolve/page-content/page
 import { appStateResolvePageRobotsTxT } from "@app-state/resolve/pages/public/robots-txt.resolve.app-state";
 import { appStateResolvePageSitemapXml } from "@app-state/resolve/pages/public/sitemap-xml.resolve.app-state";
 
+import { appStateResolvePageMetadata } from "@app-state/resolve/pages/page-metadata.resolve.app-state";
+
 export const appStateResolvePublicPage = (
   page: AuthoredPublicPageDefinition,
 ): AppStatePageDefinition => {
   return {
     ...page,
     status: null,
+    metadata: appStateResolvePageMetadata(page.metadata),
     robots: appStateResolvePageRobots(page.robots),
     assets: appStateResolvePageAssets(page.assets),
     breadcrumbs: appStateResolvePageBreadcrumbs(page.breadcrumbs),

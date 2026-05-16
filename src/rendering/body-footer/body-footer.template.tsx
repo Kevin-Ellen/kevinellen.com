@@ -11,9 +11,7 @@ type BodyFooterTemplateProps = Readonly<{
 }>;
 
 export const BodyFooterTemplate = ({ bodyFooter }: BodyFooterTemplateProps) => (
-  <footer className="l-footer">
-    <h2 className="u-sr-only">Footer</h2>
-
+  <footer className="l-footer" aria-label="Site footer">
     <div className="l-page__frame">
       <BodyFooterNavTemplate nav={bodyFooter.nav} />
       <BodyFooterAffiliationsTemplate affiliations={bodyFooter.affiliations} />

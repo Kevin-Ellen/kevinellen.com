@@ -13,7 +13,7 @@ export const authoredTermsLegalPage: AuthoredPublicPageDefinition = deepFreeze({
   metadata: {
     pageTitle: "Terms of Use | Kevin Ellen",
     metaDescription:
-      "Terms of use for kevinellen.com, covering acceptable use, intellectual property, image protection, and site limitations.",
+      "Terms of use for kevinellen.com, covering acceptable use, intellectual property, image protection, content accuracy, and site limitations.",
   },
 
   breadcrumbs: ["home", "terms"],

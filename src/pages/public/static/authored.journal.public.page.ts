@@ -12,7 +12,7 @@ export const authoredJournalPublicPage: AuthoredPublicPageDefinition =
     label: "Journal",
 
     metadata: {
-      pageTitle: "Wildlife Journal",
+      pageTitle: "Wildlife Photography Journal | Kevin Ellen",
       metaDescription:
         "Wildlife photography field notes and encounters, documenting moments in nature through observation, patience, and timing.",
     },

@@ -26,6 +26,11 @@ export const authoredFooterNavigation: AuthoredFooterNavigation = deepFreeze({
           id: "about-equipment" as PageIdPublic,
           text: "Equipment",
         },
+        {
+          kind: "internal",
+          id: "about-technology" as PageIdPublic,
+          text: "Technology",
+        },
       ],
     },
 

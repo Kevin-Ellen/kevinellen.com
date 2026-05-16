@@ -4,6 +4,7 @@ import type { AuthoredErrorPageDefinition } from "@shared-types/page-definitions
 import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 
 import { appStateResolvePageContent } from "@app-state/resolve/page-content/page-content.resolve.app-state";
+import { appStateResolvePageMetadata } from "@app-state/resolve/pages/page-metadata.resolve.app-state";
 
 export const appStateResolveErrorPage = (
   page: AuthoredErrorPageDefinition,
@@ -13,6 +14,8 @@ export const appStateResolveErrorPage = (
 
     kind: null,
     slug: null,
+
+    metadata: appStateResolvePageMetadata(page.metadata),
 
     robots: null,
     robotsTxt: null,
