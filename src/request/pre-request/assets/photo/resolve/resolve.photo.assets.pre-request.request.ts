@@ -7,6 +7,22 @@ import {
   PHOTO_ASSET_PATH_PATTERN,
 } from "@request/pre-request/assets/photo/config/config.photo-assets.pre-request.request";
 
+const PHOTO_VARIANT_FIT = "cover";
+const PHOTO_VARIANT_FORMAT = "auto";
+
+const buildPhotoVariant = (width?: string, height?: string): string => {
+  if (!width || !height) {
+    return DEFAULT_PHOTO_VARIANT;
+  }
+
+  return [
+    `w=${width}`,
+    `h=${height}`,
+    `fit=${PHOTO_VARIANT_FIT}`,
+    `format=${PHOTO_VARIANT_FORMAT}`,
+  ].join(",");
+};
+
 export const photoAssetResolver = (req: Request): PhotoAssetResolution => {
   const pathname = new URL(req.url).pathname;
 
@@ -24,10 +40,7 @@ export const photoAssetResolver = (req: Request): PhotoAssetResolution => {
     outcome: "asset",
     asset: {
       imageId: photoId,
-      variant:
-        width && height
-          ? `w=${width},h=${height},fit=cover`
-          : DEFAULT_PHOTO_VARIANT,
+      variant: buildPhotoVariant(width, height),
     },
   };
 };

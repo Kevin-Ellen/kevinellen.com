@@ -51,6 +51,6 @@ describe("PHOTO_ASSET_PATH_PATTERN", () => {
 
 describe("DEFAULT_PHOTO_VARIANT", () => {
   it("defaults to the public variant", () => {
-    expect(DEFAULT_PHOTO_VARIANT).toBe("public");
+    expect(DEFAULT_PHOTO_VARIANT).toBe("w=1200,h=800,fit=cover,format=auto");
   });
 });
