@@ -8,7 +8,7 @@ const config: Config = {
 
   roots: ["<rootDir>/src", "<rootDir>/packages/content-cli"],
 
-  testMatch: ["**/*.test.ts"],
+  testMatch: ["**/*.test.ts", "**/*.test.tsx"],
 
   transform: {
     ...tsJestTransformCfg,
@@ -16,6 +16,7 @@ const config: Config = {
 
   collectCoverageFrom: [
     "src/**/*.ts",
+    "src/**/*.tsx",
     "packages/content-cli/**/*.ts",
     "!src/**/*.d.ts",
   ],
@@ -35,7 +36,7 @@ const config: Config = {
     "^@content-cli/(.*)$": "<rootDir>/packages/content-cli/src/$1",
   },
 
-  moduleFileExtensions: ["ts", "js", "json"],
+  moduleFileExtensions: ["ts", "tsx", "js", "json"],
 
   coverageThreshold: {
     global: {

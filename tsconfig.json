@@ -14,6 +14,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "jsx": "react-jsx",
     "paths": {
       "@shared-types/*": ["./shared-types/*"],
       "@request/*": ["./src/request/*"],
@@ -32,10 +33,7 @@
     "src",
     "tests",
     "worker-configuration.d.ts",
-    // "packages/shared-types/src",
-    // "packages/shared-types/src/uploads",
     "shared-types/",
     "jest.config.ts"
-  ],
-  "exclude": ["__OLD"]
+  ]
 }

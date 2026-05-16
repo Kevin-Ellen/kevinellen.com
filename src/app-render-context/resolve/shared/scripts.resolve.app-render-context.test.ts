@@ -51,7 +51,7 @@ describe("appRenderContextResolveScripts", () => {
     });
   });
 
-  it("defaults link script loading to blocking", () => {
+  it("leaves link script loading unset when blocking", () => {
     const appContext = {
       assets: {
         scripts: [
@@ -75,7 +75,7 @@ describe("appRenderContextResolveScripts", () => {
         {
           src: "/footer.js",
           nonce: "nonce-two",
-          loading: "blocking",
+          loading: undefined,
         },
       ],
     });

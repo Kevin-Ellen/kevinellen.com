@@ -40,7 +40,7 @@ export const appRenderContextResolveScripts = (
     linkScripts.push({
       src: script.src,
       nonce: context.nonce,
-      loading: script.loading ?? "blocking",
+      loading: script.loading,
     });
   }
 
