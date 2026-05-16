@@ -2,7 +2,7 @@
 
 import type { AppStateJournalListingBlock } from "@shared-types/page-content/block/journal-listing/app-state.journal-listing.block.types";
 import type { AppContextPagination } from "@shared-types/page-content/shared/pagination/app-context.pagination.shared.types";
-import type { AppContextPhotoMetadata } from "@shared-types/media/photo/app-context.photo.types";
+import type { AppContextResolvedPhoto } from "@shared-types/media/render-image/app-context.render-image.types";
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
@@ -13,7 +13,7 @@ export type AppContextJournalListingItem = Readonly<{
   intro: string | null;
   eyebrow: string | null;
   publishedAt: string | null;
-  image: AppContextPhotoMetadata | null;
+  image: AppContextResolvedPhoto | null;
 }>;
 
 type RuntimeFields = Readonly<{

@@ -22,6 +22,13 @@ jest.mock(
   }),
 );
 
+const imageDelivery = {
+  listingThumbnail: {
+    sizes: "(min-width: 768px) 220px, 33vw",
+    widths: [320, 480, 640, 960],
+  },
+} as const;
+
 const createModule = (): AppStateJournalListingBlock => ({
   kind: "journalListing",
   flow: "content",
@@ -51,7 +58,8 @@ describe("appContextResolveJournalListingBlock", () => {
       routingPagination: {
         currentPage: 2,
       },
-    } as AppContextPageContentResolverContext;
+      imageDelivery,
+    } as unknown as AppContextPageContentResolverContext;
 
     const journalItems = [
       { id: "one" },
@@ -92,6 +100,7 @@ describe("appContextResolveJournalListingBlock", () => {
 
     expect(mockedAppContextResolveJournalListingItems).toHaveBeenCalledWith(
       context,
+      imageDelivery.listingThumbnail,
     );
 
     expect(mockedAppContextResolvePagination).toHaveBeenCalledWith({
@@ -108,7 +117,8 @@ describe("appContextResolveJournalListingBlock", () => {
     const context = {
       currentPageSlug: "/journal",
       routingPagination: null,
-    } as AppContextPageContentResolverContext;
+      imageDelivery,
+    } as unknown as AppContextPageContentResolverContext;
 
     mockedAppContextResolveJournalListingItems.mockReturnValue([
       { id: "one" },
@@ -129,6 +139,11 @@ describe("appContextResolveJournalListingBlock", () => {
 
     expect(result.items).toEqual([{ id: "one" }, { id: "two" }]);
 
+    expect(mockedAppContextResolveJournalListingItems).toHaveBeenCalledWith(
+      context,
+      imageDelivery.listingThumbnail,
+    );
+
     expect(mockedAppContextResolvePagination).toHaveBeenCalledWith({
       pagination: module.pagination,
       currentPage: 1,
@@ -143,12 +158,18 @@ describe("appContextResolveJournalListingBlock", () => {
     const context = {
       currentPageSlug: null,
       routingPagination: null,
-    } as AppContextPageContentResolverContext;
+      imageDelivery,
+    } as unknown as AppContextPageContentResolverContext;
 
     mockedAppContextResolveJournalListingItems.mockReturnValue([]);
 
     expect(() => appContextResolveJournalListingBlock(module, context)).toThrow(
       "Missing current page slug for journal listing pagination.",
+    );
+
+    expect(mockedAppContextResolveJournalListingItems).toHaveBeenCalledWith(
+      context,
+      imageDelivery.listingThumbnail,
     );
   });
 });

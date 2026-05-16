@@ -12,7 +12,10 @@ export const appContextResolveJournalListingBlock = (
   context: AppContextPageContentResolverContext,
 ): AppContextJournalListingBlock => {
   const currentPage = context.routingPagination?.currentPage ?? 1;
-  const journalItems = appContextResolveJournalListingItems(context);
+  const journalItems = appContextResolveJournalListingItems(
+    context,
+    context.imageDelivery.listingThumbnail,
+  );
 
   const baseHref = context.currentPageSlug;
 

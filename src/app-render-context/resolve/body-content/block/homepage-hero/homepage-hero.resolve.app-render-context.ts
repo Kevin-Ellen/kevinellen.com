@@ -13,11 +13,6 @@ export const appRenderContextResolveHomepageHeroBlock = (
   appContext: AppContext,
   block: AppContextHomepageHeroBlock,
 ): AppRenderContextHomepageHeroBlock => {
-  const photo = appRenderContextResolvePhoto(
-    block.photo,
-    appContext.metadataLabels,
-  );
-
   return {
     kind: "homepageHero",
     flow: block.flow,
@@ -26,7 +21,9 @@ export const appRenderContextResolveHomepageHeroBlock = (
     intro: block.intro.map((content) =>
       appRenderContextResolveInline(appContext, content),
     ),
-    photo: appRenderContextResolveRenderImage(photo),
+    photo: appRenderContextResolveRenderImage(
+      appRenderContextResolvePhoto(block.photo, appContext.metadataLabels),
+    ),
     primaryLink: block.primaryLink
       ? appRenderContextResolveLink(appContext, block.primaryLink)
       : null,

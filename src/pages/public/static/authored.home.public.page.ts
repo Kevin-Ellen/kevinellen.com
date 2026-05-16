@@ -102,7 +102,7 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
             link: {
               kind: "internal",
               id: "notes",
-              text: "Read articles",
+              text: "Read notes",
             },
             icon: "icon-pencil",
           },
@@ -112,7 +112,7 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
       {
         kind: "homepageNoteListing",
         heading: {
-          text: "Latest articles",
+          text: "Latest notes",
           level: 2,
         },
         itemCount: 3,
@@ -120,7 +120,7 @@ export const authoredHomePublicPage: AuthoredPublicPageDefinition = deepFreeze({
           {
             kind: "text",
             value:
-              "Articles are coming soon — thoughts on systems, photography, and digital craft.",
+              "Notes are coming soon — thoughts on systems, photography, and digital craft.",
           },
         ],
       },

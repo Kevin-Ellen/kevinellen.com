@@ -14,6 +14,13 @@ jest.mock(
   }),
 );
 
+const imageDelivery = {
+  homepageJournalFeature: {
+    sizes: "(min-width: 1200px) 740px, calc(100vw - 2rem)",
+    widths: [640, 960, 1280],
+  },
+} as const;
+
 describe("appContextResolveHomepageJournalListingBlock", () => {
   const mockedAppContextResolveJournalListingItems = jest.mocked(
     appContextResolveJournalListingItems,
@@ -24,7 +31,9 @@ describe("appContextResolveHomepageJournalListingBlock", () => {
   });
 
   it("limits entries to the configured item count", () => {
-    const context = {} as AppContextPageContentResolverContext;
+    const context = {
+      imageDelivery,
+    } as unknown as AppContextPageContentResolverContext;
 
     const module: AppStateHomepageJournalListingBlock = {
       kind: "homepageJournalListing",
@@ -106,11 +115,14 @@ describe("appContextResolveHomepageJournalListingBlock", () => {
     expect(mockedAppContextResolveJournalListingItems).toHaveBeenCalledTimes(1);
     expect(mockedAppContextResolveJournalListingItems).toHaveBeenCalledWith(
       context,
+      imageDelivery.homepageJournalFeature,
     );
   });
 
   it("returns empty entries when no journal items exist", () => {
-    const context = {} as AppContextPageContentResolverContext;
+    const context = {
+      imageDelivery,
+    } as unknown as AppContextPageContentResolverContext;
 
     const module: AppStateHomepageJournalListingBlock = {
       kind: "homepageJournalListing",
@@ -141,5 +153,10 @@ describe("appContextResolveHomepageJournalListingBlock", () => {
       flow: "content",
       entries: [],
     });
+
+    expect(mockedAppContextResolveJournalListingItems).toHaveBeenCalledWith(
+      context,
+      imageDelivery.homepageJournalFeature,
+    );
   });
 });

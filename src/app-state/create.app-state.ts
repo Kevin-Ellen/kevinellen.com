@@ -12,6 +12,7 @@ import { appStateResolveMetadataLabels } from "@app-state/resolve/metadata-label
 import { appStateResolveNavigation } from "@app-state/resolve/navigation.resolve.app-state";
 import { appStateResolveStructuredData } from "@app-state/resolve/structured-data.resolve.app-state";
 import { appStateResolvePages } from "@app-state/resolve/pages.resolve.app-state";
+import { appStateResolveImageDelivery } from "@app-state/resolve/image-delivery.resolve.app-state";
 
 export const appStateCreate = async (env: Env): Promise<AppState> => {
   const siteConfig = appStateResolveSiteConfig(env);
@@ -25,6 +26,7 @@ export const appStateCreate = async (env: Env): Promise<AppState> => {
   const metadataLabels = appStateResolveMetadataLabels;
   const navigation = appStateResolveNavigation;
   const structuredData = appStateResolveStructuredData(siteConfig);
+  const imageDelivery = appStateResolveImageDelivery;
 
   const pages = await appStateResolvePages({
     journalKv: env.KV_JOURNALS,
@@ -39,6 +41,7 @@ export const appStateCreate = async (env: Env): Promise<AppState> => {
     globalFooter,
     social,
     metadataLabels,
+    imageDelivery,
     navigation,
     structuredData,
     pages,

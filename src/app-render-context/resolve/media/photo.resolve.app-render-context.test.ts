@@ -2,6 +2,7 @@
 
 import type { AppStateMetadataLabels } from "@shared-types/config/metadata-labels/app-state.metadata-labels.types";
 import type { AppContextPhotoMetadata } from "@shared-types/media/photo/app-context.photo.types";
+import type { AppContextResolvedPhoto } from "@shared-types/media/render-image/app-context.render-image.types";
 
 import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
 import { formatDate } from "@utils/date.format.util";
@@ -14,6 +15,11 @@ jest.mock("@utils/date.format.util", () => ({
 jest.mock("@utils/normaliseDimensions.util", () => ({
   normaliseDimensionsToBase: jest.fn(),
 }));
+
+const delivery = {
+  sizes: "(min-width: 1200px) 640px, calc(100vw - 2rem)",
+  widths: [640, 960, 1280],
+} as const;
 
 const createMetadataLabels = (): AppStateMetadataLabels =>
   ({
@@ -48,6 +54,9 @@ const createPhoto = (
 ): AppContextPhotoMetadata =>
   ({
     id: "coot-in-soft-light",
+    sourceFileName: "coot-in-soft-light.jpg",
+    cloudflareImageId: "raw-cloudflare-id",
+    cloudflareUploadedAt: "2026-05-09T09:00:00.000Z",
     title: "Coot in soft light",
     alt: "A coot swimming through soft light.",
     commentary: "ARC commentary.",
@@ -56,31 +65,42 @@ const createPhoto = (
       utc: "2026-05-09T08:00:00.000Z",
       timezone: "Europe/London",
     },
-    width: 1600,
-    height: 1000,
-    src: null,
-    srcset: null,
-    sizes: null,
-    attribution: null,
-    ratio: null,
-    cloudflareImageId: "raw-cloudflare-id",
-    cloudflareUploadedAt: "2026-05-09T09:00:00.000Z",
     photographer: "Kevin Ellen",
     copyright: null,
-    latitude: 51.7,
-    longitude: 0.1,
-    resolvedLocation: {
-      country: "England",
-    },
     cameraMake: "Canon",
     cameraModel: "EOS R7",
     lensModel: "RF 100-500mm",
     exposureTime: 0.00125,
     aperture: 7.1,
-    focalLength: 500,
     iso: 12800,
+    focalLength: 500,
+    focalLength35mm: null,
+    width: 1600,
+    height: 1000,
+    latitude: 51.7,
+    longitude: 0.1,
+    resolvedLocation: {
+      name: null,
+      road: null,
+      village: null,
+      town: null,
+      city: null,
+      county: null,
+      state: null,
+      country: "England",
+      countryCode: "gb",
+      postcode: null,
+      displayName: "England",
+    },
     ...overrides,
-  }) as unknown as AppContextPhotoMetadata;
+  }) as AppContextPhotoMetadata;
+
+const createResolvedPhoto = (
+  overrides: Partial<AppContextPhotoMetadata> = {},
+): AppContextResolvedPhoto => ({
+  metadata: createPhoto(overrides),
+  delivery,
+});
 
 describe("appRenderContextResolvePhoto", () => {
   const mockedFormatDate = jest.mocked(formatDate);
@@ -100,7 +120,7 @@ describe("appRenderContextResolvePhoto", () => {
 
   it("resolves a render-safe photo shape", () => {
     const result = appRenderContextResolvePhoto(
-      createPhoto(),
+      createResolvedPhoto(),
       createMetadataLabels(),
     );
 
@@ -115,10 +135,9 @@ describe("appRenderContextResolvePhoto", () => {
       srcset: [
         "/media/photo/coot-in-soft-light/640/400 640w",
         "/media/photo/coot-in-soft-light/960/600 960w",
-        "/media/photo/coot-in-soft-light/1440/900 1440w",
-        "/media/photo/coot-in-soft-light/1920/1200 1920w",
+        "/media/photo/coot-in-soft-light/1280/800 1280w",
       ],
-      sizes: "(min-width: 1200px) 1200px, 100vw",
+      sizes: "(min-width: 1200px) 640px, calc(100vw - 2rem)",
       attribution: "Kevin Ellen",
       ratio: {
         width: 8,
@@ -185,7 +204,7 @@ describe("appRenderContextResolvePhoto", () => {
   it("uses copyright before photographer for attribution", () => {
     expect(
       appRenderContextResolvePhoto(
-        createPhoto({
+        createResolvedPhoto({
           copyright: "© Kevin Ellen",
           photographer: "Kevin Ellen",
         }),
@@ -197,7 +216,7 @@ describe("appRenderContextResolvePhoto", () => {
   it("returns null attribution when copyright and photographer are missing", () => {
     expect(
       appRenderContextResolvePhoto(
-        createPhoto({
+        createResolvedPhoto({
           copyright: null,
           photographer: null,
         }),
@@ -208,7 +227,7 @@ describe("appRenderContextResolvePhoto", () => {
 
   it("formats whole-second shutter speeds", () => {
     const result = appRenderContextResolvePhoto(
-      createPhoto({
+      createResolvedPhoto({
         exposureTime: 2,
       }),
       createMetadataLabels(),
@@ -227,8 +246,8 @@ describe("appRenderContextResolvePhoto", () => {
 
   it("omits empty metadata groups", () => {
     const result = appRenderContextResolvePhoto(
-      createPhoto({
-        readableLocation: undefined,
+      createResolvedPhoto({
+        readableLocation: "",
         capturedAt: null,
         exposureTime: null,
         aperture: null,
@@ -246,7 +265,7 @@ describe("appRenderContextResolvePhoto", () => {
     const metadataLabels = createMetadataLabels();
 
     const result = appRenderContextResolvePhoto(
-      createPhoto({
+      createResolvedPhoto({
         readableLocation: "Epping Forest",
         capturedAt: null,
         exposureTime: null,
@@ -280,7 +299,7 @@ describe("appRenderContextResolvePhoto", () => {
   it("normalises missing setting and capture metadata descriptions to null", () => {
     const metadataLabels = createMetadataLabels();
 
-    const result = appRenderContextResolvePhoto(createPhoto(), {
+    const result = appRenderContextResolvePhoto(createResolvedPhoto(), {
       ...metadataLabels,
       capturedAt: {
         label: "Captured",
@@ -352,7 +371,7 @@ describe("appRenderContextResolvePhoto", () => {
 
   it("formats captured date without timezone when captured timezone is missing", () => {
     appRenderContextResolvePhoto(
-      createPhoto({
+      createResolvedPhoto({
         capturedAt: {
           utc: "2026-05-09T08:00:00.000Z",
           timezone: null,

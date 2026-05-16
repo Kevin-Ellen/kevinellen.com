@@ -1,11 +1,7 @@
 // src/app-render-context/resolve/media/render-image.resolve.app-render-context.ts
 
-import type { AppRenderContextPhoto } from "@shared-types/media/photo/app-render-context.photo.types";
-
-export type AppRenderContextRenderImage = Pick<
-  AppRenderContextPhoto,
-  "src" | "srcset" | "sizes" | "alt" | "width" | "height" | "ratio"
->;
+import type { AppRenderContextPhoto } from "@shared-types/media/photo/app-render-context.render-photo.types";
+import type { AppRenderContextRenderImage } from "@shared-types/media/render-image/app-render-context.render-image.types";
 
 export const appRenderContextResolveRenderImage = (
   photo: AppRenderContextPhoto,

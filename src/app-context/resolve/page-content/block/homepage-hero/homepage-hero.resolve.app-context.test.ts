@@ -15,6 +15,13 @@ jest.mock(
   }),
 );
 
+const imageDelivery = {
+  homepageHero: {
+    sizes: "(min-width: 1200px) 640px, calc(100vw - 2rem)",
+    widths: [640, 960, 1280],
+  },
+} as const;
+
 describe("appContextResolveHomepageHero", () => {
   const mockedAppContextResolveInline = jest.mocked(appContextResolveInline);
 
@@ -51,6 +58,7 @@ describe("appContextResolveHomepageHero", () => {
 
     const context = {
       photos: [photo],
+      imageDelivery,
       resolveInternalLink: jest.fn().mockReturnValue(resolvedPrimaryLink),
     } as unknown as AppContextPageContentResolverContext;
 
@@ -87,7 +95,10 @@ describe("appContextResolveHomepageHero", () => {
           value: "Hello",
         },
       ],
-      photo,
+      photo: {
+        metadata: photo,
+        delivery: imageDelivery.homepageHero,
+      },
       primaryLink: resolvedPrimaryLink,
     });
 
@@ -109,6 +120,7 @@ describe("appContextResolveHomepageHero", () => {
 
     const context = {
       photos: [photo],
+      imageDelivery,
       resolveInternalLink: jest.fn(),
     } as unknown as AppContextPageContentResolverContext;
 
@@ -130,7 +142,10 @@ describe("appContextResolveHomepageHero", () => {
       eyebrow: null,
       title: "Field notes from the edge",
       intro: [],
-      photo,
+      photo: {
+        metadata: photo,
+        delivery: imageDelivery.homepageHero,
+      },
       primaryLink: null,
     });
 
@@ -141,6 +156,7 @@ describe("appContextResolveHomepageHero", () => {
   it("throws when the homepage hero photo is not resolved in context", () => {
     const context = {
       photos: [],
+      imageDelivery,
       resolveInternalLink: jest.fn(),
     } as unknown as AppContextPageContentResolverContext;
 

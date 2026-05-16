@@ -8,26 +8,15 @@ import type {
 } from "@shared-types/page-content/block/image-strip/app-render-context.image-strip.block.types";
 
 import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
+import { appRenderContextResolveRenderImage } from "@app-render-context/resolve/media/render-image.resolve.app-render-context";
 
 const appRenderContextResolveImageStripPhoto = (
   appContext: AppContext,
   photo: AppContextImageStripBlock["photos"][number],
-): AppRenderContextImageStripPhoto => {
-  const resolvedPhoto = appRenderContextResolvePhoto(
-    photo,
-    appContext.metadataLabels,
+): AppRenderContextImageStripPhoto =>
+  appRenderContextResolveRenderImage(
+    appRenderContextResolvePhoto(photo, appContext.metadataLabels),
   );
-
-  return {
-    src: resolvedPhoto.src,
-    srcset: resolvedPhoto.srcset,
-    sizes: resolvedPhoto.sizes,
-    alt: resolvedPhoto.alt,
-    width: resolvedPhoto.width,
-    height: resolvedPhoto.height,
-    ratio: resolvedPhoto.ratio,
-  };
-};
 
 export const appRenderContextResolveImageStripBlock = (
   appContext: AppContext,
