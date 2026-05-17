@@ -59,15 +59,23 @@ describe("orchestrateAssetsPreRequest", () => {
       response,
     );
 
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
     expect(mockedPhotoAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
   });
 
   it("returns null when no asset handlers match", async () => {
+    const req = createRequest();
+    const env = createEnv();
+    const ctx = createCtx();
+
     mockedStaticAssetOrchestrator.mockResolvedValue(null);
     mockedPhotoAssetOrchestrator.mockResolvedValue(null);
 
     await expect(
-      orchestrateAssetsPreRequest(createRequest(), createEnv(), createCtx()),
+      orchestrateAssetsPreRequest(req, env, ctx),
     ).resolves.toBeNull();
+
+    expect(mockedStaticAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
+    expect(mockedPhotoAssetOrchestrator).toHaveBeenCalledWith(req, env, ctx);
   });
 });

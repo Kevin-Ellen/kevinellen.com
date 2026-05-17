@@ -104,4 +104,24 @@ describe("photoAssetResolver", () => {
       outcome: "continue",
     });
   });
+
+  it("returns continue for non-numeric width values", () => {
+    const result = photoAssetResolver(
+      new Request("https://example.com/media/photo/test-photo/abc/800"),
+    );
+
+    expect(result).toEqual({
+      outcome: "continue",
+    });
+  });
+
+  it("returns continue for non-numeric height values", () => {
+    const result = photoAssetResolver(
+      new Request("https://example.com/media/photo/test-photo/1200/def"),
+    );
+
+    expect(result).toEqual({
+      outcome: "continue",
+    });
+  });
 });

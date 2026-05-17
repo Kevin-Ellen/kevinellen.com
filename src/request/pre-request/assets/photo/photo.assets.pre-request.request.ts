@@ -11,6 +11,9 @@ const buildCloudflareImageUrl = (
   return `https://imagedelivery.net/${accountHash}/${imageId}/${variant}`;
 };
 
+const isCloudflareImagesFailureResponse = (response: Response): boolean =>
+  !response.ok;
+
 export const photoAssetOrchestrator = async (
   req: Request,
   env: Env,
@@ -34,7 +37,7 @@ export const photoAssetOrchestrator = async (
 
   const upstreamResponse = await fetch(imageUrl);
 
-  if (upstreamResponse.status === 404) {
+  if (isCloudflareImagesFailureResponse(upstreamResponse)) {
     return null;
   }
 

@@ -11,7 +11,7 @@ const PHOTO_VARIANT_FIT = "cover";
 const PHOTO_VARIANT_FORMAT = "auto";
 
 const buildPhotoVariant = (width?: string, height?: string): string => {
-  if (!width || !height) {
+  if (width === undefined || height === undefined) {
     return DEFAULT_PHOTO_VARIANT;
   }
 
