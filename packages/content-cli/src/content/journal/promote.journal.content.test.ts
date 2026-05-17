@@ -122,13 +122,13 @@ describe("runPromoteJournalCommand", () => {
     expect(mockedReadCloudflareKvValue).toHaveBeenCalledWith(
       devConfig,
       "dev-journals",
-      "page:journal:rye-house",
+      "page:rye-house",
     );
 
     expect(mockedWriteCloudflareKvValue).toHaveBeenCalledWith(
       prodConfig,
       "prod-journals",
-      "page:journal:rye-house",
+      "page:rye-house",
       journal,
     );
 
@@ -137,7 +137,7 @@ describe("runPromoteJournalCommand", () => {
       entity: "journal",
       action: "promote",
       journalId: "rye-house",
-      key: "page:journal:rye-house",
+      key: "page:rye-house",
       from: "dev",
       to: "prod",
     });
