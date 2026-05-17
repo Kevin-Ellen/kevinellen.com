@@ -9,6 +9,7 @@ describe("appContextResolveCodeInlineContent", () => {
     const content: AppStateCodeInline = {
       kind: "code",
       value: "const answer = 42;",
+      language: null,
     };
 
     const result = appContextResolveCodeInline(content);

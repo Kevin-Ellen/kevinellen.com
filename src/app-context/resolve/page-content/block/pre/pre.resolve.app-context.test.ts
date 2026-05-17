@@ -12,7 +12,8 @@ describe("appContextResolvePreBlock", () => {
     const block: AppStatePreBlock = {
       kind: "pre",
       flow: "content",
-      value: "const hello = 'world';",
+      value: "const foo = 'bar';",
+      language: null,
     };
 
     const result = appContextResolvePreBlock(block, context);

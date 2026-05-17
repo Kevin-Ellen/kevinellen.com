@@ -9,6 +9,7 @@ describe("appRenderContextResolveCodeInline", () => {
     const inline: AppContextCodeInline = {
       kind: "code",
       value: "const answer = 42;",
+      language: null,
     };
 
     expect(appRenderContextResolveCodeInline(inline)).toEqual(inline);

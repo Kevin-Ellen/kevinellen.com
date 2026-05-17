@@ -9,7 +9,8 @@ describe("appRenderContextResolvePreBlock", () => {
     const block: AppContextPreBlock = {
       kind: "pre",
       flow: "content",
-      value: "const coot = true;",
+      value: "const foo = 'bar';",
+      language: null,
     };
 
     expect(appRenderContextResolvePreBlock(block)).toEqual(block);

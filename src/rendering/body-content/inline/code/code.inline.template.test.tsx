@@ -12,10 +12,25 @@ describe("CodeInlineTemplate", () => {
           item={{
             kind: "code",
             value: "npm run validate",
+            language: null,
           }}
         />,
       ),
     ).toBe("<code>npm run validate</code>");
+  });
+
+  it("renders language class when language is provided", () => {
+    expect(
+      renderToStaticMarkup(
+        <CodeInlineTemplate
+          item={{
+            kind: "code",
+            value: "const answer = 42;",
+            language: "ts",
+          }}
+        />,
+      ),
+    ).toBe('<code class="language-ts">const answer = 42;</code>');
   });
 
   it("escapes html safely", () => {
@@ -25,6 +40,7 @@ describe("CodeInlineTemplate", () => {
           item={{
             kind: "code",
             value: '<script>alert("x")</script>',
+            language: null,
           }}
         />,
       ),
