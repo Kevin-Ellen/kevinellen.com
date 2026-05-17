@@ -9,11 +9,13 @@ import type {
 } from "@shared-types/assets/scripts/app-render-context.scripts.assets.types";
 import type { AppRenderContextHeadLinkAsset } from "@shared-types/config/site-config/app-render-context.head-assets.config.types";
 import type { AppRenderContextPreload } from "@shared-types/config/site-config/app-render-context.preload.config.types";
+import type { AppRenderContextSocialPreview } from "@shared-types/page-definitions/social-preview/app-render-context.social-preview.page-definition.types";
 
 export type AppRenderContextDocOpen = Readonly<{
   metadata: PageMetadata;
   language: SiteLanguage;
   canonicalUrl: string | null;
+  socialPreview: AppRenderContextSocialPreview | null;
   inlineScripts: readonly AppRenderContextInlineScript[];
   linkScripts: readonly AppRenderContextLinkScript[];
   preload: AppRenderContextPreload;

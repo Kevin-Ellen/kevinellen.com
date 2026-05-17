@@ -1,11 +1,11 @@
 // src/app-state/resolve/social-preview.resolve.app-state.test.ts
 
-import { resolveSocialPreview } from "@app-state/resolve/social-preview.resolve.app-state";
+import { AppStateResolveSocialPreview } from "@app-state/resolve/social-preview.resolve.app-state";
 
 describe("resolveSocialPreview", () => {
   it("inherits title and description from page metadata by default", () => {
     expect(
-      resolveSocialPreview({
+      AppStateResolveSocialPreview({
         metadata: {
           pageTitle: "Journal | Kevin Ellen",
           metaDescription: "Field notes from Epping Forest.",
@@ -21,7 +21,7 @@ describe("resolveSocialPreview", () => {
 
   it("allows social metadata to override inherited values", () => {
     expect(
-      resolveSocialPreview({
+      AppStateResolveSocialPreview({
         metadata: {
           pageTitle: "Journal | Kevin Ellen",
           metaDescription: "Field notes from Epping Forest.",
@@ -44,7 +44,7 @@ describe("resolveSocialPreview", () => {
 
   it("supports partial social metadata overrides", () => {
     expect(
-      resolveSocialPreview({
+      AppStateResolveSocialPreview({
         metadata: {
           pageTitle: "Technology | Kevin Ellen",
           metaDescription: "Architecture and rendering notes.",
@@ -64,7 +64,7 @@ describe("resolveSocialPreview", () => {
 
   it("defaults open graph type to website", () => {
     expect(
-      resolveSocialPreview({
+      AppStateResolveSocialPreview({
         metadata: {
           pageTitle: "About | Kevin Ellen",
           metaDescription: "About Kevin Ellen.",
@@ -75,7 +75,7 @@ describe("resolveSocialPreview", () => {
 
   it("allows article open graph type override", () => {
     expect(
-      resolveSocialPreview({
+      AppStateResolveSocialPreview({
         metadata: {
           pageTitle: "Unexpected encounters | Kevin Ellen",
           metaDescription: "Mallorca wildlife journal.",

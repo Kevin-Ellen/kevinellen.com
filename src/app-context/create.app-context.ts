@@ -3,6 +3,7 @@
 import type { AppState } from "@app-state/class.app-state";
 import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 import type { RoutingResult } from "@request/types/request.types";
+import type { AppContextPhotoMetadata } from "@shared-types/media/photo/app-context.photo.types";
 
 import { AppContext } from "@app-context/class.app-context";
 
@@ -16,17 +17,52 @@ import { appContextResolveBreadcrumbs } from "@app-context/resolve/breadcrumbs.r
 import { appContextResolveInternalLink } from "@app-context/resolve/shared/links/internal.link.shared.resolve.app-context";
 import { appContextCollectPhotoIds } from "@app-context/resolve/page-content/shared/collect-photo-ids.resolve.app-context";
 import { appContextResolvePhotos } from "@app-context/resolve/photos/photos.resolve.app-context";
+import { appContextResolveSocialPreview } from "@app-context/resolve/social-preview.app-context";
 
 import {
   HOMEPAGE_STRIP_PHOTO_INDEX_KEY,
   type HomepageStripPhotoIndex,
 } from "@shared-types/media/photo/indices.photo.types";
 
+const appContextResolveSocialPreviewImage = (
+  explicitImage: string | null,
+  usedPhotoIds: readonly string[],
+  photos: readonly AppContextPhotoMetadata[],
+  origin: string,
+): string | null => {
+  if (explicitImage) {
+    return explicitImage.startsWith("http")
+      ? explicitImage
+      : `${origin}${explicitImage}`;
+  }
+
+  const inheritedPhotoId = usedPhotoIds[0];
+
+  if (!inheritedPhotoId) {
+    return null;
+  }
+
+  const photo = photos.find((item) => item.id === inheritedPhotoId);
+
+  if (!photo) {
+    return null;
+  }
+
+  return `${origin}/media/photo/${photo.id}/1200/630`;
+};
+
 const appContextResolvePageRuntime = (
   page: AppStatePageDefinition,
   origin: string,
+  socialPreviewImage: string | null,
 ) => ({
   metadata: page.metadata,
+  socialPreview: appContextResolveSocialPreview({
+    socialPreview: page.socialPreview,
+    origin,
+    slug: page.slug,
+    image: socialPreviewImage,
+  }),
   robots: page.robots,
   canonicalUrl: page.slug ? `${origin}${page.slug}` : null,
 });
@@ -75,10 +111,19 @@ export const appContextCreate = async (
     photoIds,
   });
 
-  const { metadata, robots, canonicalUrl } = appContextResolvePageRuntime(
-    pageState,
+  const socialPreviewImage = appContextResolveSocialPreviewImage(
+    pageState.socialPreview?.image ?? null,
+    usedPhotoIds,
+    photos,
     appState.siteConfig.origin,
   );
+
+  const { metadata, socialPreview, robots, canonicalUrl } =
+    appContextResolvePageRuntime(
+      pageState,
+      appState.siteConfig.origin,
+      socialPreviewImage,
+    );
 
   const assets = appContextResolveAssets(appState.assets, pageState.assets);
   const structuredData = appContextResolveStructuredData(appState, pageState);
@@ -109,6 +154,7 @@ export const appContextCreate = async (
     breadcrumbs,
     page,
     metadata,
+    socialPreview,
     robots,
     canonicalUrl,
     language: appState.siteConfig.language,

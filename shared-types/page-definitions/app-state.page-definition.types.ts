@@ -7,7 +7,7 @@ import type { AuthoredPageDefinition } from "@shared-types/page-definitions/auth
 import type { AppStatePageRobotsDirectives } from "@shared-types/page-definitions/robots/app-state.robots.page-definition.types";
 import type { AppStatePageRobotsTxtDirectives } from "@shared-types/page-definitions/robots-txt/app-state.robots-txt.page-definition.types";
 import type { AppStatePageSitemapXmlDirectives } from "@shared-types/page-definitions/sitemap-xml/app-state.sitemap-xml.page-definition.types";
-import type { AppStateSocialPreview } from "./social/app-state.social-preview.page-defitinion.types";
+import type { AppStateSocialPreview } from "@shared-types/page-definitions/social-preview/app-state.social-preview.page-definition.types";
 
 import type { ErrorPageStatus } from "@shared-types/page-definitions/shared/shared.error.page-definition.types";
 import type { PageId } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";

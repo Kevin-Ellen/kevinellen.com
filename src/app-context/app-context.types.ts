@@ -14,6 +14,7 @@ import type { AppContextThemeColour } from "@shared-types/config/webmanifest/app
 import type { AppContextHeaderBranding } from "@shared-types/config/site-config/app-context.header-branding.config.types";
 import type { AppContextPreload } from "@shared-types/config/site-config/app-context.preload.config.types";
 import type { AppContextMetadataLabels } from "@shared-types/config/metadata-labels/app-context.metadata-labels.types";
+import type { AppContextSocialPreview } from "@shared-types/page-definitions/social-preview/app-context.social-preview.page-definition.types";
 
 export type AppContextDocument = Readonly<{
   metadata: PageMetadata;
@@ -32,6 +33,7 @@ export type AppContextData = Readonly<{
   globalFooter: AppContextGlobalFooter;
   assets: AppContextAssets;
   structuredData: readonly AppContextStructuredDataEntry[];
+  socialPreview: AppContextSocialPreview | null;
   breadcrumbs: AppContextBreadcrumbs;
   page: AppContextPageDefinition;
   metadata: PageMetadata;

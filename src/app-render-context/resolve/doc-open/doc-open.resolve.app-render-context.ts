@@ -6,6 +6,7 @@ import type { AppContext } from "@app-context/class.app-context";
 import { appRenderContextResolveScripts } from "@app-render-context/resolve/shared/scripts.resolve.app-render-context";
 import { appRenderContextResolveDocOpenHeadLinks } from "@app-render-context/resolve/doc-open/head-links.doc-open.resolve.app-render-context";
 import { appRenderContextResolveDocOpenPreload } from "@app-render-context/resolve/doc-open/preload.doc-open.resolve.app-render-context";
+import { appRenderContextResolveSocialPreview } from "@app-render-context/resolve/doc-open/social-preview.resolve.app-render-context";
 
 type ResolveDocOpenAppRenderContextContext = Readonly<{
   nonce: string;
@@ -24,6 +25,9 @@ export const appRenderContextResolveDocOpen = (
     metadata: appContext.metadata,
     language: appContext.language,
     canonicalUrl: appContext.canonicalUrl,
+    socialPreview: appRenderContextResolveSocialPreview(
+      appContext.socialPreview,
+    ),
     inlineScripts: scripts.inlineScripts,
     linkScripts: scripts.linkScripts,
     links: appRenderContextResolveDocOpenHeadLinks(appContext),
