@@ -1,0 +1,39 @@
+@use "../tokens" as tokens;
+
+.m-homepage-hero {
+  display: grid;
+  gap: tokens.$space-xl;
+
+  @media (min-width: tokens.$bp-sm) {
+    grid-template-columns: minmax(14rem, 0.9fr) minmax(0, 1.4fr);
+    align-items: center;
+  }
+
+  &__media {
+    order: 1;
+    min-width: 0;
+
+    @media (min-width: tokens.$bp-sm) {
+      order: 2;
+    }
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__content {
+    order: 2;
+    max-width: 48ch;
+
+    @media (min-width: tokens.$bp-sm) {
+      order: 1;
+    }
+  }
+
+  &__action {
+    margin: 0;
+  }
+}

@@ -1,7 +1,7 @@
 // src/utils/deepFreeze.util.ts
 
 export function deepFreeze<T>(obj: T): T {
-  if (obj === null || typeof obj !== "object") {
+  if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
     return obj;
   }
 

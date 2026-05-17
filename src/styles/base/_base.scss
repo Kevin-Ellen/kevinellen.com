@@ -23,41 +23,6 @@ figcaption {
   display: block;
 }
 
-figure:has(blockquote) {
-  margin-block: tokens.$blockquote-spacing-top tokens.$blockquote-spacing-bottom;
-  border-inline-start: tokens.$blockquote-rule-width solid
-    tokens.$colour-rule-blockquote;
-  padding-inline-start: tokens.$blockquote-padding-inline;
-
-  blockquote {
-    font-family: tokens.$font-family-blockquote;
-    font-weight: tokens.$font-weight-blockquote;
-    font-size: tokens.$font-size-blockquote;
-    line-height: tokens.$line-height-blockquote;
-    color: tokens.$colour-type-blockquote;
-    max-inline-size: 36ch;
-  }
-
-  figcaption {
-    display: block;
-    margin-top: tokens.$blockquote-cite-spacing-top;
-    font-style: normal;
-    font-family: tokens.$font-family-body;
-    font-weight: tokens.$font-weight-blockquote-cite;
-    font-size: tokens.$font-size-blockquote-cite;
-    line-height: tokens.$line-height-blockquote-cite;
-    color: tokens.$colour-type-blockquote-cite;
-  }
-
-  > *:first-child {
-    margin-top: 0;
-  }
-
-  > *:last-child {
-    margin-bottom: 0;
-  }
-}
-
 a {
   color: inherit;
   text-decoration: underline;
@@ -79,7 +44,6 @@ ul {
 ul li,
 ol li {
   display: grid;
-  grid-template-columns: 1.1rem 1fr;
   column-gap: tokens.$space-sm;
   align-items: start;
   margin-bottom: tokens.$space-sm;
@@ -113,4 +77,62 @@ ol li::before {
   color: tokens.$colour-type-blockquote-cite;
   font-weight: tokens.$font-weight-strong;
   line-height: 1.4;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family:
+    SFMono-Regular, "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas,
+    monospace;
+}
+
+code {
+  padding: 0.08em 0.35em;
+  background: tokens.$colour-surface-subtle;
+  border: 1px solid tokens.$colour-border-subtle;
+  border-radius: 0.2rem;
+  font-size: 0.92em;
+  line-height: 1;
+  overflow-wrap: break-word;
+  position: relative;
+  top: 0.02em;
+}
+
+pre {
+  overflow-x: auto;
+  margin-block: tokens.$space-lg;
+  padding: tokens.$space-sm tokens.$space-md;
+  background: tokens.$colour-surface;
+  border: 1px solid tokens.$colour-border-strong;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+pre code {
+  display: block;
+  min-width: max-content;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre;
+  word-break: normal;
+}
+
+kbd {
+  padding: 0.08em 0.4em;
+  background: tokens.$colour-surface-elevated;
+  border: 1px solid tokens.$colour-border-subtle;
+  border-bottom-width: 2px;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+samp {
+  font-size: 0.92em;
 }

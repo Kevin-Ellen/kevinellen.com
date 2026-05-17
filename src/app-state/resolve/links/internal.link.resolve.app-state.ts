@@ -1,0 +1,18 @@
+// src/app-state/resolve/links/internal.link.resolve.app-state.ts
+
+import type { AuthoredInternalLink } from "@shared-types/links/authored.links.types";
+import type { AppStateInternalLink } from "@shared-types/links/app-state.links.types";
+
+export const appStateResolveInternalLink = (
+  link: AuthoredInternalLink,
+): AppStateInternalLink => {
+  return {
+    kind: "internal",
+    id: link.id,
+    text: link.text ?? null,
+    svgId: link.svgId ?? null,
+    behaviour: {
+      openInNewTab: link.behaviour?.openInNewTab ?? false,
+    },
+  };
+};

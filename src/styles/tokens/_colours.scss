@@ -17,3 +17,38 @@ $colour-text-inverse-muted: color.mix(
 );
 $colour-field-accent: colour.$pine-teal;
 $colour-footer-bg: colour.$deep-woodland;
+
+$colour-page: colour.$alabaster-grey;
+
+$colour-surface: colour.$white-smoke;
+$colour-surface-subtle: color.mix($colour-page, $colour-surface, 45%);
+
+$colour-surface-elevated: colour.$white-smoke;
+
+$colour-surface-strong: colour.$dust-grey;
+
+$colour-surface-immersive: colour.$charcoal;
+
+$colour-text: colour.$ink;
+
+$colour-text-inverse: colour.$porcelain;
+
+$colour-text-muted: color.mix($colour-text, $colour-surface, 80%);
+
+$colour-text-meta: colour.$ink;
+
+$colour-text-inverse-muted: color.mix(
+  $colour-text-inverse,
+  $colour-surface-immersive,
+  80%
+);
+
+$colour-rule: colour.$silver;
+
+$colour-border-subtle: color.mix($colour-rule, $colour-page, 70%);
+
+$colour-border-strong: color.mix($colour-rule, $colour-text, 80%);
+
+$colour-field-accent: colour.$pine-teal;
+
+$colour-footer-bg: colour.$deep-woodland;

@@ -10,7 +10,7 @@
   }
 
   + .m-photo {
-    margin-top: tokens.$space-sm;
+    margin-block: tokens.$space-sm tokens.$space-md;
   }
 
   @media (min-width: tokens.$bp-sm) {

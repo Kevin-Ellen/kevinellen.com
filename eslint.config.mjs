@@ -10,16 +10,32 @@ export default [
       "coverage/**",
       "node_modules/**",
       "worker-configuration.d.ts",
-      "src/xxx___app/**",
-      "xxx___src/**",
+      "tests/**",
+      "packages/**",
+      "content-pipeline/journal/uploaded/**",
+      "content-pipeline/photo/uploaded/**",
+      "content-pipeline/journal copy/**",
+      "content-pipeline/note/uploaded/**",
+      "src/assets/scripts/generated/**",
     ],
   },
 
   js.configs.recommended,
-  ...tseslint.configs.recommended,
 
   {
-    files: ["scripts/**/*.mjs"],
+    files: ["src/assets/scripts/authored/**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        document: "readonly",
+        IntersectionObserver: "readonly",
+      },
+    },
+  },
+
+  {
+    files: ["scripts/**/*.mjs", "eslint.config.mjs"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
@@ -32,11 +48,27 @@ export default [
 
   {
     files: ["**/*.{ts,mts,cts}"],
+    ...tseslint.configs.recommendedTypeChecked[0],
     languageOptions: {
+      ...tseslint.configs.recommendedTypeChecked[0].languageOptions,
       ecmaVersion: "latest",
       sourceType: "module",
+      parserOptions: {
+        ...(tseslint.configs.recommendedTypeChecked[0].languageOptions
+          ?.parserOptions ?? {}),
+        projectService: true,
+      },
+      globals: {
+        Env: "readonly",
+        ExecutionContext: "readonly",
+        fetch: "readonly",
+        crypto: "readonly",
+      },
     },
     rules: {
+      ...tseslint.configs.recommendedTypeChecked[0].rules,
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-non-null-assertion": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -45,6 +77,22 @@ export default [
           caughtErrorsIgnorePattern: "^_",
         },
       ],
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "inline-type-imports",
+        },
+      ],
+      "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    },
+  },
+
+  {
+    files: ["**/*.ts"],
+    rules: {
+      "no-undef": "off",
     },
   },
 

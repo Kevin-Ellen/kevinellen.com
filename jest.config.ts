@@ -6,28 +6,47 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 const config: Config = {
   testEnvironment: "node",
 
-  roots: ["<rootDir>/tests"],
+  roots: ["<rootDir>/src", "<rootDir>/packages/content-cli"],
 
-  testMatch: ["**/*.test.ts"],
+  testMatch: ["**/*.test.ts", "**/*.test.tsx"],
 
   transform: {
     ...tsJestTransformCfg,
   },
 
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "packages/content-cli/**/*.ts",
+    "!src/**/*.d.ts",
+  ],
+
   moduleNameMapper: {
     "\\.css\\?raw$": "<rootDir>/tests/mocks/rawCss.mock.ts",
     "^@tests/(.*)$": "<rootDir>/tests/$1",
-    "^@config/(.*)$": "<rootDir>/src/config/$1",
-    "^@src/(.*)$": "<rootDir>/src/$1",
+    "^@request/(.*)$": "<rootDir>/src/request/$1",
+    "^@app-state/(.*)$": "<rootDir>/src/app-state/$1",
+    "^@app-context/(.*)$": "<rootDir>/src/app-context/$1",
+    "^@app-render-context/(.*)$": "<rootDir>/src/app-render-context/$1",
+    "^@rendering/(.*)$": "<rootDir>/src/rendering/$1",
+    "^@shared-types/(.*)$": "<rootDir>/shared-types/$1",
     "^@utils/(.*)$": "<rootDir>/src/utils/$1",
-    "^@app/(.*)$": "<rootDir>/src/app/$1",
-    "^@system/(.*)$": "<rootDir>/src/system/$1",
-    "^@resources/(.*)$": "<rootDir>/src/resources/$1",
-    "^@types-src/(.*)$": "<rootDir>/src/types/$1",
+    "^@pages/(.*)$": "<rootDir>/src/pages/$1",
     "^@generated/(.*)\\?raw$": "<rootDir>/tests/stubs/rawText.stub.ts",
+    "^@content-cli/(.*)$": "<rootDir>/packages/content-cli/src/$1",
+    "^@assets/(.*)$": "<rootDir>/src/assets/$1",
   },
 
-  moduleFileExtensions: ["ts", "js", "json"],
+  moduleFileExtensions: ["ts", "tsx", "js", "json"],
+
+  coverageThreshold: {
+    global: {
+      statements: 100,
+      branches: 100,
+      functions: 100,
+      lines: 100,
+    },
+  },
 };
 
 export default config;
