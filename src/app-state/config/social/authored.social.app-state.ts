@@ -14,7 +14,7 @@ export const authoredSocial: AuthoredSocial = deepFreeze({
   instagram: {
     id: "instagram",
     label: "Instagram",
-    href: "https://www.instagram.com/photography.mallard",
+    href: "https://www.instagram.com/kevin.ellen.photography",
     svgId: "icon-instagram",
   },
   linkedin: {
