@@ -1,6 +1,9 @@
 // src/rendering/doc-head/doc-head.template.tsx
 
 import type { AppRenderContextDocOpen } from "@app-render-context/types/doc-open.app-render-context.types";
+import type { AppRenderContextSocialPreview } from "@shared-types/page-definitions/social-preview/app-render-context.social-preview.page-definition.types";
+
+import { SocialMeta } from "@rendering/doc-head/social-preview.doc-head.template";
 
 import CSS from "../../../.build/generated/styles.css?raw";
 
@@ -24,6 +27,13 @@ export const DocHeadTemplate = ({ docOpen }: DocHeadTemplateProps) => (
     <meta charSet="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    {docOpen.preload.map((preload) => (
+      <PreloadLink
+        key={`${preload.rel}:${preload.href}:${preload.as}`}
+        preload={preload}
+      />
+    ))}
+
     <style nonce={docOpen.nonce}>{CSS}</style>
 
     <title>{docOpen.metadata.pageTitle}</title>
@@ -34,13 +44,7 @@ export const DocHeadTemplate = ({ docOpen }: DocHeadTemplateProps) => (
     ) : null}
 
     <meta name="theme-color" content={docOpen.themeColour} />
-
-    {docOpen.preload.map((preload) => (
-      <PreloadLink
-        key={`${preload.rel}:${preload.href}:${preload.as}`}
-        preload={preload}
-      />
-    ))}
+    <SocialMeta socialPreview={docOpen.socialPreview} />
 
     {docOpen.links.map((link) => (
       <HeadLink key={`${link.rel}:${link.href}`} link={link} />
