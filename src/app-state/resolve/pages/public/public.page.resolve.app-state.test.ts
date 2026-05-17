@@ -66,7 +66,13 @@ describe("appStateResolvePublicPage", () => {
       label: "Journal",
       metadata: {
         pageTitle: "Journal | Kevin Ellen",
-        description: "Field notes.",
+        metaDescription: "Field notes.",
+      },
+      socialPreview: {
+        openGraphType: "website",
+        image: null,
+        title: "Journal social title",
+        description: "Journal social description.",
       },
       robots: { allowIndex: true },
       robotsTxt: { disallow: false },
@@ -115,6 +121,16 @@ describe("appStateResolvePublicPage", () => {
     expect(appStateResolvePublicPage(page as never)).toEqual({
       ...page,
       status: null,
+      metadata: {
+        pageTitle: "Journal | Kevin Ellen",
+        metaDescription: "Field notes.",
+      },
+      socialPreview: {
+        openGraphType: "website",
+        image: null,
+        title: "Journal social title",
+        description: "Journal social description.",
+      },
       robots: resolvedRobots,
       assets: resolvedAssets,
       breadcrumbs: resolvedBreadcrumbs,

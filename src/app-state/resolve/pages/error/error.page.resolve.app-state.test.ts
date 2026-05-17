@@ -56,20 +56,22 @@ describe("appStateResolveErrorPage", () => {
       id: "not-found",
       status: 404,
       label: "Not found",
+
+      kind: null,
+      slug: null,
+
       metadata: {
         pageTitle: "Not found | Kevin Ellen",
         metaDescription: "This page could not be found.",
       },
-      content: resolvedContent,
-
-      kind: null,
-      slug: null,
+      socialPreview: null,
 
       robots: null,
       robotsTxt: null,
       sitemapXml: null,
       structuredData: [],
 
+      content: resolvedContent,
       breadcrumbs: ["home", "not-found"],
 
       assets: {

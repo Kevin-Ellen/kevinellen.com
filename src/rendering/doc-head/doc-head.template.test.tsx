@@ -19,6 +19,8 @@ describe("DocHeadTemplate", () => {
         metaDescription: "Notes about architecture and rendering.",
       },
 
+      socialPreview: null,
+
       preload: [
         {
           rel: "preload",
@@ -101,6 +103,8 @@ describe("DocHeadTemplate", () => {
         pageTitle: "No Canonical",
         metaDescription: "Testing canonical omission.",
       },
+
+      socialPreview: null,
 
       preload: [],
       links: [],

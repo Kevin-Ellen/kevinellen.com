@@ -75,6 +75,134 @@ jest.mock("@app-context/resolve/photos/photos.resolve.app-context", () => ({
   appContextResolvePhotos: jest.fn(),
 }));
 
+const createAppState = (): AppState =>
+  ({
+    navigation: { header: {}, footer: {} },
+    globalFooter: {},
+    assets: { scripts: [], svg: [] },
+    structuredData: { website: {} },
+    siteConfig: {
+      siteName: "Kevin Ellen",
+      origin: "https://example.com",
+      language: "en-GB",
+      headAssets: {},
+      headerBranding: {},
+      preload: {},
+    },
+    manifest: {
+      backgroundColor: "#ffffff",
+    },
+    metadataLabels: {},
+    imageDelivery: {},
+    getPublicPages: [],
+  }) as unknown as AppState;
+
+type TestPageState = Readonly<{
+  id: string;
+  slug: "/" | `/${string}` | null;
+  metadata: Record<string, unknown>;
+  socialPreview: Record<string, unknown> | null;
+  robots: Record<string, unknown> | null;
+  breadcrumbs: readonly string[];
+  assets: {
+    scripts: readonly unknown[];
+    svg: readonly unknown[];
+  };
+  content: {
+    content: readonly unknown[];
+  };
+}>;
+
+const createPageState = (
+  overrides: Partial<TestPageState> = {},
+): TestPageState => ({
+  id: "home",
+  slug: "/",
+  metadata: {
+    pageTitle: "Home | Kevin Ellen",
+    metaDescription: "Homepage",
+  },
+  socialPreview: {
+    openGraphType: "website",
+    image: null,
+    title: "Home | Kevin Ellen",
+    description: "Homepage",
+  },
+  robots: {
+    allowIndex: true,
+    allowFollow: true,
+  },
+  breadcrumbs: ["home"],
+  assets: {
+    scripts: [],
+    svg: [],
+  },
+  content: {
+    content: [],
+  },
+  ...overrides,
+});
+
+const setupCommonMocks = ({
+  pageState = createPageState(),
+  photoIds = ["used-photo"],
+  photos = [{ id: "used-photo" }, { id: "strip-photo" }],
+  homepageStripPhotoIds = ["used-photo", "strip-photo"],
+  page = { id: "home" },
+}: Readonly<{
+  pageState?: Record<string, unknown>;
+  photoIds?: readonly string[];
+  photos?: readonly Record<string, unknown>[];
+  homepageStripPhotoIds?: readonly string[] | null;
+  page?: Record<string, unknown>;
+}> = {}) => {
+  const navigation = { header: {}, footer: {} };
+  const globalFooter = {};
+  const assets = { scripts: [], svg: [] };
+  const structuredData: readonly AppContextStructuredDataEntry[] = [];
+  const breadcrumbs = { items: [], current: "Home" };
+
+  const kv = {
+    get: jest.fn().mockResolvedValue(
+      homepageStripPhotoIds === null
+        ? null
+        : {
+            photoIds: homepageStripPhotoIds,
+          },
+    ),
+  };
+
+  const env = {
+    KV_PHOTOS: kv,
+  } as unknown as Env;
+
+  jest.mocked(appContextResolveNavigation).mockReturnValue(navigation as never);
+  jest
+    .mocked(appContextResolveGlobalFooter)
+    .mockReturnValue(globalFooter as never);
+  jest.mocked(appContextResolvePageSource).mockReturnValue(pageState as never);
+  jest.mocked(appContextCollectPhotoIds).mockReturnValue(photoIds);
+  jest.mocked(appContextResolvePhotos).mockResolvedValue(photos as never);
+  jest.mocked(appContextResolveAssets).mockReturnValue(assets as never);
+  jest.mocked(appContextResolveStructuredData).mockReturnValue(structuredData);
+  jest
+    .mocked(appContextResolveBreadcrumbs)
+    .mockReturnValue(breadcrumbs as never);
+  jest.mocked(appContextResolvePage).mockReturnValue(page as never);
+
+  return {
+    navigation,
+    globalFooter,
+    assets,
+    structuredData,
+    breadcrumbs,
+    kv,
+    env,
+    page,
+    photos,
+  };
+};
+
 describe("appContextCreate", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -89,91 +217,20 @@ describe("appContextCreate", () => {
       },
     };
 
-    const pageState = {
-      id: "home",
-      slug: "/",
-      metadata: {
-        title: "Home",
-        description: "Homepage",
-      },
-      robots: {
-        allowIndex: true,
-        allowFollow: true,
-      },
-      breadcrumbs: ["home"],
-      assets: {
-        scripts: [],
-        svg: [],
-      },
-      content: {
-        content: [],
-      },
-    };
+    const appState = createAppState();
+    const pageState = createPageState();
 
-    const appState = {
-      navigation: { header: {}, footer: {} },
-      globalFooter: {},
-      assets: { scripts: [], svg: [] },
-      structuredData: { website: {} },
-      siteConfig: {
-        origin: "https://example.com",
-        language: "en-GB",
-        headAssets: {},
-        headerBranding: {},
-        preload: {},
-      },
-      manifest: {
-        backgroundColor: "#ffffff",
-      },
-      metadataLabels: {},
-      getPublicPages: [],
-    } as unknown as AppState;
-
-    const photos = [
-      {
-        id: "used-photo",
-      },
-      {
-        id: "strip-photo",
-      },
-    ];
-
-    const navigation = { header: {}, footer: {} };
-    const globalFooter = {};
-    const assets = { scripts: [], svg: [] };
-    const structuredData: readonly AppContextStructuredDataEntry[] = [];
-    const breadcrumbs = { items: [], current: "Home" };
-    const page = { id: "home" };
-
-    const kv = {
-      get: jest.fn().mockResolvedValue({
-        photoIds: ["used-photo", "strip-photo"],
-      }),
-    };
-
-    const env = {
-      KV_PHOTOS: kv,
-    } as unknown as Env;
-
-    jest
-      .mocked(appContextResolveNavigation)
-      .mockReturnValue(navigation as never);
-    jest
-      .mocked(appContextResolveGlobalFooter)
-      .mockReturnValue(globalFooter as never);
-    jest
-      .mocked(appContextResolvePageSource)
-      .mockReturnValue(pageState as never);
-    jest.mocked(appContextCollectPhotoIds).mockReturnValue(["used-photo"]);
-    jest.mocked(appContextResolvePhotos).mockResolvedValue(photos as never);
-    jest.mocked(appContextResolveAssets).mockReturnValue(assets as never);
-    jest
-      .mocked(appContextResolveStructuredData)
-      .mockReturnValue(structuredData);
-    jest
-      .mocked(appContextResolveBreadcrumbs)
-      .mockReturnValue(breadcrumbs as never);
-    jest.mocked(appContextResolvePage).mockReturnValue(page as never);
+    const {
+      navigation,
+      globalFooter,
+      assets,
+      structuredData,
+      breadcrumbs,
+      kv,
+      env,
+      page,
+      photos,
+    } = setupCommonMocks({ pageState });
 
     const result = await appContextCreate(appState, routing, env);
 
@@ -231,6 +288,7 @@ describe("appContextCreate", () => {
         routingPagination: {
           currentPage: 2,
         },
+        imageDelivery: appState.imageDelivery,
       }),
     );
 
@@ -274,6 +332,16 @@ describe("appContextCreate", () => {
       breadcrumbs,
       page,
       metadata: pageState.metadata,
+      socialPreview: {
+        openGraphType: "website",
+        image: "https://example.com/media/photo/used-photo/1200/630",
+        imageWidth: 1200,
+        imageHeight: 630,
+        siteName: "Kevin Ellen",
+        title: "Home | Kevin Ellen",
+        description: "Homepage",
+        url: "https://example.com/",
+      },
       robots: pageState.robots,
       canonicalUrl: "https://example.com/",
       language: "en-GB",
@@ -285,65 +353,129 @@ describe("appContextCreate", () => {
     });
   });
 
+  it("uses explicit relative social preview images before inheriting page photos", async () => {
+    const routing: RoutingResult = {
+      kind: "found",
+      publicPageId: "home",
+      pagination: null,
+    };
+
+    const appState = createAppState();
+    const pageState = createPageState({
+      socialPreview: {
+        openGraphType: "website",
+        image: "/assets/social/custom-card.jpg",
+        title: "Home | Kevin Ellen",
+        description: "Homepage",
+      },
+    });
+
+    const { env } = setupCommonMocks({ pageState });
+
+    const result = await appContextCreate(appState, routing, env);
+
+    expect(result.socialPreview).toEqual({
+      openGraphType: "website",
+      image: "https://example.com/assets/social/custom-card.jpg",
+      imageWidth: 1200,
+      imageHeight: 630,
+      siteName: "Kevin Ellen",
+      title: "Home | Kevin Ellen",
+      description: "Homepage",
+      url: "https://example.com/",
+    });
+  });
+
+  it("uses explicit absolute social preview images as-is", async () => {
+    const routing: RoutingResult = {
+      kind: "found",
+      publicPageId: "home",
+      pagination: null,
+    };
+
+    const appState = createAppState();
+    const pageState = createPageState({
+      socialPreview: {
+        openGraphType: "website",
+        image: "https://cdn.example.com/custom-card.jpg",
+        title: "Home | Kevin Ellen",
+        description: "Homepage",
+      },
+    });
+
+    const { env } = setupCommonMocks({ pageState });
+
+    const result = await appContextCreate(appState, routing, env);
+
+    expect(result.socialPreview).toEqual({
+      openGraphType: "website",
+      image: "https://cdn.example.com/custom-card.jpg",
+      imageWidth: 1200,
+      imageHeight: 630,
+      siteName: "Kevin Ellen",
+      title: "Home | Kevin Ellen",
+      description: "Homepage",
+      url: "https://example.com/",
+    });
+  });
+
+  it("keeps social preview image null when the inherited photo cannot be resolved", async () => {
+    const routing: RoutingResult = {
+      kind: "found",
+      publicPageId: "home",
+      pagination: null,
+    };
+
+    const appState = createAppState();
+    const pageState = createPageState();
+
+    const { env } = setupCommonMocks({
+      pageState,
+      photoIds: ["missing-photo"],
+      photos: [],
+      homepageStripPhotoIds: [],
+    });
+
+    const result = await appContextCreate(appState, routing, env);
+
+    expect(result.socialPreview).toEqual({
+      openGraphType: "website",
+      image: null,
+      imageWidth: null,
+      imageHeight: null,
+      siteName: "Kevin Ellen",
+      title: "Home | Kevin Ellen",
+      description: "Homepage",
+      url: "https://example.com/",
+    });
+  });
+
   it("uses an empty homepage strip index when the KV index is missing", async () => {
     const routing: RoutingResult = {
       kind: "error",
       status: 404,
     };
 
-    const pageState = {
+    const appState = createAppState();
+    const pageState = createPageState({
       slug: null,
       metadata: {},
+      socialPreview: null,
       robots: null,
       breadcrumbs: ["error-404"],
-      assets: {
-        scripts: [],
-        svg: [],
-      },
-      content: {
-        content: [],
-      },
-    };
+    });
 
-    const appState = {
-      navigation: {},
-      globalFooter: {},
-      assets: { scripts: [], svg: [] },
-      siteConfig: {
-        origin: "https://example.com",
-        language: "en-GB",
-        headAssets: {},
-        headerBranding: {},
-        preload: {},
-      },
-      manifest: {
-        backgroundColor: "#ffffff",
-      },
-      metadataLabels: {},
-      getPublicPages: [],
-    } as unknown as AppState;
-
-    const kv = {
-      get: jest.fn().mockResolvedValue(null),
-    };
-
-    const env = {
-      KV_PHOTOS: kv,
-    } as unknown as Env;
-
-    jest.mocked(appContextResolveNavigation).mockReturnValue({} as never);
-    jest.mocked(appContextResolveGlobalFooter).mockReturnValue({} as never);
-    jest
-      .mocked(appContextResolvePageSource)
-      .mockReturnValue(pageState as never);
-    jest.mocked(appContextCollectPhotoIds).mockReturnValue([]);
-    jest.mocked(appContextResolvePhotos).mockResolvedValue([]);
-    jest.mocked(appContextResolveAssets).mockReturnValue({} as never);
-    jest.mocked(appContextResolveStructuredData).mockReturnValue([]);
-    jest.mocked(appContextResolveBreadcrumbs).mockReturnValue({} as never);
-    jest.mocked(appContextResolvePage).mockReturnValue({} as never);
+    const { env, kv } = setupCommonMocks({
+      pageState,
+      photoIds: [],
+      photos: [],
+      homepageStripPhotoIds: null,
+      page: {},
+    });
 
     const result = await appContextCreate(appState, routing, env);
+
+    expect(kv.get).toHaveBeenCalledWith(HOMEPAGE_STRIP_PHOTO_INDEX_KEY, "json");
 
     expect(appContextResolvePhotos).toHaveBeenCalledWith({
       kv,
@@ -361,5 +493,6 @@ describe("appContextCreate", () => {
     );
 
     expect(result.canonicalUrl).toBeNull();
+    expect(result.socialPreview).toBeNull();
   });
 });

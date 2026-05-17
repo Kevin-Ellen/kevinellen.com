@@ -16,6 +16,7 @@ export const appStateResolveErrorPage = (
     slug: null,
 
     metadata: appStateResolvePageMetadata(page.metadata),
+    socialPreview: null,
 
     robots: null,
     robotsTxt: null,

@@ -28,6 +28,9 @@ describe("createDraftNoteDefinition", () => {
         pageTitle: "__REQUIRED__",
         metaDescription: "__REQUIRED__",
       },
+      socialPreview: {
+        openGraphType: "article",
+      },
       breadcrumbs: ["home"],
       content: {
         head: {
