@@ -4,8 +4,11 @@ import type { AppStateSocialPreview } from "@shared-types/page-definitions/socia
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
 type RuntimeFields = Readonly<{
+  siteName: string;
   image: string | null;
-  url: string | null;
+  imageWidth: number | null;
+  imageHeight: number | null;
+  url: string;
 }>;
 
 export type AppContextSocialPreview = Replace<

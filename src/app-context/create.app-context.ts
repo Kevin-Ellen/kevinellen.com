@@ -24,6 +24,9 @@ import {
   type HomepageStripPhotoIndex,
 } from "@shared-types/media/photo/indices.photo.types";
 
+const SOCIAL_PREVIEW_IMAGE_WIDTH = 1200;
+const SOCIAL_PREVIEW_IMAGE_HEIGHT = 630;
+
 const appContextResolveSocialPreviewImage = (
   explicitImage: string | null,
   usedPhotoIds: readonly string[],
@@ -48,12 +51,13 @@ const appContextResolveSocialPreviewImage = (
     return null;
   }
 
-  return `${origin}/media/photo/${photo.id}/1200/630`;
+  return `${origin}/media/photo/${photo.id}/${SOCIAL_PREVIEW_IMAGE_WIDTH}/${SOCIAL_PREVIEW_IMAGE_HEIGHT}`;
 };
 
 const appContextResolvePageRuntime = (
   page: AppStatePageDefinition,
   origin: string,
+  siteName: string,
   socialPreviewImage: string | null,
 ) => ({
   metadata: page.metadata,
@@ -61,7 +65,10 @@ const appContextResolvePageRuntime = (
     socialPreview: page.socialPreview,
     origin,
     slug: page.slug,
+    siteName,
     image: socialPreviewImage,
+    imageWidth: socialPreviewImage ? SOCIAL_PREVIEW_IMAGE_WIDTH : null,
+    imageHeight: socialPreviewImage ? SOCIAL_PREVIEW_IMAGE_HEIGHT : null,
   }),
   robots: page.robots,
   canonicalUrl: page.slug ? `${origin}${page.slug}` : null,
@@ -122,6 +129,7 @@ export const appContextCreate = async (
     appContextResolvePageRuntime(
       pageState,
       appState.siteConfig.origin,
+      appState.siteConfig.siteName,
       socialPreviewImage,
     );
 

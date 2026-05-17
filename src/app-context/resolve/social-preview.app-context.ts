@@ -7,22 +7,31 @@ type AppContextResolveSocialPreviewInput = Readonly<{
   socialPreview: AppStateSocialPreview | null;
   origin: string;
   slug: string | null;
+  siteName: string;
   image: string | null;
+  imageWidth: number | null;
+  imageHeight: number | null;
 }>;
 
 export const appContextResolveSocialPreview = ({
   socialPreview,
   origin,
   slug,
+  siteName,
   image,
+  imageWidth,
+  imageHeight,
 }: AppContextResolveSocialPreviewInput): AppContextSocialPreview | null => {
-  if (socialPreview === null) {
+  if (socialPreview === null || slug === null) {
     return null;
   }
 
   return {
     ...socialPreview,
-    url: slug ? `${origin}${slug}` : null,
+    siteName,
+    url: `${origin}${slug}`,
     image,
+    imageWidth: image ? imageWidth : null,
+    imageHeight: image ? imageHeight : null,
   };
 };
