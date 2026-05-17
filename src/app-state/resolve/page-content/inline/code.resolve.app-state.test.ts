@@ -5,12 +5,30 @@ import { appStateResolveCodeInline } from "@app-state/resolve/page-content/inlin
 import type { AuthoredCodeInline } from "@shared-types/page-content/inline/code/authored.code.inline-content.types";
 
 describe("appStateResolveCodeInline", () => {
-  it("returns authored code inline content unchanged", () => {
+  it("applies deterministic defaults", () => {
     const content = {
       kind: "code",
       value: "const answer = 42;",
     } satisfies AuthoredCodeInline;
 
-    expect(appStateResolveCodeInline(content)).toBe(content);
+    expect(appStateResolveCodeInline(content)).toEqual({
+      kind: "code",
+      value: "const answer = 42;",
+      language: null,
+    });
+  });
+
+  it("preserves authored language", () => {
+    const content = {
+      kind: "code",
+      value: "const answer = 42;",
+      language: "ts",
+    } satisfies AuthoredCodeInline;
+
+    expect(appStateResolveCodeInline(content)).toEqual({
+      kind: "code",
+      value: "const answer = 42;",
+      language: "ts",
+    });
   });
 });

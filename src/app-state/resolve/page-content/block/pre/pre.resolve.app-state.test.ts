@@ -13,6 +13,7 @@ describe("appStateResolvePreBlock", () => {
       kind: "pre",
       value: "const foo = 'bar';",
       flow: "content",
+      language: null,
     });
   });
 
@@ -27,6 +28,22 @@ describe("appStateResolvePreBlock", () => {
       kind: "pre",
       value: "const foo = 'bar';",
       flow: "breakout",
+      language: null,
+    });
+  });
+
+  it("preserves authored language", () => {
+    expect(
+      appStateResolvePreBlock({
+        kind: "pre",
+        value: "const foo = 'bar';",
+        language: "ts",
+      }),
+    ).toEqual({
+      kind: "pre",
+      value: "const foo = 'bar';",
+      flow: "content",
+      language: "ts",
     });
   });
 });
