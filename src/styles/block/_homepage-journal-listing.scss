@@ -1,0 +1,117 @@
+@use "../tokens" as tokens;
+
+.m-homepage-journal-listing {
+  display: grid;
+  row-gap: tokens.$space-lg;
+  padding-block: tokens.$space-xl;
+
+  &__heading {
+    margin: 0;
+    font-family: tokens.$font-family-meta;
+    font-size: tokens.$font-size-meta-term;
+    font-weight: tokens.$font-weight-meta-term;
+    line-height: tokens.$line-height-meta-term;
+    color: tokens.$colour-type-meta;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__featured {
+    display: grid;
+    gap: tokens.$space-lg;
+
+    @media (min-width: tokens.$bp-sm) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+      align-items: center;
+    }
+  }
+
+  &__media-link,
+  &__image {
+    display: block;
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  &__featured-content {
+    display: grid;
+    gap: tokens.$space-md;
+    max-width: 58ch;
+  }
+
+  &__date,
+  &__item-date,
+  &__featured-intro {
+    margin: 0;
+  }
+
+  &__date,
+  &__item-date {
+    font-family: tokens.$font-family-meta;
+    font-size: tokens.$font-size-meta;
+    font-weight: tokens.$font-weight-meta;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-type-meta;
+  }
+
+  &__featured-title,
+  &__title {
+    margin: 0;
+  }
+
+  &__featured-title {
+    font-family: tokens.$font-family-heading;
+    font-size: tokens.$font-size-h3;
+    font-weight: tokens.$font-weight-h3;
+    line-height: tokens.$line-height-h3;
+    color: tokens.$colour-type-heading;
+  }
+
+  &__featured-intro {
+    max-width: 58ch;
+  }
+
+  &__list {
+    display: grid;
+    margin-top: tokens.$space-md;
+  }
+
+  &__item {
+    display: grid;
+    gap: tokens.$space-sm;
+    padding-block: tokens.$space-md;
+
+    @media (min-width: tokens.$bp-sm) {
+      grid-template-columns: 6rem minmax(0, 1fr) auto;
+      column-gap: tokens.$space-lg;
+      align-items: baseline;
+    }
+  }
+
+  &__title {
+    font-family: tokens.$font-family-heading;
+    font-size: tokens.$font-size-h5;
+    font-weight: tokens.$font-weight-h5;
+    line-height: tokens.$line-height-h5;
+    color: tokens.$colour-type-heading;
+  }
+
+  &__action,
+  &__item-action {
+    justify-self: start;
+
+    @media (min-width: tokens.$bp-md) {
+      margin-left: tokens.$space-lg;
+    }
+  }
+
+  &__featured-link,
+  &__link {
+    text-decoration: none;
+  }
+}

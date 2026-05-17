@@ -3,27 +3,38 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "types": ["./worker-configuration.d.ts", "jest"],
+    "types": [
+      "./worker-configuration.d.ts",
+      "jest",
+      "@cloudflare/workers-types"
+    ],
     "lib": ["ES2022", "DOM"],
     "strict": true,
     "noEmit": true,
     "isolatedModules": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "jsx": "react-jsx",
     "paths": {
-      "@app/*": ["./src/app/*"],
-      "@config/*": ["./src/app/config/*"],
+      "@shared-types/*": ["./shared-types/*"],
+      "@request/*": ["./src/request/*"],
+      "@app-state/*": ["./src/app-state/*"],
+      "@app-context/*": ["./src/app-context/*"],
+      "@app-render-context/*": ["./src/app-render-context/*"],
+      "@rendering/*": ["./src/rendering/*"],
+
       "@utils/*": ["./src/utils/*"],
+      "@pages/*": ["./src/pages/*"],
       "@tests/*": ["./tests/*"],
-      "@shared-types/*": ["./packages/shared-types/src/*"],
-      "@content-pipeline/*": ["./packages/content-pipeline/src/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@content-cli/*": ["./packages/content-cli/src/*"]
     }
   },
   "include": [
     "src",
     "tests",
     "worker-configuration.d.ts",
-    "packages/shared-types/src",
-    "packages/shared-types/src/uploads"
+    "shared-types/",
+    "jest.config.ts"
   ]
 }
