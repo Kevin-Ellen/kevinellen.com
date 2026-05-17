@@ -6,5 +6,8 @@ import type { AppStateCodeInline } from "@shared-types/page-content/inline/code/
 export const appStateResolveCodeInline = (
   content: AuthoredCodeInline,
 ): AppStateCodeInline => {
-  return content;
+  return {
+    ...content,
+    language: content.language ?? null,
+  };
 };

@@ -78,3 +78,61 @@ ol li::before {
   font-weight: tokens.$font-weight-strong;
   line-height: 1.4;
 }
+
+code,
+pre,
+kbd,
+samp {
+  font-family:
+    SFMono-Regular, "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas,
+    monospace;
+}
+
+code {
+  padding: 0.08em 0.35em;
+  background: tokens.$colour-surface-subtle;
+  border: 1px solid tokens.$colour-border-subtle;
+  border-radius: 0.2rem;
+  font-size: 0.92em;
+  line-height: 1;
+  overflow-wrap: break-word;
+  position: relative;
+  top: 0.02em;
+}
+
+pre {
+  overflow-x: auto;
+  margin-block: tokens.$space-lg;
+  padding: tokens.$space-sm tokens.$space-md;
+  background: tokens.$colour-surface;
+  border: 1px solid tokens.$colour-border-strong;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+pre code {
+  display: block;
+  min-width: max-content;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre;
+  word-break: normal;
+}
+
+kbd {
+  padding: 0.08em 0.4em;
+  background: tokens.$colour-surface-elevated;
+  border: 1px solid tokens.$colour-border-subtle;
+  border-bottom-width: 2px;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+samp {
+  font-size: 0.92em;
+}

@@ -9,5 +9,6 @@ export const appStateResolvePreBlock = (
   return {
     ...module,
     flow: module.flow ?? "content",
+    language: module.language ?? null,
   };
 };
