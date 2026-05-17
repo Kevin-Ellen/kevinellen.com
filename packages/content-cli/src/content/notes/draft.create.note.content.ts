@@ -20,6 +20,10 @@ export const createDraftNoteDefinition = (
       metaDescription: "__REQUIRED__",
     },
 
+    socialPreview: {
+      openGraphType: "article",
+    },
+
     breadcrumbs: ["home"],
 
     content: {

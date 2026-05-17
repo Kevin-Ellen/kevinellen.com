@@ -20,6 +20,9 @@ export const createDraftJournalDefinition = (
       pageTitle: "__REQUIRED__",
       metaDescription: "__REQUIRED__",
     },
+    socialPreview: {
+      openGraphType: "article",
+    },
 
     breadcrumbs: ["home", "journal"],
 

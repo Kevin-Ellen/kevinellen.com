@@ -10,6 +10,7 @@ import { appStateResolvePageStructuredData } from "@app-state/resolve/pages/publ
 import { appStateResolvePageContent } from "@app-state/resolve/page-content/page-content.resolve.app-state";
 import { appStateResolvePageRobotsTxT } from "@app-state/resolve/pages/public/robots-txt.resolve.app-state";
 import { appStateResolvePageSitemapXml } from "@app-state/resolve/pages/public/sitemap-xml.resolve.app-state";
+import { AppStateResolveSocialPreview } from "@app-state/resolve/social-preview.resolve.app-state";
 
 import { appStateResolvePageMetadata } from "@app-state/resolve/pages/page-metadata.resolve.app-state";
 
@@ -27,5 +28,9 @@ export const appStateResolvePublicPage = (
     robotsTxt: appStateResolvePageRobotsTxT(page.robotsTxt),
     sitemapXml: appStateResolvePageSitemapXml(page.sitemapXml),
     content: appStateResolvePageContent(page.content),
+    socialPreview: AppStateResolveSocialPreview({
+      metadata: appStateResolvePageMetadata(page.metadata),
+      social: page.socialPreview,
+    }),
   };
 };
