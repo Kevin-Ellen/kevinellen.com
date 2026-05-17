@@ -10,32 +10,18 @@ import {
 const PHOTO_VARIANT_FIT = "cover";
 const PHOTO_VARIANT_FORMAT = "auto";
 
-const NUMERIC_DIMENSION_PATTERN = /^\d+$/;
+const buildPhotoVariant = (width?: string, height?: string): string => {
+  if (width === undefined || height === undefined) {
+    return DEFAULT_PHOTO_VARIANT;
+  }
 
-const shouldUseDefaultPhotoVariant = (
-  width?: string,
-  height?: string,
-): boolean => width === undefined && height === undefined;
-
-const hasCompletePhotoVariantDimensions = (
-  width?: string,
-  height?: string,
-): width is string => width !== undefined && height !== undefined;
-
-const hasNumericPhotoVariantDimensions = (
-  width: string,
-  height: string,
-): boolean =>
-  NUMERIC_DIMENSION_PATTERN.test(width) &&
-  NUMERIC_DIMENSION_PATTERN.test(height);
-
-const buildPhotoVariant = (width: string, height: string): string =>
-  [
+  return [
     `w=${width}`,
     `h=${height}`,
     `fit=${PHOTO_VARIANT_FIT}`,
     `format=${PHOTO_VARIANT_FORMAT}`,
   ].join(",");
+};
 
 export const photoAssetResolver = (req: Request): PhotoAssetResolution => {
   const pathname = new URL(req.url).pathname;
@@ -49,25 +35,6 @@ export const photoAssetResolver = (req: Request): PhotoAssetResolution => {
   }
 
   const [, photoId, width, height] = match;
-
-  if (shouldUseDefaultPhotoVariant(width, height)) {
-    return {
-      outcome: "asset",
-      asset: {
-        imageId: photoId,
-        variant: DEFAULT_PHOTO_VARIANT,
-      },
-    };
-  }
-
-  if (
-    !hasCompletePhotoVariantDimensions(width, height) ||
-    !hasNumericPhotoVariantDimensions(width, height)
-  ) {
-    return {
-      outcome: "continue",
-    };
-  }
 
   return {
     outcome: "asset",
