@@ -9,6 +9,7 @@ describe("applyBaseResponseHeaders", () => {
     const result = applyBaseResponseHeaders(headers, "test-nonce");
 
     expect(result).toBe(headers);
+
     expect(headers.get("content-security-policy")).toBe(
       [
         "default-src 'self'",
@@ -24,13 +25,32 @@ describe("applyBaseResponseHeaders", () => {
         "upgrade-insecure-requests",
       ].join("; "),
     );
+
+    expect(headers.get("strict-transport-security")).toBe(
+      "max-age=31536000; includeSubDomains; preload",
+    );
+
     expect(headers.get("x-content-type-options")).toBe("nosniff");
+
+    expect(headers.get("x-frame-options")).toBe("DENY");
+
     expect(headers.get("referrer-policy")).toBe(
       "strict-origin-when-cross-origin",
     );
+
     expect(headers.get("permissions-policy")).toBe(
-      "camera=(), microphone=(), geolocation=()",
+      [
+        "camera=()",
+        "microphone=()",
+        "geolocation=()",
+        "payment=()",
+        "usb=()",
+        "display-capture=()",
+      ].join(", "),
     );
+
     expect(headers.get("cross-origin-opener-policy")).toBe("same-origin");
+
+    expect(headers.get("cross-origin-resource-policy")).toBe("same-origin");
   });
 });

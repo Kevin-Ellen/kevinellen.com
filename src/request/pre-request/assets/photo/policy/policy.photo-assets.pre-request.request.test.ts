@@ -133,4 +133,52 @@ describe("photoAssetResponsePolicy", () => {
     expect(originalResponse.headers.get("x-runtime-policy")).toBe("old-policy");
     expect(originalResponse.headers.get("x-robots-tag")).toBe("index, follow");
   });
+
+  it("adds photo asset security headers", () => {
+    const response = photoAssetResponsePolicy(new Response(null), createEnv());
+
+    expect(response.headers.get("content-security-policy")).toBe(
+      [
+        "default-src 'none'",
+        "base-uri 'none'",
+        "object-src 'none'",
+        "frame-ancestors 'none'",
+        "form-action 'none'",
+        "sandbox",
+      ].join("; "),
+    );
+
+    expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+    expect(response.headers.get("cross-origin-resource-policy")).toBe(
+      "cross-origin",
+    );
+  });
+
+  it("overrides upstream photo asset security headers", () => {
+    const originalResponse = new Response(null, {
+      headers: {
+        "content-security-policy": "default-src *",
+        "x-content-type-options": "sniff",
+        "cross-origin-resource-policy": "same-origin",
+      },
+    });
+
+    const response = photoAssetResponsePolicy(originalResponse, createEnv());
+
+    expect(response.headers.get("content-security-policy")).toBe(
+      [
+        "default-src 'none'",
+        "base-uri 'none'",
+        "object-src 'none'",
+        "frame-ancestors 'none'",
+        "form-action 'none'",
+        "sandbox",
+      ].join("; "),
+    );
+
+    expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+    expect(response.headers.get("cross-origin-resource-policy")).toBe(
+      "cross-origin",
+    );
+  });
 });
