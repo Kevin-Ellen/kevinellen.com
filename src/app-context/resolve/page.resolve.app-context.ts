@@ -18,6 +18,7 @@ export const appContextResolvePage = (
     slug: page.slug,
     label: page.label,
     status: page.status,
+    socialPreview: page.socialPreview,
     content: appContextResolvePageContent(page.content, context),
   };
 };

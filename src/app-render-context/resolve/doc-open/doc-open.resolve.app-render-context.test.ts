@@ -36,7 +36,18 @@ describe("appRenderContextResolveDocOpen", () => {
   it("resolves doc open render context", () => {
     const appContext = {
       metadata: {
+        pageTitle: "Kevin Ellen",
+        metaDescription: "Wildlife photography and technical notes.",
+      },
+      socialPreview: {
+        openGraphType: "website",
+        siteName: "Kevin Ellen",
         title: "Kevin Ellen",
+        description: "Wildlife photography and technical notes.",
+        url: "https://kevinellen.com/",
+        image: null,
+        imageWidth: null,
+        imageHeight: null,
       },
       language: "en-GB",
       canonicalUrl: "https://kevinellen.com/",
@@ -80,7 +91,19 @@ describe("appRenderContextResolveDocOpen", () => {
       }),
     ).toEqual({
       metadata: {
+        pageTitle: "Kevin Ellen",
+        metaDescription: "Wildlife photography and technical notes.",
+      },
+      socialPreview: {
+        openGraphType: "website",
+        siteName: "Kevin Ellen",
         title: "Kevin Ellen",
+        description: "Wildlife photography and technical notes.",
+        url: "https://kevinellen.com/",
+        image: null,
+        imageWidth: null,
+        imageHeight: null,
+        twitterCard: "summary_large_image",
       },
       language: "en-GB",
       canonicalUrl: "https://kevinellen.com/",

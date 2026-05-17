@@ -15,6 +15,7 @@ import type { AppContextBreadcrumbs } from "@shared-types/breadcrumbs/app-contex
 import type { AppContextPageDefinition } from "@shared-types/page-definitions/app-context.page-definition.types";
 import type { AppContextPreload } from "@shared-types/config/site-config/app-context.preload.config.types";
 import type { AppContextMetadataLabels } from "@shared-types/config/metadata-labels/app-context.metadata-labels.types";
+import type { AppContextSocialPreview } from "@shared-types/page-definitions/social-preview/app-context.social-preview.page-definition.types";
 
 export class AppContext {
   readonly #data: AppContextData;
@@ -94,6 +95,10 @@ export class AppContext {
 
   public get preload(): AppContextPreload {
     return this.#data.preload;
+  }
+
+  public get socialPreview(): AppContextSocialPreview | null {
+    return this.#data.socialPreview;
   }
 
   public get metadataLabels(): AppContextMetadataLabels {

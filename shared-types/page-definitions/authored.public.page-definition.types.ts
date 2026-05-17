@@ -8,6 +8,7 @@ import type { AuthoredPageSitemapXmlDirectives } from "@shared-types/page-defini
 import type { PublicPageKind } from "@shared-types/page-definitions/shared/shared.public-kind.page-definition.types";
 import type { PageIdPublic } from "@shared-types/page-definitions/shared/shared.page-id.page-definition.types";
 import type { AuthoredStructuredDataEntry } from "@shared-types/structured-data/authored.structured-data.types";
+import type { AuthoredSocialPreview } from "@shared-types/page-definitions/social-preview/authored.social-preview.page-definition.types";
 
 import type { Replace } from "@shared-types/shared-types-utils/replace.shared.types";
 
@@ -21,6 +22,7 @@ type SpecialisedFields = Readonly<{
   assets?: AuthoredAssets;
   breadcrumbs?: readonly PageIdPublic[];
   structuredData?: readonly AuthoredStructuredDataEntry[];
+  socialPreview?: AuthoredSocialPreview;
 }>;
 
 export type AuthoredPublicPageDefinition = Replace<
