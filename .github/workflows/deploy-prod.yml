@@ -14,52 +14,123 @@ concurrency:
 
 jobs:
   deploy-prod:
-    name: Trigger PROD deployment in Spacelift
+    name: Build release artifact and trigger PROD deployment in Spacelift
     runs-on: ubuntu-latest
     environment: prod
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
-      - name: Resolve promoted release metadata
+      - name: Resolve release metadata
         id: release
         shell: bash
         run: |
           set -euo pipefail
 
-          MERGE_SHA="${GITHUB_SHA}"
-          PARENTS="$(git rev-list --parents -n 1 "${MERGE_SHA}")"
-          PARENT_COUNT="$(echo "${PARENTS}" | wc -w | tr -d ' ')"
+          RELEASE_SHA="${GITHUB_SHA}"
+          RELEASE_PREFIX="workers/${RELEASE_SHA}"
 
-          if [ "${PARENT_COUNT}" -lt 3 ]; then
-            echo "Expected a merge commit on deploy-prod, but commit ${MERGE_SHA} does not have two parents."
-            echo "Use PR merges into deploy-prod rather than direct pushes."
-            exit 1
+          echo "release_sha=${RELEASE_SHA}" >> "$GITHUB_OUTPUT"
+          echo "release_key=${RELEASE_PREFIX}/worker-bundle.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "manifest_key=${RELEASE_PREFIX}/manifest.json" >> "$GITHUB_OUTPUT"
+          echo "checksums_key=${RELEASE_PREFIX}/checksums.txt" >> "$GITHUB_OUTPUT"
+
+          echo "Resolved deploy-prod release SHA: ${RELEASE_SHA}"
+          echo "Resolved release key: ${RELEASE_PREFIX}/worker-bundle.tar.gz"
+
+      - name: Set up Node 25
+        uses: actions/setup-node@v6
+        with:
+          node-version: 25
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build styles
+        run: npm run build:styles
+
+      - name: Build worker
+        run: npm run build
+
+      - name: Prepare release artifact package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          GIT_SHA="${{ steps.release.outputs.release_sha }}"
+          RELEASE_KEY="${{ steps.release.outputs.release_key }}"
+          BUILD_ID="${GITHUB_RUN_ID}"
+          ARTIFACT_DIR=".artifact"
+          PACKAGE_DIR="${ARTIFACT_DIR}/package"
+
+          rm -rf "${ARTIFACT_DIR}"
+          mkdir -p "${PACKAGE_DIR}/worker"
+
+          cp dist/worker/entry.js "${PACKAGE_DIR}/worker/entry.js"
+          cp dist/worker/entry.js.map "${PACKAGE_DIR}/worker/entry.js.map"
+
+          if [ -d "dist/static" ]; then
+            mkdir -p "${PACKAGE_DIR}/static"
+            cp -R dist/static/. "${PACKAGE_DIR}/static/"
           fi
 
-          RELEASE_SHA="$(echo "${PARENTS}" | awk '{print $3}')"
-          RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
+          cat > "${PACKAGE_DIR}/manifest.json" <<EOF_MANIFEST
+          {
+            "project": "kevinellen.com",
+            "git_sha": "${GIT_SHA}",
+            "build_id": "${BUILD_ID}",
+            "worker_entry": "worker/entry.js",
+            "static_dir": "static",
+            "bundle_archive": "worker-bundle.tar.gz",
+            "release_key": "${RELEASE_KEY}",
+            "node_version": "25",
+            "compatibility_date": "2026-03-12"
+          }
+          EOF_MANIFEST
 
-          echo "merge_sha=${MERGE_SHA}" >> "$GITHUB_OUTPUT"
-          echo "release_sha=${RELEASE_SHA}" >> "$GITHUB_OUTPUT"
-          echo "release_key=${RELEASE_KEY}" >> "$GITHUB_OUTPUT"
+          tar -czf "${ARTIFACT_DIR}/worker-bundle.tar.gz" -C "${PACKAGE_DIR}" .
+          (
+            cd "${ARTIFACT_DIR}"
+            sha256sum "worker-bundle.tar.gz" | tee "checksums.txt"
+          )
 
-          echo "Resolved merge SHA: ${MERGE_SHA}"
-          echo "Resolved promoted release SHA: ${RELEASE_SHA}"
-          echo "Resolved release key: ${RELEASE_KEY}"
+      - name: Upload release artifact to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BUCKET="kevinellen-artifacts"
+          ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+
+          python3 -m pip install --no-cache-dir awscli >/dev/null 2>&1
+
+          python3 -m awscli s3 cp ".artifact/worker-bundle.tar.gz" \
+            "s3://${BUCKET}/${{ steps.release.outputs.release_key }}" \
+            --endpoint-url "${ENDPOINT}"
+
+          python3 -m awscli s3 cp ".artifact/package/manifest.json" \
+            "s3://${BUCKET}/${{ steps.release.outputs.manifest_key }}" \
+            --endpoint-url "${ENDPOINT}"
+
+          python3 -m awscli s3 cp ".artifact/checksums.txt" \
+            "s3://${BUCKET}/${{ steps.release.outputs.checksums_key }}" \
+            --endpoint-url "${ENDPOINT}"
 
       - name: Show deploy inputs
         shell: bash
         run: |
           echo "stack_id=${{ vars.SPACELIFT_PROD_STACK_ID }}"
-          echo "merge_sha=${{ steps.release.outputs.merge_sha }}"
           echo "release_sha=${{ steps.release.outputs.release_sha }}"
           echo "release_key=${{ steps.release.outputs.release_key }}"
 
-      - name: Verify promoted artefact exists
+      - name: Verify release artifact exists
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -72,13 +143,11 @@ jobs:
           ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
           BUCKET="kevinellen-artifacts"
 
-          python3 -m pip install --no-cache-dir awscli >/dev/null 2>&1
-
           python3 -m awscli s3 ls \
             "s3://${BUCKET}/${{ steps.release.outputs.release_key }}" \
             --endpoint-url "${ENDPOINT}" >/dev/null
 
-          echo "Artefact exists: ${{ steps.release.outputs.release_key }}"
+          echo "Release artifact exists: ${{ steps.release.outputs.release_key }}"
 
       - name: Trigger PROD run via Spacelift GraphQL
         env:
@@ -115,7 +184,7 @@ jobs:
 
           echo "JWT acquired"
 
-          PAYLOAD="$(cat <<EOF
+          PAYLOAD="$(cat <<EOF_PAYLOAD
           {
             "query": "mutation RunTrigger(\$stack: ID!, \$commitSha: String!, \$runtimeConfig: RuntimeConfigInput) { runTrigger(stack: \$stack, commitSha: \$commitSha, runtimeConfig: \$runtimeConfig) { id } }",
             "variables": {
@@ -143,7 +212,7 @@ jobs:
               }
             }
           }
-          EOF
+          EOF_PAYLOAD
           )"
 
           RESPONSE="$(
