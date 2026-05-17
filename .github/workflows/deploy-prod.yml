@@ -40,7 +40,7 @@ jobs:
             exit 1
           fi
 
-          RELEASE_SHA="$(echo "${PARENTS}" | awk '{print $3}')"
+          RELEASE_SHA="$(echo "${PARENTS}" | awk '{print $2}')"
           RELEASE_KEY="workers/${RELEASE_SHA}/worker-bundle.tar.gz"
 
           echo "merge_sha=${MERGE_SHA}" >> "$GITHUB_OUTPUT"
