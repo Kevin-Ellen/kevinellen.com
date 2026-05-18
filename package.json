@@ -33,7 +33,7 @@
   },
   "keywords": [],
   "author": "Kevin Ellen",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "packageManager": "npm@11.11.0",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260502.1",
