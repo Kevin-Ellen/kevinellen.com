@@ -6,8 +6,21 @@ import type { ContentCliEnvironment } from "@content-cli/types/content-cli.env.t
 import { cancel, isCancel, select } from "@clack/prompts";
 
 import { runJournalPromoteFlow } from "@content-cli/cli/interactive/flows/journal/promote.journal.flow.interactive.cli";
+import { runNotePromoteFlow } from "@content-cli/cli/interactive/flows/note/promote.note.flow.interactive.cli";
 
-type PromoteMenuAction = "dev-stg" | "stg-prod" | "dev-prod" | "back";
+type PromoteEntity = "journal" | "note";
+type PromoteRoute = "dev-stg" | "stg-prod" | "dev-prod";
+
+type PromoteMenuAction = `${PromoteEntity}:${PromoteRoute}` | "back";
+
+const promoteRoutes: Record<
+  PromoteRoute,
+  [from: ContentCliEnvironment, to: ContentCliEnvironment]
+> = {
+  "dev-stg": ["dev", "stg"],
+  "stg-prod": ["stg", "prod"],
+  "dev-prod": ["dev", "prod"],
+};
 
 export const runPromoteInteractiveMenu = async (
   state: InteractiveCliState,
@@ -15,9 +28,14 @@ export const runPromoteInteractiveMenu = async (
   const action = await select<PromoteMenuAction>({
     message: "🐦 Promote",
     options: [
-      { value: "dev-stg", label: "Journal DEV → STG" },
-      { value: "stg-prod", label: "Journal STG → PROD" },
-      { value: "dev-prod", label: "Journal DEV → PROD" },
+      { value: "journal:dev-stg", label: "Journal DEV → STG" },
+      { value: "journal:stg-prod", label: "Journal STG → PROD" },
+      { value: "journal:dev-prod", label: "Journal DEV → PROD" },
+
+      { value: "note:dev-stg", label: "Note DEV → STG" },
+      { value: "note:stg-prod", label: "Note STG → PROD" },
+      { value: "note:dev-prod", label: "Note DEV → PROD" },
+
       { value: "back", label: "Back" },
     ],
   });
@@ -29,19 +47,20 @@ export const runPromoteInteractiveMenu = async (
 
   if (action === "back") return;
 
-  const actionMap: Record<
-    Exclude<PromoteMenuAction, "back">,
-    [from: ContentCliEnvironment, to: ContentCliEnvironment]
-  > = {
-    "dev-stg": ["dev", "stg"],
-    "stg-prod": ["stg", "prod"],
-    "dev-prod": ["dev", "prod"],
-  };
+  const [entity, route] = action.split(":") as [PromoteEntity, PromoteRoute];
 
-  const flowArgs = actionMap[action];
+  const flowArgs = promoteRoutes[route];
+
   if (!flowArgs) {
     throw new Error(`No promote flow defined for action: ${action}`);
   }
 
-  await runJournalPromoteFlow(state, flowArgs[0], flowArgs[1]);
+  const [from, to] = flowArgs;
+
+  if (entity === "journal") {
+    await runJournalPromoteFlow(state, from, to);
+    return;
+  }
+
+  await runNotePromoteFlow(state, from, to);
 };
