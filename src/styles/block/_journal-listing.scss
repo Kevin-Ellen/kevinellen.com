@@ -14,7 +14,8 @@
     padding-block: tokens.$space-lg;
     border-top: 1px solid tokens.$colour-rule;
 
-    &::before {
+    &::before,
+    &::marker {
       content: "";
     }
 
