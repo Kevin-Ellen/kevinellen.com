@@ -29,7 +29,7 @@
     padding-inline: 0;
 
     @media (min-width: tokens.$bp-md) {
-      grid-template-columns: minmax(0, 44ch) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 28ch) minmax(0, 1fr);
       column-gap: tokens.$space-xl;
       align-items: start;
     }
