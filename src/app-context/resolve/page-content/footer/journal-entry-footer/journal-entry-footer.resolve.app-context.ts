@@ -36,13 +36,13 @@ export const appContextResolveJournalEntryFooter = (
   context: AppContextPageContentResolverContext,
 ): AppContextJournalEntryFooter => {
   const cameras = uniqueDefinedStrings(
-    context.photos.map((photo) =>
+    context.pagePhotos.map((photo) =>
       resolveCameraLabel(photo.cameraMake, photo.cameraModel),
     ),
   );
 
   const lenses = uniqueDefinedStrings(
-    context.photos.map((photo) => photo.lensModel),
+    context.pagePhotos.map((photo) => photo.lensModel),
   );
 
   return {

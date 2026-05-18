@@ -140,8 +140,11 @@ export const appContextCreate = async (
     appState,
   );
 
+  const pagePhotos = photos.filter((photo) => usedPhotoIdSet.has(photo.id));
+
   const page = appContextResolvePage(pageState, routing, {
     photos,
+    pagePhotos,
     homepageStripPhotoIds: availableHomepageStripPhotoIds,
     metadataLabels: appState.metadataLabels,
     resolveInternalLink: (link) =>
