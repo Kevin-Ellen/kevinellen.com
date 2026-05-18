@@ -91,4 +91,38 @@ describe("runNotePromoteFlow", () => {
       to: "prod",
     });
   });
+
+  it("trims slug input before promoting", async () => {
+    (text as unknown as jest.Mock).mockResolvedValueOnce("  my-note  ");
+
+    await runNotePromoteFlow(
+      { env: "dev" } as InteractiveCliState,
+      "dev",
+      "stg",
+    );
+
+    expect(runInteractiveContentCommand).toHaveBeenCalledWith({
+      env: "dev",
+      entity: "note",
+      action: "promote",
+      slug: "my-note",
+      from: "dev",
+      to: "stg",
+    });
+  });
+
+  it("cancels when slug input is empty after trimming", async () => {
+    (text as unknown as jest.Mock).mockResolvedValueOnce("   ");
+
+    await runNotePromoteFlow(
+      { env: "dev" } as InteractiveCliState,
+      "dev",
+      "stg",
+    );
+
+    expect(cancel).toHaveBeenCalledWith(
+      "Promotion cancelled. Note slug is required.",
+    );
+    expect(runInteractiveContentCommand).not.toHaveBeenCalled();
+  });
 });

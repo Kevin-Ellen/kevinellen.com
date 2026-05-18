@@ -31,47 +31,72 @@ type JournalPublishCommandResult = Readonly<
 
 const JOURNAL_PAGE_ID_PREFIX = "journal:";
 
-const toJournalPageId = (workspaceId: string): `journal:${string}` =>
-  `${JOURNAL_PAGE_ID_PREFIX}${workspaceId}`;
+const toJournalPageId = (pageId: string): `journal:${string}` => {
+  if (pageId.startsWith(JOURNAL_PAGE_ID_PREFIX)) {
+    return pageId as `journal:${string}`;
+  }
+
+  return `${JOURNAL_PAGE_ID_PREFIX}${pageId}`;
+};
+
+const assertJournalWorkspaceMatchesSlug = (
+  workspaceId: string,
+  page: AuthoredPublicPageDefinition,
+): void => {
+  const expectedSlug = `/journal/${workspaceId}`;
+
+  if (page.slug === expectedSlug) return;
+
+  throw new Error(
+    [
+      "Journal slug/workspace mismatch.",
+      "",
+      `Workspace: ${workspaceId}`,
+      `Expected slug: ${expectedSlug}`,
+      `Actual slug: ${page.slug}`,
+      "",
+      "The workspace identifies the draft location, but the authored page owns the canonical slug.",
+      "Update the draft slug or publish from the matching workspace.",
+    ].join("\n"),
+  );
+};
 
 /**
- * Update the page identity (id, slug, breadcrumbs)
+ * Normalise journal page identity without deriving the public slug from the workspace.
  */
 const updateJournalIdentity = (
   page: AuthoredPublicPageDefinition,
-  workspaceId: string,
-): AuthoredPublicPageDefinition => ({
-  ...page,
-  id: toJournalPageId(workspaceId),
-  kind: "journal",
-  slug: `/journal/${workspaceId}`,
-  breadcrumbs: ["home", "journal", toJournalPageId(workspaceId)],
-});
+): AuthoredPublicPageDefinition => {
+  const journalPageId = toJournalPageId(page.id);
+
+  return {
+    ...page,
+    id: journalPageId,
+    kind: "journal",
+    slug: page.slug,
+    breadcrumbs: ["home", "journal", journalPageId],
+  };
+};
 
 /**
- * Append a new updatedAt timestamp to the journalEntryFooter(s)
+ * Append a new updatedAt timestamp to the journalEntryFooter(s).
  */
 const updateJournalFooter = (
   page: AuthoredPublicPageDefinition,
 ): AuthoredPublicPageDefinition => {
   const updatedAt = formatLocalDateTimeWithOffset(new Date());
 
-  const footer = page.content.footer ?? [];
-  const updatedFooter = [];
+  const updatedFooter = (page.content.footer ?? []).map((module) => {
+    if (module.kind !== "journalEntryFooter") return module;
 
-  for (const module of footer) {
-    if (module.kind === "journalEntryFooter") {
-      updatedFooter.push({
-        ...module,
-        publication: {
-          ...module.publication,
-          updatedAt: [...module.publication.updatedAt, updatedAt],
-        },
-      });
-    } else {
-      updatedFooter.push(module);
-    }
-  }
+    return {
+      ...module,
+      publication: {
+        ...module.publication,
+        updatedAt: [...module.publication.updatedAt, updatedAt],
+      },
+    };
+  });
 
   return {
     ...page,
@@ -81,15 +106,18 @@ const updateJournalFooter = (
     },
   };
 };
+
 /**
- * Publish a journal: validate, publish photos, update KV, and move workspace.
+ * Publish a journal: validate, check identity, publish photos, update KV, and move workspace.
  */
 export const runPublishJournalCommand = async (
   args: ParsedJournalDirectCliArgs,
 ): Promise<JournalPublishCommandResult> => {
   const workspaceId = args.slug;
-  if (!workspaceId)
+
+  if (!workspaceId) {
     throw new Error("Journal publish requires --slug <workspace-id>.");
+  }
 
   // Step 1: validate the draft
   await runValidateJournalCommand(args);
@@ -113,21 +141,21 @@ export const runPublishJournalCommand = async (
   // Step 3: import the draft
   const page = await importJournalDraft(journalPath);
 
+  // Step 4: validate and normalise identity before side effects
+  assertJournalWorkspaceMatchesSlug(workspaceId, page);
+
+  const publishedPage = updateJournalFooter(updateJournalIdentity(page));
+
   console.log(`\nPublishing journal ${workspaceId}...`);
   console.log(`Workspace path: ${workspacePath}`);
   console.log(`Journal file path: ${journalPath}\n`);
 
-  // Step 4: publish photos
+  // Step 5: publish photos
   const publishedPhotos = await publishPhotoDrafts(
     config,
     workspaceId,
     workspacePath,
     photosPath,
-  );
-
-  // Step 5: update page identity and footer
-  const publishedPage = updateJournalFooter(
-    updateJournalIdentity(page, workspaceId),
   );
 
   // Step 6: write to KV
