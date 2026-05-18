@@ -5,10 +5,20 @@ import type { AppStateJournalEntryFooter } from "@shared-types/page-content/foot
 
 import { appContextResolveJournalEntryFooter } from "@app-context/resolve/page-content/footer/journal-entry-footer/journal-entry-footer.resolve.app-context";
 
+const journalFooter: AppStateJournalEntryFooter = {
+  kind: "journalEntryFooter",
+  publication: {
+    author: "Kevin",
+    publishedAt: "2025-05-10",
+    updatedAt: [],
+  },
+  tags: [],
+};
+
 describe("appContextResolveJournalEntryFooterModule", () => {
-  it("collects unique camera and lens labels", () => {
+  it("collects unique camera and lens labels from page photos only", () => {
     const context = {
-      photos: [
+      pagePhotos: [
         {
           cameraMake: "Canon",
           cameraModel: "Canon EOS R7",
@@ -27,17 +37,7 @@ describe("appContextResolveJournalEntryFooterModule", () => {
       ],
     } as unknown as AppContextPageContentResolverContext;
 
-    const module: AppStateJournalEntryFooter = {
-      kind: "journalEntryFooter",
-      publication: {
-        author: "Kevin",
-        publishedAt: "2025-05-10",
-        updatedAt: [],
-      },
-      tags: [],
-    };
-
-    const result = appContextResolveJournalEntryFooter(module, context);
+    const result = appContextResolveJournalEntryFooter(journalFooter, context);
 
     expect(result).toEqual({
       kind: "journalEntryFooter",
@@ -57,9 +57,35 @@ describe("appContextResolveJournalEntryFooterModule", () => {
     });
   });
 
-  it("filters null and empty equipment values", () => {
+  it("ignores globally loaded photos when resolving journal footer equipment", () => {
     const context = {
       photos: [
+        {
+          cameraMake: "Canon",
+          cameraModel: "Canon EOS R7",
+          lensModel: "RF100-500mm F4.5-7.1 L IS USM + EXTENDER RF1.4x",
+        },
+      ],
+      pagePhotos: [
+        {
+          cameraMake: "Canon",
+          cameraModel: "Canon EOS R7",
+          lensModel: "RF100-500mm F4.5-7.1 L IS USM",
+        },
+      ],
+    } as unknown as AppContextPageContentResolverContext;
+
+    const result = appContextResolveJournalEntryFooter(journalFooter, context);
+
+    expect(result.equipment).toEqual({
+      cameras: ["Canon EOS R7"],
+      lenses: ["RF100-500mm F4.5-7.1 L IS USM"],
+    });
+  });
+
+  it("filters null and empty equipment values", () => {
+    const context = {
+      pagePhotos: [
         {
           cameraMake: null,
           cameraModel: null,
@@ -73,17 +99,7 @@ describe("appContextResolveJournalEntryFooterModule", () => {
       ],
     } as unknown as AppContextPageContentResolverContext;
 
-    const module: AppStateJournalEntryFooter = {
-      kind: "journalEntryFooter",
-      publication: {
-        author: "Kevin",
-        publishedAt: "2025-05-10",
-        updatedAt: [],
-      },
-      tags: [],
-    };
-
-    const result = appContextResolveJournalEntryFooter(module, context);
+    const result = appContextResolveJournalEntryFooter(journalFooter, context);
 
     expect(result.equipment).toEqual({
       cameras: [],
@@ -93,7 +109,7 @@ describe("appContextResolveJournalEntryFooterModule", () => {
 
   it("uses camera model directly when it already includes the make", () => {
     const context = {
-      photos: [
+      pagePhotos: [
         {
           cameraMake: "Canon",
           cameraModel: "Canon EOS R7",
@@ -102,24 +118,14 @@ describe("appContextResolveJournalEntryFooterModule", () => {
       ],
     } as unknown as AppContextPageContentResolverContext;
 
-    const module: AppStateJournalEntryFooter = {
-      kind: "journalEntryFooter",
-      publication: {
-        author: "Kevin",
-        publishedAt: "2025-05-10",
-        updatedAt: [],
-      },
-      tags: [],
-    };
-
-    const result = appContextResolveJournalEntryFooter(module, context);
+    const result = appContextResolveJournalEntryFooter(journalFooter, context);
 
     expect(result.equipment.cameras).toEqual(["Canon EOS R7"]);
   });
 
   it("combines camera make and model when needed", () => {
     const context = {
-      photos: [
+      pagePhotos: [
         {
           cameraMake: "Canon",
           cameraModel: "EOS R5",
@@ -128,17 +134,7 @@ describe("appContextResolveJournalEntryFooterModule", () => {
       ],
     } as unknown as AppContextPageContentResolverContext;
 
-    const module: AppStateJournalEntryFooter = {
-      kind: "journalEntryFooter",
-      publication: {
-        author: "kevin",
-        publishedAt: "2025-05-10",
-        updatedAt: [],
-      },
-      tags: [],
-    };
-
-    const result = appContextResolveJournalEntryFooter(module, context);
+    const result = appContextResolveJournalEntryFooter(journalFooter, context);
 
     expect(result.equipment.cameras).toEqual(["Canon EOS R5"]);
   });

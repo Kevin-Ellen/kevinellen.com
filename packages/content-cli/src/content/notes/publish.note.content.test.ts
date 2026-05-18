@@ -3,6 +3,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
+import type { ParsedNoteDirectCliArgs } from "@content-cli/types/parse-args.cli.types";
+
 import { runPublishNoteCommand } from "@content-cli/content/notes/publish.note.content";
 import { writeCloudflareKvValue } from "@content-cli/cloudflare/kv/kv.client.cloudflare.content-cli";
 import { loadContentCliConfig } from "@content-cli/config/load.content-cli.config";
@@ -51,42 +54,55 @@ jest.mock("@content-cli/utils/format.local.date.time.with.offset.util", () => ({
   formatLocalDateTimeWithOffset: jest.fn(),
 }));
 
-describe("runPublishNoteCommand", () => {
-  const config = {
-    cloudflareKvNotesNamespaceId: "notes-dev",
-  };
+const config = {
+  cloudflareKvNotesNamespaceId: "notes-dev",
+};
 
-  const validPage = {
-    id: "note:my-note",
-    kind: "note",
-    slug: "/notes/my-note",
-    label: "My Note",
-    metadata: {
-      pageTitle: "My Note",
-      metaDescription: "Description.",
+const createArgs = (
+  overrides: Partial<ParsedNoteDirectCliArgs> = {},
+): ParsedNoteDirectCliArgs => ({
+  mode: "direct",
+  env: "dev",
+  entity: "note",
+  action: "publish",
+  bucket: "drafts",
+  slug: "my-note",
+  ...overrides,
+});
+
+const validPage: AuthoredPublicPageDefinition = {
+  id: "note:my-note",
+  kind: "note",
+  slug: "/notes/my-note",
+  label: "My Note",
+  metadata: {
+    pageTitle: "My Note",
+    metaDescription: "Description.",
+  },
+  breadcrumbs: ["home"],
+  content: {
+    head: {
+      eyebrow: "Note",
+      title: "My Note",
+      intro: "Intro.",
     },
-    breadcrumbs: ["home"],
-    content: {
-      head: {
-        eyebrow: "Note",
-        title: "My Note",
-        intro: "Intro.",
-      },
-      content: [],
-      footer: [
-        {
-          kind: "noteEntryFooter",
-          publication: {
-            author: "Kevin Ellen",
-            publishedAt: "2026-05-10T22:00:00+01:00",
-            updatedAt: ["2026-05-10T22:00:00+01:00"],
-          },
-          tags: [],
+    content: [],
+    footer: [
+      {
+        kind: "noteEntryFooter",
+        publication: {
+          author: "Kevin Ellen",
+          publishedAt: "2026-05-10T22:00:00+01:00",
+          updatedAt: ["2026-05-10T22:00:00+01:00"],
         },
-      ],
-    },
-  };
+        topic: "Architecture",
+        tags: [],
+      },
+    ],
+  },
+};
 
+describe("runPublishNoteCommand", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -101,31 +117,19 @@ describe("runPublishNoteCommand", () => {
       .mocked(getNoteFilePath)
       .mockReturnValue("/workspace/note/drafts/dev/my-note/note.draft.ts");
 
-    jest.mocked(importNoteDraft).mockResolvedValue(validPage as never);
-
+    jest.mocked(importNoteDraft).mockResolvedValue(validPage);
+    jest.mocked(runValidateNoteCommand).mockResolvedValue({ ok: true });
     jest
       .mocked(formatLocalDateTimeWithOffset)
       .mockReturnValue("2026-05-10T23:00:00+01:00");
   });
 
   it("publishes a valid note to KV and moves the workspace", async () => {
-    const result = await runPublishNoteCommand({
-      mode: "direct",
-      env: "dev",
-      entity: "note",
-      action: "publish",
-      bucket: "drafts",
-      slug: "my-note",
-    });
+    const args = createArgs();
 
-    expect(runValidateNoteCommand).toHaveBeenCalledWith({
-      mode: "direct",
-      env: "dev",
-      entity: "note",
-      action: "publish",
-      bucket: "drafts",
-      slug: "my-note",
-    });
+    const result = await runPublishNoteCommand(args);
+
+    expect(runValidateNoteCommand).toHaveBeenCalledWith(args);
 
     expect(writeCloudflareKvValue).toHaveBeenCalledWith(
       config,
@@ -133,6 +137,10 @@ describe("runPublishNoteCommand", () => {
       "page:note:my-note",
       {
         ...validPage,
+        id: "note:my-note",
+        kind: "note",
+        slug: "/notes/my-note",
+        breadcrumbs: ["home", "notes", "note:my-note"],
         content: {
           ...validPage.content,
           footer: [
@@ -146,6 +154,7 @@ describe("runPublishNoteCommand", () => {
                   "2026-05-10T23:00:00+01:00",
                 ],
               },
+              topic: "Architecture",
               tags: [],
             },
           ],
@@ -179,13 +188,7 @@ describe("runPublishNoteCommand", () => {
 
   it("throws when slug is missing", async () => {
     await expect(
-      runPublishNoteCommand({
-        mode: "direct",
-        env: "dev",
-        entity: "note",
-        action: "publish",
-        bucket: "drafts",
-      }),
+      runPublishNoteCommand(createArgs({ slug: undefined })),
     ).rejects.toThrow("Note publish requires --slug <workspace-id>.");
   });
 
@@ -193,125 +196,117 @@ describe("runPublishNoteCommand", () => {
     jest.mocked(importNoteDraft).mockResolvedValue({
       ...validPage,
       kind: "journal",
-    } as never);
+    } as AuthoredPublicPageDefinition);
 
-    await expect(
-      runPublishNoteCommand({
-        mode: "direct",
-        env: "dev",
-        entity: "note",
-        action: "publish",
-        bucket: "drafts",
-        slug: "my-note",
-      }),
-    ).rejects.toThrow('Note publish requires kind "note". Received: journal');
+    await expect(runPublishNoteCommand(createArgs())).rejects.toThrow(
+      'Note publish requires kind "note". Received: journal',
+    );
+
+    expect(writeCloudflareKvValue).not.toHaveBeenCalled();
+    expect(fs.rename).not.toHaveBeenCalled();
   });
 
-  it("throws when note id does not start with note prefix", async () => {
+  it("normalises an unprefixed note id before publishing", async () => {
     jest.mocked(importNoteDraft).mockResolvedValue({
       ...validPage,
-      id: "journal:my-note",
-    } as never);
-
-    await expect(
-      runPublishNoteCommand({
-        mode: "direct",
-        env: "dev",
-        entity: "note",
-        action: "publish",
-        bucket: "drafts",
-        slug: "my-note",
-      }),
-    ).rejects.toThrow(
-      'Note id must start with "note:". Received: journal:my-note',
-    );
-  });
-
-  it("throws when note slug does not start with notes path", async () => {
-    jest.mocked(importNoteDraft).mockResolvedValue({
-      ...validPage,
-      slug: "/journal/my-note",
-    } as never);
-
-    await expect(
-      runPublishNoteCommand({
-        mode: "direct",
-        env: "dev",
-        entity: "note",
-        action: "publish",
-        bucket: "drafts",
-        slug: "my-note",
-      }),
-    ).rejects.toThrow(
-      'Note slug must start with "/notes/". Received: /journal/my-note',
-    );
-  });
-
-  it("preserves non-publication footer modules", async () => {
-    const pageWithOtherFooter = {
-      ...validPage,
-      content: {
-        ...validPage.content,
-        footer: [
-          {
-            kind: "otherFooter",
-          },
-        ],
-      },
-    };
-
-    jest
-      .mocked(importNoteDraft)
-      .mockResolvedValue(pageWithOtherFooter as never);
-
-    await runPublishNoteCommand({
-      mode: "direct",
-      env: "dev",
-      entity: "note",
-      action: "publish",
-      bucket: "drafts",
-      slug: "my-note",
+      id: "my-note",
     });
+
+    await runPublishNoteCommand(createArgs());
 
     expect(writeCloudflareKvValue).toHaveBeenCalledWith(
       config,
       "notes-dev",
       "page:note:my-note",
-      pageWithOtherFooter,
+      expect.objectContaining({
+        id: "note:my-note",
+        breadcrumbs: ["home", "notes", "note:my-note"],
+      }),
     );
   });
 
-  it("handles missing footer by publishing an empty footer array", async () => {
-    const pageWithoutFooter = {
+  it("rejects slug/workspace mismatch before writing KV or moving workspace", async () => {
+    jest.mocked(importNoteDraft).mockResolvedValue({
+      ...validPage,
+      slug: "/notes/a-different-note",
+    });
+
+    await expect(runPublishNoteCommand(createArgs())).rejects.toThrow(
+      [
+        "Note slug/workspace mismatch.",
+        "",
+        "Workspace: my-note",
+        "Expected slug: /notes/my-note",
+        "Actual slug: /notes/a-different-note",
+      ].join("\n"),
+    );
+
+    expect(writeCloudflareKvValue).not.toHaveBeenCalled();
+    expect(fs.rm).not.toHaveBeenCalled();
+    expect(fs.mkdir).not.toHaveBeenCalled();
+    expect(fs.rename).not.toHaveBeenCalled();
+  });
+
+  it("updates noteEntryFooter.updatedAt and leaves other footer modules untouched", async () => {
+    const journalFooter = {
+      kind: "journalEntryFooter",
+      publication: {
+        author: "Kevin Ellen",
+        publishedAt: "2026-05-10T22:00:00+01:00",
+        updatedAt: ["2026-05-10T22:00:00+01:00"],
+      },
+      tags: [],
+    } as const;
+
+    jest.mocked(importNoteDraft).mockResolvedValue({
+      ...validPage,
+      content: {
+        ...validPage.content,
+        footer: [...validPage.content.footer!, journalFooter],
+      },
+    });
+
+    await runPublishNoteCommand(createArgs());
+
+    const publishedPage = jest.mocked(writeCloudflareKvValue).mock
+      .calls[0][3] as AuthoredPublicPageDefinition;
+
+    const noteFooter = publishedPage.content.footer?.find(
+      (module) => module.kind === "noteEntryFooter",
+    );
+
+    const untouchedJournalFooter = publishedPage.content.footer?.find(
+      (module) => module.kind === "journalEntryFooter",
+    );
+
+    expect(noteFooter?.publication.updatedAt).toEqual([
+      "2026-05-10T22:00:00+01:00",
+      "2026-05-10T23:00:00+01:00",
+    ]);
+
+    expect(untouchedJournalFooter).toBe(journalFooter);
+  });
+
+  it("handles undefined footer by publishing an empty footer array", async () => {
+    jest.mocked(importNoteDraft).mockResolvedValue({
       ...validPage,
       content: {
         ...validPage.content,
         footer: undefined,
       },
-    };
-
-    jest.mocked(importNoteDraft).mockResolvedValue(pageWithoutFooter as never);
-
-    await runPublishNoteCommand({
-      mode: "direct",
-      env: "dev",
-      entity: "note",
-      action: "publish",
-      bucket: "drafts",
-      slug: "my-note",
     });
+
+    await runPublishNoteCommand(createArgs());
 
     expect(writeCloudflareKvValue).toHaveBeenCalledWith(
       config,
       "notes-dev",
       "page:note:my-note",
-      {
-        ...pageWithoutFooter,
-        content: {
-          ...pageWithoutFooter.content,
+      expect.objectContaining({
+        content: expect.objectContaining({
           footer: [],
-        },
-      },
+        }),
+      }),
     );
   });
 });

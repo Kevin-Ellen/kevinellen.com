@@ -19,4 +19,5 @@ export type AppContextPageContentResolverContext = Readonly<{
   resolvePhoto: (photoId: string) => AppContextPhotoMetadata | null;
   currentPageSlug: string | null;
   imageDelivery: AppContextImageDeliveryConfig;
+  pagePhotos: readonly AppContextPhotoMetadata[];
 }>;

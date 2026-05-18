@@ -30,35 +30,73 @@ type NotePublishCommandResult = Readonly<
   }
 >;
 
-const assertValidNoteIdentity = (page: AuthoredPublicPageDefinition): void => {
+const NOTE_PAGE_ID_PREFIX = "note:";
+
+const toNotePageId = (pageId: string): `note:${string}` => {
+  if (pageId.startsWith(NOTE_PAGE_ID_PREFIX)) {
+    return pageId as `note:${string}`;
+  }
+
+  return `${NOTE_PAGE_ID_PREFIX}${pageId}`;
+};
+
+const assertNoteKind = (page: AuthoredPublicPageDefinition): void => {
   if (page.kind !== "note") {
     throw new Error(
       `Note publish requires kind "note". Received: ${page.kind}`,
     );
   }
+};
 
-  if (!page.id.startsWith("note:")) {
-    throw new Error(`Note id must start with "note:". Received: ${page.id}`);
-  }
+const assertNoteWorkspaceMatchesSlug = (
+  workspaceId: string,
+  page: AuthoredPublicPageDefinition,
+): void => {
+  const expectedSlug = `/notes/${workspaceId}`;
 
-  if (!page.slug.startsWith("/notes/")) {
-    throw new Error(
-      `Note slug must start with "/notes/". Received: ${page.slug}`,
-    );
-  }
+  if (page.slug === expectedSlug) return;
+
+  throw new Error(
+    [
+      "Note slug/workspace mismatch.",
+      "",
+      `Workspace: ${workspaceId}`,
+      `Expected slug: ${expectedSlug}`,
+      `Actual slug: ${page.slug}`,
+      "",
+      "The workspace identifies the draft location, but the authored page owns the canonical slug.",
+      "Update the draft slug or publish from the matching workspace.",
+    ].join("\n"),
+  );
+};
+
+/**
+ * Normalise note page identity without deriving the public slug from the workspace.
+ */
+const updateNoteIdentity = (
+  page: AuthoredPublicPageDefinition,
+): AuthoredPublicPageDefinition => {
+  const notePageId = toNotePageId(page.id);
+
+  return {
+    ...page,
+    id: notePageId,
+    kind: "note",
+    slug: page.slug,
+    breadcrumbs: ["home", "notes", notePageId],
+  };
 };
 
 const updateNoteFooter = (
   page: AuthoredPublicPageDefinition,
 ): AuthoredPublicPageDefinition => {
   const updatedAt = formatLocalDateTimeWithOffset(new Date());
-  const footer = page.content.footer ?? [];
 
   return {
     ...page,
     content: {
       ...page.content,
-      footer: footer.map((module) => {
+      footer: (page.content.footer ?? []).map((module) => {
         if (module.kind !== "noteEntryFooter") {
           return module;
         }
@@ -103,9 +141,10 @@ export const runPublishNoteCommand = async (
   const notePath = getNoteFilePath(args.env, args.bucket, workspaceId);
   const page = await importNoteDraft(notePath);
 
-  assertValidNoteIdentity(page);
+  assertNoteKind(page);
+  assertNoteWorkspaceMatchesSlug(workspaceId, page);
 
-  const publishedPage = updateNoteFooter(page);
+  const publishedPage = updateNoteFooter(updateNoteIdentity(page));
 
   console.log(`\nPublishing note ${workspaceId}...`);
   console.log(`Workspace path: ${workspacePath}`);

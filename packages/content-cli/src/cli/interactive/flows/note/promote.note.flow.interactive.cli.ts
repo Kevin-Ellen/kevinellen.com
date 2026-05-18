@@ -12,12 +12,19 @@ export const runNotePromoteFlow = async (
   from: ContentCliEnvironment,
   to: ContentCliEnvironment,
 ): Promise<void> => {
-  const slug = await text({
+  const slugInput = await text({
     message: `Note slug to promote from ${from.toUpperCase()} to ${to.toUpperCase()}`,
   });
 
-  if (isCancel(slug)) {
+  if (isCancel(slugInput)) {
     cancel("Cancelled.");
+    return;
+  }
+
+  const slug = slugInput.trim();
+
+  if (!slug) {
+    cancel("Promotion cancelled. Note slug is required.");
     return;
   }
 
