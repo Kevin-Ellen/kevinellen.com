@@ -26,6 +26,19 @@ describe("appRenderContextResolveSequenceBlock", () => {
     const resolvedPhoto = {
       id: "kingfisher-1",
       src: "/media/photo/kingfisher-1",
+      meta: [
+        {
+          kind: "context",
+          items: [
+            {
+              id: "location",
+              label: "Location",
+              description: null,
+              value: "Rye Meads",
+            },
+          ],
+        },
+      ],
     };
 
     mockedAppRenderContextResolvePhoto.mockReturnValue(resolvedPhoto as never);
@@ -74,19 +87,25 @@ describe("appRenderContextResolveSequenceBlock", () => {
           photo: resolvedPhoto,
         },
       ],
+      meta: [
+        {
+          kind: "context",
+          items: [
+            {
+              id: "location",
+              label: "Location",
+              description: null,
+              value: "Rye Meads",
+            },
+          ],
+        },
+      ],
     });
 
     expect(mockedAppRenderContextResolvePhoto).toHaveBeenCalledTimes(2);
   });
 
   it("preserves immersive breakout sequences", () => {
-    const resolvedPhoto = {
-      id: "kingfisher-1",
-      src: "/media/photo/kingfisher-1",
-    };
-
-    mockedAppRenderContextResolvePhoto.mockReturnValue(resolvedPhoto as never);
-
     const block: AppContextSequenceBlock = {
       kind: "sequence",
       immersive: true,
@@ -108,6 +127,87 @@ describe("appRenderContextResolveSequenceBlock", () => {
       flow: "breakout",
       caption: [],
       photos: [],
+      meta: [],
     });
+
+    expect(mockedAppRenderContextResolvePhoto).not.toHaveBeenCalled();
+  });
+
+  it("deduplicates metadata across sequence photos", () => {
+    mockedAppRenderContextResolvePhoto
+      .mockReturnValueOnce({
+        id: "kingfisher-1",
+        src: "/media/photo/kingfisher-1",
+        meta: [
+          {
+            kind: "context",
+            items: [
+              {
+                id: "location",
+                label: "Location",
+                description: null,
+                value: "Rye Meads",
+              },
+            ],
+          },
+        ],
+      } as never)
+      .mockReturnValueOnce({
+        id: "kingfisher-2",
+        src: "/media/photo/kingfisher-2",
+        meta: [
+          {
+            kind: "context",
+            items: [
+              {
+                id: "location",
+                label: "Location",
+                description: null,
+                value: "Rye Meads",
+              },
+            ],
+          },
+        ],
+      } as never);
+
+    const block: AppContextSequenceBlock = {
+      kind: "sequence",
+      immersive: false,
+      flow: "content",
+      caption: [],
+      photos: [
+        {
+          position: 1,
+          photo: { id: "photo-1" } as never,
+        },
+        {
+          position: 2,
+          photo: { id: "photo-2" } as never,
+        },
+      ],
+    };
+
+    const appContext = {
+      metadataLabels: {
+        context: "Context",
+        settings: "Settings",
+      },
+    } as unknown as AppContext;
+
+    expect(
+      appRenderContextResolveSequenceBlock(appContext, block).meta,
+    ).toEqual([
+      {
+        kind: "context",
+        items: [
+          {
+            id: "location",
+            label: "Location",
+            description: null,
+            value: "Rye Meads",
+          },
+        ],
+      },
+    ]);
   });
 });

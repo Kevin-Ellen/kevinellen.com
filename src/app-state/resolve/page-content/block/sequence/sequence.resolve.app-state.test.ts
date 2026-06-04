@@ -23,7 +23,7 @@ describe("appStateResolveSequenceBlock", () => {
         3: "photo-three",
       },
       immersive: false,
-      flow: "content",
+      flow: "breakout",
     });
   });
 

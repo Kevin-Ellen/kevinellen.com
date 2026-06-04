@@ -41,7 +41,7 @@ describe("appContextResolveSequenceBlock", () => {
 
     expect(appContextResolveSequenceBlock(block, context)).toEqual({
       kind: "sequence",
-      flow: "breakout",
+      flow: "content",
       immersive: false,
       caption: [{ kind: "text", value: "A kingfisher exit sequence." }],
       photos: [
@@ -82,7 +82,7 @@ describe("appContextResolveSequenceBlock", () => {
   it("uses full bleed delivery for immersive sequences", () => {
     const block: AppStateSequenceBlock = {
       kind: "sequence",
-      flow: "breakout",
+      flow: "content",
       immersive: true,
       caption: [{ kind: "text", value: "An immersive sequence." }],
       photos: {
