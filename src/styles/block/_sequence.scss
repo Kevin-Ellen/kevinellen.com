@@ -67,16 +67,99 @@
   }
 
   &__annotation {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: tokens.$space-lg;
     margin-top: tokens.$space-md;
+    padding-inline: 0;
+
+    @media (min-width: tokens.$bp-md) {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      column-gap: tokens.$space-xl;
+      align-items: start;
+    }
   }
 
   &__caption {
-    max-width: 44ch;
     margin: 0;
+    max-width: 44ch;
     font-family: tokens.$font-family-caption;
     font-weight: tokens.$font-weight-caption;
     font-size: tokens.$font-size-caption;
     line-height: tokens.$line-height-caption;
-    color: tokens.$colour-type-caption-inverse;
+    color: tokens.$colour-type-caption;
+    text-align: left;
+
+    .m-sequence--immersive & {
+      color: tokens.$colour-type-caption-inverse;
+    }
+  }
+
+  &__meta-group {
+    display: grid;
+    row-gap: tokens.$space-lg;
+    justify-items: start;
+    min-width: 0;
+
+    @media (min-width: tokens.$bp-md) {
+      justify-items: end;
+    }
+  }
+
+  &__meta {
+    display: grid;
+    row-gap: tokens.$space-sm;
+    margin: 0;
+    max-width: 28rem;
+    min-width: 0;
+    font-family: tokens.$font-family-meta;
+    font-weight: tokens.$font-weight-meta;
+    font-size: tokens.$font-size-meta;
+    line-height: tokens.$line-height-meta;
+    color: tokens.$colour-type-meta;
+    text-align: left;
+    overflow-wrap: anywhere;
+
+    @media (min-width: tokens.$bp-md) {
+      text-align: right;
+    }
+
+    .m-sequence--immersive & {
+      color: tokens.$colour-type-meta-inverse;
+    }
+
+    &--settings {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: tokens.$space-md 1rem;
+      width: 100%;
+      max-width: 28rem;
+      overflow-wrap: normal;
+
+      @media (min-width: tokens.$bp-lg) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+  }
+
+  &__meta-item {
+    display: grid;
+    row-gap: tokens.$space-2xs;
+    margin: 0;
+    min-width: 0;
+  }
+
+  &__meta-term {
+    margin: 0;
+    font-size: tokens.$font-size-meta-term;
+    font-weight: tokens.$font-weight-meta-term;
+    line-height: tokens.$line-height-meta-term;
+    opacity: tokens.$meta-term-opacity;
+  }
+
+  &__meta-detail {
+    margin: 0;
+    min-width: 0;
+    font-weight: tokens.$font-weight-meta-detail;
   }
 }

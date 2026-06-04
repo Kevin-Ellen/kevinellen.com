@@ -217,6 +217,7 @@ describe("BlockTemplate", () => {
             value: "A kingfisher exits the water across three frames.",
           },
         ],
+        meta: [],
         photos: [
           {
             position: 1,

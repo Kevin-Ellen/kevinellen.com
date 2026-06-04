@@ -11,23 +11,41 @@ import type {
 import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
 import { appRenderContextResolveInline } from "@app-render-context/resolve/body-content/inline/inline.resolve.app-render-context";
 
-const getPhotoMetaKey = (item: AppRenderContextPhotoMetaItem): string =>
-  `${item.label}:${item.value}`;
+const normaliseSequenceMetaValue = (
+  item: AppRenderContextPhotoMetaItem,
+): string => item.value.replace(/^ISO\s+/u, "");
+
+const formatSequenceMetaValue = (
+  item: AppRenderContextPhotoMetaItem,
+  values: readonly string[],
+): string => {
+  if (item.id === "iso") {
+    return `ISO ${values.join("–")}`;
+  }
+
+  return values.join(", ");
+};
 
 const dedupePhotoMetaItems = (
   items: readonly AppRenderContextPhotoMetaItem[],
 ): readonly AppRenderContextPhotoMetaItem[] => {
-  const seen = new Set<string>();
+  const grouped = new Map<string, AppRenderContextPhotoMetaItem[]>();
 
-  return items.filter((item) => {
-    const key = getPhotoMetaKey(item);
+  items.forEach((item) => {
+    grouped.set(item.id, [...(grouped.get(item.id) ?? []), item]);
+  });
 
-    if (seen.has(key)) {
-      return false;
-    }
+  return Array.from(grouped.values()).map((group) => {
+    const [first] = group;
 
-    seen.add(key);
-    return true;
+    const values = Array.from(
+      new Set(group.map((item) => normaliseSequenceMetaValue(item))),
+    );
+
+    return {
+      ...first,
+      value: formatSequenceMetaValue(first, values),
+    };
   });
 };
 

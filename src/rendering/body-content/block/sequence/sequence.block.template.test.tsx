@@ -19,6 +19,7 @@ const sequenceBlock = (
         value: "A kingfisher exits the water across three frames.",
       },
     ],
+    meta: [],
     photos: [
       {
         position: 1,
@@ -91,5 +92,56 @@ describe("SequenceBlockTemplate", () => {
 
     expect(html).toContain('data-sequence-position="1"');
     expect(html).toContain('data-sequence-position="2"');
+  });
+
+  it("renders sequence metadata", () => {
+    const html = renderToStaticMarkup(
+      <SequenceBlockTemplate
+        block={sequenceBlock({
+          meta: [
+            {
+              kind: "context",
+              items: [
+                {
+                  id: "location",
+                  label: "Location",
+                  description: null,
+                  value: "Rye Meads",
+                },
+                {
+                  id: "capturedAt",
+                  label: "Captured",
+                  description: null,
+                  value: "14 May 2026, 08:58",
+                  datetime: "2026-05-14T07:58:49.000Z",
+                },
+              ],
+            },
+            {
+              kind: "settings",
+              items: [
+                {
+                  id: "iso",
+                  label: "ISO",
+                  description: "The camera’s sensitivity to light.",
+                  value: "ISO 5,000–6,400",
+                },
+              ],
+            },
+          ],
+        })}
+      />,
+    );
+
+    expect(html).toContain("m-sequence__meta-group");
+    expect(html).toContain("Rye Meads");
+    expect(html).toContain(
+      '<time dateTime="2026-05-14T07:58:49.000Z">14 May 2026, 08:58</time>',
+    );
+    expect(html).toContain(
+      '<abbr title="The camera’s sensitivity to light.">ISO</abbr>',
+    );
+    expect(html).toContain("ISO 5,000–6,400");
+    expect(html).toContain("m-sequence__meta--settings");
   });
 });

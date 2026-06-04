@@ -210,4 +210,160 @@ describe("appRenderContextResolveSequenceBlock", () => {
       },
     ]);
   });
+
+  it("collapses repeated ISO metadata into a range", () => {
+    mockedAppRenderContextResolvePhoto
+      .mockReturnValueOnce({
+        id: "kingfisher-1",
+        src: "/media/photo/kingfisher-1",
+        meta: [
+          {
+            kind: "settings",
+            items: [
+              {
+                id: "iso",
+                label: "ISO",
+                description: "The camera’s sensitivity to light.",
+                value: "ISO 5,000",
+              },
+            ],
+          },
+        ],
+      } as never)
+      .mockReturnValueOnce({
+        id: "kingfisher-2",
+        src: "/media/photo/kingfisher-2",
+        meta: [
+          {
+            kind: "settings",
+            items: [
+              {
+                id: "iso",
+                label: "ISO",
+                description: "The camera’s sensitivity to light.",
+                value: "ISO 6,400",
+              },
+            ],
+          },
+        ],
+      } as never);
+
+    const block: AppContextSequenceBlock = {
+      kind: "sequence",
+      immersive: false,
+      flow: "content",
+      caption: [],
+      photos: [
+        {
+          position: 1,
+          photo: { id: "photo-1" } as never,
+        },
+        {
+          position: 2,
+          photo: { id: "photo-2" } as never,
+        },
+      ],
+    };
+
+    const appContext = {
+      metadataLabels: {
+        context: "Context",
+        settings: "Settings",
+      },
+    } as unknown as AppContext;
+
+    expect(
+      appRenderContextResolveSequenceBlock(appContext, block).meta,
+    ).toEqual([
+      {
+        kind: "settings",
+        items: [
+          {
+            id: "iso",
+            label: "ISO",
+            description: "The camera’s sensitivity to light.",
+            value: "ISO 5,000–6,400",
+          },
+        ],
+      },
+    ]);
+  });
+
+  it("collapses repeated ISO metadata into a range", () => {
+    mockedAppRenderContextResolvePhoto
+      .mockReturnValueOnce({
+        id: "kingfisher-1",
+        src: "/media/photo/kingfisher-1",
+        meta: [
+          {
+            kind: "settings",
+            items: [
+              {
+                id: "iso",
+                label: "ISO",
+                description: "The camera’s sensitivity to light.",
+                value: "ISO 5,000",
+              },
+            ],
+          },
+        ],
+      } as never)
+      .mockReturnValueOnce({
+        id: "kingfisher-2",
+        src: "/media/photo/kingfisher-2",
+        meta: [
+          {
+            kind: "settings",
+            items: [
+              {
+                id: "iso",
+                label: "ISO",
+                description: "The camera’s sensitivity to light.",
+                value: "ISO 6,400",
+              },
+            ],
+          },
+        ],
+      } as never);
+
+    const block: AppContextSequenceBlock = {
+      kind: "sequence",
+      immersive: false,
+      flow: "content",
+      caption: [],
+      photos: [
+        {
+          position: 1,
+          photo: { id: "photo-1" } as never,
+        },
+        {
+          position: 2,
+          photo: { id: "photo-2" } as never,
+        },
+      ],
+    };
+
+    const appContext = {
+      metadataLabels: {
+        context: "Context",
+        settings: "Settings",
+      },
+    } as unknown as AppContext;
+
+    expect(
+      appRenderContextResolveSequenceBlock(appContext, block).meta,
+    ).toEqual([
+      {
+        kind: "settings",
+        items: [
+          {
+            id: "iso",
+            label: "ISO",
+            description: "The camera’s sensitivity to light.",
+            value: "ISO 5,000–6,400",
+          },
+        ],
+      },
+    ]);
+  });
 });
