@@ -36,7 +36,7 @@ export const appContextResolveSequenceBlock = (
   return {
     kind: block.kind,
     immersive: block.immersive,
-    flow: "breakout",
+    flow: block.flow,
     caption: block.caption.map((item) =>
       appContextResolveInline(item, context),
     ),

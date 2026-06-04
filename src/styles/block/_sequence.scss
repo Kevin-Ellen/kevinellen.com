@@ -1,0 +1,83 @@
+@use "../tokens" as tokens;
+
+.m-sequence {
+  background: tokens.$colour-surface-strong;
+  padding-inline: tokens.$space-sm;
+  padding-block: tokens.$space-2xl;
+
+  @media (min-width: tokens.$bp-sm) {
+    padding-inline: tokens.$space-2xl;
+  }
+
+  &--immersive {
+    background: tokens.$colour-immersive;
+  }
+
+  &__items {
+    display: flex;
+    gap: tokens.$space-md;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    padding-block-end: tokens.$space-sm;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: tokens.$colour-rule transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__items:active {
+    cursor: grabbing;
+  }
+
+  &__items::-webkit-scrollbar {
+    height: 0.5rem;
+  }
+
+  &__items::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &__items::-webkit-scrollbar-thumb {
+    background: tokens.$colour-rule;
+    border-radius: 999px;
+  }
+
+  &__items::-webkit-scrollbar-thumb:hover {
+    background: tokens.$colour-type-caption-inverse;
+  }
+
+  &__item {
+    flex: 0 0 min(82vw, 52rem);
+    margin: 0;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: tokens.$bp-lg) {
+    &__item {
+      flex-basis: min(42vw, 44rem);
+    }
+  }
+
+  &__object {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid tokens.$colour-rule;
+  }
+
+  &__annotation {
+    margin-top: tokens.$space-md;
+  }
+
+  &__caption {
+    max-width: 44ch;
+    margin: 0;
+    font-family: tokens.$font-family-caption;
+    font-weight: tokens.$font-weight-caption;
+    font-size: tokens.$font-size-caption;
+    line-height: tokens.$line-height-caption;
+    color: tokens.$colour-type-caption-inverse;
+  }
+}

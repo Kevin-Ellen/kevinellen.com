@@ -9,7 +9,8 @@
     margin-top: tokens.$space-lg;
   }
 
-  + .m-photo {
+  + .m-photo,
+  + .m-sequence {
     margin-block: tokens.$space-sm tokens.$space-md;
   }
 

@@ -20,7 +20,7 @@ export const appContextResolveHeroBlock = (
   return {
     kind: module.kind,
     immersive: module.immersive,
-    flow: "breakout",
+    flow: module.flow,
     photo: {
       metadata: photo,
       delivery: module.immersive

@@ -11,7 +11,7 @@ export const appStateResolveSequenceBlock = (
   return {
     ...block,
     immersive: block.immersive ?? false,
-    flow: block.flow ?? "content",
+    flow: block.flow ?? "breakout",
     caption: block.caption.map(appStateResolveInline),
   };
 };
