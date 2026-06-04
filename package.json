@@ -3,6 +3,31 @@
   "version": "1.0.0",
   "private": true,
   "description": "Personal portfolio website built on Cloudflare Workers, Terraform, KV, and Images.",
+  "author": "Kevin Ellen",
+  "license": "MIT",
+  "homepage": "https://kevinellen.com",
+  "keywords": [
+    "cloudflare-workers",
+    "typescript",
+    "terraform",
+    "edge-rendering",
+    "static-site",
+    "portfolio",
+    "photography",
+    "content-pipeline",
+    "cloudflare-kv",
+    "cloudflare-images",
+    "technical-seo",
+    "tsx",
+    "sass"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kevin-Ellen/kevinellen.com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kevin-Ellen/kevinellen.com/issues"
+  },
   "type": "module",
   "engines": {
     "node": "24.x"
@@ -31,9 +56,6 @@
     "content": "tsx packages/content-cli/src/cli/content.cli.ts",
     "build:scripts": "node scripts/build-scripts.mjs"
   },
-  "keywords": [],
-  "author": "Kevin Ellen",
-  "license": "UNLICENSED",
   "packageManager": "npm@11.11.0",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260502.1",

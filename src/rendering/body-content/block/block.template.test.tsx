@@ -204,4 +204,37 @@ describe("BlockTemplate", () => {
       }),
     ).toBe("");
   });
+
+  it("renders a sequence block", () => {
+    expect(
+      renderBlock({
+        kind: "sequence",
+        flow: "content",
+        immersive: false,
+        caption: [
+          {
+            kind: "text",
+            value: "A kingfisher exits the water across three frames.",
+          },
+        ],
+        meta: [],
+        photos: [
+          {
+            position: 1,
+            photo: {
+              id: "kingfisher-001",
+              src: "/media/photo/kingfisher-001/1200",
+              srcset: ["/media/photo/kingfisher-001/1200 1200w"],
+              sizes: "100vw",
+              width: 1200,
+              height: 800,
+              alt: "Kingfisher leaving the water",
+              commentary: "Frame one.",
+              meta: [],
+            },
+          },
+        ],
+      }),
+    ).toContain("m-sequence");
+  });
 });

@@ -15,6 +15,7 @@ import { appStateResolveHomepageJournalListingBlock } from "@app-state/resolve/p
 import { appStateResolveSectionLinksBlock } from "@app-state/resolve/page-content/block/section-links/section-links.resolve.app-state";
 import { appStateResolveNoteListingBlock } from "@app-state/resolve/page-content/block/note-listing/note-listing.resolve.app-state";
 import { appStateResolveHomepageNoteListingBlock } from "@app-state/resolve/page-content/block/homepage-note-listing/homepage-note-listing.resolve.app-state";
+import { appStateResolveSequenceBlock } from "@app-state/resolve/page-content/block/sequence/sequence.resolve.app-state";
 
 jest.mock(
   "@app-state/resolve/page-content/block/paragraph/paragraph.resolve.app-state",
@@ -107,6 +108,13 @@ jest.mock(
   }),
 );
 
+jest.mock(
+  "@app-state/resolve/page-content/block/sequence/sequence.resolve.app-state",
+  () => ({
+    appStateResolveSequenceBlock: jest.fn(),
+  }),
+);
+
 describe("appStateResolveBlockContentModule", () => {
   const cases = [
     ["paragraph", appStateResolveParagraphBlock],
@@ -122,6 +130,7 @@ describe("appStateResolveBlockContentModule", () => {
     ["sectionLinks", appStateResolveSectionLinksBlock],
     ["noteListing", appStateResolveNoteListingBlock],
     ["homepageNoteListing", appStateResolveHomepageNoteListingBlock],
+    ["sequence", appStateResolveSequenceBlock],
   ] as const;
 
   beforeEach(() => {

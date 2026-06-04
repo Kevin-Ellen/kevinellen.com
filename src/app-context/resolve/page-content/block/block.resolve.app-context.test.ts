@@ -18,6 +18,7 @@ import { appContextResolveQuoteBlock } from "@app-context/resolve/page-content/b
 import { appContextResolveSectionLinksBlock } from "@app-context/resolve/page-content/block/section-links/section-links.resolve.app-context";
 import { appContextResolveNoteListingBlock } from "@app-context/resolve/page-content/block/note-listing/note-listing.resolve.app-context";
 import { appContextResolveHomepageNoteListingBlock } from "@app-context/resolve/page-content/block/homepage-note-listing/homepage-note-listing.resolve.app-context";
+import { appContextResolveSequenceBlock } from "@app-context/resolve/page-content/block/sequence/sequence.resolve.app-context";
 
 jest.mock(
   "@app-context/resolve/page-content/block/article-section/article-section.resolve.app-context",
@@ -110,6 +111,13 @@ jest.mock(
   }),
 );
 
+jest.mock(
+  "@app-context/resolve/page-content/block/sequence/sequence.resolve.app-context",
+  () => ({
+    appContextResolveSequenceBlock: jest.fn(),
+  }),
+);
+
 describe("appContextResolveBlock", () => {
   const context = {} as AppContextPageContentResolverContext;
 
@@ -131,6 +139,7 @@ describe("appContextResolveBlock", () => {
     ["sectionLinks", appContextResolveSectionLinksBlock],
     ["noteListing", appContextResolveNoteListingBlock],
     ["homepageNoteListing", appContextResolveHomepageNoteListingBlock],
+    ["sequence", appContextResolveSequenceBlock],
   ] as const)("resolves %s blocks", (kind, resolver) => {
     const block = {
       kind,

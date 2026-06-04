@@ -16,6 +16,7 @@ import { appStateResolveHomepageJournalListingBlock } from "@app-state/resolve/p
 import { appStateResolveSectionLinksBlock } from "@app-state/resolve/page-content/block/section-links/section-links.resolve.app-state";
 import { appStateResolveNoteListingBlock } from "@app-state/resolve/page-content/block/note-listing/note-listing.resolve.app-state";
 import { appStateResolveHomepageNoteListingBlock } from "@app-state/resolve/page-content/block/homepage-note-listing/homepage-note-listing.resolve.app-state";
+import { appStateResolveSequenceBlock } from "@app-state/resolve/page-content/block/sequence/sequence.resolve.app-state";
 
 type BlockKind = AuthoredBlock["kind"];
 
@@ -45,6 +46,7 @@ const blockResolver = <TKind extends BlockKind>(
     sectionLinks: appStateResolveSectionLinksBlock,
     noteListing: appStateResolveNoteListingBlock,
     homepageNoteListing: appStateResolveHomepageNoteListingBlock,
+    sequence: appStateResolveSequenceBlock,
   } satisfies AppStateBlockContentModuleResolverRegistry;
 
   return registry[kind];
