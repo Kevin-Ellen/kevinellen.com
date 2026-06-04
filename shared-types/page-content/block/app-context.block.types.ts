@@ -13,6 +13,7 @@ import type { AppContextHomepageJournalListingBlock } from "@shared-types/page-c
 import type { AppContextSectionLinksBlock } from "@shared-types/page-content/block/section-links/app-context.section-links.block.types";
 import type { AppContextNoteListingBlock } from "@shared-types/page-content/block/note-listing/app-context.note-listing.block.types";
 import type { AppContextHomepageNoteListingBlock } from "@shared-types/page-content/block/homepage-note-listing/app-context.homepage-note-listing.block.types";
+import type { AppContextSequenceBlock } from "@shared-types/page-content/block/sequence/app-context.sequence.block.types";
 
 export type AppContextBlock =
   | AppContextParagraphBlock
@@ -27,4 +28,5 @@ export type AppContextBlock =
   | AppContextHomepageJournalListingBlock
   | AppContextSectionLinksBlock
   | AppContextNoteListingBlock
-  | AppContextHomepageNoteListingBlock;
+  | AppContextHomepageNoteListingBlock
+  | AppContextSequenceBlock;

@@ -1,6 +1,6 @@
 // src/rendering/body-content/footer/footer.template.tsx
 
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 import type { AppRenderContextPageContentFooter } from "@shared-types/page-content/footer/app-render-context.page-footer.types";
 
@@ -39,7 +39,7 @@ export const BodyContentFooterTemplate = ({
           footer: AppRenderContextPageContentFooter,
         ) => ReactNode;
 
-        return <div key={`footer:${index}`}>{renderer(item)}</div>;
+        return <Fragment key={`footer:${index}`}>{renderer(item)}</Fragment>;
       })}
     </footer>
   );

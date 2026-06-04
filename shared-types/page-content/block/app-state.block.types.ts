@@ -13,6 +13,7 @@ import type { AppStateHomepageJournalListingBlock } from "@shared-types/page-con
 import type { AppStateSectionLinksBlock } from "@shared-types/page-content/block/section-links/app-state.section-links.block.types";
 import type { AppStateNoteListingBlock } from "@shared-types/page-content/block/note-listing/app-state.note-listing.block.types";
 import type { AppStateHomepageNoteListingBlock } from "@shared-types/page-content/block/homepage-note-listing/app-state.homepage-note-listing.block.types";
+import type { AppStateSequenceBlock } from "@shared-types/page-content/block/sequence/app-state.sequence.block.types";
 
 export type AppStateBlock =
   | AppStateParagraphBlock
@@ -27,4 +28,5 @@ export type AppStateBlock =
   | AppStateHomepageJournalListingBlock
   | AppStateSectionLinksBlock
   | AppStateNoteListingBlock
-  | AppStateHomepageNoteListingBlock;
+  | AppStateHomepageNoteListingBlock
+  | AppStateSequenceBlock;
