@@ -16,8 +16,7 @@
   &__items {
     display: flex;
     gap: tokens.$space-md;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
     scroll-snap-type: x mandatory;
     padding-block-end: tokens.$space-sm;
     cursor: grab;
