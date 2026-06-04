@@ -80,7 +80,7 @@ describe("appContextResolveHeroBlock", () => {
     expect(result).toEqual({
       kind: "hero",
       immersive: false,
-      flow: "content",
+      flow: "breakout",
       photo: {
         metadata: photo,
         delivery: imageDelivery.contentWidth,
@@ -93,7 +93,7 @@ describe("appContextResolveHeroBlock", () => {
       kind: "hero",
       photoId: "missing-photo",
       immersive: false,
-      flow: "content",
+      flow: "breakout",
     };
 
     const context = {

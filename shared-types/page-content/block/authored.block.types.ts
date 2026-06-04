@@ -13,6 +13,7 @@ import type { AuthoredHomepageJournalListingBlock } from "@shared-types/page-con
 import type { AuthoredSectionLinksBlock } from "@shared-types/page-content/block/section-links/authored.section-links.block.types";
 import type { AuthoredNoteListingBlock } from "@shared-types/page-content/block/note-listing/authored.note-listing.block.types";
 import type { AuthoredHomepageNoteListingBlock } from "@shared-types/page-content/block/homepage-note-listing/authored.homepage-note-listing.block.types";
+import type { AuthoredSequenceBlock } from "@shared-types/page-content/block/sequence/authored.sequence.block.types";
 
 export type AuthoredBlock =
   | AuthoredParagraphBlock
@@ -27,4 +28,5 @@ export type AuthoredBlock =
   | AuthoredHomepageJournalListingBlock
   | AuthoredSectionLinksBlock
   | AuthoredNoteListingBlock
-  | AuthoredHomepageNoteListingBlock;
+  | AuthoredHomepageNoteListingBlock
+  | AuthoredSequenceBlock;

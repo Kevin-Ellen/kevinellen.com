@@ -17,6 +17,7 @@ import { appRenderContextResolveQuoteBlock } from "@app-render-context/resolve/b
 import { appRenderContextResolveSectionLinksBlock } from "@app-render-context/resolve/body-content/block/section-links/section-links.resolve.app-render-context";
 import { appRenderContextResolveHomepageNoteListingBlock } from "@app-render-context/resolve/body-content/block/homepage-note-listing/homepage-note-listing.resolve.app-render-context";
 import { appRenderContextResolveNoteListingBlock } from "@app-render-context/resolve/body-content/block/note-listing/note-listing.resolve.app-render-context";
+import { appRenderContextResolveSequenceBlock } from "@app-render-context/resolve/body-content/block/sequence/sequence.resolve.app-render-context";
 
 jest.mock(
   "@app-render-context/resolve/body-content/block/article-section/article-section.resolve.app-render-context",
@@ -108,6 +109,14 @@ jest.mock(
     appRenderContextResolveSectionLinksBlock: jest.fn(),
   }),
 );
+
+jest.mock(
+  "@app-render-context/resolve/body-content/block/sequence/sequence.resolve.app-render-context",
+  () => ({
+    appRenderContextResolveSequenceBlock: jest.fn(),
+  }),
+);
+
 describe("appRenderContextResolveBlock", () => {
   const appContext = {} as unknown as AppContext;
 
@@ -137,6 +146,7 @@ describe("appRenderContextResolveBlock", () => {
       true,
     ],
     ["noteListing", appRenderContextResolveNoteListingBlock, true],
+    ["sequence", appRenderContextResolveSequenceBlock, true],
   ] as const)("resolves %s blocks", (kind, resolver, receivesAppContext) => {
     const block = { kind } as unknown as AppContextBlock;
     const resolvedBlock = { kind, resolved: true };

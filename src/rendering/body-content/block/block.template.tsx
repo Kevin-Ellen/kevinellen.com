@@ -17,6 +17,7 @@ import { ParagraphBlockTemplate } from "@rendering/body-content/block/paragraph/
 import { PreBlockTemplate } from "@rendering/body-content/block/pre/pre.block.template";
 import { QuoteBlockTemplate } from "@rendering/body-content/block/quote/quote.block.template";
 import { SectionLinksBlockTemplate } from "@rendering/body-content/block/section-links/section-links.block.template";
+import { SequenceBlockTemplate } from "@rendering/body-content/block/sequence/sequence.block.template";
 
 type BlockRendererMap = Readonly<{
   [K in AppRenderContextBlock["kind"]]: (
@@ -42,6 +43,7 @@ const blockTemplates = {
   homepageNoteListing: (block) => (
     <HomepageNoteListingBlockTemplate block={block} />
   ),
+  sequence: (block) => <SequenceBlockTemplate block={block} />,
 } satisfies BlockRendererMap;
 
 type BlockTemplateProps = Readonly<{

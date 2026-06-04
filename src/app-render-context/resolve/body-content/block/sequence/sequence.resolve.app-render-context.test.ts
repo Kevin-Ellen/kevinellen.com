@@ -1,0 +1,113 @@
+// src/app-render-context/resolve/body-content/block/sequence/sequence.resolve.app-render-context.test.ts
+
+import type { AppContext } from "@app-context/class.app-context";
+import type { AppContextSequenceBlock } from "@shared-types/page-content/block/sequence/app-context.sequence.block.types";
+
+import { appRenderContextResolvePhoto } from "@app-render-context/resolve/media/photo.resolve.app-render-context";
+import { appRenderContextResolveSequenceBlock } from "./sequence.resolve.app-render-context";
+
+jest.mock(
+  "@app-render-context/resolve/media/photo.resolve.app-render-context",
+  () => ({
+    appRenderContextResolvePhoto: jest.fn(),
+  }),
+);
+
+describe("appRenderContextResolveSequenceBlock", () => {
+  const mockedAppRenderContextResolvePhoto = jest.mocked(
+    appRenderContextResolvePhoto,
+  );
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("resolves all photos in sequence order", () => {
+    const resolvedPhoto = {
+      id: "kingfisher-1",
+      src: "/media/photo/kingfisher-1",
+    };
+
+    mockedAppRenderContextResolvePhoto.mockReturnValue(resolvedPhoto as never);
+
+    const block: AppContextSequenceBlock = {
+      kind: "sequence",
+      immersive: false,
+      flow: "content",
+      caption: [
+        {
+          kind: "text",
+          value: "A kingfisher exiting the water.",
+        },
+      ],
+      photos: [
+        {
+          position: 1,
+          photo: { id: "photo-1" } as never,
+        },
+        {
+          position: 2,
+          photo: { id: "photo-2" } as never,
+        },
+      ],
+    };
+
+    const appContext = {
+      metadataLabels: {
+        context: "Context",
+        settings: "Settings",
+      },
+    } as unknown as AppContext;
+
+    expect(appRenderContextResolveSequenceBlock(appContext, block)).toEqual({
+      kind: "sequence",
+      immersive: false,
+      flow: "content",
+      caption: block.caption,
+      photos: [
+        {
+          position: 1,
+          photo: resolvedPhoto,
+        },
+        {
+          position: 2,
+          photo: resolvedPhoto,
+        },
+      ],
+    });
+
+    expect(mockedAppRenderContextResolvePhoto).toHaveBeenCalledTimes(2);
+  });
+
+  it("preserves immersive breakout sequences", () => {
+    const resolvedPhoto = {
+      id: "kingfisher-1",
+      src: "/media/photo/kingfisher-1",
+    };
+
+    mockedAppRenderContextResolvePhoto.mockReturnValue(resolvedPhoto as never);
+
+    const block: AppContextSequenceBlock = {
+      kind: "sequence",
+      immersive: true,
+      flow: "breakout",
+      caption: [],
+      photos: [],
+    };
+
+    const appContext = {
+      metadataLabels: {
+        context: "Context",
+        settings: "Settings",
+      },
+    } as unknown as AppContext;
+
+    expect(appRenderContextResolveSequenceBlock(appContext, block)).toEqual({
+      kind: "sequence",
+      immersive: true,
+      flow: "breakout",
+      caption: [],
+      photos: [],
+    });
+  });
+});
