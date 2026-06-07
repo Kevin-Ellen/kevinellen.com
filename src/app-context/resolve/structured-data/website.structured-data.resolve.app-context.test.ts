@@ -3,7 +3,7 @@
 import type { AppState } from "@app-state/class.app-state";
 import type { AppStateWebSiteStructuredData } from "@shared-types/config/structured-data/app-state.website.structured-data.types";
 
-import { appContextResolveWebsiteStructuredData } from "@app-context/resolve/structured-data/website.structured-data.global.resolve.app-context";
+import { appContextResolveWebsiteStructuredData } from "@app-context/resolve/structured-data/website.structured-data.resolve.app-context";
 
 describe("appContextResolveWebsiteStructuredData", () => {
   it("resolves website structured data references", () => {
