@@ -13,6 +13,7 @@ import { appStateResolveNavigation } from "@app-state/resolve/navigation.resolve
 import { appStateResolveStructuredData } from "@app-state/resolve/structured-data.resolve.app-state";
 import { appStateResolvePages } from "@app-state/resolve/pages.resolve.app-state";
 import { appStateResolveImageDelivery } from "@app-state/resolve/image-delivery.resolve.app-state";
+import { authoredSocial } from "@app-state/config/social/authored.social.app-state";
 
 export const appStateCreate = async (env: Env): Promise<AppState> => {
   const siteConfig = appStateResolveSiteConfig(env);
@@ -25,7 +26,10 @@ export const appStateCreate = async (env: Env): Promise<AppState> => {
   const social = appStateResolveSocial;
   const metadataLabels = appStateResolveMetadataLabels;
   const navigation = appStateResolveNavigation;
-  const structuredData = appStateResolveStructuredData(siteConfig);
+  const structuredData = appStateResolveStructuredData(
+    siteConfig,
+    authoredSocial,
+  );
   const imageDelivery = appStateResolveImageDelivery;
 
   const pages = await appStateResolvePages({

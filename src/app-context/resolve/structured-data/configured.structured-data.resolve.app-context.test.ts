@@ -6,7 +6,15 @@ import type { AppContextStructuredDataEntry } from "@shared-types/structured-dat
 
 import { appContextResolveConfiguredStructuredData } from "./configured.structured-data.resolve.app-context";
 
+import { appContextResolvePersonStructuredData } from "@app-context/resolve/structured-data/person.structured-data.resolve.app-context";
 import { appContextResolveWebsiteStructuredData } from "@app-context/resolve/structured-data/website.structured-data.resolve.app-context";
+
+jest.mock(
+  "@app-context/resolve/structured-data/person.structured-data.resolve.app-context",
+  () => ({
+    appContextResolvePersonStructuredData: jest.fn(),
+  }),
+);
 
 jest.mock(
   "@app-context/resolve/structured-data/website.structured-data.resolve.app-context",
@@ -23,9 +31,21 @@ const resolvedWebsiteStructuredData: AppContextStructuredDataEntry = {
   },
 };
 
+const resolvedPersonStructuredData: AppContextStructuredDataEntry = {
+  id: "person",
+  json: {
+    "@context": "https://schema.org",
+    "@type": "Person",
+  },
+};
+
 describe("appContextResolveConfiguredStructuredData", () => {
   const mockedAppContextResolveWebsiteStructuredData = jest.mocked(
     appContextResolveWebsiteStructuredData,
+  );
+
+  const mockedAppContextResolvePersonStructuredData = jest.mocked(
+    appContextResolvePersonStructuredData,
   );
 
   const appState = {
@@ -33,6 +53,11 @@ describe("appContextResolveConfiguredStructuredData", () => {
       website: {
         id: {
           pageId: "home",
+        },
+      },
+      person: {
+        id: {
+          pageId: "about",
         },
       },
     },
@@ -63,11 +88,38 @@ describe("appContextResolveConfiguredStructuredData", () => {
       appState.structuredData.website,
       appState,
     );
+
+    expect(mockedAppContextResolvePersonStructuredData).not.toHaveBeenCalled();
   });
 
-  it("does not resolve website structured data when the page does not match the configured website page", () => {
+  it("resolves person structured data when the page matches the configured person page", () => {
+    mockedAppContextResolvePersonStructuredData.mockReturnValue(
+      resolvedPersonStructuredData,
+    );
+
     const page = {
       id: "about",
+    } as AppStatePageDefinition;
+
+    const result = appContextResolveConfiguredStructuredData(appState, page);
+
+    expect(result).toEqual([resolvedPersonStructuredData]);
+
+    expect(mockedAppContextResolvePersonStructuredData).toHaveBeenCalledTimes(
+      1,
+    );
+
+    expect(mockedAppContextResolvePersonStructuredData).toHaveBeenCalledWith(
+      appState.structuredData.person,
+      appState,
+    );
+
+    expect(mockedAppContextResolveWebsiteStructuredData).not.toHaveBeenCalled();
+  });
+
+  it("does not resolve configured structured data when the page does not match a configured structured data page", () => {
+    const page = {
+      id: "journal",
     } as AppStatePageDefinition;
 
     const result = appContextResolveConfiguredStructuredData(appState, page);
@@ -75,5 +127,6 @@ describe("appContextResolveConfiguredStructuredData", () => {
     expect(result).toEqual([]);
 
     expect(mockedAppContextResolveWebsiteStructuredData).not.toHaveBeenCalled();
+    expect(mockedAppContextResolvePersonStructuredData).not.toHaveBeenCalled();
   });
 });

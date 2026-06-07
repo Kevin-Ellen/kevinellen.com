@@ -4,11 +4,13 @@ import type { PageId } from "@shared-types/page-definitions/shared/shared.page-i
 
 import type { AppStateSiteConfig } from "@shared-types/config/site-config/app-state.site-config.types";
 import type { AppStateStructuredData } from "@shared-types/config/structured-data/app-state.structured-data.types";
+import type { AuthoredSocial } from "@shared-types/config/social/authored.social.types";
 
 import { deepFreeze } from "@utils/deepFreeze.util";
 
 export const appStateResolveStructuredData = (
   siteConfig: AppStateSiteConfig,
+  authoredSocial: AuthoredSocial,
 ): AppStateStructuredData =>
   deepFreeze({
     website: {
@@ -26,5 +28,24 @@ export const appStateResolveStructuredData = (
         pageId: "about" as PageId,
         hash: "#person",
       },
+    },
+
+    person: {
+      id: {
+        pageId: "about" as PageId,
+        hash: "#person",
+      },
+      url: {
+        pageId: "about" as PageId,
+      },
+      name: siteConfig.author,
+      description: siteConfig.person.description,
+      jobTitle: siteConfig.person.jobTitle,
+      knowsAbout: siteConfig.person.knowsAbout,
+      knowsLanguage: siteConfig.person.knowsLanguage,
+      sameAs: [
+        ...Object.values(authoredSocial).map((item) => item.href),
+        ...siteConfig.person.additionalSameAs,
+      ],
     },
   });

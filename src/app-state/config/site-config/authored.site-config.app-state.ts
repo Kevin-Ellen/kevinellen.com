@@ -11,6 +11,29 @@ export const appStateSiteConfigAuthored: AuthoredSiteConfig = deepFreeze({
   description:
     "Wildlife photography, field notes, and technical work exploring nature and digital publishing.",
 
+  person: {
+    description:
+      "Wildlife photographer and technical SEO specialist based in south-east England.",
+
+    jobTitle: "Technical SEO Specialist",
+
+    knowsAbout: [
+      "Wildlife photography",
+      "Nature photography",
+      "Technical SEO",
+      "Structured data",
+      "Edge-native web architecture",
+      "Cloudflare Workers",
+    ],
+
+    knowsLanguage: ["en-GB", "nl-NL"],
+
+    additionalSameAs: [
+      "https://www.imdb.com/name/nm5886775/",
+      "https://x.com/Kevin_Ellen_",
+    ],
+  },
+
   headerBranding: {
     homeHref: "/",
     ariaLabel: "Kevin Ellen home",

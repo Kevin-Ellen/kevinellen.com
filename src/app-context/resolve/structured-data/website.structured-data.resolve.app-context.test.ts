@@ -1,4 +1,4 @@
-// src/app-context/resolve/structured-data/website.structured-data.global.resolve.app-context.test.ts
+// src/app-context/resolve/structured-data/website.structured-data.resolve.app-context.test.ts
 
 import type { AppState } from "@app-state/class.app-state";
 import type { AppStateWebSiteStructuredData } from "@shared-types/config/structured-data/app-state.website.structured-data.types";
