@@ -143,6 +143,37 @@ describe("appContextCollectPhotoIds", () => {
     ).toEqual(["first-photo"]);
   });
 
+  it("collects photo ids from sequence blocks", () => {
+    const blocks = [
+      {
+        kind: "sequence",
+
+        immersive: false,
+
+        flow: "content",
+
+        caption: [
+          {
+            kind: "text",
+            value: "Bird sequence",
+          },
+        ],
+
+        photos: {
+          1: "rook-wandering-in-amager-meadows",
+          2: "juvenile-white-wagtail-chilling-in-amager-meadows",
+          3: "hooded-crow-in-amager-meadows",
+        },
+      },
+    ] as unknown as readonly AppStateBlock[];
+
+    expect(appContextCollectPhotoIds(blocks, createContext())).toEqual([
+      "rook-wandering-in-amager-meadows",
+      "juvenile-white-wagtail-chilling-in-amager-meadows",
+      "hooded-crow-in-amager-meadows",
+    ]);
+  });
+
   it("ignores blocks without photo collectors", () => {
     expect(
       appContextCollectPhotoIds(

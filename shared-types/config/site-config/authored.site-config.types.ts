@@ -48,10 +48,19 @@ export type AuthoredSiteConfigAssets = Readonly<{
   svgs: readonly SvgAssetId[];
 }>;
 
+export type AuthoredSiteConfigPerson = Readonly<{
+  description: string;
+  jobTitle: string;
+  knowsAbout: readonly string[];
+  knowsLanguage: readonly string[];
+  additionalSameAs: readonly string[];
+}>;
+
 export type AuthoredSiteConfig = Readonly<{
   siteName: string;
   author: string;
   description: string;
+  person: AuthoredSiteConfigPerson;
   language: SiteLanguage;
   headerBranding: AuthoredSiteConfigHeaderBranding;
   headAssets: AuthoredSiteConfigHeadAssets;

@@ -4,7 +4,7 @@ import type { AppContextStructuredDataEntry } from "@shared-types/structured-dat
 import type { AppStatePageDefinition } from "@shared-types/page-definitions/app-state.page-definition.types";
 import type { AppState } from "@app-state/class.app-state";
 
-import { appContextResolveGlobalStructuredData } from "@app-context/resolve/structured-data/global.structured-data.resolve.app-context";
+import { appContextResolveConfiguredStructuredData } from "@app-context/resolve/structured-data/configured.structured-data.resolve.app-context";
 
 export const appContextResolveStructuredData = (
   appState: AppState,
@@ -15,7 +15,7 @@ export const appContextResolveStructuredData = (
   }
 
   return [
-    ...appContextResolveGlobalStructuredData(appState),
+    ...appContextResolveConfiguredStructuredData(appState, page),
     ...page.structuredData,
   ];
 };

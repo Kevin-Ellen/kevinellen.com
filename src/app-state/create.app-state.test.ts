@@ -8,6 +8,7 @@ import { appStateResolveWebmanifest } from "@app-state/resolve/webmanifest.resol
 import { appStateResolveGlobalFooter } from "@app-state/resolve/page-content/site/global-footer.resolve.app-state";
 import { appStateResolveStructuredData } from "@app-state/resolve/structured-data.resolve.app-state";
 import { appStateResolvePages } from "@app-state/resolve/pages.resolve.app-state";
+import { authoredSocial } from "@app-state/config/social/authored.social.app-state";
 
 jest.mock("@app-state/resolve/site-config.resolve.app-state", () => ({
   appStateResolveSiteConfig: jest.fn(),
@@ -95,6 +96,7 @@ describe("appStateCreate", () => {
 
     expect(mockedAppStateResolveStructuredData).toHaveBeenCalledWith(
       siteConfig,
+      authoredSocial,
     );
 
     expect(mockedAppStateResolvePages).toHaveBeenCalledWith({

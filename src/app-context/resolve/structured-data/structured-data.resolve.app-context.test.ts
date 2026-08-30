@@ -6,18 +6,18 @@ import type { AppContextStructuredDataEntry } from "@shared-types/structured-dat
 
 import { appContextResolveStructuredData } from "@app-context/resolve/structured-data/structured-data.resolve.app-context";
 
-import { appContextResolveGlobalStructuredData } from "@app-context/resolve/structured-data/global.structured-data.resolve.app-context";
+import { appContextResolveConfiguredStructuredData } from "@app-context/resolve/structured-data/configured.structured-data.resolve.app-context";
 
 jest.mock(
-  "@app-context/resolve/structured-data/global.structured-data.resolve.app-context",
+  "@app-context/resolve/structured-data/configured.structured-data.resolve.app-context",
   () => ({
-    appContextResolveGlobalStructuredData: jest.fn(),
+    appContextResolveConfiguredStructuredData: jest.fn(),
   }),
 );
 
 describe("appContextResolveStructuredData", () => {
-  const mockedAppContextResolveGlobalStructuredData = jest.mocked(
-    appContextResolveGlobalStructuredData,
+  const mockedAppContextResolveConfiguredStructuredData = jest.mocked(
+    appContextResolveConfiguredStructuredData,
   );
 
   beforeEach(() => {
@@ -34,13 +34,15 @@ describe("appContextResolveStructuredData", () => {
 
     expect(appContextResolveStructuredData(appState, page)).toEqual([]);
 
-    expect(mockedAppContextResolveGlobalStructuredData).not.toHaveBeenCalled();
+    expect(
+      mockedAppContextResolveConfiguredStructuredData,
+    ).not.toHaveBeenCalled();
   });
 
-  it("combines global and page structured data for public pages", () => {
+  it("combines configured and page structured data for public pages", () => {
     const appState = {} as AppState;
 
-    const globalStructuredData: AppContextStructuredDataEntry = {
+    const configuredStructuredData: AppContextStructuredDataEntry = {
       id: "website",
       json: {
         "@context": "https://schema.org",
@@ -56,21 +58,16 @@ describe("appContextResolveStructuredData", () => {
       },
     };
 
-    const pageStructuredData = {
-      id: "page",
+    const pageStructuredData: AppContextStructuredDataEntry = {
+      id: "breadcrumb",
       json: {
         "@context": "https://schema.org",
-        "@type": "WebPage",
-        "@id": "https://example.com/#page",
-        url: "https://example.com/",
-        name: "Home",
-        description: "Homepage.",
-        inLanguage: "en-GB",
+        "@type": "BreadcrumbList",
       },
     };
 
-    mockedAppContextResolveGlobalStructuredData.mockReturnValue([
-      globalStructuredData,
+    mockedAppContextResolveConfiguredStructuredData.mockReturnValue([
+      configuredStructuredData,
     ]);
 
     const page = {
@@ -79,12 +76,12 @@ describe("appContextResolveStructuredData", () => {
     } as unknown as AppStatePageDefinition;
 
     expect(appContextResolveStructuredData(appState, page)).toEqual([
-      globalStructuredData,
+      configuredStructuredData,
       pageStructuredData,
     ]);
 
-    expect(mockedAppContextResolveGlobalStructuredData).toHaveBeenCalledWith(
-      appState,
-    );
+    expect(
+      mockedAppContextResolveConfiguredStructuredData,
+    ).toHaveBeenCalledWith(appState, page);
   });
 });

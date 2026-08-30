@@ -29,6 +29,8 @@ const appContextCollectJournalPhotoIds = (
 const APP_CONTEXT_PHOTO_ID_COLLECTORS: AppContextPhotoIdCollectorRegistry = {
   hero: (block) => [block.photoId],
 
+  sequence: (block) => Object.values(block.photos),
+
   homepageHero: (block) => [block.photoId],
 
   homepageJournalListing: (_block, context) =>
