@@ -1,7 +1,6 @@
 // src/pages/public/static/about/authored.about.public.page.ts
 
 import type { AuthoredPublicPageDefinition } from "@shared-types/page-definitions/authored.public.page-definition.types";
-
 import { deepFreeze } from "@utils/deepFreeze.util";
 
 export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
@@ -11,9 +10,9 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
   label: "About",
 
   metadata: {
-    pageTitle: "About | Kevin Ellen",
+    pageTitle: "About Kevin Ellen | Wildlife Photographer in Essex",
     metaDescription:
-      "About Kevin Ellen: wildlife photographer, technical SEO specialist, and builder of a personal platform for field notes, photography, and edge-native systems.",
+      "Kevin Ellen is an independent wildlife and nature photographer based in Loughton, Essex, near Epping Forest. Explore his photography, field journals and technical work.",
   },
 
   breadcrumbs: ["home", "about"],
@@ -23,7 +22,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       eyebrow: "Kevin Ellen",
       title: "About me",
       intro:
-        "This site brings together two long-standing interests: wildlife and technology. It is a place for photography, field notes, journal writing, and the technical thinking behind the platform itself.",
+        "I'm an independent wildlife and nature photographer based in Loughton, Essex, near Epping Forest. I photograph the natural world close to home and during my travels, and I work professionally in technology and engineering.",
     },
 
     content: [
@@ -41,7 +40,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "I am a technical SEO professional based in south-east England, on the border between London and Essex. I spend a lot of time around Epping Forest, a place I have loved since moving to the area. Forests, mountains, and quiet natural spaces are where I feel most at home.",
+                  "Epping Forest has been a familiar place since I moved to the area. I love forests, mountains, wetlands and quiet natural spaces, and I am happiest taking my time to explore them. Living in Loughton means I have the forest close by, with plenty to observe without travelling far.",
               },
             ],
           },
@@ -51,7 +50,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "In 2024 I picked up my dad’s old camera. That simple decision quickly turned into something much bigger. Since then, I have travelled with my own camera, using it to explore, observe, and document the natural world more closely.",
+                  "In 2024 I picked up my dad's old camera. That simple decision quickly turned into something much bigger. Since then, photography has given me another reason to slow down, look more closely and document the natural world around me.",
               },
             ],
           },
@@ -61,7 +60,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       {
         kind: "articleSection",
         heading: {
-          text: "Nature",
+          text: "Nature & photography",
           level: 2,
         },
         modules: [
@@ -71,7 +70,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "Wildlife and nature matter deeply to me. I enjoy being fully immersed in it: watching the forest floor, noticing textures in foliage and shrubs, and keeping an eye out for movement. Sometimes it is something small and hidden. Sometimes it is much more obvious.",
+                  "What interests me most about wildlife is behaviour and character. I enjoy the small interactions, unexpected expressions and occasionally absurd moments that reveal something about an animal beyond its species name. A photograph can be technically good, but I especially like it when it tells a story.",
               },
             ],
           },
@@ -81,7 +80,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "Photography gives me a way to capture and share those moments. In a world full of screens and constant noise, I hope these observations encourage others to reconnect with nature and experience it for themselves.",
+                  "I pay just as much attention to the surroundings: the forest floor, textures in foliage, changing light and the habitats that make an encounter possible. Wildlife is part of a wider environment, and that context matters to me as much as the subject itself.",
               },
             ],
           },
@@ -91,7 +90,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "Travel is an important part of nature photography for me. I tend to stay close to natural spaces, away from busy urban and tourist-heavy areas. I am drawn to places where culture and landscape meet.",
+                  "I photograph nature locally around Epping Forest and Essex, as well as when travelling abroad. My journeys often take me away from busy tourist areas and towards forests, mountains and wetlands, especially places where landscape and culture meet. I share my own photographs, observations and field journals here on the site.",
               },
             ],
           },
@@ -101,20 +100,17 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "If you are curious about what I bring on these trips, you can explore the ",
+                  "Photography is a way to share those encounters, but I hope it also encourages someone to go outside and notice what is happening around them. If you're curious about the kit I take into the field, have a look at my ",
               },
               {
                 kind: "internalLink",
                 link: {
                   kind: "internal",
                   id: "about-equipment",
-                  text: "photography equipment page",
+                  text: "photography equipment",
                 },
               },
-              {
-                kind: "text",
-                value: ".",
-              },
+              { kind: "text", value: "." },
             ],
           },
         ],
@@ -140,7 +136,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
       {
         kind: "articleSection",
         heading: {
-          text: "Technology",
+          text: "Technology & engineering",
           level: 2,
         },
         modules: [
@@ -149,7 +145,8 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
             content: [
               {
                 kind: "text",
-                value: "Technology fascinates me too.",
+                value:
+                  "Away from the camera, my professional background is in technical SEO. Over time, my work has increasingly moved towards software engineering, solution architecture and automation. I enjoy understanding how systems work, finding where they fall short and building something better.",
               },
             ],
           },
@@ -159,7 +156,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "I am interested in how systems are built, how they can be improved, and how people discover and interact with content online.",
+                  "That might mean designing an architecture, writing application code or connecting services. I care about clear responsibilities, maintainable solutions and the practical work of turning an idea into something that runs.",
               },
             ],
           },
@@ -169,17 +166,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "The web sits between machines and people. It lets us build structured, high-performance systems while still creating meaningful experiences. That balance is something I keep exploring.",
-              },
-            ],
-          },
-          {
-            kind: "paragraph",
-            content: [
-              {
-                kind: "text",
-                value:
-                  "If you want to dive deeper into how this site is built, the ",
+                  "This website is one example. I built it as a small edge-native platform for photography and writing, rather than using an off-the-shelf content management system. The ",
               },
               {
                 kind: "internalLink",
@@ -192,7 +179,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  " explores the architecture, decisions, and systems behind it.",
+                  " explains the architecture and the decisions behind it.",
               },
             ],
           },
@@ -212,7 +199,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "At first glance, nature and technology might seem unrelated. The more time I spend with both, the more similarities I see. Nature is a balanced system, where every part has a role.",
+                  "Nature and technology occupy different parts of my life, but both reward curiosity, patience and attention to detail. In the field I watch and wait; at a keyboard I investigate, test and refine. Neither always goes to plan, which is part of the appeal.",
               },
             ],
           },
@@ -222,51 +209,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "That same idea shapes how I approach technical work. I aim for clarity, simplicity, and intention. Every part of a system should have a reason to exist.",
-              },
-            ],
-          },
-          {
-            kind: "paragraph",
-            content: [
-              {
-                kind: "text",
-                value:
-                  "In many ways, this website reflects that idea: something carefully structured, but still natural to explore.",
-              },
-            ],
-          },
-          {
-            kind: "paragraph",
-            content: [
-              {
-                kind: "text",
-                value: "That same idea runs through both the ",
-              },
-              {
-                kind: "internalLink",
-                link: {
-                  kind: "internal",
-                  id: "about-equipment",
-                  text: "photography equipment page",
-                },
-              },
-              {
-                kind: "text",
-                value: " and the ",
-              },
-              {
-                kind: "internalLink",
-                link: {
-                  kind: "internal",
-                  id: "about-technology",
-                  text: "technology section",
-                },
-              },
-              {
-                kind: "text",
-                value:
-                  ", which look at the practical and technical sides of the site in more detail.",
+                  "This site brings those interests together. The technology provides a home for the photographs and stories, but the natural world is the reason I keep heading outside to make more of them.",
               },
             ],
           },
@@ -286,7 +229,7 @@ export const authoredAboutPage: AuthoredPublicPageDefinition = deepFreeze({
               {
                 kind: "text",
                 value:
-                  "This has been a journey on several levels: learning new systems, building this platform, and developing my photography at the same time.",
+                  "I'm still learning, both behind the camera and while building the platform that holds the results. That's part of what makes it enjoyable.",
               },
             ],
           },
