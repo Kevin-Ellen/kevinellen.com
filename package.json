@@ -54,7 +54,9 @@
     "prepare": "husky",
     "validate": "npm run format:check && npm run format:tf:check && npm run lint && npm run lint:styles && npm run type-check:all && npm run test",
     "content": "tsx packages/content-cli/src/cli/content.cli.ts",
-    "build:scripts": "node scripts/build-scripts.mjs"
+    "build:scripts": "node scripts/build-scripts.mjs",
+    "schema:authored": "ts-json-schema-generator --path 'shared-types/page-content/authored.page-content.types.ts' --type 'AuthoredPageContent' --tsconfig tsconfig.schema.json --out 'schema/authored.schema.json'",
+    "schema:authored:check": "npm run schema:authored && git diff --exit-code -- schema/authored.schema.json"
   },
   "packageManager": "npm@11.11.0",
   "devDependencies": {
@@ -79,6 +81,7 @@
     "stylelint-scss": "^7.0.0",
     "terser": "^5.47.1",
     "ts-jest": "^29.4.6",
+    "ts-json-schema-generator": "^2.9.0",
     "tsx": "^4.21.0",
     "typescript": "5.9.3",
     "typescript-eslint": "^8.57.0",

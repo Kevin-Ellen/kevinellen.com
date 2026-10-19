@@ -1,0 +1,942 @@
+{
+  "$ref": "#/definitions/AuthoredPageContent",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AuthoredArticleSectionBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+        },
+        "kind": {
+          "const": "articleSection",
+          "type": "string"
+        },
+        "modules": {
+          "items": {
+            "$ref": "#/definitions/AuthoredBlock"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "heading",
+        "modules"
+      ],
+      "type": "object"
+    },
+    "AuthoredArticleSectionHeadingBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "enum": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "type": "number"
+        },
+        "text": {
+          "type": "string"
+        },
+        "visuallyHidden": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "text",
+        "level"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"hero\",structure-1832424286-310-365-1832424286-281-367-1832424286-248-368-1832424286-0-369>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "immersive": {
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "hero",
+          "type": "string"
+        },
+        "photoId": {
+          "$ref": "#/definitions/PhotoId"
+        }
+      },
+      "required": [
+        "kind",
+        "photoId"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"homepageHero\",structure-1776868192-533-674-1776868192-496-676-1776868192-455-677-1776868192-0-678>": {
+      "additionalProperties": false,
+      "properties": {
+        "eyebrow": {
+          "type": "string"
+        },
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "intro": {
+          "items": {
+            "$ref": "#/definitions/AuthoredInline"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "homepageHero",
+          "type": "string"
+        },
+        "photoId": {
+          "$ref": "#/definitions/PhotoId"
+        },
+        "primaryLink": {
+          "$ref": "#/definitions/AuthoredInternalLink"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "photoId",
+        "title"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"homepageJournalListing\",structure-198932984-458-539-198932984-411-541-198932984-360-542-198932984-0-543>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "heading": {
+          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+        },
+        "itemCount": {
+          "type": "number"
+        },
+        "kind": {
+          "const": "homepageJournalListing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "heading",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"homepageNoteListing\",structure-538435776-446-527-538435776-402-529-538435776-354-530-538435776-0-531>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "heading": {
+          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+        },
+        "itemCount": {
+          "type": "number"
+        },
+        "kind": {
+          "const": "homepageNoteListing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "heading",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"imageStrip\",structure-239170368-506-685-239170368-471-687-239170368-432-688-239170368-0-689>": {
+      "additionalProperties": false,
+      "properties": {
+        "excludePagePhotos": {
+          "type": "boolean"
+        },
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "heading": {
+          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+        },
+        "itemCount": {
+          "type": "number"
+        },
+        "kind": {
+          "const": "imageStrip",
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/definitions/ImageStripSource"
+        },
+        "strategy": {
+          "$ref": "#/definitions/ImageStripStrategy"
+        }
+      },
+      "required": [
+        "heading",
+        "kind",
+        "source"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"journalListing\",structure-310081088-400-444-310081088-361-446-310081088-318-447-310081088-0-448>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "kind": {
+          "const": "journalListing",
+          "type": "string"
+        },
+        "pagination": {
+          "$ref": "#/definitions/AuthoredPagination"
+        }
+      },
+      "required": [
+        "kind",
+        "pagination"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"list\",structure-995901094-522-603-995901094-493-605-995901094-460-606-995901094-0-607>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/definitions/AuthoredListItemBlock"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "list",
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/definitions/BlockListStyle"
+        }
+      },
+      "required": [
+        "items",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"noteListing\",structure-952946236-388-432-952946236-352-434-952946236-312-435-952946236-0-436>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "kind": {
+          "const": "noteListing",
+          "type": "string"
+        },
+        "pagination": {
+          "$ref": "#/definitions/AuthoredPagination"
+        }
+      },
+      "required": [
+        "kind",
+        "pagination"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"paragraph\",structure-995640192-360-408-995640192-326-410-995640192-288-411-995640192-0-412>": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "items": {
+            "$ref": "#/definitions/AuthoredInline"
+          },
+          "type": "array"
+        },
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "kind": {
+          "const": "paragraph",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"pre\",structure-665075872-336-392-665075872-308-394-665075872-276-395-665075872-0-396>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "kind": {
+          "const": "pre",
+          "type": "string"
+        },
+        "language": {
+          "$ref": "#/definitions/CodeLanguage"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"quote\",structure-1279843264-241-309-1279843264-211-311-1279843264-177-312-1279843264-0-313>": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "type": "string"
+        },
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "quote",
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "text"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"sectionLinks\",structure-616718752-746-800-616718752-709-802-616718752-668-803-616718752-0-804>": {
+      "additionalProperties": false,
+      "properties": {
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "kind": {
+          "const": "sectionLinks",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "heading": {
+                "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+              },
+              "icon": {
+                "$ref": "#/definitions/SvgAssetId"
+              },
+              "intro": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "link": {
+                "$ref": "#/definitions/AuthoredInternalLink"
+              }
+            },
+            "required": [
+              "heading",
+              "link",
+              "icon",
+              "intro"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "sections"
+      ],
+      "type": "object"
+    },
+    "AuthoredBaseBlock<\"sequence\",structure-1521326740-429-549-1521326740-396-551-1521326740-359-552-1521326740-0-553>": {
+      "additionalProperties": false,
+      "properties": {
+        "caption": {
+          "items": {
+            "$ref": "#/definitions/AuthoredInline"
+          },
+          "type": "array"
+        },
+        "flow": {
+          "$ref": "#/definitions/BlockFlow"
+        },
+        "immersive": {
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "sequence",
+          "type": "string"
+        },
+        "photos": {
+          "additionalProperties": {
+            "$ref": "#/definitions/PhotoId"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "caption",
+        "kind",
+        "photos"
+      ],
+      "type": "object"
+    },
+    "AuthoredBlock": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AuthoredParagraphBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredListBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredQuoteBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredHeroBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredJournalListingBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredArticleSectionBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredPreBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredHomepageHeroBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredImageStripBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredHomepageJournalListingBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredSectionLinksBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredNoteListingBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredHomepageNoteListingBlock"
+        },
+        {
+          "$ref": "#/definitions/AuthoredSequenceBlock"
+        }
+      ]
+    },
+    "AuthoredCodeInline": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "code",
+          "type": "string"
+        },
+        "language": {
+          "$ref": "#/definitions/CodeLanguage"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "AuthoredEmphasisInline": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "items": {
+            "$ref": "#/definitions/AuthoredInline"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "emphasis",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "content"
+      ],
+      "type": "object"
+    },
+    "AuthoredExternalLink": {
+      "additionalProperties": false,
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "external",
+          "type": "string"
+        },
+        "svgId": {
+          "$ref": "#/definitions/SvgAssetId"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "href",
+        "text"
+      ],
+      "type": "object"
+    },
+    "AuthoredExternalLinkInline": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "externalLink",
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/definitions/AuthoredExternalLink"
+        }
+      },
+      "required": [
+        "kind",
+        "link"
+      ],
+      "type": "object"
+    },
+    "AuthoredHeroBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22hero%22%2Cstructure-1832424286-310-365-1832424286-281-367-1832424286-248-368-1832424286-0-369%3E"
+    },
+    "AuthoredHomepageHeroBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22homepageHero%22%2Cstructure-1776868192-533-674-1776868192-496-676-1776868192-455-677-1776868192-0-678%3E"
+    },
+    "AuthoredHomepageJournalListingBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22homepageJournalListing%22%2Cstructure-198932984-458-539-198932984-411-541-198932984-360-542-198932984-0-543%3E"
+    },
+    "AuthoredHomepageNoteListingBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22homepageNoteListing%22%2Cstructure-538435776-446-527-538435776-402-529-538435776-354-530-538435776-0-531%3E"
+    },
+    "AuthoredImageStripBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22imageStrip%22%2Cstructure-239170368-506-685-239170368-471-687-239170368-432-688-239170368-0-689%3E"
+    },
+    "AuthoredInline": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AuthoredCodeInline"
+        },
+        {
+          "$ref": "#/definitions/AuthoredLineBreakInline"
+        },
+        {
+          "$ref": "#/definitions/AuthoredTextInline"
+        },
+        {
+          "$ref": "#/definitions/AuthoredEmphasisInline"
+        },
+        {
+          "$ref": "#/definitions/AuthoredStrongInline"
+        },
+        {
+          "$ref": "#/definitions/AuthoredInternalLinkInline"
+        },
+        {
+          "$ref": "#/definitions/AuthoredExternalLinkInline"
+        }
+      ]
+    },
+    "AuthoredInternalLink": {
+      "additionalProperties": false,
+      "properties": {
+        "behaviour": {
+          "$ref": "#/definitions/LinkOpenBehaviour"
+        },
+        "id": {
+          "$ref": "#/definitions/PageIdPublic"
+        },
+        "kind": {
+          "const": "internal",
+          "type": "string"
+        },
+        "svgId": {
+          "$ref": "#/definitions/SvgAssetId"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "type": "object"
+    },
+    "AuthoredInternalLinkInline": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "internalLink",
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/definitions/AuthoredInternalLink"
+        }
+      },
+      "required": [
+        "kind",
+        "link"
+      ],
+      "type": "object"
+    },
+    "AuthoredJournalEntryFooter": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "journalEntryFooter",
+          "type": "string"
+        },
+        "publication": {
+          "additionalProperties": false,
+          "properties": {
+            "author": {
+              "type": "string"
+            },
+            "publishedAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "author",
+            "publishedAt",
+            "updatedAt"
+          ],
+          "type": "object"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "publication",
+        "tags"
+      ],
+      "type": "object"
+    },
+    "AuthoredJournalListingBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22journalListing%22%2Cstructure-310081088-400-444-310081088-361-446-310081088-318-447-310081088-0-448%3E"
+    },
+    "AuthoredLineBreakInline": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "lineBreak",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    "AuthoredListBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22list%22%2Cstructure-995901094-522-603-995901094-493-605-995901094-460-606-995901094-0-607%3E"
+    },
+    "AuthoredListItemBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "items": {
+            "$ref": "#/definitions/AuthoredInline"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "content"
+      ],
+      "type": "object"
+    },
+    "AuthoredNoteEntryFooter": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "noteEntryFooter",
+          "type": "string"
+        },
+        "publication": {
+          "additionalProperties": false,
+          "properties": {
+            "author": {
+              "type": "string"
+            },
+            "publishedAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "author",
+            "publishedAt",
+            "updatedAt"
+          ],
+          "type": "object"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "topic": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "publication",
+        "topic",
+        "tags"
+      ],
+      "type": "object"
+    },
+    "AuthoredNoteListingBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22noteListing%22%2Cstructure-952946236-388-432-952946236-352-434-952946236-312-435-952946236-0-436%3E"
+    },
+    "AuthoredPageContent": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "items": {
+            "$ref": "#/definitions/AuthoredBlock"
+          },
+          "type": "array"
+        },
+        "footer": {
+          "items": {
+            "$ref": "#/definitions/AuthoredPageContentFooter"
+          },
+          "type": "array"
+        },
+        "head": {
+          "$ref": "#/definitions/AuthoredPageContentHead"
+        }
+      },
+      "required": [
+        "head",
+        "content"
+      ],
+      "type": "object"
+    },
+    "AuthoredPageContentFooter": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AuthoredJournalEntryFooter"
+        },
+        {
+          "$ref": "#/definitions/AuthoredNoteEntryFooter"
+        }
+      ]
+    },
+    "AuthoredPageContentHead": {
+      "additionalProperties": false,
+      "properties": {
+        "eyebrow": {
+          "type": "string"
+        },
+        "intro": {
+          "type": "string"
+        },
+        "showInBody": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "type": "object"
+    },
+    "AuthoredPagination": {
+      "additionalProperties": false,
+      "properties": {
+        "pageSize": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "pageSize"
+      ],
+      "type": "object"
+    },
+    "AuthoredParagraphBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22paragraph%22%2Cstructure-995640192-360-408-995640192-326-410-995640192-288-411-995640192-0-412%3E"
+    },
+    "AuthoredPreBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22pre%22%2Cstructure-665075872-336-392-665075872-308-394-665075872-276-395-665075872-0-396%3E"
+    },
+    "AuthoredQuoteBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22quote%22%2Cstructure-1279843264-241-309-1279843264-211-311-1279843264-177-312-1279843264-0-313%3E"
+    },
+    "AuthoredSectionLinksBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22sectionLinks%22%2Cstructure-616718752-746-800-616718752-709-802-616718752-668-803-616718752-0-804%3E"
+    },
+    "AuthoredSequenceBlock": {
+      "$ref": "#/definitions/AuthoredBaseBlock%3C%22sequence%22%2Cstructure-1521326740-429-549-1521326740-396-551-1521326740-359-552-1521326740-0-553%3E"
+    },
+    "AuthoredStrongInline": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "items": {
+            "$ref": "#/definitions/AuthoredInline"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "strong",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "content"
+      ],
+      "type": "object"
+    },
+    "AuthoredTextInline": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "text",
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "type": "object"
+    },
+    "BlockFlow": {
+      "enum": [
+        "content",
+        "breakout"
+      ],
+      "type": "string"
+    },
+    "BlockListStyle": {
+      "enum": [
+        "unordered",
+        "ordered"
+      ],
+      "type": "string"
+    },
+    "CodeLanguage": {
+      "enum": [
+        "bash",
+        "html",
+        "css",
+        "scss",
+        "js",
+        "ts",
+        "tsx",
+        "json",
+        "terraform",
+        "text"
+      ],
+      "type": "string"
+    },
+    "ImageStripSource": {
+      "const": "homepage-strip",
+      "type": "string"
+    },
+    "ImageStripStrategy": {
+      "const": "dailyRandom",
+      "type": "string"
+    },
+    "LinkOpenBehaviour": {
+      "additionalProperties": false,
+      "properties": {
+        "openInNewTab": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "openInNewTab"
+      ],
+      "type": "object"
+    },
+    "PageIdPublic": {
+      "type": "string"
+    },
+    "PhotoId": {
+      "type": "string"
+    },
+    "SvgAssetId": {
+      "enum": [
+        "logo-monogram-ke",
+        "icon-home",
+        "icon-newspaper",
+        "icon-pencil",
+        "icon-github",
+        "icon-instagram",
+        "icon-linkedin",
+        "logo-rspb",
+        "logo-national-trust",
+        "logo-vogelbescherming-nederland"
+      ],
+      "type": "string"
+    }
+  }
+}
