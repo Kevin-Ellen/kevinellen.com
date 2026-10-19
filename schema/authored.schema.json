@@ -19,24 +19,14 @@
           "type": "array"
         }
       },
-      "required": [
-        "kind",
-        "heading",
-        "modules"
-      ],
+      "required": ["kind", "heading", "modules"],
       "type": "object"
     },
     "AuthoredArticleSectionHeadingBlock": {
       "additionalProperties": false,
       "properties": {
         "level": {
-          "enum": [
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
+          "enum": [2, 3, 4, 5, 6],
           "type": "number"
         },
         "text": {
@@ -46,10 +36,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "text",
-        "level"
-      ],
+      "required": ["text", "level"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"hero\",structure-1832424286-310-365-1832424286-281-367-1832424286-248-368-1832424286-0-369>": {
@@ -69,10 +56,7 @@
           "$ref": "#/definitions/PhotoId"
         }
       },
-      "required": [
-        "kind",
-        "photoId"
-      ],
+      "required": ["kind", "photoId"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"homepageHero\",structure-1776868192-533-674-1776868192-496-676-1776868192-455-677-1776868192-0-678>": {
@@ -104,11 +88,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "photoId",
-        "title"
-      ],
+      "required": ["kind", "photoId", "title"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"homepageJournalListing\",structure-198932984-458-539-198932984-411-541-198932984-360-542-198932984-0-543>": {
@@ -128,10 +108,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "heading",
-        "kind"
-      ],
+      "required": ["heading", "kind"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"homepageNoteListing\",structure-538435776-446-527-538435776-402-529-538435776-354-530-538435776-0-531>": {
@@ -151,10 +128,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "heading",
-        "kind"
-      ],
+      "required": ["heading", "kind"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"imageStrip\",structure-239170368-506-685-239170368-471-687-239170368-432-688-239170368-0-689>": {
@@ -183,11 +157,7 @@
           "$ref": "#/definitions/ImageStripStrategy"
         }
       },
-      "required": [
-        "heading",
-        "kind",
-        "source"
-      ],
+      "required": ["heading", "kind", "source"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"journalListing\",structure-310081088-400-444-310081088-361-446-310081088-318-447-310081088-0-448>": {
@@ -204,10 +174,7 @@
           "$ref": "#/definitions/AuthoredPagination"
         }
       },
-      "required": [
-        "kind",
-        "pagination"
-      ],
+      "required": ["kind", "pagination"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"list\",structure-995901094-522-603-995901094-493-605-995901094-460-606-995901094-0-607>": {
@@ -230,10 +197,7 @@
           "$ref": "#/definitions/BlockListStyle"
         }
       },
-      "required": [
-        "items",
-        "kind"
-      ],
+      "required": ["items", "kind"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"noteListing\",structure-952946236-388-432-952946236-352-434-952946236-312-435-952946236-0-436>": {
@@ -250,10 +214,7 @@
           "$ref": "#/definitions/AuthoredPagination"
         }
       },
-      "required": [
-        "kind",
-        "pagination"
-      ],
+      "required": ["kind", "pagination"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"paragraph\",structure-995640192-360-408-995640192-326-410-995640192-288-411-995640192-0-412>": {
@@ -273,10 +234,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "content",
-        "kind"
-      ],
+      "required": ["content", "kind"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"pre\",structure-665075872-336-392-665075872-308-394-665075872-276-395-665075872-0-396>": {
@@ -296,10 +254,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "value"
-      ],
+      "required": ["kind", "value"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"quote\",structure-1279843264-241-309-1279843264-211-311-1279843264-177-312-1279843264-0-313>": {
@@ -322,11 +277,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "kind",
-        "text"
-      ],
+      "required": ["id", "kind", "text"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"sectionLinks\",structure-616718752-746-800-616718752-709-802-616718752-668-803-616718752-0-804>": {
@@ -350,30 +301,19 @@
                 "$ref": "#/definitions/SvgAssetId"
               },
               "intro": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               },
               "link": {
                 "$ref": "#/definitions/AuthoredInternalLink"
               }
             },
-            "required": [
-              "heading",
-              "link",
-              "icon",
-              "intro"
-            ],
+            "required": ["heading", "link", "icon", "intro"],
             "type": "object"
           },
           "type": "array"
         }
       },
-      "required": [
-        "kind",
-        "sections"
-      ],
+      "required": ["kind", "sections"],
       "type": "object"
     },
     "AuthoredBaseBlock<\"sequence\",structure-1521326740-429-549-1521326740-396-551-1521326740-359-552-1521326740-0-553>": {
@@ -402,11 +342,7 @@
           "type": "object"
         }
       },
-      "required": [
-        "caption",
-        "kind",
-        "photos"
-      ],
+      "required": ["caption", "kind", "photos"],
       "type": "object"
     },
     "AuthoredBlock": {
@@ -469,10 +405,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "value"
-      ],
+      "required": ["kind", "value"],
       "type": "object"
     },
     "AuthoredEmphasisInline": {
@@ -489,10 +422,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "content"
-      ],
+      "required": ["kind", "content"],
       "type": "object"
     },
     "AuthoredExternalLink": {
@@ -512,11 +442,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "href",
-        "text"
-      ],
+      "required": ["kind", "href", "text"],
       "type": "object"
     },
     "AuthoredExternalLinkInline": {
@@ -530,10 +456,7 @@
           "$ref": "#/definitions/AuthoredExternalLink"
         }
       },
-      "required": [
-        "kind",
-        "link"
-      ],
+      "required": ["kind", "link"],
       "type": "object"
     },
     "AuthoredHeroBlock": {
@@ -596,10 +519,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "id"
-      ],
+      "required": ["kind", "id"],
       "type": "object"
     },
     "AuthoredInternalLinkInline": {
@@ -613,10 +533,7 @@
           "$ref": "#/definitions/AuthoredInternalLink"
         }
       },
-      "required": [
-        "kind",
-        "link"
-      ],
+      "required": ["kind", "link"],
       "type": "object"
     },
     "AuthoredJournalEntryFooter": {
@@ -642,11 +559,7 @@
               "type": "array"
             }
           },
-          "required": [
-            "author",
-            "publishedAt",
-            "updatedAt"
-          ],
+          "required": ["author", "publishedAt", "updatedAt"],
           "type": "object"
         },
         "tags": {
@@ -656,11 +569,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "kind",
-        "publication",
-        "tags"
-      ],
+      "required": ["kind", "publication", "tags"],
       "type": "object"
     },
     "AuthoredJournalListingBlock": {
@@ -674,9 +583,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind"
-      ],
+      "required": ["kind"],
       "type": "object"
     },
     "AuthoredListBlock": {
@@ -692,9 +599,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "content"
-      ],
+      "required": ["content"],
       "type": "object"
     },
     "AuthoredNoteEntryFooter": {
@@ -720,11 +625,7 @@
               "type": "array"
             }
           },
-          "required": [
-            "author",
-            "publishedAt",
-            "updatedAt"
-          ],
+          "required": ["author", "publishedAt", "updatedAt"],
           "type": "object"
         },
         "tags": {
@@ -737,12 +638,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "publication",
-        "topic",
-        "tags"
-      ],
+      "required": ["kind", "publication", "topic", "tags"],
       "type": "object"
     },
     "AuthoredNoteListingBlock": {
@@ -767,10 +663,7 @@
           "$ref": "#/definitions/AuthoredPageContentHead"
         }
       },
-      "required": [
-        "head",
-        "content"
-      ],
+      "required": ["head", "content"],
       "type": "object"
     },
     "AuthoredPageContentFooter": {
@@ -799,9 +692,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "title"
-      ],
+      "required": ["title"],
       "type": "object"
     },
     "AuthoredPagination": {
@@ -811,9 +702,7 @@
           "type": "number"
         }
       },
-      "required": [
-        "pageSize"
-      ],
+      "required": ["pageSize"],
       "type": "object"
     },
     "AuthoredParagraphBlock": {
@@ -845,10 +734,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "content"
-      ],
+      "required": ["kind", "content"],
       "type": "object"
     },
     "AuthoredTextInline": {
@@ -862,24 +748,15 @@
           "type": "string"
         }
       },
-      "required": [
-        "kind",
-        "value"
-      ],
+      "required": ["kind", "value"],
       "type": "object"
     },
     "BlockFlow": {
-      "enum": [
-        "content",
-        "breakout"
-      ],
+      "enum": ["content", "breakout"],
       "type": "string"
     },
     "BlockListStyle": {
-      "enum": [
-        "unordered",
-        "ordered"
-      ],
+      "enum": ["unordered", "ordered"],
       "type": "string"
     },
     "CodeLanguage": {
@@ -912,9 +789,7 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "openInNewTab"
-      ],
+      "required": ["openInNewTab"],
       "type": "object"
     },
     "PageIdPublic": {
