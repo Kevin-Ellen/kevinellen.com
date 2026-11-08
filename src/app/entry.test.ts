@@ -1,5 +1,7 @@
 // src/app/entry.test.ts
 
+import type { WorkerEnv } from "./entry.type";
+
 import worker from "./entry";
 
 import { handleLifeCycle } from "./life-cycle/life-cycle";
@@ -22,12 +24,11 @@ describe("Worker entry", () => {
   const env = {
     CONTENT_KV: {} as KVNamespace,
     PHOTO_KV: {} as KVNamespace,
-    IMAGES_ACCOUNT_HASH: "test-account-hash" as Env["IMAGES_ACCOUNT_HASH"],
+    IMAGES_ACCOUNT_HASH: "test-account-hash",
     ASSETS: {} as Fetcher,
     DOMAIN: "https://kevinellen.com",
     INSPECT_ENABLED: "false",
-    SITE_URL: "https://kevinellen.com",
-  } satisfies Env;
+  } satisfies WorkerEnv;
 
   const ctx = {} as ExecutionContext;
 

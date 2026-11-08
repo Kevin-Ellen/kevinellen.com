@@ -15,7 +15,6 @@
     "binding": "ASSETS",
   },
   "vars": {
-    "INSPECT_ENABLED": "true",
     "DOMAIN": "http://localhost:8787",
     "IMAGES_ACCOUNT_HASH": "y5zCV0xCeMBwfDh5UGa7tw",
   },

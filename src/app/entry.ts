@@ -1,11 +1,13 @@
 // src/app/entry.ts
 
-import type { ValidatedEnv } from "./entry.type";
+import type { ValidatedEnv, WorkerEnv } from "./entry.type";
 
 import { handleLifeCycle } from "./life-cycle/life-cycle";
 import { handleMediaSystem } from "./life-cycle/system/media/media.system";
 
-const assertWorkerEnv: (env: Env) => asserts env is ValidatedEnv = (env) => {
+const assertWorkerEnv: (env: WorkerEnv) => asserts env is ValidatedEnv = (
+  env,
+) => {
   if (!env.CONTENT_KV) {
     throw new Error("Missing required binding: CONTENT_KV");
   }
@@ -18,7 +20,7 @@ const assertWorkerEnv: (env: Env) => asserts env is ValidatedEnv = (env) => {
 export default {
   fetch: async (
     request: Request,
-    env: Env,
+    env: WorkerEnv,
     ctx: ExecutionContext,
   ): Promise<Response> => {
     try {
@@ -57,4 +59,4 @@ export default {
       });
     }
   },
-} satisfies ExportedHandler<Env>;
+} satisfies ExportedHandler<WorkerEnv>;
