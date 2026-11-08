@@ -97,7 +97,7 @@ describe("Worker entry", () => {
       const invalidEnv = {
         ...env,
         [binding]: undefined,
-      } as Env;
+      } as WorkerEnv;
 
       const response = await worker.fetch(request, invalidEnv, ctx);
 
