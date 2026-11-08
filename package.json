@@ -1,7 +1,14 @@
 {
   "name": "kevinellen.com",
   "cf-config": {
-    "zone": "kevinellen.com"
+    "zone": "kevinellen.com",
+    "account-id": "aae13859d2866d7a208e1526df50cff2",
+    "compatibility-date": "2026-11-08",
+    "images-account-hash": "y5zCV0xCeMBwfDh5UGa7tw",
+    "kv": {
+      "content": "f66a50df4fb14787938bd5e51d74bbeb",
+      "photo": "e142fd95a7094802b2d439af8a7f005b"
+    }
   },
   "version": "0.1.0",
   "private": true,
@@ -11,8 +18,8 @@
     "dev:seeding": "node scripts/dev/seed-local-kv.mjs && wrangler dev",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "generate-types": "wrangler types",
-    "typecheck": "npm run build:scripts && npm run generate-types && tsc --noEmit",
+    "typecheck": "npm run build:scripts && npm run compat:update && wrangler types && tsc --noEmit",
+    "compat:update": "node scripts/build/update-compatibility.mjs",
     "schema:generate": "ts-json-schema-generator --path \"src/content-schema/**/*.ts\" --type \"*\" --out \"schema/authored.schema.json\"",
     "styles:lint": "stylelint \"src/app/assets/styles/**/*.scss\"",
     "styles:lint:fix": "npm run styles:lint -- --fix",
@@ -43,6 +50,7 @@
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
+    "jsonc-parser": "^3.3.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "sass": "^1.106.1",

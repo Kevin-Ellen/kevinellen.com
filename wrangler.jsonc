@@ -2,21 +2,23 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kevinellen",
   "main": "src/app/entry.ts",
-  "compatibility_date": "2026-10-20",
+  "compatibility_date": "2026-11-08",
   "dev": {
     "port": 8787,
   },
-  "rules": [{ "type": "Text", "globs": ["**/*.css?raw"], "fallthrough": true }],
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/*.css?raw"],
+      "fallthrough": true,
+    },
+  ],
   "cache": {
     "enabled": true,
   },
   "assets": {
     "directory": "./static",
     "binding": "ASSETS",
-  },
-  "vars": {
-    "DOMAIN": "http://localhost:8787",
-    "IMAGES_ACCOUNT_HASH": "y5zCV0xCeMBwfDh5UGa7tw",
   },
   "kv_namespaces": [
     {
@@ -28,44 +30,4 @@
       "id": "e142fd95a7094802b2d439af8a7f005b",
     },
   ],
-  "env": {
-    "staging": {
-      "vars": {
-        "INSPECT_ENABLED": "false",
-        "DOMAIN": "https://staging.kevinellen.com",
-        "IMAGES_ACCOUNT_HASH": "y5zCV0xCeMBwfDh5UGa7tw",
-      },
-      "kv_namespaces": [
-        {
-          "binding": "CONTENT_KV",
-          "id": "f66a50df4fb14787938bd5e51d74bbeb",
-          "preview_id": "f66a50df4fb14787938bd5e51d74bbeb",
-        },
-        {
-          "binding": "PHOTO_KV",
-          "id": "e142fd95a7094802b2d439af8a7f005b",
-          "preview_id": "e142fd95a7094802b2d439af8a7f005b",
-        },
-      ],
-    },
-    "production": {
-      "vars": {
-        "INSPECT_ENABLED": "false",
-        "DOMAIN": "https://kevinellen.com",
-        "IMAGES_ACCOUNT_HASH": "y5zCV0xCeMBwfDh5UGa7tw",
-      },
-      "kv_namespaces": [
-        {
-          "binding": "CONTENT_KV",
-          "id": "f66a50df4fb14787938bd5e51d74bbeb",
-          "preview_id": "97c72324bf4b4bd9a23b972756af4312",
-        },
-        {
-          "binding": "PHOTO_KV",
-          "id": "e142fd95a7094802b2d439af8a7f005b",
-          "preview_id": "e142fd95a7094802b2d439af8a7f005b",
-        },
-      ],
-    },
-  },
 }

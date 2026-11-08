@@ -27,5 +27,8 @@ await build({
 });
 
 if (fs.existsSync(staticSourceDir)) {
-  fs.cpSync(staticSourceDir, staticDistDir, { recursive: true });
+  fs.cpSync(staticSourceDir, staticDistDir, {
+    recursive: true,
+    filter: (source) => path.basename(source) !== ".DS_Store",
+  });
 }
