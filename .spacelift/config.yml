@@ -2,24 +2,19 @@ version: "2"
 
 stack_defaults: &defaults
   project_root: deployments
+  runner_image: ghcr.io/kevin-ellen/kevinellen-spacelift@sha256:266bfae4bd3399c20b5d9b3e676a88d7798c6bfa7431c2b857949d84b4ed86c2
 
   opentofu:
     version: "1.13.9"
     workflow_tool: OPENTOFU
 
   before_init:
-    - "git rev-parse --show-toplevel"
-    - 'cd "$(git rev-parse --show-toplevel)" && bash scripts/deploy/setup-node.sh'
-    - "/tmp/spacelift-node/bin/node --version"
-    - 'PATH="/tmp/spacelift-node/bin:$PATH" /tmp/spacelift-node/bin/npm ci --prefix "$(git rev-parse --show-toplevel)"'
-    - 'cd "$(git rev-parse --show-toplevel)" && PATH="/tmp/spacelift-node/bin:$PATH" npm run build'
+    - 'cd "$(git rev-parse --show-toplevel)" && npm ci'
+    - 'cd "$(git rev-parse --show-toplevel)" && npm run build'
 
   before_apply:
-    - 'cd "$(git rev-parse --show-toplevel)" && bash scripts/deploy/setup-node.sh'
-    - "/tmp/spacelift-node/bin/node --version"
-    - "/tmp/spacelift-node/bin/npm --version"
-    - 'PATH="/tmp/spacelift-node/bin:$PATH" /tmp/spacelift-node/bin/npm ci --prefix "$(git rev-parse --show-toplevel)"'
-    - 'cd "$(git rev-parse --show-toplevel)" && PATH="/tmp/spacelift-node/bin:$PATH" npm run build'
+    - 'cd "$(git rev-parse --show-toplevel)" && npm ci'
+    - 'cd "$(git rev-parse --show-toplevel)" && npm run build'
 
 stacks:
   staging:
