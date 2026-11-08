@@ -1,0 +1,25 @@
+// src/app/assets/styles/tokens/_colours.scss
+
+@use "sass:color";
+
+// Neutrals
+$white: #fff;
+$ivory: #e7e8e4;
+$charcoal: #1c1f1b;
+$stone: #d9d8d0;
+
+// Nature
+$forest: #344a3d;
+$sage: #5b6b56;
+
+// Semantic
+$background: $ivory;
+$surface: $white;
+$text: $charcoal;
+$text-muted: $sage;
+$accent: $forest;
+$border: $stone;
+
+// Overlays
+$overlay: rgb(0 0 0 / 35%);
+$text-on-image: $white;

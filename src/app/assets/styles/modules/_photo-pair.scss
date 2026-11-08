@@ -1,0 +1,23 @@
+// src/app/assets/styles/modules/_photo-pair.scss
+
+@use "../tokens/spacing" as spacing;
+@use "../mixins/viewports" as viewport;
+
+.m-photo-pair {
+  margin-block: spacing.$lg;
+
+  &__items {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: spacing.$md;
+
+    @include viewport.wide {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: spacing.$sm;
+    }
+  }
+
+  &__item {
+    min-width: 0;
+  }
+}

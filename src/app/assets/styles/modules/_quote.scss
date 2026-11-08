@@ -1,0 +1,43 @@
+// src/app/assets/styles/modules/_quote.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+@use "../mixins/viewports" as viewport;
+
+.m-quote {
+  margin-block: spacing.$xxl;
+  margin-inline: 0;
+  padding: spacing.$md;
+  border-left: 2px solid colours.$forest;
+
+  @include viewport.wide {
+    padding-block: spacing.$lg;
+    padding-inline: spacing.$xl;
+  }
+
+  &__text {
+    margin: 0;
+    color: colours.$forest;
+    font-family: typography.$font-serif;
+    font-size: typography.$heading-sm;
+    font-weight: typography.$regular;
+    line-height: 1.4;
+
+    @include viewport.wide {
+      font-size: typography.$heading-md;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__attribution {
+    margin-top: spacing.$md;
+    color: colours.$text-muted;
+    font-family: typography.$font-sans;
+    font-size: typography.$text-sm;
+    line-height: 1.5;
+  }
+}

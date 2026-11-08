@@ -1,0 +1,57 @@
+=== H05 CONTENT AND STORAGE OWNERSHIP AUDIT ===
+
+Scope: src/ modules excluding declaration files and *.test/*.spec files
+Files inspected: 462
+Mode: read-only static baseline; not an architectural compliance verdict
+
+=== MODULES BY RESPONSIBILITY ===
+APP_RENDER: 42
+APP_RENDER_CONTEXT: 44
+APP_RESOLVE: 56
+CONTENT_SCHEMA: 44
+OTHER_RUNTIME: 155
+PUBLISHING_TOOLING: 18
+ROUTING: 5
+SHARED: 96
+TEST_INFRASTRUCTURE: 2
+
+=== STATIC OWNERSHIP CANDIDATES ===
+Candidates: 0
+
+
+=== INVENTORY AND REVIEW SIGNALS ===
+Observations: 3
+DIRECT_KV_OPERATION_INVENTORY: 1
+IMAGES_REFERENCE_INVENTORY: 1
+IMAGES_UPLOAD_METADATA_REVIEW: 1
+
+[DIRECT_KV_OPERATION_INVENTORY] [ROUTING] src/app/life-cycle/routing/ledger/ledger.routing.ts:52:24 (id: 2b4cd6d153984d8d)
+  env.CONTENT_KV.get<unknown>( "ledger:appInit:journal", "json", )
+[IMAGES_REFERENCE_INVENTORY] [OTHER_RUNTIME] src/app/life-cycle/system/media/media.system.ts:139:5 (id: 6b4e337581b69ebb)
+  `https://imagedelivery.net/${imagesAccountHash}`
+[IMAGES_UPLOAD_METADATA_REVIEW] [PUBLISHING_TOOLING] src/tools/authored-content-generator/publish/publish.ts:143:3 (id: be0b810eaf7441f3)
+  form.append( "metadata", JSON.stringify({ source: "content-cli", photoId: photo.id, }), )
+
+=== MANUAL ARCHITECTURAL REVIEW ===
+[ ] Homepage: request-composed, not bundled static content
+[ ] Journal / topic / gallery pages: KV-backed published structured content
+[ ] Bundled static pages: evergreen and deploy-coupled only
+[ ] KV: editorial photo metadata; no image binaries or CMS-like editorial workflow
+[ ] Cloudflare Images: binary assets, image IDs, variants, upload traceability
+[ ] Images upload metadata is not used as an authoritative editorial store
+[ ] App-Resolve: request-time KV retrieval and content composition
+[ ] App-Render-Context: deterministic preparation; no hidden storage reads
+[ ] App-Render / React: presentation and SSR; no direct storage reads
+[ ] Publishing CLI: validates generated artifacts before publishing
+[ ] Any exceptions: documented with owner, rationale, and evidence
+
+=== LIMITATIONS ===
+This is an AST-based candidate detector, not a dependency-flow proof.
+Aliased KV handles, computed accesses, wrapper functions and runtime wiring can evade detection.
+Import-name and URL heuristics can produce false positives; review candidates manually.
+Type-only imports are excluded from runtime import candidates.
+An image delivery URL in SSR can be legitimate; it does not prove ownership leakage.
+The absence of static candidates is not an H05 pass without manual review.
+No application source files were changed.
+
+BASELINE: Manual architectural classification required before H05 pass/fail.

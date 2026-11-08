@@ -1,0 +1,65 @@
+=== H06 RESOLVER AND REGISTRY CONSISTENCY AUDIT ===
+
+Scope: src/ non-declaration, non-test resolver/getter/registry/lifecycle modules
+All source modules inspected: 462
+Resolver-related modules examined: 238
+Mode: read-only baseline; potential issues require source review
+
+=== DISPATCH INVENTORY ===
+Discriminant comparisons: 19
+Dispatch tables: 2
+
+=== STATIC CANDIDATES ===
+Candidates: 0
+
+
+=== REVIEW OBSERVATIONS ===
+Observations: 11
+DISPATCH_TABLE: 2
+IMPLICIT_SORT_ORDER_REVIEW: 2
+OBJECT_ENUMERATION_ORDER_REVIEW: 4
+REGISTRY_ITERATION_ORDER_REVIEW: 3
+
+[DISPATCH_TABLE] src/app/life-cycle/app-resolve/getters/content/content.getter.app-resolve.ts:44:7 (id: 0616e62ff772616d)
+  getterLibrary: keys bundled, published; typed Record-like
+[REGISTRY_ITERATION_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/content/content.registry.resolver.app-resolve.ts:22:3 (id: f01ec8014543c8dc)
+  Object.entries(appInit.content.bySlug)
+[OBJECT_ENUMERATION_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/content/content.registry.resolver.app-resolve.ts:22:33 (id: 09c1fa5acc0ee238)
+  for (const [slug, content] of Object.entries(appInit.content.bySlug)) { bundled[slug] = { source: "bundled", id: content.id, slug, label: content.label, }; }
+[REGISTRY_ITERATION_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/content/content.registry.resolver.app-resolve.ts:33:3 (id: 625ab7d9ffb87b8c)
+  Object.entries(ledger.bySlug)
+[OBJECT_ENUMERATION_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/content/content.registry.resolver.app-resolve.ts:33:33 (id: 70ea6f2e2844340e)
+  for (const [slug, content] of Object.entries(ledger.bySlug)) { if (Object.hasOwn(bundled, slug)) { throw new Error(`Duplicate content slug: ${slug}`); } published[slug] = { source: "publishe
+[REGISTRY_ITERATION_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/content/content.registry.resolver.app-resolve.ts:53:3 (id: 8cfc5e863db8afc0)
+  Object.entries( appInit.content.errorsByStatus, )
+[OBJECT_ENUMERATION_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/content/content.registry.resolver.app-resolve.ts:53:35 (id: c53aabbf91e84d5d)
+  for (const [status, content] of Object.entries( appInit.content.errorsByStatus, )) { errorsByStatus[Number(status)] = { source: "bundled", id: content.id, slug: content.slug ?? "", label: co
+[IMPLICIT_SORT_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/structured-data/structured-data.registry.resolver.app-resolve.ts:46:3 (id: b9624f8ee0674c53)
+  leftTypes.sort()
+[IMPLICIT_SORT_ORDER_REVIEW] src/app/life-cycle/app-resolve/resolvers/registry/structured-data/structured-data.registry.resolver.app-resolve.ts:47:3 (id: 4639c14ca69dfdbd)
+  rightTypes.sort()
+[DISPATCH_TABLE] src/shared/resolvers/content/inline/inline.content.resolver.shared.app-init.ts:19:7 (id: adc193fbda354f1c)
+  resolvers: keys text, link; typed Record-like
+[OBJECT_ENUMERATION_ORDER_REVIEW] src/shared/resolvers/content/modules/topic-listing/topic-listing.module.content.resolver.shared.app-init.ts:21:11 (id: 5e2f72e04f05ce21)
+  Object.keys(topics) as TopicId[]
+
+=== TARGETED MANUAL REVIEW ===
+[ ] Resolver selectors use canonical discriminants and typed dispatch tables where appropriate
+[ ] Unknown variants follow deliberate throw/fallback/never paths; no accidental undefined output
+[ ] All registry entries are resolved via the same contract for equivalent inputs
+[ ] Duplicate or colliding registry keys are rejected or intentionally resolved
+[ ] Registry iteration order cannot alter output for identical published input
+[ ] Lists have explicit and stable ordering, including deterministic tie-breakers
+[ ] Any fallback/merge precedence is intentional and covered by targeted tests
+[ ] Same input, different resolution path produces equivalent canonical output
+[ ] Exceptions have evidence and rationale; no broad refactoring without a verified issue
+
+=== LIMITATIONS ===
+The checker identifies syntax patterns; it does not prove runtime equivalence or exhaustiveness.
+Switch default presence alone does not prove a safe unknown-variant behaviour.
+A typed Record dispatch table may still have an invalid runtime key; test unknown inputs explicitly.
+Object enumeration is deterministic by JS rules, but relying on insertion order for semantic output can be fragile.
+Only resolver-related files are analysed for dispatch/order candidates; cross-module paths require manual tracing.
+No application source files were changed.
+
+BASELINE: Classify observations and review representative dispatch/registry paths before H06 verdict.

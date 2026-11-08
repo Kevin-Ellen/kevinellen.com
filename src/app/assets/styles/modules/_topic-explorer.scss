@@ -1,0 +1,158 @@
+// src/app/assets/styles/modules/_topic-explorer.scss
+
+@use "sass:color";
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/motion" as motion;
+@use "../mixins/viewports" as viewport;
+
+.m-topic-explorer {
+  padding-block: spacing.$xxl;
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: spacing.$sm;
+    margin-bottom: spacing.$lg;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: spacing.$sm;
+
+    @include viewport.expanded {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    isolation: isolate;
+    color: colours.$text-on-image;
+    text-decoration: none;
+
+    @include viewport.expanded {
+      aspect-ratio: 1 / 1;
+    }
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        180deg,
+        transparent 25%,
+        color.change(colours.$charcoal, $alpha: 0.25) 55%,
+        color.change(colours.$charcoal, $alpha: 0.85) 100%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    &:is(:hover, :focus-visible) {
+      img {
+        transform: scale(1.04);
+      }
+
+      &::after {
+        background: linear-gradient(
+          180deg,
+          transparent 15%,
+          color.change(colours.$charcoal, $alpha: 0.35) 55%,
+          color.change(colours.$charcoal, $alpha: 0.9) 100%
+        );
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid colours.$accent;
+      outline-offset: 3px;
+    }
+  }
+
+  &__card img {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform motion.$normal motion.$ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  &__card-content {
+    width: 100%;
+    padding: spacing.$sm;
+
+    @include viewport.expanded {
+      padding: spacing.$md;
+    }
+
+    h3 {
+      margin-bottom: 0.25rem;
+      color: inherit;
+      font-size: 1.25rem;
+      line-height: 1.15;
+    }
+
+    p {
+      font-size: 0.8125rem;
+      line-height: 1.4;
+    }
+  }
+
+  &__more {
+    display: flex;
+    flex-direction: column;
+    gap: spacing.$xs;
+    margin-top: spacing.$md;
+    padding-top: spacing.$xs;
+
+    @include viewport.expanded {
+      flex-direction: row;
+      align-items: center;
+      gap: spacing.$md;
+    }
+  }
+
+  &__more-label {
+    color: colours.$text-muted;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing.$xs;
+
+    a {
+      padding: spacing.$xs;
+      border: 1px solid colours.$border;
+      color: colours.$text;
+      font-size: 0.8125rem;
+      text-decoration: none;
+
+      &:hover {
+        border-color: colours.$accent;
+        background: color.change(colours.$forest, $alpha: 0.06);
+      }
+
+      &:focus-visible {
+        outline: 2px solid colours.$accent;
+        outline-offset: 3px;
+      }
+    }
+  }
+}

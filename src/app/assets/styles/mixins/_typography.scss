@@ -1,0 +1,14 @@
+// src/app/assets/styles/mixins/_typography.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/typography" as typography;
+
+@mixin eyebrow {
+  color: colours.$text-muted;
+  font-family: typography.$font-sans;
+  font-size: typography.$text-sm;
+  font-weight: typography.$medium;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}

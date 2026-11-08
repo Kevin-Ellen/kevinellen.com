@@ -1,0 +1,123 @@
+// src/app/assets/styles/components/_photo.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.c-photo {
+  margin: spacing.$lg 0;
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__caption {
+    display: flex;
+    flex-direction: column;
+    gap: spacing.$xs;
+    padding-block: spacing.$xs;
+    color: colours.$text-muted;
+    font-size: typography.$text-sm;
+    line-height: 1.4;
+  }
+
+  &__description {
+    max-width: 60ch;
+    min-width: 0;
+  }
+
+  &__metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing.$xs spacing.$md;
+    margin: 0;
+    font-size: 0.75rem;
+  }
+
+  &__metadata-item {
+    display: flex;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  &__metadata-term {
+    margin: 0;
+    color: colours.$text-muted;
+  }
+
+  &__metadata-trigger {
+    appearance: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+    cursor: help;
+
+    &:focus-visible {
+      outline: 2px solid colours.$forest;
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  }
+
+  &__metadata-value {
+    margin: 0;
+    color: colours.$text;
+  }
+
+  &__metadata-popover {
+    position: fixed;
+    position-area: bottom;
+    position-try-fallbacks: flip-block, flip-inline;
+    width: max-content;
+    max-width: min(18rem, calc(100vw - 2rem));
+    margin: spacing.$xs 0 0;
+    padding: spacing.$sm;
+    border: 1px solid colours.$sage;
+    border-radius: 0.375rem;
+    background: colours.$background;
+    color: colours.$text;
+    font-family: typography.$font-sans;
+    font-size: typography.$text-sm;
+    line-height: 1.5;
+    white-space: normal;
+    box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 12%);
+  }
+
+  &__metadata-explanation {
+    margin: 0;
+  }
+
+  // Wide editorial photographs
+  &--wide {
+    .c-photo__caption {
+      padding: spacing.$sm 0;
+    }
+
+    .c-photo__description {
+      max-width: 70ch;
+    }
+  }
+
+  &__location {
+    display: flex;
+    align-items: baseline;
+    gap: spacing.$xs;
+    color: colours.$text-muted;
+    font-size: typography.$text-sm;
+    line-height: 1.4;
+  }
+
+  &__location-icon {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    align-self: center;
+    fill: currentcolor;
+  }
+}

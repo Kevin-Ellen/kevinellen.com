@@ -1,0 +1,80 @@
+// src/app/assets/styles/modules/_editorial-intro.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+@use "../mixins/viewports" as viewport;
+
+$vp-change: 43rem;
+
+.m-editorial-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: spacing.$lg;
+  align-items: center;
+  padding-block: spacing.$xl;
+
+  @include viewport.custom($vp-change) {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 5fr);
+    gap: spacing.$xxl;
+    padding-block: spacing.$xxl;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+
+  &__eyebrow {
+    margin-bottom: spacing.$md;
+    color: colours.$sage;
+    font-size: typography.$text-sm;
+    font-weight: typography.$semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin-bottom: spacing.$md;
+    font-size: typography.$heading-lg;
+    line-height: 1.1;
+  }
+
+  &__statement {
+    margin-bottom: spacing.$lg;
+    color: colours.$forest;
+    font-family: typography.$font-serif;
+    font-size: typography.$heading-sm;
+    line-height: 1.35;
+  }
+
+  &__description {
+    max-width: 52ch;
+    font-size: typography.$text-base;
+    line-height: 1.7;
+  }
+
+  &__location {
+    margin-top: spacing.$lg;
+    padding-top: spacing.$sm;
+    border-top: 1px solid colours.$stone;
+    color: colours.$sage;
+    font-size: typography.$text-sm;
+  }
+
+  &__portrait {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+
+    @include viewport.wide {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+}

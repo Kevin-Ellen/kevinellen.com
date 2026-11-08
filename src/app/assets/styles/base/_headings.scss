@@ -1,0 +1,39 @@
+// src/app/assets/styles/base/_headings.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/typography" as typography;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: inherit;
+  font-family: typography.$font-serif;
+  font-weight: typography.$regular;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, typography.$heading-xl);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: typography.$heading-lg;
+}
+
+h3 {
+  font-size: typography.$heading-md;
+}
+
+h4 {
+  font-size: typography.$heading-sm;
+}
+
+h5,
+h6 {
+  font-size: typography.$text-lg;
+}

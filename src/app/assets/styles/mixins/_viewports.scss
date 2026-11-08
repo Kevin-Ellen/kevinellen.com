@@ -1,0 +1,21 @@
+// src/app/assets/styles/mixins/_viewports.scss
+
+@use "../tokens/viewports" as viewports;
+
+@mixin expanded {
+  @media (min-width: viewports.$expanded) {
+    @content;
+  }
+}
+
+@mixin wide {
+  @media (min-width: viewports.$wide) {
+    @content;
+  }
+}
+
+@mixin custom($min-width) {
+  @media (min-width: $min-width) {
+    @content;
+  }
+}

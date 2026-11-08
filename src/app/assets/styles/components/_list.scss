@@ -1,0 +1,17 @@
+// src/app/assets/styles/components/_list.scss
+
+@use "../tokens/spacing" as spacing;
+
+.c-list {
+  margin-block: spacing.$md;
+  padding-inline-start: 1.5rem;
+  list-style-type: disc;
+
+  &__item {
+    padding-inline-start: 0.25rem;
+
+    & + & {
+      margin-block-start: spacing.$xs;
+    }
+  }
+}

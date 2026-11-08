@@ -1,0 +1,99 @@
+=== H04 TYPE SAFETY AUDIT ===
+
+Scope: src/ modules excluding declaration files and *.test/*.spec files; includes CLI tooling and integration fixtures
+Files inspected: 462
+Strict mode: true
+noUncheckedIndexedAccess: false
+exactOptionalPropertyTypes: false
+
+=== VERDICT ===
+Result: PASS
+Open candidates: 0
+Accepted exceptions: 5
+Stale reviews: 0
+Review manifest: audits/H04-type-safety-reviews.json
+
+=== CANDIDATES BY RESPONSIBILITY ===
+WORKER_RUNTIME: 1 (0 open, 1 accepted)
+PUBLISHING_TOOLING: 3 (0 open, 3 accepted)
+TEST_INFRASTRUCTURE: 1 (0 open, 1 accepted)
+
+=== STATIC REVIEW CANDIDATES ===
+Candidates: 5
+DOUBLE_ASSERTION_CANDIDATE: 1
+ASSERTION_FROM_ANY: 4
+
+[ACCEPTED] [WORKER_RUNTIME] [DOUBLE_ASSERTION_CANDIDATE] src/app/life-cycle/app-resolve/resolvers/registry/structured-data/structured-data.registry.resolver.app-resolve.ts:33:3 (id: 6cb90ab6f607aee3)
+  value as unknown as GraphNode
+  Reason: Intentional schema-dts graph-node inspection conversion. Graph merging and type compatibility are covered by resolver tests. Schema validity remains an upstream content contract.
+[ACCEPTED] [TEST_INFRASTRUCTURE] [ASSERTION_FROM_ANY] src/tests/fixtures/content.published.integration.fixture.ts:37:3 (id: 5b74a1746ae78199)
+  JSON.parse(readFileSync(join(__dirname, "data", filename), "utf8")) as T
+  Reason: Test-only fixture loader consuming repository-controlled JSON. The generic assertion is limited to integration test setup, not Worker runtime or production publishing.
+[ACCEPTED] [PUBLISHING_TOOLING] [ASSERTION_FROM_ANY] src/tools/authored-content-generator/publish/publish.ts:97:10 (id: e526e5d45f09ddff)
+  JSON.parse(value) as T
+  Reason: Generic KV read adapter used by the controlled publishing CLI. Retrieved values follow the published content contract; downstream publication performs write verification and the Worker validates its own request-time KV boundaries. Residual risk from malformed existing KV values is accepted.
+[ACCEPTED] [PUBLISHING_TOOLING] [ASSERTION_FROM_ANY] src/tools/authored-content-generator/validate/import-authored.validate.ts:10:18 (id: 94d182d174ed7914)
+  (await import(moduleUrl)) as Record<string, unknown>
+  Reason: Dynamic import is treated as an indexable module namespace. Export lookup is checked, and imported content remains unknown until downstream AJV-backed photo or journal validation.
+[ACCEPTED] [PUBLISHING_TOOLING] [ASSERTION_FROM_ANY] src/tools/authored-content-generator/validate/validate.ts:74:18 (id: ca06691c8f57b6d7)
+  JSON.parse(await readFile(schemaPath, "utf8")) as JsonSchema
+  Reason: Repository-generated JSON Schema is represented as a generic record and compiled by AJV. Invalid schemas fail validation setup before publication artifacts are generated.
+
+=== STALE REVIEWS (PREVIOUS FINDINGS NO LONGER MATCHING) ===
+Count: 0
+
+=== EXTERNAL DATA BOUNDARY INVENTORY ===
+JSON parse / .json() call sites: 17
+Content-related call sites: 17
+[JSON_PARSE] src/tests/fixtures/content.published.integration.fixture.ts:37
+  JSON.parse(readFileSync(join(__dirname, "data", filename), "utf8"))
+[JSON_METHOD] src/tools/authored-content-generator/prepare/photo/location/location.photo.prepare.ts:85
+  response.json<NominatimResponse>()
+[JSON_PARSE] src/tools/authored-content-generator/publish/journal/journal.publish.ts:39
+  JSON.parse(authoredContent)
+[JSON_PARSE] src/tools/authored-content-generator/publish/journal/journal.publish.ts:40
+  JSON.parse(appInitContent)
+[JSON_PARSE] src/tools/authored-content-generator/publish/ledger/ledger.publish.ts:86
+  JSON.parse(authoredJson)
+[JSON_PARSE] src/tools/authored-content-generator/publish/ledger/ledger.publish.ts:87
+  JSON.parse(appInitJson)
+[JSON_PARSE] src/tools/authored-content-generator/publish/ledger/ledger.publish.ts:122
+  JSON.parse( await runWrangler(["list", ...bindingArgs(mode)]), )
+[JSON_PARSE] src/tools/authored-content-generator/publish/ledger/ledger.publish.ts:143
+  JSON.parse(json)
+[JSON_PARSE] src/tools/authored-content-generator/publish/ledger/ledger.publish.ts:175
+  JSON.parse( await runWrangler(["get", key, ...bindingArgs(mode), "--text"]), )
+[JSON_PARSE] src/tools/authored-content-generator/publish/ledger/ledger.publish.ts:179
+  JSON.parse(await readFile(filePath, "utf8"))
+[JSON_PARSE] src/tools/authored-content-generator/publish/photo/photo.publish.ts:50
+  JSON.parse(content)
+[JSON_PARSE] src/tools/authored-content-generator/publish/photo/photo.publish.ts:87
+  JSON.parse(content)
+[JSON_PARSE] src/tools/authored-content-generator/publish/publish.ts:71
+  JSON.parse( await runWrangler(["list", "--prefix", key, ...bindingArgs(mode, binding)]), )
+[JSON_PARSE] src/tools/authored-content-generator/publish/publish.ts:97
+  JSON.parse(value)
+[JSON_METHOD] src/tools/authored-content-generator/publish/publish.ts:164
+  response.json<CloudflareImageResponse>()
+[JSON_PARSE] src/tools/authored-content-generator/publish/publish.ts:218
+  JSON.parse(content)
+[JSON_PARSE] src/tools/authored-content-generator/validate/validate.ts:74
+  JSON.parse(await readFile(schemaPath, "utf8"))
+
+=== EXHAUSTIVENESS OBSERVATIONS ===
+Observed guards/defaults: 0
+
+=== RUNTIME KV BOUNDARY REVIEW ===
+Journal ledger: src/app/life-cycle/routing/ledger/ledger.routing.ts
+Published content: src/app/life-cycle/app-resolve/getters/content/kv/kv.content.getter.app-resolve.ts
+Photo metadata: src/app/life-cycle/app-resolve/getters/photo-kv/photo-kv.getter.app-resolve.ts
+These are manually reviewed locations, not automatically verified by this script.
+Run their Jest suites and integration tests separately; this audit does not prove runtime coverage.
+
+=== REVIEW NOTES ===
+An ACCEPTED exception requires a matching fingerprint, file, category and non-empty reason.
+New or modified assertions are OPEN until reviewed; stale entries must be reconciled.
+A PASS means no unreviewed static candidates, not proof of complete runtime type safety.
+A default switch branch is not proof of exhaustiveness.
+JSON boundary inventory is syntactic, not proof of payload validation.
+No source files were changed.

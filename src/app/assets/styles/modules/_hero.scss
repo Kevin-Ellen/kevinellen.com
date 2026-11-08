@@ -1,0 +1,100 @@
+// src/app/assets/styles/modules/_hero.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../mixins/viewports" as viewport;
+@use "../mixins/typography" as type;
+
+.m-hero {
+  position: relative;
+  width: 100%;
+  max-height: 45rem;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  isolation: isolate;
+
+  @include viewport.expanded {
+    aspect-ratio: auto;
+    height: clamp(28rem, 55vw, 45rem);
+  }
+
+  &__media {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+
+    @include viewport.expanded {
+      object-position: right bottom;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding-block: 9rem spacing.$lg;
+    color: colours.$ivory;
+
+    @include viewport.expanded {
+      align-items: center;
+      padding-block: spacing.$xxl spacing.$lg;
+    }
+
+    .l-frame {
+      width: 100%;
+    }
+  }
+
+  &__eyebrow {
+    @include type.eyebrow;
+
+    margin-bottom: spacing.$xs;
+    color: colours.$ivory;
+  }
+
+  &__title {
+    max-width: 12ch;
+    font-size: clamp(1.5rem, 4vw, 4rem);
+    line-height: 1.1;
+
+    @include viewport.expanded {
+      max-width: 20ch;
+    }
+  }
+
+  &__description {
+    max-width: 36ch;
+    margin-top: spacing.$sm;
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    @include viewport.expanded {
+      font-size: 1rem;
+    }
+  }
+
+  &__location {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: spacing.$md;
+    pointer-events: none;
+  }
+}

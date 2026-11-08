@@ -1,43 +1,83 @@
+// jest.config.ts
+
 import type { Config } from "jest";
+
 import { createDefaultPreset } from "ts-jest";
 
-const tsJestTransformCfg = createDefaultPreset().transform;
+const collectCoverageFrom = [
+  // Include source
+  "src/**/*.{ts,tsx}",
 
-const config: Config = {
-  testEnvironment: "node",
+  // Explicitly retain these configuration files
+  "src/app/config/content.config.ts",
+  "src/app/config/redirects.config.ts",
+  "src/app/config/svg.assets.config.ts",
 
-  roots: ["<rootDir>/src", "<rootDir>/packages/content-cli"],
+  // Exclude tests and declarations
+  "!src/**/*.test.{ts,tsx}",
+  "!src/**/*.d.ts",
+  "!src/tests/**",
 
-  testMatch: ["**/*.test.ts", "**/*.test.tsx"],
+  // Exclude other authored configuration
+  "!src/shared/config/site.config.shared.authored.ts",
+  "!src/shared/config/person.config.shared.authored.ts",
+  "!src/shared/config/topics.config.shared.authored.ts",
+];
+const sharedConfig: Config = {
+  rootDir: ".",
+
+  roots: ["<rootDir>"],
 
   transform: {
-    ...tsJestTransformCfg,
+    ...createDefaultPreset().transform,
   },
 
-  collectCoverageFrom: [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "packages/content-cli/**/*.ts",
-    "!src/**/*.d.ts",
-  ],
+  clearMocks: true,
 
   moduleNameMapper: {
-    "\\.css\\?raw$": "<rootDir>/tests/mocks/rawCss.mock.ts",
     "^@tests/(.*)$": "<rootDir>/tests/$1",
-    "^@request/(.*)$": "<rootDir>/src/request/$1",
-    "^@app-state/(.*)$": "<rootDir>/src/app-state/$1",
-    "^@app-context/(.*)$": "<rootDir>/src/app-context/$1",
-    "^@app-render-context/(.*)$": "<rootDir>/src/app-render-context/$1",
-    "^@rendering/(.*)$": "<rootDir>/src/rendering/$1",
-    "^@shared-types/(.*)$": "<rootDir>/shared-types/$1",
-    "^@utils/(.*)$": "<rootDir>/src/utils/$1",
-    "^@pages/(.*)$": "<rootDir>/src/pages/$1",
-    "^@generated/(.*)\\?raw$": "<rootDir>/tests/stubs/rawText.stub.ts",
-    "^@content-cli/(.*)$": "<rootDir>/packages/content-cli/src/$1",
-    "^@assets/(.*)$": "<rootDir>/src/assets/$1",
+    "^@shared-types/(.*)$": "<rootDir>/src/shared-types/$1",
+    "\\?raw$": "<rootDir>/src/tests/mocks/raw-asset.mock.ts",
   },
 
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
+
+  collectCoverageFrom,
+
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/src/app/content/",
+    "/src/shared-types/",
+  ],
+
+  coverageProvider: "babel",
+};
+
+const config: Config = {
+  rootDir: ".",
+
+  collectCoverage: true,
+  collectCoverageFrom,
+
+  projects: [
+    {
+      ...sharedConfig,
+      displayName: "node",
+      testEnvironment: "node",
+      testMatch: ["**/*.test.ts"],
+    },
+    {
+      ...sharedConfig,
+      displayName: "jsdom",
+      testEnvironment: "jsdom",
+      testMatch: ["**/*.test.tsx"],
+      setupFilesAfterEnv: ["@testing-library/jest-dom"],
+    },
+  ],
+
+  coverageDirectory: "<rootDir>/audits/coverage",
+
+  coverageReporters: ["text", "html", "lcov", "json"],
 
   coverageThreshold: {
     global: {

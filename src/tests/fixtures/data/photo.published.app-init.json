@@ -1,0 +1,47 @@
+{
+  "id": "amager-faelled-footpath-with-sheep",
+  "sourceFileName": "amager-faelled-footpath-with-sheep.jpg",
+  "cloudflareImageId": "amager-faelled-footpath-with-sheep",
+  "cloudflareUploadedAt": "2026-08-30T18:25:54.815Z",
+  "title": "Sheep Along a Footpath in Amager Fælled",
+  "alt": "Sheep resting beneath a tree and beside a footpath through the open grassland of Amager Fælled, Denmark.",
+  "commentary": "Starting my walk through Amager Fælled, the sheep (Ovis aries) had already found one of the few shady spots in the open meadow. A wonderfully relaxed introduction to the area.",
+  "readableLocation": "Amager Fælled, Copenhagen, Denmark",
+  "species": [
+    {
+      "name": "Sheep",
+      "scientificName": "Ovis aries"
+    }
+  ],
+  "capturedAt": {
+    "utc": "2026-06-12T05:21:26.000Z",
+    "timezone": "Europe/Copenhagen"
+  },
+  "photographer": "Kevin Ellen",
+  "copyright": "Kevin Ellen, 2026",
+  "cameraMake": "Google",
+  "cameraModel": "Pixel 9 Pro XL",
+  "lensModel": "Pixel 9 Pro XL back camera 6.9mm f/1.68",
+  "exposureTime": 0.00125,
+  "aperture": 1.7,
+  "iso": 22,
+  "focalLength": 6.9,
+  "focalLength35mm": 24,
+  "width": 8160,
+  "height": 6144,
+  "latitude": 55.610535,
+  "longitude": 12.569278,
+  "resolvedLocation": {
+    "name": "Lærkestien",
+    "road": "Lærkestien",
+    "village": null,
+    "town": "Tårnby",
+    "city": null,
+    "county": null,
+    "state": "Region Hovedstaden",
+    "country": "Danmark",
+    "countryCode": "dk",
+    "postcode": "2770",
+    "displayName": "Lærkestien, Nøragersminde, Tårnby, Tårnby Kommune, Region Hovedstaden, 2770, Danmark"
+  }
+}

@@ -1,0 +1,52 @@
+// src/app/assets/styles/components/_pagination.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.c-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: spacing.$md;
+  font-family: typography.$font-sans;
+  font-size: typography.$text-sm;
+
+  &__pages {
+    display: flex;
+    align-items: center;
+    gap: spacing.$xs;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding-inline: spacing.$xs;
+    color: colours.$text;
+    text-decoration: none;
+
+    &:hover {
+      color: colours.$forest;
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
+
+    &:focus-visible {
+      outline: 2px solid colours.$forest;
+      outline-offset: 2px;
+    }
+
+    &[aria-current="page"] {
+      color: colours.$forest;
+      font-weight: typography.$semibold;
+      border-bottom: 2px solid colours.$forest;
+    }
+  }
+}

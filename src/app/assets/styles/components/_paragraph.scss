@@ -1,0 +1,13 @@
+// src/app/assets/styles/components/_paragraph.scss
+
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.c-paragraph {
+  font-size: typography.$text-base;
+  line-height: 1.65;
+
+  & + & {
+    margin-top: spacing.$sm;
+  }
+}

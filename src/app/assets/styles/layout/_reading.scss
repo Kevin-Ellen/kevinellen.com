@@ -1,0 +1,16 @@
+// src/app/assets/styles/layout/_reading.scss
+
+@use "../tokens/spacing" as spacing;
+@use "../mixins/viewports" as viewport;
+
+.l-reading {
+  width: 100%;
+  max-width: calc(72ch + 2 * #{spacing.$sm});
+  margin-inline: auto;
+  padding-inline: spacing.$sm;
+
+  @include viewport.expanded {
+    max-width: calc(72ch + 2 * #{spacing.$lg});
+    padding-inline: spacing.$lg;
+  }
+}

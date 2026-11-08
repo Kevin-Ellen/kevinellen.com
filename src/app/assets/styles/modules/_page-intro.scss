@@ -1,0 +1,63 @@
+// src/app/assets/styles/modules/_page-intro.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+@use "../mixins/viewports" as viewport;
+@use "../mixins/typography" as type;
+
+.m-page-intro {
+  padding-block: spacing.$lg;
+  color: colours.$text;
+
+  &__content {
+    max-width: 48rem;
+  }
+
+  &__eyebrow {
+    @include type.eyebrow;
+
+    margin-bottom: spacing.$xs;
+  }
+
+  &__title {
+    max-width: 24ch;
+  }
+
+  &__description {
+    max-width: 65ch;
+    margin-top: spacing.$sm;
+    color: colours.$text-muted;
+    font-size: typography.$text-lg;
+    line-height: 1.5;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: spacing.$sm;
+    margin-top: spacing.$md;
+    color: colours.$text-muted;
+    font-size: typography.$text-sm;
+    line-height: 1.4;
+  }
+
+  &__date,
+  &__location {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing.$xs;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      flex: 0 0 auto;
+      fill: currentcolor;
+    }
+  }
+
+  @include viewport.expanded {
+    padding-block: spacing.$xl;
+  }
+}

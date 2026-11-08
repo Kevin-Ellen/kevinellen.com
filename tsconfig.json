@@ -3,38 +3,34 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": [
       "./worker-configuration.d.ts",
       "jest",
-      "@cloudflare/workers-types"
+      "node",
+      "@testing-library/jest-dom"
     ],
-    "lib": ["ES2022", "DOM"],
+    "jsx": "react-jsx",
     "strict": true,
     "noEmit": true,
-    "isolatedModules": true,
     "skipLibCheck": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "@shared-types/*": ["./shared-types/*"],
-      "@request/*": ["./src/request/*"],
-      "@app-state/*": ["./src/app-state/*"],
-      "@app-context/*": ["./src/app-context/*"],
-      "@app-render-context/*": ["./src/app-render-context/*"],
-      "@rendering/*": ["./src/rendering/*"],
-
-      "@utils/*": ["./src/utils/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@tests/*": ["./tests/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@content-cli/*": ["./packages/content-cli/src/*"]
-    }
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src",
-    "tests",
-    "worker-configuration.d.ts",
-    "shared-types/",
-    "jest.config.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/tests/**/*.ts",
+    "setup/**/*.ts",
+    "src/app/life-cycle/inspect/inspectts",
+    "src/app/life-cycle/request/canonicalisation/config.canonicalisation.request-ingress.ts",
+    "src/app/life-cycle/app-render/app-render.js",
+    "authored-content/journals/**/*.ts"
+  ],
+  "exclude": [
+    "authored-content/journals/uploaded**/*.ts",
+    "src/tools/temp-folder/**/*.ts",
+    "audits/**/*/.{cjs}"
   ]
 }

@@ -1,272 +1,1722 @@
 {
-  "$ref": "#/definitions/AuthoredPageContent",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "AuthoredArticleSectionBlock": {
+    "ArticleFooterModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
+        "fieldNotes": {
+          "additionalProperties": false,
+          "properties": {
+            "cameras": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "lenses": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "cameras",
+            "lenses"
+          ],
+          "type": "object"
+        },
+        "kind": {
+          "const": "articleFooter",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "fieldNotes"
+      ],
+      "type": "object"
+    },
+    "ArticleSectionModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "entries": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "layout": {
+                "enum": [
+                  "reading",
+                  "frame",
+                  "none"
+                ],
+                "type": "string"
+              },
+              "module": {
+                "$ref": "#/definitions/ModuleContentAuthored"
+              }
+            },
+            "required": [
+              "layout",
+              "module"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
         "heading": {
-          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "level": {
+              "enum": [
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": "number"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "text",
+            "level"
+          ],
+          "type": "object"
         },
         "kind": {
           "const": "articleSection",
           "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "heading",
+        "entries"
+      ],
+      "type": "object"
+    },
+    "BannerModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "components": {
+          "items": {
+            "$ref": "#/definitions/ComponentContentAuthored"
+          },
+          "type": "array"
+        },
+        "heading": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "level": {
+              "const": 2,
+              "type": "number"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "text",
+            "level"
+          ],
+          "type": "object"
+        },
+        "kind": {
+          "const": "banner",
+          "type": "string"
+        },
+        "media": {
+          "$ref": "#/definitions/EditorialPhotoComponentContentAuthored"
+        }
+      },
+      "required": [
+        "kind",
+        "heading",
+        "media",
+        "components"
+      ],
+      "type": "object"
+    },
+    "ComponentContentAuthored": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ParagraphComponentContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/ListComponentContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/PhotoComponentContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/EditorialPhotoComponentContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/RichListComponentContentAuthored"
+        }
+      ]
+    },
+    "ContentAuthored": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PublicContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/ErrorContentAuthored"
+        }
+      ]
+    },
+    "ContentBodyAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "footer": {
+          "$ref": "#/definitions/ContentBodyFooterAuthored"
         },
         "modules": {
           "items": {
-            "$ref": "#/definitions/AuthoredBlock"
+            "$ref": "#/definitions/ModuleContentAuthored"
           },
           "type": "array"
         }
       },
-      "required": ["kind", "heading", "modules"],
+      "required": [
+        "modules"
+      ],
       "type": "object"
     },
-    "AuthoredArticleSectionHeadingBlock": {
+    "ContentBodyFooterAuthored": {
+      "items": {
+        "$ref": "#/definitions/ModuleContentAuthored"
+      },
+      "type": "array"
+    },
+    "ContentCommonAuthored": {
       "additionalProperties": false,
       "properties": {
-        "level": {
-          "enum": [2, 3, 4, 5, 6],
+        "body": {
+          "$ref": "#/definitions/ContentBodyAuthored"
+        },
+        "breadcrumbs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dates": {
+          "$ref": "#/definitions/ContentDatesAuthored"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "pagePresentation": {
+          "$ref": "#/definitions/PagePresentationAuthored"
+        },
+        "pageType": {
+          "$ref": "#/definitions/ContentPageType"
+        },
+        "render": {
+          "$ref": "#/definitions/ContentRender"
+        },
+        "status": {
           "type": "number"
-        },
-        "text": {
-          "type": "string"
-        },
-        "visuallyHidden": {
-          "type": "boolean"
         }
       },
-      "required": ["text", "level"],
+      "required": [
+        "id",
+        "render",
+        "pageType",
+        "label",
+        "breadcrumbs",
+        "dates",
+        "body"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"hero\",structure-1832424286-310-365-1832424286-281-367-1832424286-248-368-1832424286-0-369>": {
+    "ContentDatesAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
-        },
-        "immersive": {
-          "type": "boolean"
-        },
-        "kind": {
-          "const": "hero",
+        "created": {
           "type": "string"
         },
-        "photoId": {
-          "$ref": "#/definitions/PhotoId"
+        "lastUpdated": {
+          "type": "string"
         }
       },
-      "required": ["kind", "photoId"],
+      "required": [
+        "created"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"homepageHero\",structure-1776868192-533-674-1776868192-496-676-1776868192-455-677-1776868192-0-678>": {
+    "ContentKind": {
+      "enum": [
+        "public",
+        "error"
+      ],
+      "type": "string"
+    },
+    "ContentPageType": {
+      "enum": [
+        "standard",
+        "journalEntry"
+      ],
+      "type": "string"
+    },
+    "ContentRender": {
+      "enum": [
+        "static",
+        "composed"
+      ],
+      "type": "string"
+    },
+    "EditorialFeatureModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
+        "components": {
+          "items": {
+            "$ref": "#/definitions/ComponentContentAuthored"
+          },
+          "type": "array"
+        },
         "eyebrow": {
           "type": "string"
         },
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
-        },
-        "intro": {
-          "items": {
-            "$ref": "#/definitions/AuthoredInline"
+        "heading": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "level": {
+              "const": 2,
+              "type": "number"
+            },
+            "text": {
+              "type": "string"
+            }
           },
-          "type": "array"
+          "required": [
+            "id",
+            "text",
+            "level"
+          ],
+          "type": "object"
         },
-        "kind": {
-          "const": "homepageHero",
+        "id": {
           "type": "string"
         },
-        "photoId": {
-          "$ref": "#/definitions/PhotoId"
+        "kind": {
+          "const": "editorialFeature",
+          "type": "string"
         },
-        "primaryLink": {
-          "$ref": "#/definitions/AuthoredInternalLink"
+        "media": {
+          "$ref": "#/definitions/EditorialPhotoComponentContentAuthored"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "eyebrow",
+        "heading",
+        "components",
+        "media"
+      ],
+      "type": "object"
+    },
+    "EditorialIntroModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "editorialIntro",
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "portrait": {
+          "$ref": "#/definitions/EditorialPhotoComponentContentAuthored"
+        },
+        "statement": {
+          "type": "string"
         },
         "title": {
           "type": "string"
         }
       },
-      "required": ["kind", "photoId", "title"],
+      "required": [
+        "kind",
+        "eyebrow",
+        "title",
+        "statement",
+        "description"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"homepageJournalListing\",structure-198932984-458-539-198932984-411-541-198932984-360-542-198932984-0-543>": {
+    "EditorialPhotoComponentContentAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
+        "alt": {
+          "type": "string"
         },
-        "heading": {
-          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
+        "description": {
+          "type": "string"
         },
-        "itemCount": {
+        "height": {
           "type": "number"
         },
         "kind": {
-          "const": "homepageJournalListing",
+          "const": "editorialPhoto",
           "type": "string"
-        }
-      },
-      "required": ["heading", "kind"],
-      "type": "object"
-    },
-    "AuthoredBaseBlock<\"homepageNoteListing\",structure-538435776-446-527-538435776-402-529-538435776-354-530-538435776-0-531>": {
-      "additionalProperties": false,
-      "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
         },
-        "heading": {
-          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
-        },
-        "itemCount": {
-          "type": "number"
-        },
-        "kind": {
-          "const": "homepageNoteListing",
-          "type": "string"
-        }
-      },
-      "required": ["heading", "kind"],
-      "type": "object"
-    },
-    "AuthoredBaseBlock<\"imageStrip\",structure-239170368-506-685-239170368-471-687-239170368-432-688-239170368-0-689>": {
-      "additionalProperties": false,
-      "properties": {
-        "excludePagePhotos": {
+        "priority": {
           "type": "boolean"
         },
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
-        },
-        "heading": {
-          "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
-        },
-        "itemCount": {
-          "type": "number"
-        },
-        "kind": {
-          "const": "imageStrip",
+        "src": {
           "type": "string"
         },
-        "source": {
-          "$ref": "#/definitions/ImageStripSource"
-        },
-        "strategy": {
-          "$ref": "#/definitions/ImageStripStrategy"
+        "width": {
+          "type": "number"
         }
       },
-      "required": ["heading", "kind", "source"],
+      "required": [
+        "kind",
+        "src",
+        "alt",
+        "width",
+        "height"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"journalListing\",structure-310081088-400-444-310081088-361-446-310081088-318-447-310081088-0-448>": {
+    "EditorialSplitModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
+        "components": {
+          "items": {
+            "$ref": "#/definitions/ComponentContentAuthored"
+          },
+          "type": "array"
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "heading": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "level": {
+              "const": 2,
+              "type": "number"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "text",
+            "level"
+          ],
+          "type": "object"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "editorialSplit",
+          "type": "string"
+        },
+        "media": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/EditorialPhotoComponentContentAuthored"
+            },
+            {
+              "$ref": "#/definitions/RichListComponentContentAuthored"
+            }
+          ]
+        },
+        "reverse": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "eyebrow",
+        "heading",
+        "components",
+        "media"
+      ],
+      "type": "object"
+    },
+    "ErrorContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/ContentBodyAuthored"
+        },
+        "breadcrumbs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dates": {
+          "$ref": "#/definitions/ContentDatesAuthored"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "error",
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "description"
+          ],
+          "type": "object"
+        },
+        "pagePresentation": {
+          "$ref": "#/definitions/PagePresentationAuthored"
+        },
+        "pageType": {
+          "$ref": "#/definitions/ContentPageType"
+        },
+        "render": {
+          "$ref": "#/definitions/ContentRender"
+        },
+        "status": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "body",
+        "breadcrumbs",
+        "dates",
+        "id",
+        "kind",
+        "label",
+        "metadata",
+        "pageType",
+        "render"
+      ],
+      "type": "object"
+    },
+    "ExternalLinkAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "ariaLabel": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        },
+        "icon": {
+          "$ref": "#/definitions/LinkIconAuthored"
+        },
+        "kind": {
+          "const": "external",
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "rel": {
+          "items": {
+            "$ref": "#/definitions/LinkRel"
+          },
+          "type": "array"
+        },
+        "target": {
+          "$ref": "#/definitions/LinkTarget"
+        },
+        "title": {
+          "type": "string"
+        },
+        "variant": {
+          "$ref": "#/definitions/LinkVariant"
+        }
+      },
+      "required": [
+        "href",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "FeaturedPhotoModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "alt": {
+          "type": "string"
+        },
+        "commentary": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "featuredPhoto",
+          "type": "string"
+        },
+        "photoId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "photoId",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "FetchPriority": {
+      "enum": [
+        "high",
+        "low",
+        "auto"
+      ],
+      "type": "string"
+    },
+    "FinalWordsModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "components": {
+          "items": {
+            "$ref": "#/definitions/ComponentContentAuthored"
+          },
+          "type": "array"
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "heading": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "level": {
+              "const": 2,
+              "type": "number"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "text",
+            "level"
+          ],
+          "type": "object"
+        },
+        "kind": {
+          "const": "finalWords",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "eyebrow",
+        "heading",
+        "components"
+      ],
+      "type": "object"
+    },
+    "HeroModuleContentSchemaAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "hero",
+          "type": "string"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "icon": {
+                  "$ref": "#/definitions/SvgReferenceAuthored"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label",
+                "icon"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "media": {
+          "additionalProperties": false,
+          "properties": {
+            "alt": {
+              "type": "string"
+            },
+            "fetchPriority": {
+              "$ref": "#/definitions/FetchPriority"
+            },
+            "height": {
+              "type": "number"
+            },
+            "sources": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "height": {
+                    "type": "number"
+                  },
+                  "media": {
+                    "type": "string"
+                  },
+                  "src": {
+                    "type": "string"
+                  },
+                  "width": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "src",
+                  "media",
+                  "width",
+                  "height"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "src": {
+              "type": "string"
+            },
+            "width": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "src",
+            "width",
+            "height",
+            "alt",
+            "fetchPriority",
+            "sources"
+          ],
+          "type": "object"
+        },
+        "title": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "eyebrow",
+        "title",
+        "description",
+        "media",
+        "location"
+      ],
+      "type": "object"
+    },
+    "InlineContentAuthored": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/LinkInlineContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/TextInlineContentAuthored"
+        }
+      ]
+    },
+    "InlineScriptAssetAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "inline",
+          "type": "string"
+        },
+        "loading": {
+          "$ref": "#/definitions/ScriptLoadingType"
+        },
+        "location": {
+          "$ref": "#/definitions/ScriptLocation"
+        },
+        "scriptType": {
+          "$ref": "#/definitions/ScriptType"
+        }
+      },
+      "required": [
+        "content",
+        "id",
+        "kind",
+        "location"
+      ],
+      "type": "object"
+    },
+    "InternalLinkAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "ariaLabel": {
+          "type": "string"
+        },
+        "icon": {
+          "$ref": "#/definitions/LinkIconAuthored"
+        },
+        "kind": {
+          "const": "internal",
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "pageId": {
+          "type": "string"
+        },
+        "rel": {
+          "items": {
+            "$ref": "#/definitions/LinkRel"
+          },
+          "type": "array"
+        },
+        "target": {
+          "$ref": "#/definitions/LinkTarget"
+        },
+        "title": {
+          "type": "string"
+        },
+        "variant": {
+          "$ref": "#/definitions/LinkVariant"
+        }
+      },
+      "required": [
+        "kind",
+        "pageId"
+      ],
+      "type": "object"
+    },
+    "JournalListingModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "displayFeatured": {
+          "type": "boolean"
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "heading": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "level": {
+              "const": 2,
+              "type": "number"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "level",
+            "text"
+          ],
+          "type": "object"
         },
         "kind": {
           "const": "journalListing",
           "type": "string"
         },
+        "pageSize": {
+          "type": "number"
+        },
         "pagination": {
-          "$ref": "#/definitions/AuthoredPagination"
+          "type": "boolean"
+        },
+        "photoLimit": {
+          "type": "number"
+        },
+        "showViewAllLink": {
+          "type": "boolean"
+        },
+        "topicId": {
+          "$ref": "#/definitions/TopicId"
         }
       },
-      "required": ["kind", "pagination"],
+      "required": [
+        "kind",
+        "heading",
+        "photoLimit",
+        "pageSize"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"list\",structure-995901094-522-603-995901094-493-605-995901094-460-606-995901094-0-607>": {
+    "LinkAuthored": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/InternalLinkAuthored"
+        },
+        {
+          "$ref": "#/definitions/SocialLinkAuthored"
+        },
+        {
+          "$ref": "#/definitions/ExternalLinkAuthored"
+        }
+      ]
+    },
+    "LinkCommonAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
+        "ariaLabel": {
+          "type": "string"
         },
+        "icon": {
+          "$ref": "#/definitions/LinkIconAuthored"
+        },
+        "label": {
+          "type": "string"
+        },
+        "rel": {
+          "items": {
+            "$ref": "#/definitions/LinkRel"
+          },
+          "type": "array"
+        },
+        "target": {
+          "$ref": "#/definitions/LinkTarget"
+        },
+        "title": {
+          "type": "string"
+        },
+        "variant": {
+          "$ref": "#/definitions/LinkVariant"
+        }
+      },
+      "type": "object"
+    },
+    "LinkIconAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "LinkInlineContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "link",
+          "type": "string"
+        },
+        "link": {
+          "$ref": "#/definitions/LinkAuthored"
+        }
+      },
+      "required": [
+        "kind",
+        "link"
+      ],
+      "type": "object"
+    },
+    "LinkRel": {
+      "enum": [
+        "noopener",
+        "noreferrer",
+        "nofollow",
+        "external",
+        "ugc",
+        "sponsored",
+        "author",
+        "me",
+        "license"
+      ],
+      "type": "string"
+    },
+    "LinkTarget": {
+      "enum": [
+        "_self",
+        "_blank",
+        "_parent",
+        "_top"
+      ],
+      "type": "string"
+    },
+    "LinkVariant": {
+      "enum": [
+        "editorial",
+        "editorial-subtle"
+      ],
+      "type": "string"
+    },
+    "ListComponentContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
         "items": {
           "items": {
-            "$ref": "#/definitions/AuthoredListItemBlock"
+            "additionalProperties": false,
+            "properties": {
+              "content": {
+                "items": {
+                  "$ref": "#/definitions/InlineContentAuthored"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "content"
+            ],
+            "type": "object"
           },
           "type": "array"
         },
         "kind": {
           "const": "list",
           "type": "string"
-        },
-        "style": {
-          "$ref": "#/definitions/BlockListStyle"
         }
       },
-      "required": ["items", "kind"],
+      "required": [
+        "kind",
+        "items"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"noteListing\",structure-952946236-388-432-952946236-352-434-952946236-312-435-952946236-0-436>": {
+    "MetadataBarModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
+        "cameras": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
-        "kind": {
-          "const": "noteListing",
+        "heading": {
           "type": "string"
         },
-        "pagination": {
-          "$ref": "#/definitions/AuthoredPagination"
+        "kind": {
+          "const": "metadataBar",
+          "type": "string"
+        },
+        "lenses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
-      "required": ["kind", "pagination"],
+      "required": [
+        "kind",
+        "cameras",
+        "lenses",
+        "location"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"paragraph\",structure-995640192-360-408-995640192-326-410-995640192-288-411-995640192-0-412>": {
+    "ModuleContentAuthored": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ArticleSectionModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/HeroModuleContentSchemaAuthored"
+        },
+        {
+          "$ref": "#/definitions/PageIntroModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/FeaturedPhotoModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/MetadataBarModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/RichContentModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/PhotoPairModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/ArticleFooterModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/FinalWordsModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/EditorialIntroModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/EditorialSplitModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/EditorialFeatureModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/BannerModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/QuoteModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/PhotoSequenceModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/JournalListingModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/TopicListingModuleContentAuthored"
+        },
+        {
+          "$ref": "#/definitions/TopicExplorerModuleContentAuthored"
+        }
+      ]
+    },
+    "PageIntroModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "eyebrow": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "pageIntro",
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "title"
+      ],
+      "type": "object"
+    },
+    "PagePresentationAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "additionalProperties": false,
+          "properties": {
+            "appearance": {
+              "enum": [
+                "solid",
+                "transparent"
+              ],
+              "type": "string"
+            },
+            "colourScheme": {
+              "enum": [
+                "default",
+                "inverted"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "appearance",
+            "colourScheme"
+          ],
+          "type": "object"
+        },
+        "layout": {
+          "enum": [
+            "contained",
+            "full-bleed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "layout",
+        "header"
+      ],
+      "type": "object"
+    },
+    "ParagraphComponentContentAuthored": {
       "additionalProperties": false,
       "properties": {
         "content": {
           "items": {
-            "$ref": "#/definitions/AuthoredInline"
+            "$ref": "#/definitions/InlineContentAuthored"
           },
           "type": "array"
-        },
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
         },
         "kind": {
           "const": "paragraph",
           "type": "string"
         }
       },
-      "required": ["content", "kind"],
+      "required": [
+        "kind",
+        "content"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"pre\",structure-665075872-336-392-665075872-308-394-665075872-276-395-665075872-0-396>": {
+    "PhotoAssetAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
-        },
-        "kind": {
-          "const": "pre",
+        "alt": {
           "type": "string"
         },
-        "language": {
-          "$ref": "#/definitions/CodeLanguage"
+        "aperture": {
+          "type": "number"
         },
-        "value": {
+        "cameraMake": {
+          "type": "string"
+        },
+        "cameraModel": {
+          "type": "string"
+        },
+        "capturedAt": {
+          "additionalProperties": false,
+          "properties": {
+            "timezone": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "utc": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "utc",
+            "timezone"
+          ],
+          "type": "object"
+        },
+        "cloudflareImageId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cloudflareUploadedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "commentary": {
+          "type": "string"
+        },
+        "copyright": {
+          "type": "string"
+        },
+        "exposureTime": {
+          "type": "number"
+        },
+        "focalLength": {
+          "type": "number"
+        },
+        "focalLength35mm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "iso": {
+          "type": "number"
+        },
+        "latitude": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "lensModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "longitude": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "photographer": {
+          "type": "string"
+        },
+        "readableLocation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "resolvedLocation": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/PhotoResolvedLocationAuthored"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceFileName": {
+          "type": "string"
+        },
+        "species": {
+          "items": {
+            "$ref": "#/definitions/PhotoSpeciesAuthored"
+          },
+          "type": "array"
+        },
+        "title": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "sourceFileName",
+        "cloudflareImageId",
+        "cloudflareUploadedAt",
+        "title",
+        "alt",
+        "commentary",
+        "readableLocation",
+        "capturedAt",
+        "photographer",
+        "copyright",
+        "cameraMake",
+        "cameraModel",
+        "lensModel",
+        "exposureTime",
+        "aperture",
+        "iso",
+        "focalLength",
+        "focalLength35mm",
+        "width",
+        "height",
+        "latitude",
+        "longitude",
+        "resolvedLocation"
+      ],
+      "type": "object"
+    },
+    "PhotoAssetMetadataAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "aperture": {
+          "type": "number"
+        },
+        "cameraModel": {
+          "type": "string"
+        },
+        "capturedAt": {
+          "type": "string"
+        },
+        "copyright": {
+          "type": "string"
+        },
+        "exposureTime": {
+          "type": "number"
+        },
+        "focalLength": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "iso": {
+          "type": "number"
+        },
+        "lensModel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "location": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "photographer": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "photographer",
+        "copyright",
+        "capturedAt",
+        "cameraModel",
+        "lensModel",
+        "exposureTime",
+        "aperture",
+        "iso",
+        "focalLength",
+        "width",
+        "height",
+        "location"
+      ],
+      "type": "object"
+    },
+    "PhotoComponentContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "alt": {
+          "type": "string"
+        },
+        "commentary": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "photo",
+          "type": "string"
+        },
+        "photoId": {
+          "type": "string"
+        },
+        "wide": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "photoId"
+      ],
+      "type": "object"
+    },
+    "PhotoPairModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "photoPair",
+          "type": "string"
+        },
+        "photos": {
+          "items": {
+            "$ref": "#/definitions/PhotoComponentContentAuthored"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "photos"
+      ],
+      "type": "object"
+    },
+    "PhotoResolvedLocationAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "country": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "countryCode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "county": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "displayName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "postcode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "road": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "town": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "village": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "road",
+        "village",
+        "town",
+        "city",
+        "county",
+        "state",
+        "country",
+        "countryCode",
+        "postcode",
+        "displayName"
+      ],
+      "type": "object"
+    },
+    "PhotoSequenceModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "caption": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "photoSequence",
+          "type": "string"
+        },
+        "photos": {
+          "items": {
+            "$ref": "#/definitions/PhotoComponentContentAuthored"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "photos"
+      ],
+      "type": "object"
+    },
+    "PhotoSpeciesAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "scientificName": {
           "type": "string"
         }
       },
-      "required": ["kind", "value"],
+      "required": [
+        "name",
+        "scientificName"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"quote\",structure-1279843264-241-309-1279843264-211-311-1279843264-177-312-1279843264-0-313>": {
+    "PublicContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/ContentBodyAuthored"
+        },
+        "breadcrumbs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dates": {
+          "$ref": "#/definitions/ContentDatesAuthored"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "public",
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "sitemap": {
+              "type": "boolean"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "sitemap"
+          ],
+          "type": "object"
+        },
+        "pagePresentation": {
+          "$ref": "#/definitions/PagePresentationAuthored"
+        },
+        "pageType": {
+          "$ref": "#/definitions/ContentPageType"
+        },
+        "photos": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "render": {
+          "$ref": "#/definitions/ContentRender"
+        },
+        "scripts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "status": {
+          "type": "number"
+        },
+        "structuredData": {
+          "$ref": "#/definitions/StructuredDataContentAuthored"
+        },
+        "topics": {
+          "items": {
+            "$ref": "#/definitions/TopicId"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "body",
+        "breadcrumbs",
+        "dates",
+        "id",
+        "kind",
+        "label",
+        "metadata",
+        "pageType",
+        "render",
+        "slug"
+      ],
+      "type": "object"
+    },
+    "QuoteModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
         "attribution": {
-          "type": "string"
-        },
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
-        },
-        "id": {
           "type": "string"
         },
         "kind": {
@@ -277,467 +1727,246 @@
           "type": "string"
         }
       },
-      "required": ["id", "kind", "text"],
+      "required": [
+        "kind",
+        "text"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"sectionLinks\",structure-616718752-746-800-616718752-709-802-616718752-668-803-616718752-0-804>": {
+    "RichContentModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
+        "components": {
+          "items": {
+            "$ref": "#/definitions/ComponentContentAuthored"
+          },
+          "type": "array"
         },
         "kind": {
-          "const": "sectionLinks",
+          "const": "richContent",
           "type": "string"
-        },
-        "sections": {
+        }
+      },
+      "required": [
+        "kind",
+        "components"
+      ],
+      "type": "object"
+    },
+    "RichListComponentContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "items": {
           "items": {
             "additionalProperties": false,
             "properties": {
-              "heading": {
-                "$ref": "#/definitions/AuthoredArticleSectionHeadingBlock"
-              },
               "icon": {
-                "$ref": "#/definitions/SvgAssetId"
+                "$ref": "#/definitions/SvgReferenceAuthored"
               },
-              "intro": {
-                "type": ["string", "null"]
+              "label": {
+                "type": "string"
               },
-              "link": {
-                "$ref": "#/definitions/AuthoredInternalLink"
+              "values": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
               }
             },
-            "required": ["heading", "link", "icon", "intro"],
+            "required": [
+              "icon",
+              "label",
+              "values"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "richList",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "items"
+      ],
+      "type": "object"
+    },
+    "ScriptAssetAuthored": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/InlineScriptAssetAuthored"
+        },
+        {
+          "$ref": "#/definitions/StandaloneScriptAssetAuthored"
+        }
+      ]
+    },
+    "ScriptAssetCommonAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "loading": {
+          "$ref": "#/definitions/ScriptLoadingType"
+        },
+        "location": {
+          "$ref": "#/definitions/ScriptLocation"
+        },
+        "scriptType": {
+          "$ref": "#/definitions/ScriptType"
+        }
+      },
+      "required": [
+        "id",
+        "location"
+      ],
+      "type": "object"
+    },
+    "ScriptLoadingType": {
+      "enum": [
+        "async",
+        "defer"
+      ],
+      "type": "string"
+    },
+    "ScriptLocation": {
+      "enum": [
+        "head",
+        "end"
+      ],
+      "type": "string"
+    },
+    "ScriptType": {
+      "enum": [
+        "classic",
+        "module"
+      ],
+      "type": "string"
+    },
+    "SocialLinkAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "ariaLabel": {
+          "type": "string"
+        },
+        "icon": {
+          "$ref": "#/definitions/LinkIconAuthored"
+        },
+        "kind": {
+          "const": "social",
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "string"
+        },
+        "rel": {
+          "items": {
+            "$ref": "#/definitions/LinkRel"
+          },
+          "type": "array"
+        },
+        "target": {
+          "$ref": "#/definitions/LinkTarget"
+        },
+        "title": {
+          "type": "string"
+        },
+        "variant": {
+          "$ref": "#/definitions/LinkVariant"
+        }
+      },
+      "required": [
+        "kind",
+        "profile"
+      ],
+      "type": "object"
+    },
+    "StandaloneScriptAssetAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "standalone",
+          "type": "string"
+        },
+        "loading": {
+          "$ref": "#/definitions/ScriptLoadingType"
+        },
+        "location": {
+          "$ref": "#/definitions/ScriptLocation"
+        },
+        "scriptType": {
+          "$ref": "#/definitions/ScriptType"
+        },
+        "src": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "location",
+        "src"
+      ],
+      "type": "object"
+    },
+    "StructuredDataContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "@graph": {
+          "items": {
+            "additionalProperties": {},
             "type": "object"
           },
           "type": "array"
         }
       },
-      "required": ["kind", "sections"],
+      "required": [
+        "@graph"
+      ],
       "type": "object"
     },
-    "AuthoredBaseBlock<\"sequence\",structure-1521326740-429-549-1521326740-396-551-1521326740-359-552-1521326740-0-553>": {
-      "additionalProperties": false,
-      "properties": {
-        "caption": {
-          "items": {
-            "$ref": "#/definitions/AuthoredInline"
-          },
-          "type": "array"
-        },
-        "flow": {
-          "$ref": "#/definitions/BlockFlow"
-        },
-        "immersive": {
-          "type": "boolean"
-        },
-        "kind": {
-          "const": "sequence",
-          "type": "string"
-        },
-        "photos": {
-          "additionalProperties": {
-            "$ref": "#/definitions/PhotoId"
-          },
-          "type": "object"
-        }
-      },
-      "required": ["caption", "kind", "photos"],
-      "type": "object"
-    },
-    "AuthoredBlock": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/AuthoredParagraphBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredListBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredQuoteBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredHeroBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredJournalListingBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredArticleSectionBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredPreBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredHomepageHeroBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredImageStripBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredHomepageJournalListingBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredSectionLinksBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredNoteListingBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredHomepageNoteListingBlock"
-        },
-        {
-          "$ref": "#/definitions/AuthoredSequenceBlock"
-        }
-      ]
-    },
-    "AuthoredCodeInline": {
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "const": "code",
-          "type": "string"
-        },
-        "language": {
-          "$ref": "#/definitions/CodeLanguage"
-        },
-        "value": {
-          "type": "string"
-        }
-      },
-      "required": ["kind", "value"],
-      "type": "object"
-    },
-    "AuthoredEmphasisInline": {
+    "SvgAssetAuthored": {
       "additionalProperties": false,
       "properties": {
         "content": {
-          "items": {
-            "$ref": "#/definitions/AuthoredInline"
-          },
-          "type": "array"
-        },
-        "kind": {
-          "const": "emphasis",
           "type": "string"
-        }
-      },
-      "required": ["kind", "content"],
-      "type": "object"
-    },
-    "AuthoredExternalLink": {
-      "additionalProperties": false,
-      "properties": {
-        "href": {
-          "type": "string"
-        },
-        "kind": {
-          "const": "external",
-          "type": "string"
-        },
-        "svgId": {
-          "$ref": "#/definitions/SvgAssetId"
-        },
-        "text": {
-          "type": "string"
-        }
-      },
-      "required": ["kind", "href", "text"],
-      "type": "object"
-    },
-    "AuthoredExternalLinkInline": {
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "const": "externalLink",
-          "type": "string"
-        },
-        "link": {
-          "$ref": "#/definitions/AuthoredExternalLink"
-        }
-      },
-      "required": ["kind", "link"],
-      "type": "object"
-    },
-    "AuthoredHeroBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22hero%22%2Cstructure-1832424286-310-365-1832424286-281-367-1832424286-248-368-1832424286-0-369%3E"
-    },
-    "AuthoredHomepageHeroBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22homepageHero%22%2Cstructure-1776868192-533-674-1776868192-496-676-1776868192-455-677-1776868192-0-678%3E"
-    },
-    "AuthoredHomepageJournalListingBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22homepageJournalListing%22%2Cstructure-198932984-458-539-198932984-411-541-198932984-360-542-198932984-0-543%3E"
-    },
-    "AuthoredHomepageNoteListingBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22homepageNoteListing%22%2Cstructure-538435776-446-527-538435776-402-529-538435776-354-530-538435776-0-531%3E"
-    },
-    "AuthoredImageStripBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22imageStrip%22%2Cstructure-239170368-506-685-239170368-471-687-239170368-432-688-239170368-0-689%3E"
-    },
-    "AuthoredInline": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/AuthoredCodeInline"
-        },
-        {
-          "$ref": "#/definitions/AuthoredLineBreakInline"
-        },
-        {
-          "$ref": "#/definitions/AuthoredTextInline"
-        },
-        {
-          "$ref": "#/definitions/AuthoredEmphasisInline"
-        },
-        {
-          "$ref": "#/definitions/AuthoredStrongInline"
-        },
-        {
-          "$ref": "#/definitions/AuthoredInternalLinkInline"
-        },
-        {
-          "$ref": "#/definitions/AuthoredExternalLinkInline"
-        }
-      ]
-    },
-    "AuthoredInternalLink": {
-      "additionalProperties": false,
-      "properties": {
-        "behaviour": {
-          "$ref": "#/definitions/LinkOpenBehaviour"
         },
         "id": {
-          "$ref": "#/definitions/PageIdPublic"
-        },
-        "kind": {
-          "const": "internal",
           "type": "string"
         },
-        "svgId": {
-          "$ref": "#/definitions/SvgAssetId"
-        },
-        "text": {
+        "viewBox": {
           "type": "string"
         }
       },
-      "required": ["kind", "id"],
+      "required": [
+        "id",
+        "viewBox",
+        "content"
+      ],
       "type": "object"
     },
-    "AuthoredInternalLinkInline": {
+    "SvgReferenceAuthored": {
       "additionalProperties": false,
       "properties": {
-        "kind": {
-          "const": "internalLink",
-          "type": "string"
-        },
-        "link": {
-          "$ref": "#/definitions/AuthoredInternalLink"
-        }
-      },
-      "required": ["kind", "link"],
-      "type": "object"
-    },
-    "AuthoredJournalEntryFooter": {
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "const": "journalEntryFooter",
-          "type": "string"
-        },
-        "publication": {
-          "additionalProperties": false,
-          "properties": {
-            "author": {
-              "type": "string"
-            },
-            "publishedAt": {
-              "type": "string"
-            },
-            "updatedAt": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": ["author", "publishedAt", "updatedAt"],
-          "type": "object"
-        },
-        "tags": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "required": ["kind", "publication", "tags"],
-      "type": "object"
-    },
-    "AuthoredJournalListingBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22journalListing%22%2Cstructure-310081088-400-444-310081088-361-446-310081088-318-447-310081088-0-448%3E"
-    },
-    "AuthoredLineBreakInline": {
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "const": "lineBreak",
+        "id": {
           "type": "string"
         }
       },
-      "required": ["kind"],
+      "required": [
+        "id"
+      ],
       "type": "object"
     },
-    "AuthoredListBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22list%22%2Cstructure-995901094-522-603-995901094-493-605-995901094-460-606-995901094-0-607%3E"
-    },
-    "AuthoredListItemBlock": {
-      "additionalProperties": false,
-      "properties": {
-        "content": {
-          "items": {
-            "$ref": "#/definitions/AuthoredInline"
-          },
-          "type": "array"
-        }
-      },
-      "required": ["content"],
-      "type": "object"
-    },
-    "AuthoredNoteEntryFooter": {
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "const": "noteEntryFooter",
-          "type": "string"
-        },
-        "publication": {
-          "additionalProperties": false,
-          "properties": {
-            "author": {
-              "type": "string"
-            },
-            "publishedAt": {
-              "type": "string"
-            },
-            "updatedAt": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": ["author", "publishedAt", "updatedAt"],
-          "type": "object"
-        },
-        "tags": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "topic": {
-          "type": "string"
-        }
-      },
-      "required": ["kind", "publication", "topic", "tags"],
-      "type": "object"
-    },
-    "AuthoredNoteListingBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22noteListing%22%2Cstructure-952946236-388-432-952946236-352-434-952946236-312-435-952946236-0-436%3E"
-    },
-    "AuthoredPageContent": {
-      "additionalProperties": false,
-      "properties": {
-        "content": {
-          "items": {
-            "$ref": "#/definitions/AuthoredBlock"
-          },
-          "type": "array"
-        },
-        "footer": {
-          "items": {
-            "$ref": "#/definitions/AuthoredPageContentFooter"
-          },
-          "type": "array"
-        },
-        "head": {
-          "$ref": "#/definitions/AuthoredPageContentHead"
-        }
-      },
-      "required": ["head", "content"],
-      "type": "object"
-    },
-    "AuthoredPageContentFooter": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/AuthoredJournalEntryFooter"
-        },
-        {
-          "$ref": "#/definitions/AuthoredNoteEntryFooter"
-        }
-      ]
-    },
-    "AuthoredPageContentHead": {
-      "additionalProperties": false,
-      "properties": {
-        "eyebrow": {
-          "type": "string"
-        },
-        "intro": {
-          "type": "string"
-        },
-        "showInBody": {
-          "type": "boolean"
-        },
-        "title": {
-          "type": "string"
-        }
-      },
-      "required": ["title"],
-      "type": "object"
-    },
-    "AuthoredPagination": {
-      "additionalProperties": false,
-      "properties": {
-        "pageSize": {
-          "type": "number"
-        }
-      },
-      "required": ["pageSize"],
-      "type": "object"
-    },
-    "AuthoredParagraphBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22paragraph%22%2Cstructure-995640192-360-408-995640192-326-410-995640192-288-411-995640192-0-412%3E"
-    },
-    "AuthoredPreBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22pre%22%2Cstructure-665075872-336-392-665075872-308-394-665075872-276-395-665075872-0-396%3E"
-    },
-    "AuthoredQuoteBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22quote%22%2Cstructure-1279843264-241-309-1279843264-211-311-1279843264-177-312-1279843264-0-313%3E"
-    },
-    "AuthoredSectionLinksBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22sectionLinks%22%2Cstructure-616718752-746-800-616718752-709-802-616718752-668-803-616718752-0-804%3E"
-    },
-    "AuthoredSequenceBlock": {
-      "$ref": "#/definitions/AuthoredBaseBlock%3C%22sequence%22%2Cstructure-1521326740-429-549-1521326740-396-551-1521326740-359-552-1521326740-0-553%3E"
-    },
-    "AuthoredStrongInline": {
-      "additionalProperties": false,
-      "properties": {
-        "content": {
-          "items": {
-            "$ref": "#/definitions/AuthoredInline"
-          },
-          "type": "array"
-        },
-        "kind": {
-          "const": "strong",
-          "type": "string"
-        }
-      },
-      "required": ["kind", "content"],
-      "type": "object"
-    },
-    "AuthoredTextInline": {
+    "TextInlineContentAuthored": {
       "additionalProperties": false,
       "properties": {
         "kind": {
@@ -748,70 +1977,67 @@
           "type": "string"
         }
       },
-      "required": ["kind", "value"],
+      "required": [
+        "kind",
+        "value"
+      ],
       "type": "object"
     },
-    "BlockFlow": {
-      "enum": ["content", "breakout"],
-      "type": "string"
+    "TopicExplorerModuleContentAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "topicExplorer",
+          "type": "string"
+        },
+        "maxFeatured": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "heading",
+        "maxFeatured"
+      ],
+      "type": "object"
     },
-    "BlockListStyle": {
-      "enum": ["unordered", "ordered"],
-      "type": "string"
-    },
-    "CodeLanguage": {
+    "TopicId": {
       "enum": [
-        "bash",
-        "html",
-        "css",
-        "scss",
-        "js",
-        "ts",
-        "tsx",
-        "json",
-        "terraform",
-        "text"
+        "essex",
+        "raptors",
+        "nature-reserves",
+        "travel",
+        "wildlife-behaviour"
       ],
       "type": "string"
     },
-    "ImageStripSource": {
-      "const": "homepage-strip",
-      "type": "string"
-    },
-    "ImageStripStrategy": {
-      "const": "dailyRandom",
-      "type": "string"
-    },
-    "LinkOpenBehaviour": {
+    "TopicListingModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
-        "openInNewTab": {
+        "heading": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "topicListing",
+          "type": "string"
+        },
+        "pageSize": {
+          "type": "number"
+        },
+        "pagination": {
           "type": "boolean"
         }
       },
-      "required": ["openInNewTab"],
-      "type": "object"
-    },
-    "PageIdPublic": {
-      "type": "string"
-    },
-    "PhotoId": {
-      "type": "string"
-    },
-    "SvgAssetId": {
-      "enum": [
-        "logo-monogram-ke",
-        "icon-home",
-        "icon-newspaper",
-        "icon-pencil",
-        "icon-github",
-        "icon-instagram",
-        "icon-linkedin",
-        "logo-rspb",
-        "logo-national-trust",
-        "logo-vogelbescherming-nederland"
+      "required": [
+        "kind",
+        "heading",
+        "pageSize",
+        "pagination"
       ],
-      "type": "string"
+      "type": "object"
     }
   }
 }

@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-
-# npm run type-check:all &&
-npm test -- --runInBand &&
-npm run format:check &&
-npm run format:tf:check

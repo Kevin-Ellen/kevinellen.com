@@ -1,0 +1,48 @@
+// src/app/assets/styles/main.scss
+
+// Tokens
+@use "tokens/colours";
+@use "tokens/typography";
+
+// Base
+@use "base/reset";
+@use "base/global";
+@use "base/fonts";
+@use "base/headings";
+@use "base/utilities";
+
+// Layout
+@use "layout/header";
+@use "layout/frame";
+@use "layout/footer";
+@use "layout/reading";
+
+// Components
+@use "components/editorial-link";
+@use "components/photo-location";
+@use "components/paragraph";
+@use "components/photo";
+@use "components/list";
+@use "components/rich-list";
+@use "components/pagination";
+
+// Modules
+@use "modules/hero";
+@use "modules/latest-entry";
+@use "modules/journal-listing";
+@use "modules/banner";
+@use "modules/topic-explorer";
+@use "modules/breadcrumbs";
+@use "modules/page-intro";
+@use "modules/metadata-bar";
+@use "modules/photo-sequence";
+@use "modules/photo-pair";
+@use "modules/final-words";
+@use "modules/article-footer";
+@use "modules/article-section";
+@use "modules/editorial-intro";
+@use "modules/editorial-split";
+@use "modules/editorial-feature";
+@use "modules/quote";
+@use "modules/topic-listing";
+@use "modules/journal-listing-footer";

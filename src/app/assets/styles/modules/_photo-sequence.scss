@@ -1,0 +1,46 @@
+// src/app/assets/styles/modules/_photo-sequence.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+@use "../mixins/viewports" as viewport;
+
+.m-photo-sequence {
+  min-width: 0;
+  margin-block: spacing.$lg;
+
+  &__items {
+    display: flex;
+    gap: spacing.$sm;
+    overflow-x: auto;
+    padding: 0;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: colours.$sage transparent;
+    overscroll-behavior-x: contain;
+  }
+
+  &__item {
+    flex: 0 0 85%;
+    min-width: 0;
+    scroll-snap-align: start;
+
+    @include viewport.wide {
+      flex-basis: 55%;
+    }
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__caption {
+    max-width: 60ch;
+    margin-top: spacing.$xs;
+    color: colours.$text-muted;
+    font-size: typography.$text-sm;
+    line-height: 1.5;
+  }
+}

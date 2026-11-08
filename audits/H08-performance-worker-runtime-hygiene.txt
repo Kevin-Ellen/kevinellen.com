@@ -1,0 +1,63 @@
+=== H08 PERFORMANCE AND WORKER RUNTIME HYGIENE AUDIT ===
+
+Scope: src/ non-test, non-declaration TypeScript modules
+Modules inspected: 462
+Worker entry: src/app/entry.ts
+Value-import reachable modules from entry: 241
+Mode: read-only static baseline; not a performance benchmark or compliance verdict
+
+=== REQUEST-PATH INVENTORY ===
+Cache API operation signals: 2
+Direct KV operation signals: 3
+Render transformation signals: 74
+Runtime fetch calls: 1
+Runtime URL constructions: 22
+SSR calls: 1
+
+=== STATIC CANDIDATES ===
+Candidates: 0
+
+
+=== REVIEW OBSERVATIONS ===
+Observations: 7
+CACHE_OPERATION_INVENTORY: 2
+KV_OPERATION_INVENTORY: 3
+RUNTIME_FETCH_INVENTORY: 1
+SSR_ENTRY_INVENTORY: 1
+
+[SSR_ENTRY_INVENTORY] src/app/life-cycle/app-render/app-render.tsx:13:27 (id: 9a4a6fc3809edb7a)
+  renderToString( <Document document={context.document} metadata={context.metadata} />, )
+[KV_OPERATION_INVENTORY] src/app/life-cycle/app-resolve/getters/content/kv/kv.content.getter.app-resolve.ts:59:25 (id: 391c1e4ec480f282)
+  kv.get<unknown>(key, "json")
+[KV_OPERATION_INVENTORY] src/app/life-cycle/app-resolve/getters/photo-kv/photo-kv.getter.app-resolve.ts:65:25 (id: cbc19b7f5b667623)
+  kv.get<unknown>(key, "json")
+[KV_OPERATION_INVENTORY] src/app/life-cycle/routing/ledger/ledger.routing.ts:52:24 (id: 819a02a8f15965bc)
+  env.CONTENT_KV.get<unknown>( "ledger:appInit:journal", "json", )
+[CACHE_OPERATION_INVENTORY] src/app/life-cycle/system/media/media.system.ts:122:28 (id: cb0abe85d8d8320f)
+  cache.match(cacheKey)
+[RUNTIME_FETCH_INVENTORY] src/app/life-cycle/system/media/media.system.ts:143:26 (id: 2a8e1bb08cfbefd2)
+  fetch( new Request(imageUrl, { method: request.method, headers: { Accept: `image/${format}`, }, }), )
+[CACHE_OPERATION_INVENTORY] src/app/life-cycle/system/media/media.system.ts:201:7 (id: 29d0039dcb5178bd)
+  cache.put(cacheKey, cacheResponse)
+
+=== TARGETED MANUAL REVIEW ===
+[ ] Trace one homepage request and one journal request; count KV reads by key and check for duplicate retrieval
+[ ] Check whether AppInit construction, registries and content transformation repeat unnecessarily per request
+[ ] Confirm no direct KV access or async I/O inside ARC and React SSR
+[ ] Confirm photo metadata retrieval strategy is proportionate to visible photos (no accidental duplicate reads)
+[ ] Review public HTML/XML caching policy and KV freshness expectations, including publishing propagation
+[ ] Review media cache key dimensions: photo ID, size, format, origin, query normalisation
+[ ] Verify best-effort cache failures do not fail normal media delivery; errors are not cached accidentally
+[ ] Confirm runtime bundle excludes CLI, Node-only dependencies and authored-content fixtures
+[ ] Inspect output bundle/build configuration and size using actual build tooling; AST import graph is only a proxy
+[ ] Identify performance work only where request traces, bundle evidence or correctness risk justify it
+
+=== LIMITATIONS ===
+Static scanner does not measure CPU, latency, KV billing, cold starts, bundle bytes or production cache hit rate.
+Import graph tracks static relative value imports only; aliases, re-exports, require() and dynamic imports may evade it.
+Node builtins in Workers may be polyfilled or supported under configured compatibility flags: review, do not auto-fail.
+KV call detection is syntax-based and misses aliases/wrappers; duplicate calls are flagged only for obvious literal keys.
+Cache and transformation inventories are evidence to inspect, not proof of inefficiency.
+No application source files were changed.
+
+BASELINE: Review observations and actual request/build paths before H08 pass/fail.

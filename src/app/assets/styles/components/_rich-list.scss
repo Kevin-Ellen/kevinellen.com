@@ -1,0 +1,44 @@
+// src/app/assets/styles/components/_rich-list.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.c-rich-list {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$lg;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    gap: spacing.$md;
+  }
+
+  &__item > svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    fill: currentcolor;
+    color: colours.$forest;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: spacing.$xs;
+    min-width: 0;
+    color: colours.$charcoal;
+    font-size: typography.$text-base;
+    line-height: 1.5;
+  }
+
+  &__label {
+    color: colours.$sage;
+    font-size: typography.$text-sm;
+    font-weight: typography.$semibold;
+  }
+}

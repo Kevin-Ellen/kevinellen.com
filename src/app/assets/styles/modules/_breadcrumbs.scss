@@ -1,0 +1,53 @@
+// src/app/assets/styles/modules/_breadcrumbs.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.m-breadcrumbs {
+  padding-block: spacing.$md spacing.$sm;
+  color: colours.$text-muted;
+  font-size: typography.$text-sm;
+  line-height: 1.4;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+
+    &:not(:first-child)::before {
+      margin-inline: spacing.$xs;
+      color: colours.$text-muted;
+      content: "/";
+    }
+
+    &[aria-current="page"] {
+      color: colours.$text;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentcolor;
+      outline-offset: 4px;
+    }
+  }
+}

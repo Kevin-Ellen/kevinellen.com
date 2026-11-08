@@ -1,0 +1,10 @@
+// src/app/assets/styles/modules/_journal-listing-footer.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+
+.m-journal-listing-footer {
+  margin-top: spacing.$xl;
+  padding-block: spacing.$xl;
+  border-top: 1px solid colours.$border;
+}

@@ -1,0 +1,36 @@
+// src/app/assets/styles/modules/_final-words.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.m-final-words {
+  margin-block: spacing.$xxl;
+  padding-block: spacing.$xl;
+  background: rgba(colours.$stone, 0.25);
+
+  &__eyebrow {
+    display: block;
+    margin-bottom: spacing.$sm;
+    color: colours.$text-muted;
+    font-family: typography.$font-sans;
+    font-size: typography.$text-sm;
+    font-weight: typography.$semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__heading {
+    margin: 0;
+    color: colours.$forest;
+    font-family: typography.$font-serif;
+    font-size: typography.$heading-md;
+    line-height: 1.25;
+  }
+
+  &__content {
+    margin-top: spacing.$md;
+    padding-top: spacing.$md;
+    border-top: 1px solid colours.$border;
+  }
+}

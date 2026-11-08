@@ -1,16 +1,15 @@
 {
-  "folders": [{ "path": "." }],
+  "folders": [
+    {
+      "name": "kevinellen.com",
+      "path": ".",
+    },
+  ],
   "settings": {
     "explorer.fileNesting.enabled": true,
     "explorer.fileNesting.expand": false,
     "explorer.fileNesting.patterns": {
-      "package.json": "package-lock.json,.nvmrc",
-      "tsconfig.json": "tsconfig.base.json,tsconfig.app.json,worker-configuration.d.ts",
-      "eslint.config.mjs": ".eslintignore",
-      "stylelint.config.mjs": ".stylelintignore",
-      "prettierrc.json": ".prettierignore,.editorconfig,.gitignore,.gitattributes",
-      "wrangler.jsonc": ".dev.vars,.env,.env.*",
-      "jest.config.ts": "jest.setup.ts",
+      "*.code-workspace": "package.json,package-lock.json,.nvmrc,tsconfig*.json,.stylelintignore,.npmrc,worker-configuration.d.ts,eslint.config.*,stylelint.config.*,prettierrc.json,.prettierrc*,.prettierignore,.editorconfig,.gitignore,.gitattributes,wrangler.jsonc,.dev.vars,.env,.env.*,jest.config.*,jest.setup.*,*.config.mjs",
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -26,6 +25,8 @@
     "[scss]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
+    "stylelint.validate": ["scss"],
+    "scss.lint.boxModel": "ignore",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "eslint.useFlatConfig": true,
     "eslint.validate": ["typescript", "javascript"],

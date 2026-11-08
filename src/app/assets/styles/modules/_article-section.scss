@@ -1,0 +1,11 @@
+// src/app/assets/styles/modules/_article-section.scss
+
+@use "../tokens/spacing" as spacing;
+
+.m-article-section {
+  margin-block-start: spacing.$xxl;
+
+  > .l-reading:first-child > h2:first-child {
+    margin-top: 0;
+  }
+}

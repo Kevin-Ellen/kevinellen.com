@@ -1,0 +1,98 @@
+// src/app/assets/styles/modules/_editorial-split.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+@use "../mixins/viewports" as viewport;
+
+.m-editorial-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: spacing.$lg;
+  padding-block: spacing.$xl;
+
+  @include viewport.wide {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: spacing.$xxl;
+    padding-block: spacing.$xxl;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+
+  &__eyebrow {
+    margin-bottom: spacing.$sm;
+    color: colours.$sage;
+    font-size: typography.$text-sm;
+    font-weight: typography.$semibold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__heading {
+    margin-bottom: spacing.$md;
+    color: colours.$charcoal;
+    font-family: typography.$font-serif;
+    font-size: typography.$heading-md;
+    font-weight: typography.$regular;
+    line-height: 1.2;
+
+    @include viewport.wide {
+      font-size: typography.$heading-lg;
+    }
+  }
+
+  &__body {
+    max-width: 52ch;
+    color: colours.$charcoal;
+    font-size: typography.$text-base;
+    line-height: 1.7;
+
+    p + p {
+      margin-top: spacing.$sm;
+    }
+  }
+
+  &__link {
+    display: inline-block;
+    margin-top: spacing.$md;
+    color: colours.$forest;
+    font-family: typography.$font-serif;
+    font-weight: typography.$semibold;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  &__media {
+    min-width: 0;
+    margin: 0;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &--reverse {
+    @include viewport.wide {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+
+      .m-editorial-split__media {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .m-editorial-split__content {
+        grid-column: 2;
+        grid-row: 1;
+      }
+    }
+  }
+}

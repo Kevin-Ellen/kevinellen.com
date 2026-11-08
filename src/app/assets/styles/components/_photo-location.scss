@@ -1,0 +1,29 @@
+// src/app/assets/styles/components/_photo-location.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.c-photo-location {
+  display: inline-flex;
+  align-items: center;
+  gap: spacing.$xs;
+  width: fit-content;
+  color: colours.$ivory;
+  font-family: typography.$font-sans;
+  font-size: typography.$text-sm;
+  font-weight: typography.$medium;
+  line-height: 1.4;
+
+  &__icon {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+    fill: currentcolor;
+  }
+
+  &__label {
+    min-width: 0;
+  }
+}

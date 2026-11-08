@@ -1,0 +1,58 @@
+// src/app/assets/styles/components/_editorial-link.scss
+
+@use "../tokens/typography" as typography;
+@use "../tokens/motion" as motion;
+
+.c-editorial-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  width: fit-content;
+  color: inherit;
+  font-family: typography.$font-sans;
+  font-size: typography.$text-sm;
+  font-weight: typography.$medium;
+  line-height: 1.4;
+  text-decoration: none;
+
+  &__label {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+  }
+
+  &__arrow {
+    display: inline-block;
+    transition: transform motion.$normal motion.$ease;
+  }
+
+  &:hover &__arrow {
+    transform: translateX(0.25rem);
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 4px;
+  }
+
+  &--subtle {
+    .c-editorial-link__label {
+      text-decoration: none;
+    }
+
+    &:hover .c-editorial-link__label {
+      text-decoration: underline;
+      text-underline-offset: 0.3em;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-editorial-link__arrow {
+    transition: none;
+  }
+
+  .c-editorial-link:hover .c-editorial-link__arrow {
+    transform: none;
+  }
+}

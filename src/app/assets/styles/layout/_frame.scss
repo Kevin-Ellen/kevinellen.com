@@ -1,0 +1,16 @@
+// src/app/assets/styles/layout/_frame.scss
+
+@use "../tokens/spacing" as spacing;
+@use "../tokens/sizing" as sizing;
+@use "../mixins/viewports" as viewport;
+
+.l-frame {
+  width: 100%;
+  max-width: sizing.$content-max;
+  margin-inline: auto;
+  padding-inline: spacing.$sm;
+
+  @include viewport.expanded {
+    padding-inline: spacing.$lg;
+  }
+}

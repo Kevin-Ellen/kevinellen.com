@@ -1,5 +1,15 @@
+// stylelint.config.mjs
+
 export default {
   extends: ["stylelint-config-standard-scss"],
+
+  ignoreFiles: [
+    "src/app/assets/css/**/*.css",
+    "dist/**",
+    "coverage/**",
+    "node_modules/**",
+  ],
+
   rules: {
     "selector-class-pattern": [
       "^(?:l|c|m|u|is|has)-[a-z0-9]+(?:-[a-z0-9]+)*(?:__(?:[a-z0-9]+(?:-[a-z0-9]+)*))?(?:--(?:[a-z0-9]+(?:-[a-z0-9]+)*))?$",
@@ -8,8 +18,7 @@ export default {
           "Expected class names to use project prefixes (l-, c-, m-, u-, is-, has-) with optional BEM __element and --modifier.",
       },
     ],
+
     "no-descending-specificity": null,
-    "scss/dollar-variable-empty-line-before": null,
-    "scss/dollar-variable-colon-space-after": null,
   },
 };

@@ -1,0 +1,515 @@
+{
+  "id": "escape-in-amager-faelled-and-kalvebod-faelled",
+  "kind": "public",
+  "pageType": "journalEntry",
+  "render": "composed",
+  "label": "Escape in Amager Fælled & Kalvebod Fælled",
+  "status": 200,
+  "slug": "/journal/escape-in-amager-faelled-and-kalvebod-faelled",
+  "pagePresentation": {
+    "layout": "contained",
+    "header": {
+      "transparent": false,
+      "inverted": false
+    }
+  },
+  "breadcrumbs": [
+    "home",
+    "journal",
+    "escape-in-amager-faelled-and-kalvebod-faelled"
+  ],
+  "dates": {
+    "created": "2026-08-30",
+    "lastUpdated": "2026-08-30"
+  },
+  "metadata": {
+    "title": "Escape in Amager Fælled & Kalvebod Fælled",
+    "description": "Exploring the meadows, woodland and coastal wetlands of Amager, Copenhagen.",
+    "sitemap": true
+  },
+  "topics": [
+    "nature-reserves",
+    "travel"
+  ],
+  "scripts": [],
+  "structuredData": null,
+  "body": {
+    "modules": [
+      {
+        "kind": "pageIntro",
+        "eyebrow": "Journal",
+        "title": "Escape in Amager Fælled & Kalvebod Fælled",
+        "description": "A few extra nights in Copenhagen gave me the chance to explore two vast wetland areas on the city's doorstep, where open meadows, birch woodland and coastal views offer a surprising amount of nature.",
+        "location": "Region Hovedstaden, Denmark",
+        "date": "2026-08-30"
+      },
+      {
+        "kind": "featuredPhoto",
+        "photoId": "sheep-chilling-in-amager",
+        "wide": true
+      },
+      {
+        "kind": "metadataBar",
+        "heading": "Equipment for this entry",
+        "cameras": {
+          "icon": {
+            "id": "icon-camera",
+            "width": 640,
+            "height": 640
+          },
+          "entries": [
+            "Canon EOS R7"
+          ]
+        },
+        "lenses": {
+          "icon": {
+            "id": "icon-aperture",
+            "width": 463,
+            "height": 463
+          },
+          "entries": [
+            "RF 100–500mm f/4.5–7.1 L IS USM",
+            "RF 1.4× Extender"
+          ]
+        },
+        "location": {
+          "icon": {
+            "id": "icon-location-dot",
+            "width": 640,
+            "height": 640
+          },
+          "entries": "Amager Fælled & Kalvebod Fælled, Copenhagen, Denmark"
+        }
+      },
+      {
+        "kind": "richContent",
+        "components": [
+          {
+            "kind": "paragraph",
+            "content": [
+              {
+                "kind": "text",
+                "value": "I was in København, Copenhagen, for work and a few very full-on days at Umbraco Codegarden. Knowing I was already going to be in Denmark, I had added a couple of extra nights to give myself some time to get away from the city and explore a little."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "content": [
+              {
+                "kind": "text",
+                "value": "There was only one slight problem. By then I had developed a fairly impressive case of man-flu and felt thoroughly drained. Staying in bed would probably have been sensible, but a quiet morning amongst trees, wetlands and wildlife sounded considerably more appealing."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "content": [
+              {
+                "kind": "text",
+                "value": "I was not expecting anything particularly exotic. Denmark shares much of its birdlife with the UK and the Netherlands, so rather than chasing species I wanted to enjoy the landscape, look for interesting behaviour and, if possible, come home with photographs that actually felt like Denmark rather than simply pictures of birds."
+              }
+            ]
+          },
+          {
+            "kind": "photo",
+            "photoId": "amager-faelled-footpath-with-sheep"
+          }
+        ]
+      },
+      {
+        "kind": "articleSection",
+        "heading": {
+          "id": "mellow-in-the-meadows",
+          "text": "Mellow in the Meadows",
+          "level": 2
+        },
+        "entries": [
+          {
+            "layout": "reading",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "An early train took me out towards Amager and it did not take long before the city had largely disappeared behind me. Open meadows stretched ahead, with sheep dotted around the grass and what appeared to be a sizeable parliament of corvids holding an early morning meeting."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "They were probably discussing all the solutions to the world's problems; we just cannot understand them. Or they were working out how to joke around with the sheep. Which is more likely."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "layout": "frame",
+            "module": {
+              "kind": "photoPair",
+              "photos": [
+                {
+                  "kind": "photo",
+                  "photoId": "rook-wandering-in-amager-meadows"
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "juvenile-white-wagtail-chilling-in-amager-meadows"
+                }
+              ]
+            }
+          },
+          {
+            "layout": "reading",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "The Danish sun was already warmer than I had expected. The sheep mostly looked sheep-ishly in my direction before returning to whatever they were doing, accompanied by a near-constant cacophony of bleats and corvid calls."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "For somewhere so close to Copenhagen Airport, it all felt remarkably relaxed. There was no particular target and no rush, just a path through the grass and plenty to stop and look at along the way."
+                    }
+                  ]
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "rook-flying-over-amager-meadows"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "articleSection",
+        "heading": {
+          "id": "woodland-heading",
+          "text": "Hiding Between the Trees",
+          "level": 2
+        },
+        "entries": [
+          {
+            "layout": "reading",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "photo",
+                  "photoId": "view-from-forest-amager"
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "The walk moved through several different habitats and eventually into dense birch woodland. After the open meadows it was a complete change, and also a very welcome bit of respite from the sun."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "There was life everywhere, although actually seeing it amongst the dense leaves and branches was another matter. Most things announced themselves through sound long before I had any chance of finding them with the camera."
+                    }
+                  ]
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "hooded-crow-posing-in-forest"
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "One hooded crow was considerably more cooperative and found itself a convenient perch amongst the trees. Otherwise I simply enjoyed the longer route through the woodland, the sounds around me and some wonderfully clean air."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "I also knew what was coming next. The coast was getting closer, and with it considerably less shade."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "articleSection",
+        "heading": {
+          "id": "danish-coast-heading",
+          "text": "Coasting Along the Danish Coast",
+          "level": 2
+        },
+        "entries": [
+          {
+            "layout": "frame",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "photo",
+                  "photoId": "panorama-photo-kalvebod-faelle-dyke",
+                  "wide": true
+                }
+              ]
+            }
+          },
+          {
+            "layout": "reading",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "Emerging onto the dyke opened everything up again. Wetlands sat on one side, the vast waters of Køge Bugt on the other and paths seemed to stretch away forever beneath an enormous Danish sky."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "There were swifts and white wagtails making the most of the insects, while swallows zipped around almost constantly. Photographing them in flight was mostly an exercise in watching tiny aerial acrobats disappear from the frame considerably faster than I could follow them."
+                    }
+                  ]
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "white-wagtail-with-dinner-on-rock-in-kalvebod-faelle"
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "One white wagtail made life easier by briefly landing on a rock with its dinner still firmly in its beak. Elsewhere, the terns seemed to spend much of their time flying while looking almost straight down, constantly scanning below them for an opportunity."
+                    }
+                  ]
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "tern-hunting-over-kalvebod-faelle"
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "Three oystercatchers also flew past in a wonderfully neat formation, their black and white plumage standing out against the sky."
+                    }
+                  ]
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "oystercatchers-flying-over-amager"
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "The coastal path offered plenty more to watch. There was a large colony of coots, gulls doing whatever random thing gulls had decided to do at that particular moment, and the occasional heron moving between feeding spots."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "layout": "frame",
+            "module": {
+              "kind": "photoPair",
+              "photos": [
+                {
+                  "kind": "photo",
+                  "photoId": "grey-heron-in-flight-over-kalvebod-faelle"
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "grey-heron-eating-in-kalvebod-faelle"
+                }
+              ]
+            }
+          },
+          {
+            "layout": "reading",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "One grey heron appeared to find something in the shallows, although I am still not entirely sure whether it caught breakfast or simply collected a mouthful of mud. Whatever happened, it did not look particularly impressed with the result."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "The mute swans were a little more dignified. Well, mostly. One cruised past in flight looking as though it was auditioning for one of those old KLM adverts, while another temporarily abandoned the traditional swan elegance for a very enthusiastic scratch."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "layout": "frame",
+            "module": {
+              "kind": "photoPair",
+              "photos": [
+                {
+                  "kind": "photo",
+                  "photoId": "mute-swan-auditioning-for-klm-ad-in-flight-over-kalvebod-faelle"
+                },
+                {
+                  "kind": "photo",
+                  "photoId": "mute-swan-having-a-scratch-in-kalvebod-faelle"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "articleSection",
+        "heading": {
+          "id": "civilisation-heading",
+          "text": "Making My Way Back to Civilisation",
+          "level": 2
+        },
+        "entries": [
+          {
+            "layout": "reading",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "Eventually it was time to start making my way back towards civilisation. One thing Denmark makes remarkably easy is getting out of the city in the first place. The DSB app had made the public transport side almost entirely painless, from working out the journey to buying the ticket."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "It is the sort of small practical thing worth mentioning. We travellers and photographers ought to share useful tips and hints where appropriate, and being able to get from central Copenhagen into countryside like this without needing a car made the whole morning considerably easier."
+                    }
+                  ]
+                },
+                {
+                  "kind": "paragraph",
+                  "content": [
+                    {
+                      "kind": "text",
+                      "value": "There was time for one final cooperative bird. After spending much of the morning watching barn swallows hurtle around the sky, one finally decided to sit still. For once I could properly appreciate the colours rather than merely trying to keep one somewhere inside the viewfinder."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "layout": "frame",
+            "module": {
+              "kind": "richContent",
+              "components": [
+                {
+                  "kind": "photo",
+                  "photoId": "barn-swallow-patiently-posing-in-amager-faelle",
+                  "wide": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "kind": "finalWords",
+        "eyebrow": "Final words",
+        "heading": {
+          "id": "final-words-heading",
+          "text": "Sometimes getting out into nature really is the best cure for many things.",
+          "level": 2
+        },
+        "components": [
+          {
+            "kind": "paragraph",
+            "content": [
+              {
+                "kind": "text",
+                "value": "I still did not feel particularly great, but after several busy days the long early morning outside had been exactly what I needed. Some music, birds, trees, open space and no particular requirement to be anywhere quickly."
+              }
+            ]
+          },
+          {
+            "kind": "paragraph",
+            "content": [
+              {
+                "kind": "text",
+                "value": "There had never been a great target species. In many ways the familiarity of the wildlife made the walk better, because I could concentrate on behaviour, the landscape and photographing familiar animals somewhere different. Looking back through the photographs, Denmark is part of them rather than merely the place where they happened."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "footer": [
+      {
+        "kind": "articleFooter",
+        "fieldNotes": {
+          "cameras": [
+            "Canon EOS R7",
+            "Google Pixel 9 Pro XL"
+          ],
+          "lenses": [
+            "RF100-500mm F4.5-7.1 L IS USM",
+            "Pixel 9 Pro XL back camera 6.9mm f/1.68",
+            "Pixel 9 Pro XL back camera 2.02mm f/1.7"
+          ]
+        }
+      }
+    ]
+  }
+}

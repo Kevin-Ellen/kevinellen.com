@@ -1,3 +1,5 @@
+// eslint.config.mjs
+
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
@@ -12,23 +14,23 @@ export default [
       "worker-configuration.d.ts",
       "tests/**",
       "packages/**",
-      "content-pipeline/journal/uploaded/**",
-      "content-pipeline/photo/uploaded/**",
-      "content-pipeline/journal copy/**",
-      "content-pipeline/note/uploaded/**",
       "src/assets/scripts/generated/**",
+      "src/tools/temp-folder/**",
+      "audits/**"
     ],
   },
 
   js.configs.recommended,
 
   {
-    files: ["src/assets/scripts/authored/**/*.js"],
+    files: ["src/app/assets/scripts/authored/**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
         document: "readonly",
+        window: "readonly",
+        requestAnimationFrame: "readonly",
         IntersectionObserver: "readonly",
       },
     },
@@ -56,7 +58,10 @@ export default [
       parserOptions: {
         ...(tseslint.configs.recommendedTypeChecked[0].languageOptions
           ?.parserOptions ?? {}),
-        projectService: true,
+        projectService: {
+          allowDefaultProject: ["jest.config.ts"],
+        },
+        tsconfigRootDir: import.meta.dirname,
       },
       globals: {
         Env: "readonly",

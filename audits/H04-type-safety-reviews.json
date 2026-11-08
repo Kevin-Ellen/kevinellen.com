@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "reviews": [
+    {
+      "id": "6cb90ab6f607aee3",
+      "category": "DOUBLE_ASSERTION_CANDIDATE",
+      "file": "src/app/life-cycle/app-resolve/resolvers/registry/structured-data/structured-data.registry.resolver.app-resolve.ts",
+      "status": "ACCEPTED",
+      "reason": "Intentional schema-dts graph-node inspection conversion. Graph merging and type compatibility are covered by resolver tests. Schema validity remains an upstream content contract."
+    },
+    {
+      "id": "5b74a1746ae78199",
+      "category": "ASSERTION_FROM_ANY",
+      "file": "src/tests/fixtures/content.published.integration.fixture.ts",
+      "status": "ACCEPTED",
+      "reason": "Test-only fixture loader consuming repository-controlled JSON. The generic assertion is limited to integration test setup, not Worker runtime or production publishing."
+    },
+    {
+      "id": "94d182d174ed7914",
+      "category": "ASSERTION_FROM_ANY",
+      "file": "src/tools/authored-content-generator/validate/import-authored.validate.ts",
+      "status": "ACCEPTED",
+      "reason": "Dynamic import is treated as an indexable module namespace. Export lookup is checked, and imported content remains unknown until downstream AJV-backed photo or journal validation."
+    },
+    {
+      "id": "ca06691c8f57b6d7",
+      "category": "ASSERTION_FROM_ANY",
+      "file": "src/tools/authored-content-generator/validate/validate.ts",
+      "status": "ACCEPTED",
+      "reason": "Repository-generated JSON Schema is represented as a generic record and compiled by AJV. Invalid schemas fail validation setup before publication artifacts are generated."
+    },
+    {
+      "id": "e526e5d45f09ddff",
+      "category": "ASSERTION_FROM_ANY",
+      "file": "src/tools/authored-content-generator/publish/publish.ts",
+      "status": "ACCEPTED",
+      "reason": "Generic KV read adapter used by the controlled publishing CLI. Retrieved values follow the published content contract; downstream publication performs write verification and the Worker validates its own request-time KV boundaries. Residual risk from malformed existing KV values is accepted."
+    }
+  ]
+}
