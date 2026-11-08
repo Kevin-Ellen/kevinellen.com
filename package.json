@@ -1,9 +1,14 @@
 {
   "name": "kevinellen.com",
+  "cf-config": {
+    "zone": "kevinellen.com"
+  },
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "wrangler dev",
+    "dev:seeding": "node scripts/dev/seed-local-kv.mjs && wrangler dev",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "generate-types": "wrangler types",
@@ -20,7 +25,8 @@
     "content:prepare": "tsx src/tools/authored-content-generator/prepare/prepare.ts",
     "content:validate": "tsx src/tools/authored-content-generator/validate/validate.ts",
     "content:publish": "tsx src/tools/authored-content-generator/publish/publish.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "npm run styles:build && npm run build:scripts && node scripts/build/build-app.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
