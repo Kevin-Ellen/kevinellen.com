@@ -1,0 +1,5 @@
+set -e
+
+npm run test:coverage -- --ci --watch=false
+npm run styles:build
+npm run build:scripts
