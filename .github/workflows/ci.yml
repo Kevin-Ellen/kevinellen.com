@@ -47,11 +47,17 @@ jobs:
       - name: Tests with coverage
         run: npm run test:coverage -- --ci --watch=false
 
-      - name: Build styles
-        run: npm run styles:build
+      - name: Build website
+        run: npm run build
 
-      - name: Build scripts
-        run: npm run build:scripts
+      - name: Upload deployment artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
 
   secrets-scan:
     name: Secrets scan
