@@ -1,0 +1,44 @@
+name: Deploy staging
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - staging
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: Promote validated commit
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Promote to deployment branch
+        env:
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          git fetch origin staging
+
+          CURRENT_SHA="$(git rev-parse origin/staging)"
+
+          if [[ "$RELEASE_SHA" != "$CURRENT_SHA" ]]; then
+            echo "Skipping superseded commit $RELEASE_SHA"
+            exit 0
+          fi
+
+          git push origin \
+            "$RELEASE_SHA:refs/heads/deploy-staging"
