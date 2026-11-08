@@ -9,7 +9,7 @@ stack_defaults: &defaults
     workflow_tool: OPENTOFU
 
   before_init:
-    - "pwd && ls -la && ls -la deployments"
+    - "pwd && ls -la"
     - "git rev-parse HEAD"
     - 'cd "$(git rev-parse --show-toplevel)" && npm ci'
     - 'cd "$(git rev-parse --show-toplevel)" && npm run build'
