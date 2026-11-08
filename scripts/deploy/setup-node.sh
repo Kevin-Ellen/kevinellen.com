@@ -4,6 +4,9 @@ set -euo pipefail
 NODE_VERSION="$(tr -d '[:space:]' < .nvmrc)"
 NODE_DIR="/tmp/spacelift-node"
 
+# Required by Node 26 on Alpine Linux
+apk add --no-cache libatomic libstdc++
+
 mkdir -p "$NODE_DIR"
 
 curl -fsSL \
