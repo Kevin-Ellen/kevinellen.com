@@ -17,10 +17,13 @@ pnpm-debug.log*
 # =========================
 dist/
 build/
+!/scripts/build/
+!/scripts/build/*.mjs
 coverage/
 .tmp/
 .cache/
 .build/
+/src/app/assets/scripts/generated/
 
 # =========================
 # Cloudflare

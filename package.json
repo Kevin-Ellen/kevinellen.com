@@ -7,7 +7,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "generate-types": "wrangler types",
-    "typecheck": "npm run generate-types && tsc --noEmit",
+    "typecheck": "npm run build:scripts && npm run generate-types && tsc --noEmit",
     "schema:generate": "ts-json-schema-generator --path \"src/content-schema/**/*.ts\" --type \"*\" --out \"schema/authored.schema.json\"",
     "styles:lint": "stylelint \"src/app/assets/styles/**/*.scss\"",
     "styles:lint:fix": "npm run styles:lint -- --fix",
