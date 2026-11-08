@@ -73,7 +73,7 @@ curl --fail --silent --show-error --location \
 }
 
 echo "${DIGEST#sha256:}  ${TMP_DIR}/artifact.zip" |
-  sha256sum --check --status
+  sha256sum -c -s
 
 # GitHub's upload-artifact stores dist/ contents at ZIP root
 mkdir -p "${TMP_DIR}/dist"
