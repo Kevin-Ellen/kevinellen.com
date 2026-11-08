@@ -79,3 +79,21 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 30
+
+  deploy-staging:
+    name: Deploy staging
+
+    needs:
+      - secrets-scan
+      - validate
+
+    if: >-
+      ${{
+        github.event_name == 'push' &&
+        github.ref == 'refs/heads/staging'
+      }}
+
+    permissions:
+      contents: write
+
+    uses: ./.github/workflows/deploy-staging.yml

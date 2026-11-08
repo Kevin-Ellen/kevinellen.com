@@ -1,24 +1,11 @@
 name: Deploy staging
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches:
-      - staging
-
-permissions:
-  contents: write
-
-concurrency:
-  group: deploy-staging
-  cancel-in-progress: false
+  workflow_call:
 
 jobs:
   promote:
     name: Promote validated commit
-    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
 
     steps:
@@ -29,7 +16,7 @@ jobs:
 
       - name: Promote to deployment branch
         env:
-          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE_SHA: ${{ github.sha }}
         run: |
           git fetch origin staging
 
