@@ -52,6 +52,9 @@ override.tf.json
 *.tfvars
 *.tfvars.json
 
+# Version-controlled environment configuration
+!deployments/staging/terraform.tfvars
+
 # =========================
 # OS / editor
 # =========================
