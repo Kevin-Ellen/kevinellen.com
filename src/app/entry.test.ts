@@ -27,9 +27,6 @@ describe("Worker entry", () => {
     DOMAIN: "https://kevinellen.com",
     INSPECT_ENABLED: "false",
     SITE_URL: "https://kevinellen.com",
-    CLOUDFLARE_ACCOUNT_ID: "test-account-id" as Env["CLOUDFLARE_ACCOUNT_ID"],
-    CLOUDFLARE_IMAGES_API_TOKEN:
-      "test-api-token" as Env["CLOUDFLARE_IMAGES_API_TOKEN"],
   } satisfies Env;
 
   const ctx = {} as ExecutionContext;
