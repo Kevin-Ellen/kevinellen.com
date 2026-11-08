@@ -7,6 +7,12 @@ stack_defaults: &defaults
     version: "1.13.9"
     workflow_tool: OPENTOFU
 
+  before_init:
+    - 'bash "$(git rev-parse --show-toplevel)/scripts/deploy/fetch-artifact.sh"'
+
+  before_apply:
+    - 'bash "$(git rev-parse --show-toplevel)/scripts/deploy/fetch-artifact.sh"'
+
 stacks:
   staging:
     <<: *defaults
