@@ -21,7 +21,7 @@ locals {
   account_id   = local.package_config["cf-config"]["account-id"]
 
   environment = var.environment
-  worker_name = "${replace(local.project_name, ".", "_")}-${local.environment}"
+  worker_name = "${replace(local.project_name, ".", "-")}-${local.environment}"
 
   hostname = local.environment == "production" ? local.zone_name : "${local.environment}.${local.zone_name}"
 
