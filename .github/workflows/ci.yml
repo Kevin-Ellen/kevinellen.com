@@ -18,9 +18,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  secrets-scan:
+    name: Secrets scan
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   validate:
     name: Validate website
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+
+    needs:
+      - secrets-scan
 
     steps:
       - name: Checkout repository
@@ -59,20 +80,44 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  secrets-scan:
-    name: Secrets scan
+  notify-spacelift:
+    name: Notify Spacelift
     runs-on: ubuntu-24.04
 
-    permissions:
-      contents: read
+    needs:
+      - secrets-scan
+      - validate
+
+    if: >-
+      ${{
+        always() &&
+        github.event_name == 'push' &&
+        github.ref == 'refs/heads/staging'
+      }}
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+      - name: Install spacectl
+        uses: spacelift-io/setup-spacectl@main
 
-      - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v3
+      - name: Report CI result
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SPACELIFT_API_KEY_ENDPOINT: https://kevin-ellen.app.spacelift.io
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+          SECRETS_RESULT: ${{ needs.secrets-scan.result }}
+          VALIDATE_RESULT: ${{ needs.validate.result }}
+
+        shell: bash
+        run: |
+          if [[ "$SECRETS_RESULT" == "success" &&
+                "$VALIDATE_RESULT" == "success" ]]; then
+            STATUS="finished"
+          else
+            STATUS="failed"
+          fi
+
+          spacectl run-external-dependency mark-completed \
+            --id "${GITHUB_SHA}-website-ci" \
+            --status "$STATUS"
+
+          echo "Reported ${STATUS} for ${GITHUB_SHA}"
