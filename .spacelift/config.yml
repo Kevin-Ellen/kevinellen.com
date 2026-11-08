@@ -2,8 +2,10 @@ version: "2"
 
 stack_defaults: &defaults
   project_root: deployments
-  terraform_workflow_tool: OPEN_TOFU
-  opentofu_version: "1.13.9"
+
+  opentofu:
+    version: "1.13.9"
+    workflow_tool: OPENTOFU
 
   before_init:
     - "git rev-parse --show-toplevel"
