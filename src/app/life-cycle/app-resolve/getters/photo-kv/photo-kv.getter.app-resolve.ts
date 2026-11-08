@@ -4,6 +4,14 @@ import type { PhotoAppResolve } from "../../../../types/photo/photo.app-resolve.
 
 export type PhotoGetter = (photoId: string) => Promise<PhotoAppResolve | null>;
 
+type ValidatedPublishedPhoto = Record<string, unknown> & {
+  id: string;
+  title: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
@@ -22,7 +30,10 @@ const isSpecies = (value: unknown): boolean => {
   );
 };
 
-const hasValidPhotoEnvelope = (value: unknown, photoId: string): boolean => {
+const hasValidPhotoEnvelope = (
+  value: unknown,
+  photoId: string,
+): value is ValidatedPublishedPhoto => {
   if (!isRecord(value)) {
     return false;
   }
@@ -33,21 +44,6 @@ const hasValidPhotoEnvelope = (value: unknown, photoId: string): boolean => {
     typeof value.alt !== "string" ||
     !isPositiveFiniteNumber(value.width) ||
     !isPositiveFiniteNumber(value.height)
-  ) {
-    return false;
-  }
-
-  if (
-    !isRecord(value.dimensions) ||
-    !isPositiveFiniteNumber(value.dimensions.width) ||
-    !isPositiveFiniteNumber(value.dimensions.height)
-  ) {
-    return false;
-  }
-
-  if (
-    value.dimensions.width !== value.width ||
-    value.dimensions.height !== value.height
   ) {
     return false;
   }
@@ -80,9 +76,13 @@ export const createPhotoGetter = (kv: KVNamespace): PhotoGetter => {
         throw new Error(`Invalid published photo in KV: ${key}`);
       }
 
-      // Identity, dimensions and species structure are checked here.
-      // The remaining metadata is guaranteed by the publishing contract.
-      return photo as PhotoAppResolve;
+      return {
+        ...photo,
+        dimensions: {
+          width: photo.width,
+          height: photo.height,
+        },
+      } as PhotoAppResolve;
     })();
 
     cache.set(photoId, pending);

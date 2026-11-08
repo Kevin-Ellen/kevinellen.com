@@ -1,6 +1,7 @@
 // src/app/life-cycle/app-resolve/getters/photo-kv/photo-kv.getter.app-resolve.test.ts
 
 import type { PhotoAppResolve } from "../../../../types/photo/photo.app-resolve.type";
+import type { PhotoAppInit } from "../../../../../shared/types/assets/photo.asset.shared.app-init.type";
 
 import {
   createPhotoGetter,
@@ -16,19 +17,23 @@ describe("Photo KV getter AppResolve", () => {
 
   const photoId = "test-photo";
 
-  const createPhoto = (id = photoId): PhotoAppResolve =>
+  const createPhoto = (id = photoId): PhotoAppInit =>
     ({
       id,
       title: "Test photograph",
       alt: "A test photograph",
       width: 1200,
       height: 800,
-      dimensions: {
-        width: 1200,
-        height: 800,
-      },
       species: null,
-    }) as PhotoAppResolve;
+    }) as PhotoAppInit;
+
+  const resolvePhoto = (photo: PhotoAppInit): PhotoAppResolve => ({
+    ...photo,
+    dimensions: {
+      width: photo.width,
+      height: photo.height,
+    },
+  });
 
   let getPhoto: PhotoGetter;
 
@@ -39,9 +44,10 @@ describe("Photo KV getter AppResolve", () => {
 
   it("retrieves the requested photo as JSON", async () => {
     const photo = createPhoto();
+
     kvGet.mockResolvedValue(photo);
 
-    await expect(getPhoto(photoId)).resolves.toBe(photo);
+    await expect(getPhoto(photoId)).resolves.toEqual(resolvePhoto(photo));
 
     expect(kvGet).toHaveBeenCalledWith("photo:test-photo", "json");
     expect(kvGet).toHaveBeenCalledTimes(1);
@@ -55,6 +61,7 @@ describe("Photo KV getter AppResolve", () => {
 
   it("propagates KV retrieval failures", async () => {
     const error = new Error("KV unavailable");
+
     kvGet.mockRejectedValue(error);
 
     await expect(getPhoto(photoId)).rejects.toBe(error);
@@ -95,21 +102,12 @@ describe("Photo KV getter AppResolve", () => {
     });
   });
 
-  it("rejects missing dimensions", async () => {
-    await expectInvalid({
-      ...createPhoto(),
-      dimensions: undefined,
-    });
-  });
+  it("maps published dimensions into the resolved photo", async () => {
+    const photo = createPhoto();
 
-  it("rejects inconsistent dimensions", async () => {
-    await expectInvalid({
-      ...createPhoto(),
-      dimensions: {
-        width: 600,
-        height: 800,
-      },
-    });
+    kvGet.mockResolvedValue(photo);
+
+    await expect(getPhoto(photoId)).resolves.toEqual(resolvePhoto(photo));
   });
 
   it("rejects malformed species", async () => {
@@ -142,14 +140,14 @@ describe("Photo KV getter AppResolve", () => {
         {
           name: "Robin",
           scientificName: "Erithacus rubecula",
-          taxonRank: "species",
+          taxonRank: "species" as const,
         },
       ],
     };
 
     kvGet.mockResolvedValue(photo);
 
-    await expect(getPhoto(photoId)).resolves.toBe(photo);
+    await expect(getPhoto(photoId)).resolves.toEqual(resolvePhoto(photo));
   });
 
   it("accepts an empty species array", async () => {
@@ -160,7 +158,7 @@ describe("Photo KV getter AppResolve", () => {
 
     kvGet.mockResolvedValue(photo);
 
-    await expect(getPhoto(photoId)).resolves.toBe(photo);
+    await expect(getPhoto(photoId)).resolves.toEqual(resolvePhoto(photo));
   });
 
   it("accepts published species without taxonRank", async () => {
@@ -176,7 +174,13 @@ describe("Photo KV getter AppResolve", () => {
 
     kvGet.mockResolvedValue(photo);
 
-    await expect(getPhoto(photoId)).resolves.toBe(photo);
+    await expect(getPhoto(photoId)).resolves.toEqual({
+      ...photo,
+      dimensions: {
+        width: photo.width,
+        height: photo.height,
+      },
+    });
   });
 
   describe("Request-scoped deduplication", () => {
@@ -191,8 +195,8 @@ describe("Photo KV getter AppResolve", () => {
       expect(first).toBe(second);
 
       await expect(Promise.all([first, second])).resolves.toEqual([
-        photo,
-        photo,
+        resolvePhoto(photo),
+        resolvePhoto(photo),
       ]);
 
       expect(kvGet).toHaveBeenCalledTimes(1);
@@ -200,10 +204,14 @@ describe("Photo KV getter AppResolve", () => {
 
     it("reuses a successfully resolved photo", async () => {
       const photo = createPhoto();
+
       kvGet.mockResolvedValue(photo);
 
-      await expect(getPhoto(photoId)).resolves.toBe(photo);
-      await expect(getPhoto(photoId)).resolves.toBe(photo);
+      const first = await getPhoto(photoId);
+      const second = await getPhoto(photoId);
+
+      expect(first).toEqual(resolvePhoto(photo));
+      expect(second).toBe(first);
 
       expect(kvGet).toHaveBeenCalledTimes(1);
     });
@@ -238,7 +246,11 @@ describe("Photo KV getter AppResolve", () => {
         getPhoto("second-photo"),
       ]);
 
-      expect(result).toEqual([firstPhoto, secondPhoto]);
+      expect(result).toEqual([
+        resolvePhoto(firstPhoto),
+        resolvePhoto(secondPhoto),
+      ]);
+
       expect(kvGet).toHaveBeenCalledTimes(2);
       expect(kvGet).toHaveBeenCalledWith("photo:first-photo", "json");
       expect(kvGet).toHaveBeenCalledWith("photo:second-photo", "json");
@@ -252,7 +264,7 @@ describe("Photo KV getter AppResolve", () => {
 
       await expect(getPhoto(photoId)).rejects.toBe(error);
 
-      await expect(getPhoto(photoId)).resolves.toBe(photo);
+      await expect(getPhoto(photoId)).resolves.toEqual(resolvePhoto(photo));
 
       expect(kvGet).toHaveBeenCalledTimes(2);
     });
@@ -271,20 +283,25 @@ describe("Photo KV getter AppResolve", () => {
         "Invalid published photo in KV: photo:test-photo",
       );
 
-      await expect(getPhoto(photoId)).resolves.toBe(photo);
+      await expect(getPhoto(photoId)).resolves.toEqual(resolvePhoto(photo));
 
       expect(kvGet).toHaveBeenCalledTimes(2);
     });
 
     it("isolates caches between getter instances", async () => {
       const photo = createPhoto();
+
       kvGet.mockResolvedValue(photo);
 
       const firstGetter = createPhotoGetter(kv);
       const secondGetter = createPhotoGetter(kv);
 
-      await firstGetter(photoId);
-      await secondGetter(photoId);
+      const first = await firstGetter(photoId);
+      const second = await secondGetter(photoId);
+
+      expect(first).toEqual(resolvePhoto(photo));
+      expect(second).toEqual(resolvePhoto(photo));
+      expect(first).not.toBe(second);
 
       expect(kvGet).toHaveBeenCalledTimes(2);
     });

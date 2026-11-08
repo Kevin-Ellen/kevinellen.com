@@ -8,12 +8,37 @@ import { handleMediaSystem } from "./life-cycle/system/media/media.system";
 const assertWorkerEnv: (env: WorkerEnv) => asserts env is ValidatedEnv = (
   env,
 ) => {
+  // KV bindings
   if (!env.CONTENT_KV) {
     throw new Error("Missing required binding: CONTENT_KV");
   }
 
   if (!env.PHOTO_KV) {
     throw new Error("Missing required binding: PHOTO_KV");
+  }
+
+  // Static assets
+  if (!env.ASSETS) {
+    throw new Error("Missing required binding: ASSETS");
+  }
+
+  // Environment variables
+  if (!env.DOMAIN?.trim()) {
+    throw new Error("Missing required variable: DOMAIN");
+  }
+
+  if (!env.IMAGES_ACCOUNT_HASH?.trim()) {
+    throw new Error("Missing required variable: IMAGES_ACCOUNT_HASH");
+  }
+
+  if (env.INSPECT_ENABLED !== "true" && env.INSPECT_ENABLED !== "false") {
+    throw new Error("Invalid or missing variable: INSPECT_ENABLED");
+  }
+
+  try {
+    new URL(env.DOMAIN);
+  } catch {
+    throw new Error("Invalid variable: DOMAIN must be a valid URL");
   }
 };
 

@@ -91,7 +91,7 @@ describe("Worker entry", () => {
     expect(consoleError).not.toHaveBeenCalled();
   });
 
-  it.each(["CONTENT_KV", "PHOTO_KV"] as const)(
+  it.each(["CONTENT_KV", "PHOTO_KV", "ASSETS"] as const)(
     "returns a sanitized 500 when %s is missing",
     async (binding) => {
       const invalidEnv = {
@@ -114,6 +114,71 @@ describe("Worker entry", () => {
       });
     },
   );
+
+  it.each([
+    ["DOMAIN", undefined, "Missing required variable: DOMAIN"],
+    ["DOMAIN", "   ", "Missing required variable: DOMAIN"],
+    [
+      "IMAGES_ACCOUNT_HASH",
+      undefined,
+      "Missing required variable: IMAGES_ACCOUNT_HASH",
+    ],
+    [
+      "IMAGES_ACCOUNT_HASH",
+      "   ",
+      "Missing required variable: IMAGES_ACCOUNT_HASH",
+    ],
+    [
+      "INSPECT_ENABLED",
+      undefined,
+      "Invalid or missing variable: INSPECT_ENABLED",
+    ],
+    ["INSPECT_ENABLED", "yes", "Invalid or missing variable: INSPECT_ENABLED"],
+    ["INSPECT_ENABLED", "", "Invalid or missing variable: INSPECT_ENABLED"],
+  ] as const)(
+    "returns a sanitized 500 when %s is invalid",
+    async (variable, value, message) => {
+      const invalidEnv = {
+        ...env,
+        [variable]: value,
+      } as WorkerEnv;
+
+      const response = await worker.fetch(request, invalidEnv, ctx);
+
+      await expectSanitized500(response);
+
+      expect(mockedHandleMediaSystem).not.toHaveBeenCalled();
+      expect(mockedHandleLifeCycle).not.toHaveBeenCalled();
+
+      expect(consoleError).toHaveBeenCalledWith("Worker request failed", {
+        error: {
+          name: "Error",
+          message,
+        },
+      });
+    },
+  );
+
+  it("returns a sanitized 500 when DOMAIN is not a valid URL", async () => {
+    const invalidEnv = {
+      ...env,
+      DOMAIN: "not-a-valid-url",
+    } as WorkerEnv;
+
+    const response = await worker.fetch(request, invalidEnv, ctx);
+
+    await expectSanitized500(response);
+
+    expect(mockedHandleMediaSystem).not.toHaveBeenCalled();
+    expect(mockedHandleLifeCycle).not.toHaveBeenCalled();
+
+    expect(consoleError).toHaveBeenCalledWith("Worker request failed", {
+      error: {
+        name: "Error",
+        message: "Invalid variable: DOMAIN must be a valid URL",
+      },
+    });
+  });
 
   it("returns a sanitized 500 when media handling fails", async () => {
     mockedHandleMediaSystem.mockRejectedValue(
