@@ -23,7 +23,8 @@ coverage/
 .tmp/
 .cache/
 .build/
-/src/app/assets/scripts/generated/
+src/app/assets/scripts/generated/
+src/app/assets/css
 
 # =========================
 # Cloudflare
