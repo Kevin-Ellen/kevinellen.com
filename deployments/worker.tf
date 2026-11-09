@@ -82,11 +82,25 @@ resource "cloudflare_workers_deployment" "site" {
   }]
 }
 
-# 4. Attach the domain after deployment
+# 4. Attach the primary domain after deployment
 resource "cloudflare_workers_custom_domain" "site" {
   account_id = local.account_id
   zone_id    = data.cloudflare_zone.site.id
   hostname   = local.hostname
+  service    = cloudflare_worker.site.name
+
+  depends_on = [
+    cloudflare_workers_deployment.site
+  ]
+}
+
+# 5. Attach www to the production Worker
+resource "cloudflare_workers_custom_domain" "www" {
+  count = local.environment == "production" ? 1 : 0
+
+  account_id = local.account_id
+  zone_id    = data.cloudflare_zone.site.id
+  hostname   = "www.${local.zone_name}"
   service    = cloudflare_worker.site.name
 
   depends_on = [
