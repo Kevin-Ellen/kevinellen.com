@@ -23,7 +23,7 @@ resource "cloudflare_worker_version" "site" {
     directory = "${path.root}/../dist/static"
 
     config = {
-      run_worker_first = true
+      run_worker_first = false
     }
   }
 
@@ -56,7 +56,12 @@ resource "cloudflare_worker_version" "site" {
       name = "INSPECT_ENABLED"
       type = "plain_text"
       text = "false"
-    }
+    },
+    {
+      name = "DEPLOYMENT_ENVIRONMENT"
+      type = "plain_text"
+      text = local.environment
+    },
   ]
 
   cache_options = {

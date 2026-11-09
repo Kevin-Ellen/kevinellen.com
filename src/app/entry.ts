@@ -1,6 +1,10 @@
 // src/app/entry.ts
 
-import type { ValidatedEnv, WorkerEnv } from "./entry.type";
+import type {
+  DeploymentEnvironment,
+  ValidatedEnv,
+  WorkerEnv,
+} from "./entry.type";
 
 import { handleLifeCycle } from "./life-cycle/life-cycle";
 import { handleMediaSystem } from "./life-cycle/system/media/media.system";
@@ -35,11 +39,39 @@ const assertWorkerEnv: (env: WorkerEnv) => asserts env is ValidatedEnv = (
     throw new Error("Invalid or missing variable: INSPECT_ENABLED");
   }
 
+  if (
+    env.DEPLOYMENT_ENVIRONMENT !== "development" &&
+    env.DEPLOYMENT_ENVIRONMENT !== "staging" &&
+    env.DEPLOYMENT_ENVIRONMENT !== "production"
+  ) {
+    throw new Error("Invalid or missing variable: DEPLOYMENT_ENVIRONMENT");
+  }
+
   try {
     new URL(env.DOMAIN);
   } catch {
     throw new Error("Invalid variable: DOMAIN must be a valid URL");
   }
+};
+
+const applyIndexingPolicy = (
+  response: Response,
+  environment: DeploymentEnvironment,
+): Response => {
+  if (environment === "production") {
+    return response;
+  }
+
+  const headers = new Headers(response.headers);
+  headers.set("X-Robots-Tag", "noindex");
+
+  const nullBodyStatus = [204, 205, 304].includes(response.status);
+
+  return new Response(nullBodyStatus ? null : response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 };
 
 export default {
@@ -51,6 +83,8 @@ export default {
     try {
       assertWorkerEnv(env);
 
+      const environment = env.DEPLOYMENT_ENVIRONMENT;
+
       const mediaResponse = await handleMediaSystem({
         request,
         imagesAccountHash: env.IMAGES_ACCOUNT_HASH,
@@ -58,10 +92,12 @@ export default {
       });
 
       if (mediaResponse !== null) {
-        return mediaResponse;
+        return applyIndexingPolicy(mediaResponse, environment);
       }
 
-      return await handleLifeCycle({ request, env });
+      const response = await handleLifeCycle({ request, env });
+
+      return applyIndexingPolicy(response, environment);
     } catch (error: unknown) {
       console.error("Worker request failed", {
         error:
@@ -75,13 +111,20 @@ export default {
               },
       });
 
-      return new Response("Internal Server Error", {
+      const response = new Response("Internal Server Error", {
         status: 500,
         headers: {
           "Content-Type": "text/plain; charset=utf-8",
           "Cache-Control": "no-store",
         },
       });
+
+      return applyIndexingPolicy(
+        response,
+        env.DEPLOYMENT_ENVIRONMENT === "production"
+          ? "production"
+          : "development",
+      );
     }
   },
 } satisfies ExportedHandler<WorkerEnv>;
