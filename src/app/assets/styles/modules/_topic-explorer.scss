@@ -22,7 +22,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: spacing.$sm;
 
-    @include viewport.expanded {
+    @include viewport.wide {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
@@ -37,7 +37,7 @@
     color: colours.$text-on-image;
     text-decoration: none;
 
-    @include viewport.expanded {
+    @include viewport.wide {
       aspect-ratio: 1 / 1;
     }
 
