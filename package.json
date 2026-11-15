@@ -28,7 +28,7 @@
     "build:scripts": "node scripts/build/build-scripts.mjs",
     "lint": "eslint src scripts",
     "review": "npm run typecheck && npm run lint && echo '🦆 Quack! All okay!'",
-    "content:create": "tsx src/tools/authored-content-generator/scripts/create.ts",
+    "content:create": "tsx src/tools/authored-content-generator/create.ts",
     "content:prepare": "tsx src/tools/authored-content-generator/prepare/prepare.ts",
     "content:validate": "tsx src/tools/authored-content-generator/validate/validate.ts",
     "content:publish": "tsx src/tools/authored-content-generator/publish/publish.ts",
