@@ -4,7 +4,7 @@ import type { FeaturedPhotoModuleContentAppResolve } from "./featured-photo.modu
 import type { PhotoAppRenderContext } from "../../../../../photo/photo.app-render-context.type";
 
 export type FeaturedPhotoModuleContentAppRenderContext = Readonly<
-  Pick<FeaturedPhotoModuleContentAppResolve, "kind" | "wide"> & {
+  Pick<FeaturedPhotoModuleContentAppResolve, "kind" | "wide" | "expandable"> & {
     photo: PhotoAppRenderContext;
   }
 >;

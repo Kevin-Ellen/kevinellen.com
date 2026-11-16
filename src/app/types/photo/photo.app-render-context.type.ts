@@ -1,25 +1,30 @@
 // src/app/types/photo/photo.app-render-context.type.ts
 
-export type PhotoAppRenderContext = Readonly<{
-  id: string;
-  title: string;
-  alt: string;
-  commentary: string | null;
-  location: string | null;
+import type { PhotoAppResolve } from "./photo.app-resolve.type";
+import type { OmitAndReplace } from "../../../shared/types/utilities/omit-replace.utility.shared.type";
 
-  width: number;
-  height: number;
+export type PhotoAppRenderContext = OmitAndReplace<
+  Pick<
+    PhotoAppResolve,
+    "id" | "title" | "alt" | "commentary" | "width" | "height"
+  >,
+  Readonly<{
+    commentary: string | null;
+    location: PhotoAppResolve["readableLocation"];
+    species: NonNullable<PhotoAppResolve["species"]>;
 
-  image: Readonly<{
-    id: string;
-    src: string;
-    srcSet: string;
-  }>;
+    image: Readonly<{
+      id: string;
+      src: string;
+      srcSet: string;
+      viewerSrc: string;
+    }>;
 
-  metadata: Readonly<{
-    shutter: string;
-    aperture: string;
-    focalLength: string;
-    iso: string;
-  }>;
-}>;
+    metadata: Readonly<{
+      shutter: string;
+      aperture: string;
+      focalLength: string;
+      iso: string;
+    }>;
+  }>
+>;

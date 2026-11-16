@@ -31,7 +31,10 @@ describe("Featured photo module AppInit resolver", () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
-    mockedPhotoResolver.mockImplementation(({ authored }) => ({ ...authored }));
+    mockedPhotoResolver.mockImplementation(({ authored }) => ({
+      ...authored,
+      expandable: authored.expandable ?? false,
+    }));
   });
 
   it("converts the authored module into a photo component", () => {

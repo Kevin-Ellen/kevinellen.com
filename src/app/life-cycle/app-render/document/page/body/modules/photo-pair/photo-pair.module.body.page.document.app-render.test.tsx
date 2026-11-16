@@ -25,12 +25,14 @@ describe("PhotoPairModule", () => {
     alt: `Photograph ${id}`,
     commentary: null,
     location: null,
+    species: [],
     width: 1200,
     height: 800,
     image: {
       id: `image-${id}`,
       src: `/images/${id}.webp`,
       srcSet: `/images/${id}-400.webp 400w`,
+      viewerSrc: `/images/${id}`,
     },
     metadata: {
       shutter: "1/1000s",
@@ -43,6 +45,7 @@ describe("PhotoPairModule", () => {
   const createItem = (id: string): Item => ({
     kind: "photo",
     photo: createPhoto(id),
+    expandable: false,
   });
 
   const createModule = (
@@ -92,14 +95,20 @@ describe("PhotoPairModule", () => {
 
     expect(mockedPhoto.mock.calls[0]?.[0]).toEqual({
       photo: first.photo,
-      className: "m-photo-pair__item",
-      sizes: "(min-width: 60rem) 50vw, 100vw",
+      presentation: {
+        className: "m-photo-pair__item",
+        sizes: "(min-width: 60rem) 50vw, 100vw",
+        expandable: false,
+      },
     });
 
     expect(mockedPhoto.mock.calls[1]?.[0]).toEqual({
       photo: second.photo,
-      className: "m-photo-pair__item",
-      sizes: "(min-width: 60rem) 50vw, 100vw",
+      presentation: {
+        className: "m-photo-pair__item",
+        sizes: "(min-width: 60rem) 50vw, 100vw",
+        expandable: false,
+      },
     });
   });
 });

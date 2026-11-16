@@ -92,7 +92,7 @@ describe("Media system", () => {
       expect(response?.status).toBe(200);
       const upstream = fetchSpy.mock.calls[0]?.[0] as Request;
       expect(upstream.url).toBe(
-        `https://imagedelivery.net/${imagesAccountHash}/${photoId}/public`,
+        `https://imagedelivery.net/${imagesAccountHash}/${photoId}/viewer`,
       );
     });
     it("accepts sized photo routes", async () => {
@@ -208,7 +208,9 @@ describe("Media system", () => {
         ),
       );
       const cacheKey = cacheMatch.mock.calls[0]?.[0];
-      expect(cacheKey?.url).toBe(`${origin}${photoPath}?format=webp`);
+      expect(cacheKey?.url).toBe(
+        `${origin}${photoPath}?format=webp&variant=viewer`,
+      );
       expect(cacheKey?.method).toBe("GET");
     });
     it("normalises sized cache keys and trailing slashes", async () => {
@@ -221,13 +223,15 @@ describe("Media system", () => {
       );
       const cacheKey = cacheMatch.mock.calls[0]?.[0];
       expect(cacheKey?.url).toBe(
-        `${origin}/media/photo/1200/800/${photoId}?format=webp`,
+        `${origin}/media/photo/1200/800/${photoId}?format=webp&variant=w%3D1200%2Ch%3D800%2Cfit%3Dscale-down`,
       );
     });
     it("separates cache entries by image format", async () => {
       await handle(createRequest(photoPath, "GET", "image/avif"));
       const cacheKey = cacheMatch.mock.calls[0]?.[0];
-      expect(cacheKey?.url).toBe(`${origin}${photoPath}?format=avif`);
+      expect(cacheKey?.url).toBe(
+        `${origin}${photoPath}?format=avif&variant=viewer`,
+      );
     });
     it("stores responses without the cache diagnostic header", async () => {
       await handle(createRequest(photoPath));

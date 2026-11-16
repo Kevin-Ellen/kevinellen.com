@@ -11,7 +11,14 @@ type Props = Readonly<{
 export const FeaturedPhotoModule = ({ module }: Props) => (
   <div className="m-featured-photo">
     <div className="l-frame">
-      <PhotoObject photo={module.photo} wide={module.wide} priority />
+      <PhotoObject
+        photo={module.photo}
+        presentation={{
+          wide: module.wide,
+          priority: true,
+          expandable: module.expandable,
+        }}
+      />
     </div>
   </div>
 );

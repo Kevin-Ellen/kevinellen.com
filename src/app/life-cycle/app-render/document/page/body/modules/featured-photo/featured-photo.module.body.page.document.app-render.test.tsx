@@ -56,7 +56,7 @@ describe("FeaturedPhotoModule", () => {
   it("always enables priority image loading", () => {
     render(<FeaturedPhotoModule module={createModule()} />);
 
-    expect(mockedPhoto.mock.calls[0]?.[0].priority).toBe(true);
+    expect(mockedPhoto.mock.calls[0]?.[0].presentation?.priority).toBe(true);
   });
 
   it("forwards wide=true", () => {
@@ -66,8 +66,11 @@ describe("FeaturedPhotoModule", () => {
 
     expect(mockedPhoto.mock.calls[0]?.[0]).toEqual({
       photo: module.photo,
-      wide: true,
-      priority: true,
+      presentation: {
+        wide: true,
+        priority: true,
+        expandable: undefined,
+      },
     });
   });
 

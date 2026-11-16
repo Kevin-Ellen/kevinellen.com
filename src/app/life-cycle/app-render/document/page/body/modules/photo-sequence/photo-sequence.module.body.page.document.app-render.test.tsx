@@ -75,7 +75,10 @@ describe("PhotoSequenceModule", () => {
 
     expect(mockedPhoto.mock.calls[0]?.[0]).toEqual({
       photo: expect.any(Object),
-      sizes: "(min-width: 1024px) 55vw, 85vw",
+      presentation: {
+        sizes: "(min-width: 1024px) 55vw, 85vw",
+        expandable: undefined,
+      },
     });
   });
 

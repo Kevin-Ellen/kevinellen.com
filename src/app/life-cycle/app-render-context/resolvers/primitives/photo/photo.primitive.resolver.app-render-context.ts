@@ -60,6 +60,7 @@ export const resolvePhotoAppRenderContext = ({
     alt: alt ?? photo.alt,
     commentary: commentary === undefined ? photo.commentary : commentary,
     location: photo.readableLocation,
+    species: photo.species ?? [],
 
     width: photo.width,
     height: photo.height,
@@ -68,6 +69,7 @@ export const resolvePhotoAppRenderContext = ({
       id: photo.cloudflareImageId ?? photo.id,
       src,
       srcSet,
+      viewerSrc: `/media/photo/${photo.id}`,
     },
 
     metadata: {

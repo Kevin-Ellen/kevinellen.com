@@ -19,118 +19,149 @@ describe("Photo AppInit resolver", () => {
 
   describe("Species resolution", () => {
     it("returns null when species is undefined", () => {
-      const photo = createPhoto({
-        species: undefined,
-      });
+      const photo = createPhoto({ species: undefined });
 
-      const result = resolvePhotoAppInit(photo);
-
-      expect(result.species).toBeNull();
+      expect(resolvePhotoAppInit(photo).species).toBeNull();
     });
 
     it("preserves null species", () => {
-      const photo = createPhoto({
-        species: null,
-      });
+      const photo = createPhoto({ species: null });
 
-      const result = resolvePhotoAppInit(photo);
-
-      expect(result.species).toBeNull();
+      expect(resolvePhotoAppInit(photo).species).toBeNull();
     });
 
     it("preserves an empty species array", () => {
-      const photo = createPhoto({
-        species: [],
-      });
+      const photo = createPhoto({ species: [] });
 
-      const result = resolvePhotoAppInit(photo);
-
-      expect(result.species).toEqual([]);
+      expect(resolvePhotoAppInit(photo).species).toEqual([]);
     });
 
-    it("adds taxonRank to a single species", () => {
+    it("defaults an unspecified taxon rank to species", () => {
       const photo = createPhoto({
         species: [
           {
+            name: "Red fox",
             scientificName: "Vulpes vulpes",
-            commonName: "Red fox",
           },
         ],
       });
 
-      const result = resolvePhotoAppInit(photo);
-
-      expect(result.species).toEqual([
+      expect(resolvePhotoAppInit(photo).species).toEqual([
         {
+          name: "Red fox",
           scientificName: "Vulpes vulpes",
-          commonName: "Red fox",
           taxonRank: "species",
         },
       ]);
     });
 
-    it("adds taxonRank to every species", () => {
+    it("defaults every unspecified taxon rank to species", () => {
       const photo = createPhoto({
         species: [
           {
+            name: "Red fox",
             scientificName: "Vulpes vulpes",
-            commonName: "Red fox",
           },
           {
+            name: "Fallow deer",
             scientificName: "Dama dama",
-            commonName: "Fallow deer",
           },
         ],
       });
 
-      const result = resolvePhotoAppInit(photo);
-
-      expect(result.species).toEqual([
+      expect(resolvePhotoAppInit(photo).species).toEqual([
         {
+          name: "Red fox",
           scientificName: "Vulpes vulpes",
-          commonName: "Red fox",
           taxonRank: "species",
         },
         {
+          name: "Fallow deer",
           scientificName: "Dama dama",
-          commonName: "Fallow deer",
           taxonRank: "species",
         },
       ]);
     });
 
-    it("overrides an existing taxonRank with species", () => {
+    it("preserves an explicitly authored species rank", () => {
       const photo = createPhoto({
         species: [
           {
+            name: "Red fox",
             scientificName: "Vulpes vulpes",
-            commonName: "Red fox",
-            taxonRank: "genus",
+            taxonRank: "species",
           },
         ],
       });
 
-      const result = resolvePhotoAppInit(photo);
+      expect(resolvePhotoAppInit(photo).species?.[0]?.taxonRank).toBe(
+        "species",
+      );
+    });
 
-      expect(result.species?.[0]?.taxonRank).toBe("species");
+    it("preserves an explicitly authored subspecies rank", () => {
+      const photo = createPhoto({
+        species: [
+          {
+            name: "Pied wagtail",
+            scientificName: "Motacilla alba yarrellii",
+            taxonRank: "subspecies",
+          },
+        ],
+      });
+
+      expect(resolvePhotoAppInit(photo).species).toEqual([
+        {
+          name: "Pied wagtail",
+          scientificName: "Motacilla alba yarrellii",
+          taxonRank: "subspecies",
+        },
+      ]);
+    });
+
+    it("preserves different taxonomic ranks in the same photograph", () => {
+      const photo = createPhoto({
+        species: [
+          {
+            name: "Western marsh harrier",
+            scientificName: "Circus aeruginosus",
+          },
+          {
+            name: "Pied wagtail",
+            scientificName: "Motacilla alba yarrellii",
+            taxonRank: "subspecies",
+          },
+        ],
+      });
+
+      expect(resolvePhotoAppInit(photo).species).toEqual([
+        {
+          name: "Western marsh harrier",
+          scientificName: "Circus aeruginosus",
+          taxonRank: "species",
+        },
+        {
+          name: "Pied wagtail",
+          scientificName: "Motacilla alba yarrellii",
+          taxonRank: "subspecies",
+        },
+      ]);
     });
 
     it("preserves additional species metadata", () => {
       const photo = createPhoto({
         species: [
           {
+            name: "Red fox",
             scientificName: "Vulpes vulpes",
-            commonName: "Red fox",
             family: "Canidae",
           },
         ],
       });
 
-      const result = resolvePhotoAppInit(photo);
-
-      expect(result.species?.[0]).toEqual({
+      expect(resolvePhotoAppInit(photo).species?.[0]).toEqual({
+        name: "Red fox",
         scientificName: "Vulpes vulpes",
-        commonName: "Red fox",
         family: "Canidae",
         taxonRank: "species",
       });

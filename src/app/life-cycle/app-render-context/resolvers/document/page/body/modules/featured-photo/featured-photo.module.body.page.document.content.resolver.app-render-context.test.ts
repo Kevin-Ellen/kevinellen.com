@@ -38,6 +38,7 @@ describe("Featured photo module AppRenderContext resolver", () => {
     ({
       kind: "featuredPhoto",
       wide: true,
+      expandable: false,
       photo,
       alt: "A fox in Epping Forest",
       commentary: "Photographed at sunrise",
@@ -70,8 +71,17 @@ describe("Featured photo module AppRenderContext resolver", () => {
     expect(result).toEqual({
       kind: "featuredPhoto",
       wide: true,
+      expandable: false,
       photo: resolvedPhoto,
     });
+  });
+
+  it("preserves enabled photograph expansion", () => {
+    const result = resolveFeaturedPhotoModuleContentAppRenderContext({
+      content: createContent({ expandable: true }),
+    });
+
+    expect(result.expandable).toBe(true);
   });
 
   it("preserves the exact resolved photo reference", () => {

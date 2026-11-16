@@ -26,7 +26,9 @@ const isSpecies = (value: unknown): boolean => {
   return (
     typeof value.name === "string" &&
     typeof value.scientificName === "string" &&
-    (value.taxonRank === undefined || value.taxonRank === "species")
+    (value.taxonRank === undefined ||
+      value.taxonRank === "species" ||
+      value.taxonRank === "subspecies")
   );
 };
 

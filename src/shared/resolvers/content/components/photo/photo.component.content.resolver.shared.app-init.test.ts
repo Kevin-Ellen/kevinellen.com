@@ -27,7 +27,10 @@ describe("Photo component AppInit resolver", () => {
       caption: "A fox in Epping Forest",
     });
 
-    expect(resolve(authored)).toEqual(authored);
+    expect(resolve(authored)).toEqual({
+      ...authored,
+      expandable: false,
+    });
   });
 
   it("returns a new component object", () => {
@@ -68,7 +71,10 @@ describe("Photo component AppInit resolver", () => {
 
     const result = resolve(authored);
 
-    expect(result).toEqual(authored);
+    expect(result).toEqual({
+      ...authored,
+      expandable: false,
+    });
     expect(result).not.toBe(authored);
   });
 
@@ -80,5 +86,21 @@ describe("Photo component AppInit resolver", () => {
 
     expect(first).toEqual(second);
     expect(first).not.toBe(second);
+  });
+
+  it.each([
+    [undefined, false],
+    [false, false],
+    [true, true],
+  ])("normalises expandable %s to %s", (expandable, expected) => {
+    const result = resolvePhotoComponentContentAppInit({
+      authored: {
+        kind: "photo",
+        photoId: "forest-fox",
+        ...(expandable === undefined ? {} : { expandable }),
+      },
+    });
+
+    expect(result.expandable).toBe(expected);
   });
 });

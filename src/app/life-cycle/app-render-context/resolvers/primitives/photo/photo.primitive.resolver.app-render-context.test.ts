@@ -331,4 +331,45 @@ describe("Photo primitive AppRenderContext resolver", () => {
       expect(result.commentary).toBeNull();
     });
   });
+
+  it("preserves published species metadata", () => {
+    const species = [
+      {
+        name: "Red fox",
+        scientificName: "Vulpes vulpes",
+        taxonRank: "species",
+      },
+    ] as const;
+
+    const result = resolve(createPhoto({ species }));
+
+    expect(result.species).toEqual(species);
+  });
+
+  it("normalises null species to an empty collection", () => {
+    const result = resolve(createPhoto({ species: null }));
+
+    expect(result.species).toEqual([]);
+  });
+
+  it("supports photographs containing multiple species", () => {
+    const result = resolve(
+      createPhoto({
+        species: [
+          {
+            name: "Marsh harrier",
+            scientificName: "Circus aeruginosus",
+            taxonRank: "species",
+          },
+          {
+            name: "White wagtail",
+            scientificName: "Motacilla alba",
+            taxonRank: "species",
+          },
+        ],
+      }),
+    );
+
+    expect(result.species).toHaveLength(2);
+  });
 });

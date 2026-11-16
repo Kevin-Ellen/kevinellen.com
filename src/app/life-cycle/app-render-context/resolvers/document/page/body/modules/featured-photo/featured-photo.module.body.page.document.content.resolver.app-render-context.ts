@@ -14,6 +14,7 @@ export const resolveFeaturedPhotoModuleContentAppRenderContext = ({
 }: Input): FeaturedPhotoModuleContentAppRenderContext => ({
   kind: content.kind,
   wide: content.wide,
+  expandable: content.expandable,
 
   photo: resolvePhotoAppRenderContext({
     photo: content.photo,

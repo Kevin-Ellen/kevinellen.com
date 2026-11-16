@@ -11,4 +11,5 @@ export const resolvePhotoComponentContentAppInit = ({
   authored,
 }: Input): PhotoComponentContentAppInit => ({
   ...authored,
+  expandable: authored.expandable ?? false,
 });

@@ -14,7 +14,7 @@ const sizedPhotoRoute =
 const canonicalPhotoRoute = /^\/media\/photo\/([a-z0-9][a-z0-9-]*)\/?$/;
 
 const maxDimension = 4096;
-const canonicalVariant = "public";
+const canonicalVariant = "viewer";
 
 const cacheControl = "public, max-age=86400, s-maxage=2592000";
 
@@ -106,6 +106,7 @@ export const handleMediaSystem = async ({
   // create additional cache entries.
   const cacheUrl = new URL(canonicalPath, url.origin);
   cacheUrl.searchParams.set("format", format);
+  cacheUrl.searchParams.set("variant", variant);
 
   const cacheKey = new Request(cacheUrl.toString(), {
     method: "GET",
@@ -187,7 +188,6 @@ export const handleMediaSystem = async ({
     },
   );
 
-  // Cache successful complete GET responses only.
   if (request.method === "GET" && response.status === 200) {
     const cachedHeaders = new Headers(headers);
     cachedHeaders.delete("X-Media-Cache");
