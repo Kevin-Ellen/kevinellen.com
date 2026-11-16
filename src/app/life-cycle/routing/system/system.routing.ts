@@ -38,5 +38,13 @@ export const checkSystemRouting = <TLedger>({
     };
   }
 
+  if (pathname === "/rss.xml" && ledger !== null) {
+    return {
+      kind: "system",
+      resolver: "rss-feed",
+      ledger,
+    };
+  }
+
   return null;
 };

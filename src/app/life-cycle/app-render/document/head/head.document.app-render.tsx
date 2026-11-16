@@ -40,6 +40,13 @@ export const DocumentHead = ({ head, metadata }: Props) => (
       />
     )}
 
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Kevin Ellen — Wildlife Photography & Field Notes"
+      href="/rss.xml"
+    />
+
     <style nonce={metadata.nonce}>{css}</style>
   </head>
 );

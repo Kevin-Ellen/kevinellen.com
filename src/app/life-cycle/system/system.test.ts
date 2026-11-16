@@ -8,6 +8,7 @@ import { handleSystem } from "./system";
 import { resolveRobotsTxtSystem } from "./robots-txt/robots-txt.system";
 import { resolveWebmanifestSystem } from "./webmanifest/webmanifest.system";
 import { resolveSitemapSystem } from "./sitemap-xml/sitemap-xml.system";
+import { resolveRssFeedSystem } from "./rss-feed/rss-feed.system";
 
 jest.mock("./robots-txt/robots-txt.system", () => ({
   resolveRobotsTxtSystem: jest.fn(),
@@ -21,9 +22,14 @@ jest.mock("./sitemap-xml/sitemap-xml.system", () => ({
   resolveSitemapSystem: jest.fn(),
 }));
 
+jest.mock("./rss-feed/rss-feed.system", () => ({
+  resolveRssFeedSystem: jest.fn(),
+}));
+
 const mockedRobots = jest.mocked(resolveRobotsTxtSystem);
 const mockedWebmanifest = jest.mocked(resolveWebmanifestSystem);
 const mockedSitemap = jest.mocked(resolveSitemapSystem);
+const mockedRssFeed = jest.mocked(resolveRssFeedSystem);
 
 describe("System dispatcher", () => {
   const appInit = {} as AppInit;
@@ -127,6 +133,52 @@ describe("System dispatcher", () => {
       }),
     ).toThrow("Unsupported system resolver: unsupported-system");
 
+    expect(mockedRobots).not.toHaveBeenCalled();
+    expect(mockedWebmanifest).not.toHaveBeenCalled();
+    expect(mockedSitemap).not.toHaveBeenCalled();
+  });
+
+  it("dispatches RSS requests with the published ledger", () => {
+    const expected = {
+      kind: "xml",
+      status: 200,
+      headers: {
+        "Content-Type": "application/rss+xml; charset=utf-8",
+      },
+      body: '<rss version="2.0"></rss>',
+    } as const;
+
+    mockedRssFeed.mockReturnValue(expected);
+
+    const response = handleSystem({
+      resolver: "rss-feed",
+      appInit,
+      ledger,
+    });
+
+    expect(mockedRssFeed).toHaveBeenCalledWith({
+      appInit,
+      ledger,
+    });
+    expect(mockedRssFeed).toHaveBeenCalledTimes(1);
+
+    expect(mockedRobots).not.toHaveBeenCalled();
+    expect(mockedWebmanifest).not.toHaveBeenCalled();
+    expect(mockedSitemap).not.toHaveBeenCalled();
+
+    expect(response).toBe(expected);
+  });
+
+  it("rejects RSS requests without a published ledger", () => {
+    expect(() =>
+      handleSystem({
+        resolver: "rss-feed",
+        appInit,
+        ledger: null,
+      }),
+    ).toThrow("RSS feed requires a published ledger");
+
+    expect(mockedRssFeed).not.toHaveBeenCalled();
     expect(mockedRobots).not.toHaveBeenCalled();
     expect(mockedWebmanifest).not.toHaveBeenCalled();
     expect(mockedSitemap).not.toHaveBeenCalled();

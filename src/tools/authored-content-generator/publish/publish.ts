@@ -21,9 +21,17 @@ type PublishMode = "--local" | "--remote";
 type PhotoPublisher = Parameters<typeof publishPhoto>[0]["publisher"];
 type JournalPublisher = Parameters<typeof publishJournal>[0]["publisher"];
 
+type UploadedImage = Readonly<{
+  id: string;
+  uploadedAt: string;
+}>;
+
 type CloudflareImageResponse = Readonly<{
   success: boolean;
-  errors?: readonly { message: string }[];
+  errors?: readonly {
+    code?: number;
+    message: string;
+  }[];
   result?: Readonly<{
     id: string;
     uploaded: string;
@@ -111,21 +119,86 @@ const putKv = async (
   ]);
 };
 
-const uploadImage = async (
-  photo: PhotoAppInit,
-  image: Buffer,
-): Promise<{
-  id: string;
-  uploadedAt: string;
+// Cloudflare Images ------------------------------------------------
+
+const getImageCredentials = (): Readonly<{
+  accountId: string;
+  apiToken: string;
 }> => {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   const apiToken = process.env.CLOUDFLARE_IMAGES_API_TOKEN;
 
   if (!accountId || !apiToken) {
     throw new Error(
-      "CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_IMAGES_API_TOKEN are required for image uploads",
+      "CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_IMAGES_API_TOKEN are required",
     );
   }
+
+  return { accountId, apiToken };
+};
+
+const getImage = async (photo: PhotoAppInit): Promise<UploadedImage | null> => {
+  const { accountId, apiToken } = getImageCredentials();
+
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${accountId}/images/v1/${encodeURIComponent(photo.id)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+      },
+    },
+  );
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `Cloudflare Images lookup failed for "${photo.id}": HTTP ${response.status}`,
+    );
+  }
+
+  const data: unknown = await response.json();
+
+  if (!isRecord(data) || data.success !== true || !isRecord(data.result)) {
+    throw new Error(`Invalid Cloudflare Images response for "${photo.id}"`);
+  }
+
+  const result = data.result;
+
+  if (
+    result.id !== photo.id ||
+    typeof result.uploaded !== "string" ||
+    result.uploaded.length === 0
+  ) {
+    throw new Error(`Cloudflare Image identity mismatch: ${photo.id}`);
+  }
+
+  // Verify the image belongs to this authored photo.
+  // A matching ID alone is not sufficient.
+  if (
+    result.filename !== photo.sourceFileName ||
+    result.creator !== photo.photographer ||
+    !isRecord(result.meta) ||
+    result.meta.source !== "content-cli" ||
+    result.meta.photoId !== photo.id
+  ) {
+    throw new Error(`Cloudflare Image metadata mismatch: ${photo.id}`);
+  }
+
+  return {
+    id: result.id,
+    uploadedAt: result.uploaded,
+  };
+};
+
+const uploadImage = async (
+  photo: PhotoAppInit,
+  image: Buffer,
+): Promise<UploadedImage> => {
+  const { accountId, apiToken } = getImageCredentials();
 
   const form = new FormData();
 
@@ -177,16 +250,26 @@ const uploadImage = async (
     );
   }
 
+  if (result.result.id !== photo.id) {
+    throw new Error(
+      `Cloudflare Images returned unexpected ID for "${photo.id}": ${result.result.id}`,
+    );
+  }
+
   return {
     id: result.result.id,
     uploadedAt: result.result.uploaded,
   };
 };
 
+// Publisher adapters -----------------------------------------------
+
 const createPhotoPublisher = (mode: PublishMode): PhotoPublisher => ({
   getPhoto: (id) => getKv<PhotoAppInit>(`photo:${id}`, mode, "PHOTO_KV"),
 
   putPhoto: (photo) => putKv(`photo:${photo.id}`, photo, mode, "PHOTO_KV"),
+
+  getImage: (photo) => getImage(photo),
 
   uploadImage: (photo, image) => uploadImage(photo, image),
 });
@@ -203,6 +286,8 @@ const createJournalPublisher = (mode: PublishMode): JournalPublisher => ({
   putAppInit: (journal) =>
     putKv(`journal:appInit:${journal.id}`, journal, mode, "CONTENT_KV"),
 });
+
+// Journal inventory ------------------------------------------------
 
 const readJournalInventory = async (
   directory: string,
@@ -248,6 +333,8 @@ const readJournalInventory = async (
     photoIds: photos,
   };
 };
+
+// Workspace lifecycle ---------------------------------------------
 
 const archiveWorkspace = async (directory: string): Promise<void> => {
   const workspace = basename(directory);
@@ -312,6 +399,7 @@ export const publishWorkspace = async ({
   });
 
   console.log(`✓ Publication complete: ${journal.id}`);
+
   // 4. Archive only after successful remote publication.
   if (mode === "--remote") {
     await archiveWorkspace(directory);
@@ -319,6 +407,8 @@ export const publishWorkspace = async ({
     console.log("↷ Local publication: workspace retained");
   }
 };
+
+// CLI -------------------------------------------------------------
 
 const main = async (): Promise<void> => {
   const [workspace, ...options] = process.argv.slice(2);
