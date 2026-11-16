@@ -7,6 +7,7 @@ import { PageHeader } from "./header/header.page.document.app-render";
 import { PageFooter } from "./footer/footer.page.document.app-render";
 import { ContentBody } from "./body/body.page.document.app-render";
 import { Breadcrumbs } from "./body/breadcrumbs/breadcrumbs.body.page.document.app-render";
+import { JournalNavigationBodyPageDocumentAppRender } from "./body/journal-navigation/journal-navigation.body.page.document.app-render";
 
 const pageElementRegistry = {
   standard: null,
@@ -20,11 +21,19 @@ type Props = Readonly<{
 export const Page = ({ page }: Props) => {
   const Element = pageElementRegistry[page.pageType];
 
-  const content = <ContentBody body={page.body} />;
+  const content = (
+    <>
+      <ContentBody body={page.body} />
+      <JournalNavigationBodyPageDocumentAppRender
+        navigation={page.journalNavigation}
+      />
+    </>
+  );
 
   return (
     <>
       <PageHeader header={page.header} />
+
       <main id="main-content">
         {page.breadcrumbs.length > 1 && (
           <Breadcrumbs breadcrumbs={page.breadcrumbs} />
@@ -32,6 +41,7 @@ export const Page = ({ page }: Props) => {
 
         {Element ? <Element>{content}</Element> : content}
       </main>
+
       <PageFooter footer={page.footer} />
     </>
   );

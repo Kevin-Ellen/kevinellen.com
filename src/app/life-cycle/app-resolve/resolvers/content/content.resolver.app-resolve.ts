@@ -10,6 +10,7 @@ import type { PublishedRegistry } from "../../../../../shared/types/content/kv-l
 
 import { resolveContentBodyAppResolve } from "./body/body.content.app-resolve";
 import { resolveContentBreadcrumbsAppResolve } from "./breadcrumbs/breadcrumbs.content.resolver.app-resolve";
+import { resolveJournalNavigationAppResolve } from "./journal-navigation/journal-navigation.content.resolver.app-resolve";
 
 type ContentAppInit =
   | AppInit["content"]["bySlug"][string]
@@ -44,6 +45,13 @@ export const resolveContentAppResolve = async ({
     breadcrumbs: content.breadcrumbs,
     contentRegistry,
   }),
+  journalNavigation:
+    content.slug !== null && journalLedger.bySlug[content.slug]?.sitemap
+      ? resolveJournalNavigationAppResolve({
+          currentSlug: content.slug,
+          journalLedger,
+        })
+      : null,
   body: await resolveContentBodyAppResolve({
     content: content.body,
     contentRegistry,
