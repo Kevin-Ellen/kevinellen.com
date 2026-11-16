@@ -387,6 +387,7 @@ describe("Content AppInit resolver", () => {
         title: "About",
         description: "Wildlife photography in Essex",
         sitemap: true,
+        openGraph: null,
       });
     });
 
@@ -408,6 +409,7 @@ describe("Content AppInit resolver", () => {
         title: "Not found",
         description: "Page not found",
         sitemap: false,
+        openGraph: null,
       });
     });
 

@@ -387,8 +387,8 @@ describe("content publisher", () => {
 
       expect(mocks.publishJournalLedger).toHaveBeenCalledWith({
         directory,
-
         mode: "--local",
+        getPhoto: photoAdapter(mocks).getPhoto,
       });
 
       expect(mocks.publishPhoto.mock.invocationCallOrder[1]).toBeLessThan(

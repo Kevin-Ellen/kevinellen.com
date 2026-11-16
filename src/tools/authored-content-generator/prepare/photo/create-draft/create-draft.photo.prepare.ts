@@ -140,6 +140,13 @@ export const createDraftPhotoMetadata = (
     commentary: REQUIRED_PLACEHOLDER,
     readableLocation: resolvedLocation?.displayName ?? REQUIRED_PLACEHOLDER,
 
+    species: [
+      {
+        scientificName: REQUIRED_PLACEHOLDER,
+        name: REQUIRED_PLACEHOLDER,
+      },
+    ],
+
     capturedAt: {
       utc: resolveCapturedAtUtc(
         exif.capturedAt,

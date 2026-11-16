@@ -20,6 +20,11 @@ export const homeContentAuthored = {
     description:
       "Wildlife and nature photography by Kevin Ellen, based in Loughton, Essex, near Epping Forest. Field journals documenting wildlife behaviour, natural habitats and encounters in Essex and beyond.",
     sitemap: true,
+    openGraph: {
+      image: "/assets/images/homepage-open-graph-1200x630.jpg",
+      width: 1200,
+      height: 630,
+    },
   },
 
   pagePresentation: {

@@ -4,6 +4,7 @@ import type { Graph } from "schema-dts";
 
 import type { SiteConfigAppResolve } from "../config/site.config.app-resolve.type";
 import type { ScriptAssetAppRenderContext } from "../primitives/assets/scripts/script.asset.app-render-context.type";
+import type { OpenGraphAppResolve } from "./open-graph/open-graph.document.app-resolve.type";
 
 export type HeadDocumentAppRenderContext = Readonly<{
   title: string;
@@ -17,4 +18,6 @@ export type HeadDocumentAppRenderContext = Readonly<{
 
   structuredData: Graph["@graph"];
   scripts: readonly ScriptAssetAppRenderContext[];
+
+  openGraph: OpenGraphAppResolve;
 }>;

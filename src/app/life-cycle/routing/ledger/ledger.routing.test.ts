@@ -39,15 +39,14 @@ describe("Journal ledger routing", () => {
 
   const createLedger = (
     entries: readonly JournalLedgerEntryAppInit[],
-    version = 1,
   ): JournalLedgerAppInit => ({
-    version: version as JournalLedgerAppInit["version"],
+    version: 2,
     entries,
   });
 
   const resolve = () => resolveJournalLedgerRouting({ env });
 
-  const expectInvalidLedger = async (ledger: unknown) => {
+  const expectInvalidLedger = async (ledger: unknown): Promise<void> => {
     kvGet.mockResolvedValue(ledger);
 
     await expect(resolve()).rejects.toThrow(invalidLedgerError);
@@ -85,73 +84,45 @@ describe("Journal ledger routing", () => {
   });
 
   describe("Ledger envelope validation", () => {
-    it.each([0, 2, 3])(
+    it.each([0, 1, 3])(
       "rejects unsupported ledger version %i",
       async (version) => {
-        await expectInvalidLedger(createLedger([], version));
+        await expectInvalidLedger({ version, entries: [] });
       },
     );
 
     it.each([undefined, false, 0, "", "invalid", [], {}])(
       "rejects an invalid ledger envelope: %p",
       async (value) => {
-        if (value === null) {
-          throw new Error("Null is covered by the missing-ledger test");
-        }
-
-        if (value === undefined) {
-          kvGet.mockResolvedValue(value);
-
-          await expect(resolve()).rejects.toThrow(invalidLedgerError);
-          return;
-        }
-
         await expectInvalidLedger(value);
       },
     );
 
     it("rejects a ledger without a version", async () => {
-      await expectInvalidLedger({
-        entries: [],
-      });
+      await expectInvalidLedger({ entries: [] });
     });
 
     it("rejects a ledger without an entries array", async () => {
-      await expectInvalidLedger({
-        version: 1,
-        entries: null,
-      });
+      await expectInvalidLedger({ version: 2, entries: null });
     });
 
     it.each([undefined, "invalid", {}, 0, false])(
       "rejects an invalid entries value: %p",
       async (entries) => {
-        await expectInvalidLedger({
-          version: 1,
-          entries,
-        });
+        await expectInvalidLedger({ version: 2, entries });
       },
     );
 
     it("rejects an entries array containing null", async () => {
-      await expectInvalidLedger({
-        version: 1,
-        entries: [null],
-      });
+      await expectInvalidLedger({ version: 2, entries: [null] });
     });
 
     it("rejects an entries array containing a primitive", async () => {
-      await expectInvalidLedger({
-        version: 1,
-        entries: ["invalid"],
-      });
+      await expectInvalidLedger({ version: 2, entries: ["invalid"] });
     });
 
     it("rejects an entries array containing another array", async () => {
-      await expectInvalidLedger({
-        version: 1,
-        entries: [[]],
-      });
+      await expectInvalidLedger({ version: 2, entries: [[]] });
     });
   });
 
@@ -175,16 +146,11 @@ describe("Journal ledger routing", () => {
     it.each(requiredFields)(
       "rejects an entry missing required field %s",
       async (field) => {
-        const entry: Record<string, unknown> = {
-          ...validEntry(),
-        };
+        const entry: Record<string, unknown> = { ...validEntry() };
 
         delete entry[field];
 
-        await expectInvalidLedger({
-          version: 1,
-          entries: [entry],
-        });
+        await expectInvalidLedger({ version: 2, entries: [entry] });
       },
     );
 
@@ -204,13 +170,8 @@ describe("Journal ledger routing", () => {
       "rejects invalid primitive type for %s",
       async (field, value) => {
         await expectInvalidLedger({
-          version: 1,
-          entries: [
-            {
-              ...validEntry(),
-              [field]: value,
-            },
-          ],
+          version: 2,
+          entries: [{ ...validEntry(), [field]: value }],
         });
       },
     );
@@ -219,45 +180,35 @@ describe("Journal ledger routing", () => {
       "rejects an empty %s",
       async (field) => {
         await expectInvalidLedger({
-          version: 1,
-          entries: [
-            {
-              ...validEntry(),
-              [field]: "",
-            },
-          ],
+          version: 2,
+          entries: [{ ...validEntry(), [field]: "" }],
         });
       },
     );
 
     it.each([
       ["breadcrumbs", ["/journals", 42]],
-      ["photos", ["photo-1", null]],
-      ["topics", ["wildlife", false]],
+      ["photos", [{ id: "photo-1", width: 6000, height: 4000 }, null]],
+      ["topics", ["raptors", false]],
     ] as const)("rejects invalid elements in %s", async (field, value) => {
       await expectInvalidLedger({
-        version: 1,
-        entries: [
-          {
-            ...validEntry(),
-            [field]: value,
-          },
-        ],
+        version: 2,
+        entries: [{ ...validEntry(), [field]: value }],
       });
     });
 
-    it("accepts valid populated string arrays", async () => {
-      const entry = {
+    it("accepts valid populated ledger fields", async () => {
+      const entry: JournalLedgerEntryAppInit = {
         ...validEntry(),
         breadcrumbs: ["/", "/journals"],
-        photos: ["photo-1", "photo-2"],
-        topics: ["wildlife"],
+        photos: [
+          { id: "photo-1", width: 6000, height: 4000 },
+          { id: "photo-2", width: 4000, height: 6000 },
+        ],
+        topics: ["raptors"],
       };
 
-      kvGet.mockResolvedValue({
-        version: 1,
-        entries: [entry],
-      });
+      kvGet.mockResolvedValue(createLedger([entry]));
 
       const result = await resolve();
 
@@ -265,7 +216,7 @@ describe("Journal ledger routing", () => {
       expect(result.bySlug[entry.slug]).toBe(entry);
     });
 
-    it("accepts empty string-array fields", async () => {
+    it("accepts empty array fields", async () => {
       const entry = validEntry();
 
       kvGet.mockResolvedValue(createLedger([entry]));
@@ -275,28 +226,73 @@ describe("Journal ledger routing", () => {
       expect(result.newestFirst).toEqual([entry]);
     });
 
+    describe("v2 photograph validation", () => {
+      const validPhoto = {
+        id: "photo-1",
+        width: 6000,
+        height: 4000,
+      };
+
+      it("rejects legacy string photograph IDs", async () => {
+        await expectInvalidLedger({
+          version: 2,
+          entries: [{ ...validEntry(), photos: ["photo-1"] }],
+        });
+      });
+
+      it.each([
+        null,
+        "photo-1",
+        {},
+        { ...validPhoto, id: "" },
+        { ...validPhoto, id: 123 },
+        { ...validPhoto, width: 0 },
+        { ...validPhoto, width: -1 },
+        { ...validPhoto, width: NaN },
+        { ...validPhoto, width: Infinity },
+        { ...validPhoto, height: 0 },
+        { ...validPhoto, height: -1 },
+        { ...validPhoto, height: NaN },
+        { ...validPhoto, height: Infinity },
+        { id: "photo-1", height: 4000 },
+        { id: "photo-1", width: 6000 },
+      ])("rejects malformed photograph metadata: %p", async (photo) => {
+        await expectInvalidLedger({
+          version: 2,
+          entries: [{ ...validEntry(), photos: [photo] }],
+        });
+      });
+
+      it("preserves valid photograph metadata", async () => {
+        const entry: JournalLedgerEntryAppInit = {
+          ...validEntry(),
+          photos: [validPhoto],
+        };
+
+        kvGet.mockResolvedValue(createLedger([entry]));
+
+        const result = await resolve();
+
+        expect(result.newestFirst[0]?.photos).toEqual([validPhoto]);
+        expect(result.bySlug[entry.slug]?.photos).toBe(entry.photos);
+      });
+    });
+
     it("rejects the entire ledger if one entry is malformed", async () => {
       const valid = validEntry();
-
       const invalid = {
         ...createEntry("/journals/invalid", "2026-11-03"),
         photos: [null],
       };
 
-      await expectInvalidLedger({
-        version: 1,
-        entries: [valid, invalid],
-      });
+      await expectInvalidLedger({ version: 2, entries: [valid, invalid] });
     });
 
     it("rejects malformed dates before sorting", async () => {
       await expectInvalidLedger({
-        version: 1,
+        version: 2,
         entries: [
-          {
-            ...validEntry(),
-            dateCreated: null,
-          },
+          { ...validEntry(), dateCreated: null },
           createEntry("/journals/second", "2026-01-01"),
         ],
       });
@@ -309,10 +305,7 @@ describe("Journal ledger routing", () => {
 
       const result = await resolve();
 
-      expect(result).toEqual({
-        bySlug: {},
-        newestFirst: [],
-      });
+      expect(result).toEqual({ bySlug: {}, newestFirst: [] });
     });
 
     it("sorts entries by date descending", async () => {

@@ -88,3 +88,6 @@ __html-test/
 # Terraform lockfile must be committed
 !**/.terraform.lock.hcl
 !**/*.tfvars.example
+
+# Local KV migration artefacts
+.migration/

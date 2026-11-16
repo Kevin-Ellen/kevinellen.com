@@ -1134,6 +1134,27 @@
         }
       ]
     },
+    "OpenGraphAuthored": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "height": {
+          "type": "number"
+        },
+        "image": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "PageIntroModuleContentAuthored": {
       "additionalProperties": false,
       "properties": {
@@ -1647,6 +1668,9 @@
           "properties": {
             "description": {
               "type": "string"
+            },
+            "openGraph": {
+              "$ref": "#/definitions/OpenGraphAuthored"
             },
             "sitemap": {
               "type": "boolean"

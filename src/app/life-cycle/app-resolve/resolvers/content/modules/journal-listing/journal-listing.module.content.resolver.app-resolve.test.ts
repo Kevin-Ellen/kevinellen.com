@@ -26,24 +26,33 @@ describe("Journal-listing module AppResolve resolver", () => {
 
   const createEntry = (
     id: string,
-    topics: string[] = ["wildlife"],
-    photos: string[] = [`photo-${id}`],
-  ): Entry =>
-    ({
-      id,
-      slug: `/journals/${id}`,
-      title: `Journal ${id}`,
-      topics,
-      photos,
-    }) as unknown as Entry;
+    topics: Entry["topics"] = ["raptors"],
+    photoIds: string[] = [`photo-${id}`],
+  ): Entry => ({
+    id,
+    kind: "journal",
+    slug: `/journals/${id}`,
+    dateCreated: "2026-11-15",
+    label: `Journal ${id}`,
+    sitemap: true,
+    breadcrumbs: ["home", "journal", id],
+    title: `Journal ${id}`,
+    intro: `Introduction for ${id}`,
+    topics,
+    photos: photoIds.map((photoId) => ({
+      id: photoId,
+      width: 6000,
+      height: 4000,
+    })),
+  });
 
   const createLedger = (
     entries: readonly Entry[] = [
-      createEntry("one", ["wildlife", "essex"], ["one-a", "one-b"]),
+      createEntry("one", ["raptors", "essex"], ["one-a", "one-b"]),
       createEntry("two", ["travel"], ["two-a"]),
-      createEntry("three", ["wildlife"], ["three-a"]),
+      createEntry("three", ["raptors"], ["three-a"]),
       createEntry("four", ["travel"], ["four-a"]),
-      createEntry("five", ["wildlife"], ["five-a"]),
+      createEntry("five", ["raptors"], ["five-a"]),
     ],
   ): Ledger => ({
     newestFirst: entries,
@@ -117,7 +126,7 @@ describe("Journal-listing module AppResolve resolver", () => {
 
   it("filters entries by topic before pagination", async () => {
     const result = await resolve({
-      content: createContent({ topicId: "wildlife" }),
+      content: createContent({ topicId: "raptors" }),
     });
 
     expect(result.entries.map((entry) => entry.id)).toEqual(["one", "three"]);
@@ -130,13 +139,13 @@ describe("Journal-listing module AppResolve resolver", () => {
 
   it("returns the second page of filtered entries", async () => {
     const result = await resolve({
-      content: createContent({ topicId: "wildlife" }),
+      content: createContent({ topicId: "raptors" }),
       requestedPage: 2,
     });
 
     expect(result.entries.map((entry) => entry.id)).toEqual(["five"]);
 
-    expect(result.topicId).toBe("wildlife");
+    expect(result.topicId).toBe("raptors");
   });
 
   it("uses only the first photo for ordinary listing entries", async () => {
@@ -235,7 +244,7 @@ describe("Journal-listing module AppResolve resolver", () => {
 
   it("rejects an ordinary listing entry without photos", async () => {
     const journalLedger = createLedger([
-      createEntry("no-photo", ["wildlife"], []),
+      createEntry("no-photo", ["raptors"], []),
     ]);
 
     await expect(resolve({ journalLedger })).rejects.toThrow(
@@ -245,7 +254,7 @@ describe("Journal-listing module AppResolve resolver", () => {
 
   it("allows a featured entry with no photos", async () => {
     const journalLedger = createLedger([
-      createEntry("no-photo", ["wildlife"], []),
+      createEntry("no-photo", ["raptors"], []),
     ]);
 
     const result = await resolve({
@@ -283,7 +292,10 @@ describe("Journal-listing module AppResolve resolver", () => {
     await resolve({ journalLedger });
 
     expect(journalLedger.newestFirst[0]?.photos).toBe(originalPhotos);
-    expect(journalLedger.newestFirst[0]?.photos).toEqual(["one-a", "one-b"]);
+    expect(journalLedger.newestFirst[0]?.photos).toEqual([
+      { id: "one-a", width: 6000, height: 4000 },
+      { id: "one-b", width: 6000, height: 4000 },
+    ]);
   });
 
   it("handles an empty featured listing", async () => {
@@ -299,5 +311,20 @@ describe("Journal-listing module AppResolve resolver", () => {
     expect(result.featured).toBeNull();
     expect(result.entries).toEqual([]);
     expect(mockedPhoto).not.toHaveBeenCalled();
+  });
+
+  it("resolves photograph IDs from v2 ledger metadata", async () => {
+    const result = await resolve();
+
+    expect(mockedPhoto).toHaveBeenCalledWith({
+      photoId: "one-a",
+      getPhoto,
+    });
+
+    expect(result.entries[0]?.photos).toMatchObject([{ id: "one-a" }]);
+
+    expect(jest.mocked(resolvePhotoMetadataAppResolve)).toHaveBeenCalledTimes(
+      2,
+    );
   });
 });

@@ -84,6 +84,8 @@ export const resolveContentAppInit = ({
       },
     },
 
+    photos: isPublic ? (authored.photos ?? []) : [],
+
     breadcrumbs: authored.breadcrumbs,
 
     dates,
@@ -92,7 +94,9 @@ export const resolveContentAppInit = ({
       title: authored.metadata.title,
       description: authored.metadata.description,
       sitemap: isPublic ? authored.metadata.sitemap : false,
+      openGraph: isPublic ? (authored.metadata.openGraph ?? null) : null,
     },
+
     topics: isPublic ? (authored.topics ?? []) : [],
 
     scripts: resolvedScripts,

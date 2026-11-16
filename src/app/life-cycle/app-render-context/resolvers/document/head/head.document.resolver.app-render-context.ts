@@ -32,6 +32,7 @@ const resolveHeadScriptsDocumentAppRenderContext = ({
     return script?.location === "head" ? [script] : [];
   });
 };
+
 export const resolveHeadDocumentAppRenderContext = ({
   site,
   content,
@@ -43,6 +44,8 @@ export const resolveHeadDocumentAppRenderContext = ({
   canonical: content.slug
     ? new URL(content.slug, site.canonicalDomain).href
     : null,
+
+  openGraph: content.metadata.openGraph,
 
   locale: site.locale,
   themeColor: site.themeColor,

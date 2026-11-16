@@ -31,7 +31,13 @@ describe("RSS feed system", () => {
     breadcrumbs: [],
     title: "Fox in Epping Forest",
     intro: "An encounter in the forest.",
-    photos: ["forest-fox-photo"],
+    photos: [
+      {
+        id: "forest-fox-photo",
+        width: 2400,
+        height: 1600,
+      },
+    ],
     topics: [],
     ...overrides,
   });

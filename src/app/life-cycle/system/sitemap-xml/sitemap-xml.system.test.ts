@@ -23,7 +23,7 @@ describe("Sitemap XML system", () => {
   const createPublishedEntry = (
     slug: string,
     sitemap: boolean,
-    photos: readonly string[] = [],
+    photoIds: readonly string[] = [],
   ): PublishedEntry => ({
     id: slug,
     kind: "journal",
@@ -34,7 +34,11 @@ describe("Sitemap XML system", () => {
     breadcrumbs: [],
     title: "Test journal",
     intro: "A journal entry for sitemap regression testing.",
-    photos,
+    photos: photoIds.map((id) => ({
+      id,
+      width: 6000,
+      height: 4000,
+    })),
     topics: [],
   });
 

@@ -19,7 +19,35 @@ export const DocumentHead = ({ head, metadata }: Props) => (
 
     {head.canonical && <link rel="canonical" href={head.canonical} />}
 
-    <meta property="og:locale" content={head.locale} />
+    {/* Open Graph */}
+    <meta property="og:type" content={head.openGraph.type} />
+    <meta property="og:title" content={head.openGraph.title} />
+    <meta property="og:description" content={head.openGraph.description} />
+    <meta property="og:url" content={head.openGraph.url} />
+    <meta property="og:locale" content={head.openGraph.language} />
+
+    {head.openGraph.image && (
+      <>
+        <meta property="og:image" content={head.openGraph.image} />
+        {head.openGraph.image.startsWith("https://") && (
+          <meta property="og:image:secure_url" content={head.openGraph.image} />
+        )}
+
+        {head.openGraph.imageWidth !== null && (
+          <meta
+            property="og:image:width"
+            content={String(head.openGraph.imageWidth)}
+          />
+        )}
+
+        {head.openGraph.imageHeight !== null && (
+          <meta
+            property="og:image:height"
+            content={String(head.openGraph.imageHeight)}
+          />
+        )}
+      </>
+    )}
     <meta name="theme-color" content={head.themeColor} />
 
     <link rel="icon" href={head.icons.favicon} />

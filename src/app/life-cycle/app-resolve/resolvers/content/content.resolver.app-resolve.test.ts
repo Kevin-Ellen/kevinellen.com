@@ -45,6 +45,8 @@ describe("Content AppResolve resolver", () => {
 
   const site = {
     titleSuffix: " | Kevin Ellen",
+    canonicalDomain: "https://kevinellen.com",
+    language: "en-GB",
   } as Input["site"];
 
   const resolvedBody = {
@@ -64,11 +66,15 @@ describe("Content AppResolve resolver", () => {
 
   const createContent = (overrides: Record<string, unknown> = {}): Content =>
     ({
+      kind: "public",
+      pageType: "standard",
       id: "forest-journal",
+      slug: "/journal/forest-journal",
       label: "Forest Journal",
       metadata: {
         title: "Forest Journal",
         description: "A morning in Epping Forest",
+        openGraph: null,
       },
       breadcrumbs: ["home", "journals"],
       dates: {
@@ -113,6 +119,31 @@ describe("Content AppResolve resolver", () => {
     expect(result.metadata).toEqual({
       ...content.metadata,
       title: "Forest Journal | Kevin Ellen",
+      openGraph: {
+        type: "website",
+        title: "Forest Journal",
+        description: "A morning in Epping Forest",
+        url: "https://kevinellen.com/journal/forest-journal",
+        language: "en_GB",
+        image: null,
+        imageWidth: null,
+        imageHeight: null,
+      },
+    });
+  });
+
+  it("resolves Open Graph metadata from the content configuration", async () => {
+    const result = await resolveContentAppResolve(createInput());
+
+    expect(result.metadata.openGraph).toEqual({
+      type: "website",
+      title: "Forest Journal",
+      description: "A morning in Epping Forest",
+      url: "https://kevinellen.com/journal/forest-journal",
+      language: "en_GB",
+      image: null,
+      imageWidth: null,
+      imageHeight: null,
     });
   });
 
@@ -279,7 +310,7 @@ describe("Content AppResolve resolver", () => {
       error,
     );
 
-    expect(mockedBody).not.toHaveBeenCalled();
+    expect(mockedBody).toHaveBeenCalledTimes(1);
   });
 
   it("propagates body resolution failures", async () => {
@@ -291,7 +322,27 @@ describe("Content AppResolve resolver", () => {
       error,
     );
 
-    expect(mockedBreadcrumbs).toHaveBeenCalledTimes(1);
-    expect(mockedBody).toHaveBeenCalledTimes(1);
+    expect(mockedBreadcrumbs).not.toHaveBeenCalled();
+  });
+
+  it("handles error content without a matching registry entry", async () => {
+    const content = createContent({
+      kind: "error",
+      slug: null,
+      status: 404,
+    });
+
+    const result = await resolveContentAppResolve(createInput({ content }));
+
+    expect(result.metadata.openGraph).toEqual({
+      type: "website",
+      title: "Forest Journal",
+      description: "A morning in Epping Forest",
+      url: "https://kevinellen.com/",
+      language: "en_GB",
+      image: null,
+      imageWidth: null,
+      imageHeight: null,
+    });
   });
 });

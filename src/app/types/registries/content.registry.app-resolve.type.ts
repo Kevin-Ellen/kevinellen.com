@@ -1,5 +1,10 @@
 // src/app/types/registries/content.registry.app-resolve.type.ts
 
+import type {
+  BundledRegistryPhotoAppResolve,
+  PublishedRegistryPhotoAppResolve,
+} from "../photo/photo.app-resolve.type";
+
 type RegistryEntryBase = Readonly<{
   id: string;
   slug: string;
@@ -9,12 +14,13 @@ type RegistryEntryBase = Readonly<{
 export type ContentRegistryBundledEntryAppResolve = RegistryEntryBase &
   Readonly<{
     source: "bundled";
+    photos: readonly BundledRegistryPhotoAppResolve[];
   }>;
 
 export type ContentRegistryPublishedEntryAppResolve = RegistryEntryBase &
   Readonly<{
     source: "published";
-    photos: readonly string[];
+    photos: readonly PublishedRegistryPhotoAppResolve[];
     dateCreated: string;
     intro: string;
     title: string;

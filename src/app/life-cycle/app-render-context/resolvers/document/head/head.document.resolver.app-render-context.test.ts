@@ -45,6 +45,15 @@ describe("Document head AppRenderContext resolver", () => {
       metadata: {
         title: "Forest Journal | Kevin Ellen",
         description: "Observations from Epping Forest",
+        openGraph: {
+          type: "article",
+          title: "Forest Journal",
+          description: "Observations from Epping Forest",
+          url: "https://kevinellen.com/journals/forest",
+          image: "https://kevinellen.com/media/photo/945/630/marsh-harrier",
+          imageWidth: 945,
+          imageHeight: 630,
+        },
       },
       scripts: ["page-head"],
       ...overrides,
@@ -188,5 +197,13 @@ describe("Document head AppRenderContext resolver", () => {
     } as Input["site"];
 
     expect(() => resolve({ site: invalidSite })).toThrow("Invalid URL");
+  });
+
+  it("preserves resolved Open Graph metadata", () => {
+    const content = createContent();
+
+    const result = resolve({ content });
+
+    expect(result.openGraph).toBe(content.metadata.openGraph);
   });
 });

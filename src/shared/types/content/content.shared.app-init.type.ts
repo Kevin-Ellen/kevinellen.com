@@ -14,6 +14,7 @@ import type { OmitAndReplace } from "../utilities/omit-replace.utility.shared.ty
 
 import type { ContentBodyAppInit } from "./body/body.content.shared.app-init.type";
 import type { StructuredDataContentAppInit } from "./structured-data.content.shared.app-init.type";
+import type { OpenGraphAppInit } from "./open-graph.content.shared.type";
 
 export type ContentDatesAppInit = Readonly<{
   created: string;
@@ -49,11 +50,13 @@ export type ContentAppInit = Readonly<
     slug: string | null;
 
     topics: readonly TopicId[];
+    photos: readonly string[];
 
     metadata: Readonly<{
       title: string;
       description: string;
       sitemap: boolean;
+      openGraph: OpenGraphAppInit | null;
     }>;
 
     scripts: readonly ScriptAssetId[];
