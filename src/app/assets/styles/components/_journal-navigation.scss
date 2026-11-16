@@ -1,0 +1,51 @@
+// src/app/assets/styles/components/_journal-navigation.scss
+
+@use "../tokens/colours" as colours;
+@use "../tokens/spacing" as spacing;
+@use "../tokens/typography" as typography;
+
+.c-journal-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$xs;
+  margin-block: spacing.$lg;
+  padding-block-start: spacing.$sm;
+  border-top: 1px solid colours.$border;
+
+  &__link {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: spacing.$xs;
+    padding-block: spacing.$xs;
+    color: colours.$text;
+    text-decoration: none;
+
+    &:hover .c-journal-navigation__title {
+      color: colours.$accent;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    &:focus-visible {
+      outline: 2px solid colours.$accent;
+      outline-offset: 4px;
+    }
+  }
+
+  &__label {
+    color: colours.$text-muted;
+    font-family: typography.$font-sans;
+    font-size: typography.$text-sm;
+    white-space: nowrap;
+  }
+
+  &__title {
+    min-width: 0;
+    font-family: typography.$font-sans;
+    font-size: typography.$text-sm;
+    font-weight: typography.$medium;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+  }
+}

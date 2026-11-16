@@ -4,6 +4,7 @@ import type { HeaderPageDocumentAppRenderContext } from "./header.page.document.
 import type { LinkAppRenderContext } from "../../primitives/link/link.primitive.app-render-context.type";
 import type { ContentBodyAppRenderContext } from "./body.page.document.app-render-context.type";
 import type { FooterPageDocumentAppRenderContext } from "./footer.page.document.app-render-context.type";
+import type { JournalNavigationAppRenderContext } from "./content/journal-navigation.content.page.document.app-render-context.type";
 import type { ContentPageType } from "../../../../content-schema/content/content.content-schema.type";
 
 export type PageDocumentAppRenderContext = Readonly<{
@@ -11,5 +12,6 @@ export type PageDocumentAppRenderContext = Readonly<{
   header: HeaderPageDocumentAppRenderContext;
   breadcrumbs: readonly LinkAppRenderContext[];
   body: ContentBodyAppRenderContext;
+  journalNavigation: JournalNavigationAppRenderContext | null;
   footer: FooterPageDocumentAppRenderContext;
 }>;

@@ -23,5 +23,6 @@ export const resolvePageDocumentAppRenderContext = ({
   body: resolveContentBodyAppRenderContext({
     content: content.body,
   }),
+  journalNavigation: content.journalNavigation,
   footer: resolveFooterPageDocumentAppRenderContext({ shell }),
 });
