@@ -34,8 +34,11 @@ const componentLibrary = {
   photo: ({ component, className }) => (
     <PhotoObject
       photo={component.photo}
-      wide={component.wide}
-      className={className}
+      presentation={{
+        wide: component.wide,
+        className,
+        expandable: component.expandable,
+      }}
     />
   ),
 

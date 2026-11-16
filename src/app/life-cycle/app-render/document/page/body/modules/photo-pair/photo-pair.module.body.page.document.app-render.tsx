@@ -13,12 +13,15 @@ type Props = Readonly<{
 export const PhotoPairModule = ({ module }: Props) => (
   <div className="m-photo-pair">
     <div className="m-photo-pair__items">
-      {module.photos.map(({ photo }) => (
+      {module.photos.map((item) => (
         <PhotoObject
-          key={photo.id}
-          photo={photo}
-          className="m-photo-pair__item"
-          sizes={PHOTO_PAIR_SIZES}
+          key={item.photo.id}
+          photo={item.photo}
+          presentation={{
+            className: "m-photo-pair__item",
+            sizes: PHOTO_PAIR_SIZES,
+            expandable: item.expandable,
+          }}
         />
       ))}
     </div>

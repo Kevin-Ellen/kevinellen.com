@@ -6,22 +6,31 @@ import type { PhotoAppRenderContext } from "../../../../../../../types/photo/pho
 
 import { Svg } from "../../../../../primitives/svg/svg.primitive.app-render";
 
-type Props = Readonly<{
-  photo: PhotoAppRenderContext;
+type PhotoPresentation = Readonly<{
   wide?: boolean;
   priority?: boolean;
   className?: string;
   sizes?: string;
+  expandable?: boolean;
 }>;
 
-export const PhotoObject = ({
-  photo,
-  wide = false,
-  priority = false,
-  className,
-  sizes,
-}: Props) => {
+type Props = Readonly<{
+  photo: PhotoAppRenderContext;
+  presentation?: PhotoPresentation;
+}>;
+
+export const PhotoObject = ({ photo, presentation = {} }: Props) => {
+  const {
+    wide = false,
+    priority = false,
+    className,
+    sizes,
+    expandable = false,
+  } = presentation;
+
   const id = useId();
+  const dialogId = `${id}-viewer`;
+  const dialogTitleId = `${id}-viewer-title`;
 
   const settings = [
     {
@@ -51,80 +60,181 @@ export const PhotoObject = ({
     },
   ] as const;
 
+  const renderIdentity = (titleId?: string) => (
+    <div className="c-photo__identity">
+      <p className="c-photo__title" id={titleId}>
+        {photo.title}
+      </p>
+
+      {photo.species.length > 0 && (
+        <div className="c-photo__species">
+          {photo.species.map(({ name, scientificName, taxonRank }) => (
+            <span
+              className="c-photo__species-item"
+              key={`${scientificName}-${taxonRank}`}
+            >
+              {name}
+              {scientificName && (
+                <>
+                  {" · "}
+                  <em>{scientificName}</em>
+                </>
+              )}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderLocation = () =>
+    photo.location ? (
+      <div className="c-photo__location">
+        <Svg
+          svg={{
+            id: "icon-location-dot",
+            width: 16,
+            height: 16,
+          }}
+          className="c-photo__location-icon"
+        />
+        <span>{photo.location}</span>
+      </div>
+    ) : null;
+
+  const renderMetadata = (scope: "inline" | "viewer") => (
+    <dl className="c-photo__metadata">
+      {settings.map(({ id: settingId, label, value, explanation }) => {
+        const popoverId = `${id}-${scope}-${settingId}`;
+
+        return (
+          <div className="c-photo__metadata-item" key={settingId}>
+            <dt className="c-photo__metadata-term">
+              <button
+                type="button"
+                className="c-photo__metadata-trigger"
+                popoverTarget={popoverId}
+              >
+                {label}
+              </button>
+            </dt>
+
+            <dd className="c-photo__metadata-value">{value}</dd>
+
+            <div
+              id={popoverId}
+              popover="auto"
+              className="c-photo__metadata-popover"
+            >
+              <p className="c-photo__metadata-explanation">{explanation}</p>
+            </div>
+          </div>
+        );
+      })}
+    </dl>
+  );
+
+  const renderImage = (expanded = false) => (
+    <img
+      className={expanded ? "c-photo__viewer-image" : "c-photo__image"}
+      src={expanded ? undefined : photo.image.src}
+      srcSet={expanded ? undefined : photo.image.srcSet}
+      sizes={expanded ? undefined : sizes}
+      data-photo-viewer-src={expanded ? photo.image.viewerSrc : undefined}
+      width={photo.width}
+      height={photo.height}
+      alt={photo.alt}
+      loading={expanded || priority ? "eager" : "lazy"}
+      fetchPriority={!expanded && priority ? "high" : undefined}
+      decoding="async"
+    />
+  );
+
   return (
     <figure
       className={["c-photo", wide && "c-photo--wide", className]
         .filter(Boolean)
         .join(" ")}
     >
-      <img
-        className="c-photo__image"
-        src={photo.image.src}
-        srcSet={photo.image.srcSet}
-        sizes={sizes}
-        width={photo.width}
-        height={photo.height}
-        alt={photo.alt}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : undefined}
-        decoding="async"
-      />
+      {expandable ? (
+        <button
+          type="button"
+          className="c-photo__expand-trigger"
+          aria-label={`Expand photograph: ${photo.title}. View description and camera settings.`}
+          aria-haspopup="dialog"
+          aria-controls={dialogId}
+          data-photo-expand
+        >
+          {renderImage()}
+
+          <span className="c-photo__expand-icon" aria-hidden="true">
+            <Svg
+              svg={{
+                id: "icon-expand",
+                width: 20,
+                height: 20,
+              }}
+            />
+          </span>
+        </button>
+      ) : (
+        renderImage()
+      )}
 
       <figcaption
         className={["c-photo__caption", wide && "l-reading"]
           .filter(Boolean)
           .join(" ")}
       >
-        {photo.commentary && (
-          <p className="c-photo__description">{photo.commentary}</p>
+        {renderIdentity()}
+        {renderLocation()}
+
+        {!expandable && (
+          <>
+            {photo.commentary && (
+              <p className="c-photo__description">{photo.commentary}</p>
+            )}
+
+            {renderMetadata("inline")}
+          </>
         )}
-
-        {photo && (
-          <div className="c-photo__location">
-            <Svg
-              svg={{
-                id: "icon-location-dot",
-                width: 16,
-                height: 16,
-              }}
-              className="c-photo__location-icon"
-            />
-            <span>{photo.location}</span>
-          </div>
-        )}
-
-        <dl className="c-photo__metadata">
-          {settings.map(({ id: settingId, label, value, explanation }) => {
-            const popoverId = `${id}-${settingId}`;
-
-            return (
-              <div className="c-photo__metadata-item" key={settingId}>
-                <dt className="c-photo__metadata-term">
-                  <button
-                    type="button"
-                    className="c-photo__metadata-trigger"
-                    popoverTarget={popoverId}
-                    style={{ anchorName: `--${popoverId}` }}
-                  >
-                    {label}
-                  </button>
-                </dt>
-
-                <dd className="c-photo__metadata-value">{value}</dd>
-
-                <div
-                  id={popoverId}
-                  popover="auto"
-                  className="c-photo__metadata-popover"
-                  style={{ positionAnchor: `--${popoverId}` }}
-                >
-                  <p className="c-photo__metadata-explanation">{explanation}</p>
-                </div>
-              </div>
-            );
-          })}
-        </dl>
       </figcaption>
+
+      {expandable && (
+        <dialog
+          id={dialogId}
+          className="c-photo__viewer"
+          aria-labelledby={dialogTitleId}
+        >
+          <div className="c-photo__viewer-content">
+            <div className="c-photo__viewer-toolbar">
+              <button
+                type="button"
+                className="c-photo__viewer-close"
+                aria-label="Close photograph viewer"
+                data-photo-close
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <div className="c-photo__viewer-image-container">
+              {renderImage(true)}
+            </div>
+
+            <div className="c-photo__viewer-details">
+              {renderIdentity(dialogTitleId)}
+              {renderLocation()}
+
+              {photo.commentary && (
+                <p className="c-photo__description">{photo.commentary}</p>
+              )}
+
+              {renderMetadata("viewer")}
+            </div>
+          </div>
+        </dialog>
+      )}
     </figure>
   );
 };

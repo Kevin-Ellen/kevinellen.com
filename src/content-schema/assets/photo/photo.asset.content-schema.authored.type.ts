@@ -17,6 +17,7 @@ export type PhotoResolvedLocationAuthored = Readonly<{
 export type PhotoSpeciesAuthored = Readonly<{
   name: string;
   scientificName: string;
+  taxonRank?: "species" | "subspecies";
 }>;
 
 type PhotoCapturedAtAuthored = Readonly<{

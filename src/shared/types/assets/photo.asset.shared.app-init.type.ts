@@ -7,7 +7,7 @@ import type {
 
 export type PhotoSpeciesAppInit = PhotoSpeciesAuthored &
   Readonly<{
-    taxonRank: "species";
+    taxonRank: NonNullable<PhotoSpeciesAuthored["taxonRank"]>;
   }>;
 
 export type PhotoAppInit = Omit<PhotoAssetAuthored, "species"> &

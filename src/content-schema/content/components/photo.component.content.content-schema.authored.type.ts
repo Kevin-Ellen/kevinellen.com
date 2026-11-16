@@ -6,4 +6,5 @@ export type PhotoComponentContentAuthored = Readonly<{
   alt?: string;
   commentary?: string;
   wide?: boolean;
+  expandable?: boolean;
 }>;

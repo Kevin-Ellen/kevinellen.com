@@ -10,6 +10,6 @@ export const resolvePhotoAppInit = (
   species:
     photo.species?.map((species) => ({
       ...species,
-      taxonRank: "species" as const,
+      taxonRank: species.taxonRank ?? "species",
     })) ?? null,
 });

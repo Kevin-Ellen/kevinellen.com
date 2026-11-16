@@ -280,7 +280,7 @@ describe("createAppInit", () => {
           ...assets.scripts,
           registry: {
             "header-headroom": assets.scripts.registry["header-headroom"],
-            // Runtime registry keys are deliberately tested here.
+            "photo-viewer": assets.scripts.registry["photo-viewer"],
             ...({
               "additional-script": {},
             } as Record<string, unknown>),
@@ -294,6 +294,7 @@ describe("createAppInit", () => {
 
       expect(input?.scriptIds).toEqual([
         "header-headroom",
+        "photo-viewer",
         "additional-script",
       ]);
     });

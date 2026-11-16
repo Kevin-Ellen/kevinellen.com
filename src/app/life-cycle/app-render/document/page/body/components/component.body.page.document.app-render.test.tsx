@@ -288,7 +288,9 @@ describe("ContentComponent AppRender dispatcher", () => {
 
       render(<ContentComponent component={component} />);
 
-      expect(mockedPhoto.mock.calls[0]?.[0].wide).toBe(component.wide);
+      expect(mockedPhoto.mock.calls[0]?.[0].presentation?.wide).toBe(
+        component.wide,
+      );
     });
 
     it("forwards the custom className", () => {
@@ -300,8 +302,11 @@ describe("ContentComponent AppRender dispatcher", () => {
 
       expect(mockedPhoto.mock.calls[0]?.[0]).toEqual({
         photo: component.photo,
-        wide: component.wide,
-        className: "m-gallery__photo",
+        presentation: {
+          className: "m-gallery__photo",
+          wide: true,
+          expandable: undefined,
+        },
       });
     });
 

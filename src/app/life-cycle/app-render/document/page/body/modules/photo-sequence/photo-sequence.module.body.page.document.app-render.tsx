@@ -19,7 +19,10 @@ export const PhotoSequenceModule = ({ module }: Props) => (
         <div className="m-photo-sequence__item" key={item.photo.id}>
           <PhotoObject
             photo={item.photo}
-            sizes="(min-width: 1024px) 55vw, 85vw"
+            presentation={{
+              sizes: "(min-width: 1024px) 55vw, 85vw",
+              expandable: item.expandable,
+            }}
           />
         </div>
       ))}

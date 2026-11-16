@@ -8,5 +8,5 @@ export const scriptsAssetsConfigAuthored = {
   registry: Object.fromEntries(
     AUTHORED_SCRIPT_ASSETS.map((asset) => [asset.id, asset]),
   ),
-  global: ["header-headroom"],
+  global: ["header-headroom", "photo-viewer"],
 } as ScriptsAssetsConfigAuthored;

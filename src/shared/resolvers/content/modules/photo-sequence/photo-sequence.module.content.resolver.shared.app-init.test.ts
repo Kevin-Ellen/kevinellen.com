@@ -1,5 +1,6 @@
 // src/shared/resolvers/content/modules/photo-sequence/photo-sequence.module.content.resolver.shared.app-init.test.ts
 
+import type { PhotoComponentContentAppInit } from "../../../../types/content/components/photo.component.content.shared.app-init.type";
 import { resolvePhotoComponentContentAppInit } from "../../components/photo/photo.component.content.resolver.shared.app-init";
 import { resolvePhotoSequenceModuleAppInit } from "./photo-sequence.module.content.resolver.shared.app-init";
 
@@ -14,15 +15,14 @@ const mockedPhotoResolver = jest.mocked(resolvePhotoComponentContentAppInit);
 
 type Input = Parameters<typeof resolvePhotoSequenceModuleAppInit>[0];
 type Authored = Input["authored"];
-type Photo = Authored["photos"][number];
 type ResolvedPhoto = ReturnType<typeof resolvePhotoComponentContentAppInit>;
 
 describe("Photo sequence module AppInit resolver", () => {
-  const createPhoto = (id: string): Photo =>
-    ({
-      kind: "photo",
-      photoId: id,
-    }) as unknown as Photo;
+  const createPhoto = (photoId: string): PhotoComponentContentAppInit => ({
+    kind: "photo",
+    photoId,
+    expandable: false,
+  });
 
   const createAuthored = (overrides: Partial<Authored> = {}): Authored =>
     ({
@@ -34,7 +34,10 @@ describe("Photo sequence module AppInit resolver", () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
-    mockedPhotoResolver.mockImplementation(({ authored }) => ({ ...authored }));
+    mockedPhotoResolver.mockImplementation(({ authored }) => ({
+      ...authored,
+      expandable: authored.expandable ?? false,
+    }));
   });
 
   it("returns an empty photo collection", () => {
