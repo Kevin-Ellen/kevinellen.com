@@ -2,6 +2,7 @@
 
 import type { ContentCommonAuthored } from "./content.content-schema.authored.type";
 import type { StructuredDataContentAuthored } from "./structured-data.content.content-schema.authored.type";
+import type { OpenGraphAuthored } from "./open-graph.content.content-schema.authored.type";
 import type { TopicId } from "../topics/topic-id.topics.content-schema.type";
 
 export type PublicContentAuthored = ContentCommonAuthored &
@@ -13,6 +14,7 @@ export type PublicContentAuthored = ContentCommonAuthored &
       title: string;
       description: string;
       sitemap: boolean;
+      openGraph?: OpenGraphAuthored;
     }>;
 
     topics?: readonly TopicId[];

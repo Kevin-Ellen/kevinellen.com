@@ -13,13 +13,16 @@ import type {
   JournalLedgerAppInit,
   JournalLedgerEntryAuthored,
   JournalLedgerEntryAppInit,
+  JournalLedgerPhotoAppInit,
 } from "../../../../shared/types/content/kv-ledger.content.shared.type";
+import type { PhotoAppInit } from "../../../../shared/types/assets/photo.asset.shared.app-init.type";
 
 type PublishMode = "--local" | "--remote";
 
 type Input = Readonly<{
   directory: string;
   mode: PublishMode;
+  getPhoto: (id: string) => Promise<PhotoAppInit | null>;
 }>;
 
 type JournalArtifacts = Readonly<{
@@ -33,7 +36,7 @@ type LedgerEntryIdentity = Readonly<{
 }>;
 
 type LedgerShape = Readonly<{
-  version: 1;
+  version: 2;
   entries: readonly LedgerEntryIdentity[];
 }>;
 
@@ -51,7 +54,7 @@ const isLedgerEntry = (value: unknown): value is LedgerEntryIdentity =>
 
 const isLedgerShape = (value: unknown): value is LedgerShape =>
   isRecord(value) &&
-  value.version === 1 &&
+  value.version === 2 &&
   Array.isArray(value.entries) &&
   value.entries.every(isLedgerEntry);
 
@@ -188,6 +191,7 @@ const writeLedger = async (
 export const publishJournalLedger = async ({
   directory,
   mode,
+  getPhoto,
 }: Input): Promise<void> => {
   const { authored, appInit } = await readJournalArtifacts(directory);
 
@@ -198,6 +202,31 @@ export const publishJournalLedger = async ({
   if (new Set(authored.photos).size !== authored.photos.length) {
     throw new Error(`Journal "${authored.id}" contains duplicate photographs`);
   }
+
+  const photos: readonly JournalLedgerPhotoAppInit[] = await Promise.all(
+    authored.photos.map(async (id) => {
+      const photo = await getPhoto(id);
+
+      if (!photo) {
+        throw new Error(`Missing published photograph: ${id}`);
+      }
+
+      if (
+        !Number.isFinite(photo.width) ||
+        photo.width <= 0 ||
+        !Number.isFinite(photo.height) ||
+        photo.height <= 0
+      ) {
+        throw new Error(`Invalid dimensions for photograph: ${id}`);
+      }
+
+      return {
+        id,
+        width: photo.width,
+        height: photo.height,
+      };
+    }),
+  );
 
   const introModule = authored.body.modules.find(
     (module) => module.kind === "pageIntro",
@@ -233,6 +262,7 @@ export const publishJournalLedger = async ({
     breadcrumbs: appInit.breadcrumbs,
     title: appInit.metadata.title,
     topics: appInit.topics,
+    photos,
   };
 
   const authoredKey = "ledger:authored:journal";
@@ -241,7 +271,7 @@ export const publishJournalLedger = async ({
   const existingAuthored = await readLedger<JournalLedgerAuthored>(
     authoredKey,
     {
-      version: 1,
+      version: 2,
       entries: [],
     },
     mode,
@@ -250,19 +280,19 @@ export const publishJournalLedger = async ({
   const existingAppInit = await readLedger<JournalLedgerAppInit>(
     appInitKey,
     {
-      version: 1,
+      version: 2,
       entries: [],
     },
     mode,
   );
 
   const authoredLedger: JournalLedgerAuthored = {
-    version: 1,
+    version: 2,
     entries: updateLedger(existingAuthored.entries, authoredEntry),
   };
 
   const appInitLedger: JournalLedgerAppInit = {
-    version: 1,
+    version: 2,
     entries: updateLedger(existingAppInit.entries, appInitEntry),
   };
 

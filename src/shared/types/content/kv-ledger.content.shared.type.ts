@@ -17,8 +17,14 @@ export type JournalLedgerEntryAuthored = Readonly<{
 }>;
 
 export type JournalLedgerAuthored = Readonly<{
-  version: 1;
+  version: 2;
   entries: readonly JournalLedgerEntryAuthored[];
+}>;
+
+export type JournalLedgerPhotoAppInit = Readonly<{
+  id: string;
+  width: number;
+  height: number;
 }>;
 
 export type JournalLedgerEntryAppInit = Readonly<{
@@ -31,12 +37,12 @@ export type JournalLedgerEntryAppInit = Readonly<{
   breadcrumbs: readonly string[];
   title: string;
   intro: string;
-  photos: readonly string[];
+  photos: readonly JournalLedgerPhotoAppInit[];
   topics: readonly TopicId[];
 }>;
 
 export type JournalLedgerAppInit = Readonly<{
-  version: 1;
+  version: 2;
   entries: readonly JournalLedgerEntryAppInit[];
 }>;
 

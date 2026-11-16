@@ -11,6 +11,7 @@ import type { PublishedRegistry } from "../../../../../shared/types/content/kv-l
 import { resolveContentBodyAppResolve } from "./body/body.content.app-resolve";
 import { resolveContentBreadcrumbsAppResolve } from "./breadcrumbs/breadcrumbs.content.resolver.app-resolve";
 import { resolveJournalNavigationAppResolve } from "./journal-navigation/journal-navigation.content.resolver.app-resolve";
+import { resolveOpenGraphAppResolve } from "./open-graph/open-graph.content.resolver.app-resolve";
 
 type ContentAppInit =
   | AppInit["content"]["bySlug"][string]
@@ -34,25 +35,8 @@ export const resolveContentAppResolve = async ({
   site,
   journalLedger,
   requestedPage,
-}: Input): Promise<ContentAppResolve> => ({
-  ...content,
-
-  metadata: {
-    ...content.metadata,
-    title: `${content.metadata.title}${site.titleSuffix}`,
-  },
-  breadcrumbs: resolveContentBreadcrumbsAppResolve({
-    breadcrumbs: content.breadcrumbs,
-    contentRegistry,
-  }),
-  journalNavigation:
-    content.slug !== null && journalLedger.bySlug[content.slug]?.sitemap
-      ? resolveJournalNavigationAppResolve({
-          currentSlug: content.slug,
-          journalLedger,
-        })
-      : null,
-  body: await resolveContentBodyAppResolve({
+}: Input): Promise<ContentAppResolve> => {
+  const body = await resolveContentBodyAppResolve({
     content: content.body,
     contentRegistry,
     getPhoto,
@@ -63,5 +47,46 @@ export const resolveContentAppResolve = async ({
       published: content.dates.created,
       lastUpdated: content.dates.lastUpdated,
     },
-  }),
-});
+  });
+
+  const registryEntry =
+    content.slug !== null
+      ? (contentRegistry.bySlug[content.slug] ?? null)
+      : (contentRegistry.errorsByStatus[content.status] ?? null);
+
+  return {
+    ...content,
+
+    metadata: {
+      ...content.metadata,
+
+      title: `${content.metadata.title}${site.titleSuffix}`,
+
+      openGraph: resolveOpenGraphAppResolve({
+        pageType: content.pageType,
+        title: content.metadata.title,
+        description: content.metadata.description,
+        canonicalUrl: new URL(content.slug ?? "/", site.canonicalDomain).href,
+        canonicalDomain: site.canonicalDomain,
+        openGraph: content.metadata.openGraph,
+        language: site.language,
+        registryEntry,
+      }),
+    },
+
+    breadcrumbs: resolveContentBreadcrumbsAppResolve({
+      breadcrumbs: content.breadcrumbs,
+      contentRegistry,
+    }),
+
+    journalNavigation:
+      content.slug !== null && journalLedger.bySlug[content.slug]?.sitemap
+        ? resolveJournalNavigationAppResolve({
+            currentSlug: content.slug,
+            journalLedger,
+          })
+        : null,
+
+    body,
+  };
+};

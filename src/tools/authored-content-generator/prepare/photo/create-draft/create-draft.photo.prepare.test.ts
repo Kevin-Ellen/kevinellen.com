@@ -154,6 +154,13 @@ describe("Draft photo metadata", () => {
         commentary: "__REQUIRED__",
         readableLocation: "__REQUIRED__",
 
+        species: [
+          {
+            scientificName: "__REQUIRED__",
+            name: "__REQUIRED__",
+          },
+        ],
+
         capturedAt: {
           utc: "2026-07-15T11:30:45.000Z",
           timezone: "Europe/London",

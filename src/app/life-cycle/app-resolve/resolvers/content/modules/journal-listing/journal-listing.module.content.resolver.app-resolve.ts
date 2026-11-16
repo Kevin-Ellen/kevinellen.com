@@ -54,9 +54,9 @@ export const resolveJournalListingModuleAppResolve = async ({
     ? {
         ...featuredEntry,
         photos: await Promise.all(
-          featuredEntry.photos.slice(0, content.photoLimit).map((photoId) =>
+          featuredEntry.photos.slice(0, content.photoLimit).map(({ id }) =>
             resolvePhotoMetadataAppResolve({
-              photoId,
+              photoId: id,
               getPhoto,
             }),
           ),
@@ -66,14 +66,14 @@ export const resolveJournalListingModuleAppResolve = async ({
 
   const entries = await Promise.all(
     listingEntries.map(async (entry) => {
-      const photoId = entry.photos[0];
+      const firstPhoto = entry.photos[0];
 
-      if (!photoId) {
+      if (!firstPhoto) {
         throw new Error(`Journal entry "${entry.slug}" has no photos`);
       }
 
       const photo = await resolvePhotoMetadataAppResolve({
-        photoId,
+        photoId: firstPhoto.id,
         getPhoto,
       });
 

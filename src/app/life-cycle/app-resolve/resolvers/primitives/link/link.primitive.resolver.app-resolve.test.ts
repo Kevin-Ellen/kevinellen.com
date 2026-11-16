@@ -17,6 +17,7 @@ describe("Link primitive AppResolve resolver", () => {
     id,
     slug,
     label,
+    photos: [],
   });
 
   const createRegistry = (): Registry => ({

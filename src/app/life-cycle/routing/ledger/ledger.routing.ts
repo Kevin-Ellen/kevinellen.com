@@ -4,6 +4,7 @@ import type { ValidatedEnv } from "../../../entry.type";
 
 import type {
   JournalLedgerEntryAppInit,
+  JournalLedgerPhotoAppInit,
   PublishedRegistry,
 } from "../../../../shared/types/content/kv-ledger.content.shared.type";
 
@@ -16,12 +17,30 @@ type LedgerEntryShape = Omit<JournalLedgerEntryAppInit, "topics"> &
     topics: readonly string[];
   }>;
 
+const LEDGER_VERSION = 2;
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 const isStringArray = (value: unknown): value is string[] =>
   Array.isArray(value) &&
   value.every((item: unknown) => typeof item === "string");
+
+const isLedgerPhoto = (value: unknown): value is JournalLedgerPhotoAppInit =>
+  isRecord(value) &&
+  typeof value.id === "string" &&
+  value.id.length > 0 &&
+  typeof value.width === "number" &&
+  Number.isFinite(value.width) &&
+  value.width > 0 &&
+  typeof value.height === "number" &&
+  Number.isFinite(value.height) &&
+  value.height > 0;
+
+const isLedgerPhotoArray = (
+  value: unknown,
+): value is JournalLedgerPhotoAppInit[] =>
+  Array.isArray(value) && value.every(isLedgerPhoto);
 
 const isLedgerEntry = (value: unknown): value is LedgerEntryShape => {
   if (!isRecord(value)) {
@@ -41,7 +60,7 @@ const isLedgerEntry = (value: unknown): value is LedgerEntryShape => {
     isStringArray(value.breadcrumbs) &&
     typeof value.title === "string" &&
     typeof value.intro === "string" &&
-    isStringArray(value.photos) &&
+    isLedgerPhotoArray(value.photos) &&
     isStringArray(value.topics)
   );
 };
@@ -60,7 +79,7 @@ export const resolveJournalLedgerRouting = async ({
 
   if (
     !isRecord(ledger) ||
-    ledger.version !== 1 ||
+    ledger.version !== LEDGER_VERSION ||
     !Array.isArray(ledger.entries) ||
     !ledger.entries.every(isLedgerEntry)
   ) {

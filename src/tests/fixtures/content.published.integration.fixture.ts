@@ -71,12 +71,18 @@ export const createPublishedContentFixture = () => {
     breadcrumbs: journal.breadcrumbs,
     title: journal.metadata.title,
     intro: journal.metadata.description,
-    photos: [photo.id],
+    photos: [
+      {
+        id: photo.id,
+        width: photo.width,
+        height: photo.height,
+      },
+    ],
     topics: journal.topics,
   };
 
   const ledger: JournalLedgerAppInit = {
-    version: 1,
+    version: 2,
     entries: [entry],
   };
 

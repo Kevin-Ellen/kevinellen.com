@@ -396,6 +396,7 @@ export const publishWorkspace = async ({
   await publishJournalLedger({
     directory,
     mode,
+    getPhoto: photoPublisher.getPhoto,
   });
 
   console.log(`✓ Publication complete: ${journal.id}`);

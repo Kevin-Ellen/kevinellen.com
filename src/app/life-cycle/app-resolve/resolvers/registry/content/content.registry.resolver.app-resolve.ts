@@ -8,6 +8,8 @@ import type {
   ContentRegistryPublishedEntryAppResolve,
 } from "../../../../../types/registries/content.registry.app-resolve.type";
 
+import { resolveContentPhotosAppResolve } from "./photo-extraction/photo-extraction.content.registry.resolver.app-resolve";
+
 type Input = Readonly<{
   appInit: AppInit;
   ledger: PublishedRegistry;
@@ -25,6 +27,9 @@ export const resolveContentRegistryAppResolve = ({
       id: content.id,
       slug,
       label: content.label,
+      photos: resolveContentPhotosAppResolve({
+        body: content.body,
+      }),
     };
   }
 
@@ -58,6 +63,7 @@ export const resolveContentRegistryAppResolve = ({
       id: content.id,
       slug: content.slug ?? "",
       label: content.label,
+      photos: [],
     };
   }
 

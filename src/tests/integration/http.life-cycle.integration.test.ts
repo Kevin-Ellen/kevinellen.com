@@ -34,7 +34,7 @@ describe("HTTP lifecycle integration", () => {
     }) as ValidatedEnv;
 
   const createLedger = (): JournalLedgerAppInit => ({
-    version: 1,
+    version: 2,
     entries: [],
   });
 
@@ -131,11 +131,15 @@ describe("HTTP lifecycle integration", () => {
         collectPhotoIds(journal.body);
 
         const ledger: JournalLedgerAppInit = {
-          version: 1,
+          version: 2,
           entries: [
             {
               ...fixture.entry,
-              photos: [...photoIds],
+              photos: [...photoIds].map((id) => ({
+                id,
+                width: fixture.photo.width,
+                height: fixture.photo.height,
+              })),
             },
           ],
         };

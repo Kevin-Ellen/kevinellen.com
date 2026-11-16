@@ -57,7 +57,13 @@ export const resolveSitemapSystem = ({
 
   const publishedEntries = Object.values(ledger.bySlug)
     .filter((entry) => entry.sitemap)
-    .map((entry) => createUrlEntry(entry.slug, canonicalDomain, entry.photos));
+    .map((entry) =>
+      createUrlEntry(
+        entry.slug,
+        canonicalDomain,
+        entry.photos.map(({ id }) => id),
+      ),
+    );
 
   return {
     kind: "xml",

@@ -38,7 +38,7 @@ describe("Journal publishing integration", () => {
   const createLedger = (
     entries: readonly JournalLedgerEntryAppInit[] = [fixture.entry],
   ): JournalLedgerAppInit => ({
-    version: 1,
+    version: 2,
     entries,
   });
 
@@ -69,7 +69,7 @@ describe("Journal publishing integration", () => {
           [
             "ledger:appInit:journal",
             {
-              version: 2,
+              version: 0,
               entries: [fixture.entry],
             },
           ],

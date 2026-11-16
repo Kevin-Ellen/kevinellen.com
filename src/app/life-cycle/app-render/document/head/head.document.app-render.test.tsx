@@ -14,7 +14,18 @@ describe("DocumentHead", () => {
       title: "Wildlife Photography | Kevin Ellen",
       description: "Wildlife photography and field notes.",
       canonical: "https://kevinellen.com/",
-      locale: "en_GB",
+      locale: "en-GB",
+      openGraph: {
+        type: "website",
+        title: "Wildlife Photography",
+        description: "Wildlife photography and field notes.",
+        language: "en_GB",
+        url: "https://kevinellen.com/",
+        image:
+          "https://kevinellen.com/assets/images/homepage-open-graph-1200x630.jpg",
+        imageWidth: 1200,
+        imageHeight: 630,
+      },
       themeColor: "#10251a",
       icons: {
         favicon: "/favicon.ico",
@@ -90,11 +101,26 @@ describe("DocumentHead", () => {
     expect(html).not.toContain('rel="canonical"');
   });
 
-  it("renders locale and theme colour", () => {
+  it("renders the Open Graph locale and theme colour", () => {
     const html = renderHead();
 
     expect(html).toContain('property="og:locale" content="en_GB"');
     expect(html).toContain('name="theme-color" content="#10251a"');
+  });
+
+  it("uses the Open Graph language rather than the document locale", () => {
+    const html = renderHead(
+      createHead({
+        locale: "en-GB",
+        openGraph: {
+          ...createHead().openGraph,
+          language: "nl_NL",
+        },
+      }),
+    );
+
+    expect(html).toContain('property="og:locale" content="nl_NL"');
+    expect(html).not.toContain('property="og:locale" content="en-GB"');
   });
 
   it("renders all favicon declarations", () => {
@@ -191,5 +217,193 @@ describe("DocumentHead", () => {
     );
     expect(html).toContain('<style nonce="another-nonce"');
     expect(html).not.toContain("test-csp-nonce");
+  });
+
+  describe("Open Graph metadata", () => {
+    it("renders the required Open Graph properties", () => {
+      const html = renderHead();
+
+      expect(html).toContain('property="og:type" content="website"');
+      expect(html).toContain(
+        'property="og:title" content="Wildlife Photography"',
+      );
+      expect(html).toContain(
+        'property="og:description" content="Wildlife photography and field notes."',
+      );
+      expect(html).toContain(
+        'property="og:url" content="https://kevinellen.com/"',
+      );
+      expect(html).toContain('property="og:locale" content="en_GB"');
+    });
+
+    it("renders article metadata for journal entries", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            type: "article",
+            title: "Marsh Harriers at Abberton Reservoir",
+            description: "An autumn wildlife encounter.",
+            language: "en_GB",
+            url: "https://kevinellen.com/journal/marsh-harriers",
+            image: "https://kevinellen.com/media/photo/945/630/marsh-harrier",
+            imageWidth: 945,
+            imageHeight: 630,
+          },
+        }),
+      );
+
+      expect(html).toContain('property="og:type" content="article"');
+      expect(html).toContain(
+        'property="og:title" content="Marsh Harriers at Abberton Reservoir"',
+      );
+      expect(html).toContain(
+        'property="og:url" content="https://kevinellen.com/journal/marsh-harriers"',
+      );
+    });
+
+    it("renders an absolute Open Graph image URL", () => {
+      const html = renderHead();
+
+      expect(html).toContain(
+        'property="og:image" content="https://kevinellen.com/assets/images/homepage-open-graph-1200x630.jpg"',
+      );
+    });
+
+    it("renders a secure image URL for HTTPS images", () => {
+      const html = renderHead();
+
+      expect(html).toContain(
+        'property="og:image:secure_url" content="https://kevinellen.com/assets/images/homepage-open-graph-1200x630.jpg"',
+      );
+    });
+
+    it("omits the secure image URL for HTTP images", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            ...createHead().openGraph,
+            image: "http://localhost:8787/media/photo/788/630/dunnock",
+            imageWidth: 788,
+            imageHeight: 630,
+          },
+        }),
+      );
+
+      expect(html).toContain(
+        'property="og:image" content="http://localhost:8787/media/photo/788/630/dunnock"',
+      );
+      expect(html).not.toContain('property="og:image:secure_url"');
+    });
+
+    it("renders the actual resolved image dimensions", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            ...createHead().openGraph,
+            imageWidth: 788,
+            imageHeight: 630,
+          },
+        }),
+      );
+
+      expect(html).toContain('property="og:image:width" content="788"');
+      expect(html).toContain('property="og:image:height" content="630"');
+    });
+
+    it("omits image dimensions when they are unknown", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            ...createHead().openGraph,
+            imageWidth: null,
+            imageHeight: null,
+          },
+        }),
+      );
+
+      expect(html).toContain('property="og:image"');
+      expect(html).not.toContain('property="og:image:width"');
+      expect(html).not.toContain('property="og:image:height"');
+    });
+
+    it("renders image dimensions independently when only one is present", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            ...createHead().openGraph,
+            imageWidth: 1200,
+            imageHeight: null,
+          },
+        }),
+      );
+
+      expect(html).toContain('property="og:image:width" content="1200"');
+      expect(html).not.toContain('property="og:image:height"');
+    });
+
+    it("omits every image-related tag when no image is resolved", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            ...createHead().openGraph,
+            image: null,
+            imageWidth: null,
+            imageHeight: null,
+          },
+        }),
+      );
+
+      expect(html).not.toContain('property="og:image"');
+      expect(html).not.toContain('property="og:image:secure_url"');
+      expect(html).not.toContain('property="og:image:width"');
+      expect(html).not.toContain('property="og:image:height"');
+
+      expect(html).toContain('property="og:title"');
+      expect(html).toContain('property="og:description"');
+    });
+
+    it("escapes special characters in Open Graph metadata", () => {
+      const html = renderHead(
+        createHead({
+          openGraph: {
+            ...createHead().openGraph,
+            title: 'Birds & "Wildlife" <Essex>',
+            description: 'Photography & "nature" <journal>',
+          },
+        }),
+      );
+
+      expect(html).toContain(
+        'property="og:title" content="Birds &amp; &quot;Wildlife&quot; &lt;Essex&gt;"',
+      );
+      expect(html).toContain(
+        'property="og:description" content="Photography &amp; &quot;nature&quot; &lt;journal&gt;"',
+      );
+    });
+
+    it("keeps document metadata independent of Open Graph overrides", () => {
+      const html = renderHead(
+        createHead({
+          title: "Document Title | Kevin Ellen",
+          description: "Document description",
+          openGraph: {
+            ...createHead().openGraph,
+            title: "Social Sharing Title",
+            description: "Social sharing description",
+          },
+        }),
+      );
+
+      expect(html).toContain("<title>Document Title | Kevin Ellen</title>");
+      expect(html).toContain(
+        'name="description" content="Document description"',
+      );
+      expect(html).toContain(
+        'property="og:title" content="Social Sharing Title"',
+      );
+      expect(html).toContain(
+        'property="og:description" content="Social sharing description"',
+      );
+    });
   });
 });

@@ -14,13 +14,22 @@ describe("Content registry AppResolve resolver", () => {
     ({
       id,
       label,
-    }) as BundledContent;
+      body: {
+        modules: [],
+      },
+    }) as unknown as BundledContent;
 
   const publishedPage = (id: string, label: string): PublishedContent =>
     ({
       id,
       label,
-      photos: ["photo-001"],
+      photos: [
+        {
+          id: "photo-001",
+          width: 6000,
+          height: 4000,
+        },
+      ],
       dateCreated: "2026-10-01",
       intro: "A journal introduction",
       title: "Journal title",
@@ -61,12 +70,14 @@ describe("Content registry AppResolve resolver", () => {
         id: "home",
         slug: "/",
         label: "Home",
+        photos: [],
       },
       "/about": {
         source: "bundled",
         id: "about",
         slug: "/about",
         label: "About",
+        photos: [],
       },
     });
   });
@@ -122,6 +133,7 @@ describe("Content registry AppResolve resolver", () => {
     const errorPage = {
       ...bundledPage("not-found", "Not Found"),
       slug: "/404",
+      photos: [],
     } as ErrorContent;
 
     const input = createInput({}, {}, { 404: errorPage });
@@ -132,6 +144,7 @@ describe("Content registry AppResolve resolver", () => {
         id: "not-found",
         slug: "/404",
         label: "Not Found",
+        photos: [],
       },
     );
   });

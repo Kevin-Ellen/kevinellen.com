@@ -4,6 +4,7 @@ import type { AppInit } from "../../../../life-cycle/app-init/class.app-init";
 import type { ContentBodyAppResolve } from "../body.page.document.app-resolve.type";
 import type { JournalNavigationAppResolve } from "./journal-navigation.content.page.document.app-resolve.type";
 import type { LinkAppResolve } from "../../../primitives/link/link.primitive.app-resolve.type";
+import type { OpenGraphAppResolve } from "../../open-graph/open-graph.document.app-resolve.type";
 import type { OmitAndReplace } from "../../../../../shared/types/utilities/omit-replace.utility.shared.type";
 
 type ContentAppInit =
@@ -16,5 +17,12 @@ export type ContentAppResolve = OmitAndReplace<
     body: ContentBodyAppResolve;
     breadcrumbs: readonly LinkAppResolve[];
     journalNavigation: JournalNavigationAppResolve | null;
+
+    metadata: OmitAndReplace<
+      ContentAppInit["metadata"],
+      {
+        openGraph: OpenGraphAppResolve;
+      }
+    >;
   }
 >;
