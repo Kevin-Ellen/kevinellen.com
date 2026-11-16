@@ -31,7 +31,7 @@ describe("Photo publishing", () => {
   const imagePath = resolve(directory, "photos", "forest-fox.cr3");
   const imageBuffer = Buffer.from("prepared-image");
   const uploaded = {
-    id: "cloudflare-new-image",
+    id: photoId,
     uploadedAt: "2026-11-04T12:00:00.000Z",
   };
   const createPhoto = (overrides: Record<string, unknown> = {}): PhotoAppInit =>
@@ -49,6 +49,7 @@ describe("Photo publishing", () => {
   let publisher: {
     getPhoto: jest.MockedFunction<Publisher["getPhoto"]>;
     putPhoto: jest.MockedFunction<Publisher["putPhoto"]>;
+    getImage: jest.MockedFunction<Publisher["getImage"]>;
     uploadImage: jest.MockedFunction<Publisher["uploadImage"]>;
   };
   let logSpy: jest.SpiedFunction<typeof console.log>;
@@ -103,6 +104,10 @@ describe("Photo publishing", () => {
       >(async (photo) => {
         storedPhoto = photo;
       }),
+      getImage: jest.fn<
+        ReturnType<Publisher["getImage"]>,
+        Parameters<Publisher["getImage"]>
+      >(async (_photo) => null),
       uploadImage: jest.fn<
         ReturnType<Publisher["uploadImage"]>,
         Parameters<Publisher["uploadImage"]>
@@ -128,7 +133,6 @@ describe("Photo publishing", () => {
       expect(publisher.getPhoto).not.toHaveBeenCalled();
       expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
-
     it.each([
       ["null root", null],
       ["array root", []],
@@ -139,16 +143,13 @@ describe("Photo publishing", () => {
       "rejects invalid photo artifact identity: %s",
       async (_scenario, value) => {
         mockedReadFile.mockResolvedValue(JSON.stringify(value));
-
         await expect(publish()).rejects.toThrow(
           `Photo artifact ID mismatch: ${photoId}`,
         );
-
         expect(publisher.getPhoto).not.toHaveBeenCalled();
         expect(publisher.putPhoto).not.toHaveBeenCalled();
       },
     );
-
     it.each([
       ["missing source filename", { id: photoId }],
       ["null source filename", { id: photoId, sourceFileName: null }],
@@ -158,16 +159,13 @@ describe("Photo publishing", () => {
       "rejects invalid photo artifact source: %s",
       async (_scenario, value) => {
         mockedReadFile.mockResolvedValue(JSON.stringify(value));
-
         await expect(publish()).rejects.toThrow(
           `Invalid photo artifact: ${photoId}`,
         );
-
         expect(publisher.getPhoto).not.toHaveBeenCalled();
         expect(publisher.uploadImage).not.toHaveBeenCalled();
       },
     );
-
     it("propagates artifact read failures", async () => {
       const error = new Error("Artifact unavailable");
       mockedReadFile.mockRejectedValue(error);
@@ -217,7 +215,7 @@ describe("Photo publishing", () => {
     ])("rejects incomplete upload metadata %#", async (result) => {
       publisher.uploadImage.mockResolvedValue(result);
       await expect(publish()).rejects.toThrow(
-        `Image upload returned incomplete metadata: ${photoId}`,
+        `Image upload returned invalid metadata: ${photoId}`,
       );
       expect(mockedWriteFile).not.toHaveBeenCalled();
       expect(publisher.putPhoto).not.toHaveBeenCalled();
@@ -245,40 +243,107 @@ describe("Photo publishing", () => {
       expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
   });
+  describe("Remote Cloudflare image recovery", () => {
+    it("checks Cloudflare Images before a fresh upload", async () => {
+      await publish();
+      expect(publisher.getImage).toHaveBeenCalledWith(artifact);
+      expect(publisher.getImage.mock.invocationCallOrder[0]).toBeLessThan(
+        publisher.uploadImage.mock.invocationCallOrder[0],
+      );
+    });
+    it("reuses a remote image and checkpoints it without uploading", async () => {
+      publisher.getImage.mockResolvedValue(uploaded);
+      const result = await publish();
+      expect(publisher.getImage).toHaveBeenCalledWith(artifact);
+      expect(mockedPrepareImage).not.toHaveBeenCalled();
+      expect(publisher.uploadImage).not.toHaveBeenCalled();
+      expect(mockedWriteFile).toHaveBeenCalledWith(
+        checkpointPath,
+        `${JSON.stringify(uploaded, null, 2)}\n`,
+        "utf8",
+      );
+      expect(result.cloudflareImageId).toBe(photoId);
+      expect(result.cloudflareUploadedAt).toBe(uploaded.uploadedAt);
+      expect(logSpy).toHaveBeenCalledWith(
+        `↷ Reusing existing Cloudflare Image: ${photoId}`,
+      );
+    });
+    it("rejects incomplete remote image metadata", async () => {
+      publisher.getImage.mockResolvedValue({
+        id: photoId,
+        uploadedAt: "",
+      });
+      await expect(publish()).rejects.toThrow(
+        `Invalid remote image metadata: ${photoId}`,
+      );
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
+    });
+    it("rejects a mismatched remote image ID", async () => {
+      publisher.getImage.mockResolvedValue({
+        ...uploaded,
+        id: "another-photo",
+      });
+      await expect(publish()).rejects.toThrow(
+        `Invalid remote image metadata: ${photoId}`,
+      );
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
+    });
+    it("propagates remote image lookup failures", async () => {
+      const failure = new Error("Cloudflare Images lookup failed");
+      publisher.getImage.mockRejectedValue(failure);
+      await expect(publish()).rejects.toBe(failure);
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
+    });
+  });
   describe("Existing Cloudflare image", () => {
     it("reuses image metadata from KV", async () => {
       storedPhoto = createPhoto({
-        cloudflareImageId: "existing-kv-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-01T10:00:00.000Z",
       });
       const result = await publish();
-      expect(result.cloudflareImageId).toBe("existing-kv-image");
+      expect(result.cloudflareImageId).toBe(photoId);
       expect(result.cloudflareUploadedAt).toBe("2026-10-01T10:00:00.000Z");
       expectNoUpload();
       expect(logSpy).toHaveBeenCalledWith(
-        `↷ Image already uploaded: ${photoId}`,
+        `↷ Image already recorded: ${photoId}`,
       );
+    });
+    it("rejects a stored image ID that differs from the authored ID", async () => {
+      storedPhoto = createPhoto({
+        cloudflareImageId: "another-photo",
+        cloudflareUploadedAt: "2026-10-01T10:00:00.000Z",
+      });
+      await expect(publish()).rejects.toThrow(
+        `Existing image ID mismatch: ${photoId}`,
+      );
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
     it("falls back to image metadata in the artifact", async () => {
       artifact = createPhoto({
-        cloudflareImageId: "existing-artifact-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-02T10:00:00.000Z",
       });
       const result = await publish();
-      expect(result.cloudflareImageId).toBe("existing-artifact-image");
+      expect(result.cloudflareImageId).toBe(photoId);
       expectNoUpload();
     });
     it("prefers existing KV metadata over artifact metadata", async () => {
       artifact = createPhoto({
-        cloudflareImageId: "artifact-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-02T10:00:00.000Z",
       });
       storedPhoto = createPhoto({
-        cloudflareImageId: "kv-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-03T10:00:00.000Z",
       });
       const result = await publish();
-      expect(result.cloudflareImageId).toBe("kv-image");
+      expect(result.cloudflareImageId).toBe(photoId);
+      expect(result.cloudflareUploadedAt).toBe("2026-10-03T10:00:00.000Z");
       expectNoUpload();
     });
     it("uploads when existing KV metadata is incomplete", async () => {
@@ -298,28 +363,32 @@ describe("Photo publishing", () => {
       await publish();
       expect(publisher.uploadImage).toHaveBeenCalledTimes(1);
     });
-    it("replaces an existing image when explicitly requested", async () => {
+    it("rejects replacement of an existing image", async () => {
       storedPhoto = createPhoto({
-        cloudflareImageId: "existing-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-01T10:00:00.000Z",
       });
-      const result = await publish(true);
-      expect(publisher.uploadImage).toHaveBeenCalledWith(artifact, imageBuffer);
-      expect(result.cloudflareImageId).toBe(uploaded.id);
-      expect(result.cloudflareUploadedAt).toBe(uploaded.uploadedAt);
+      await expect(publish(true)).rejects.toThrow(
+        `Image replacement is not yet supported safely: ${photoId}`,
+      );
+      expect(publisher.getImage).not.toHaveBeenCalled();
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
-    it("replaces artifact image metadata when requested", async () => {
+    it("rejects replacement when the artifact records an image", async () => {
       artifact = createPhoto({
-        cloudflareImageId: "artifact-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-01T10:00:00.000Z",
       });
-      const result = await publish(true);
-      expect(publisher.uploadImage).toHaveBeenCalledTimes(1);
-      expect(result.cloudflareImageId).toBe(uploaded.id);
+      await expect(publish(true)).rejects.toThrow(
+        `Image replacement is not yet supported safely: ${photoId}`,
+      );
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
     it("defaults to reusing an existing image when replaceImage is omitted", async () => {
       storedPhoto = createPhoto({
-        cloudflareImageId: "existing-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-01T10:00:00.000Z",
       });
       const result = await publishPhoto({
@@ -327,7 +396,7 @@ describe("Photo publishing", () => {
         photoId,
         publisher,
       });
-      expect(result.cloudflareImageId).toBe("existing-image");
+      expect(result.cloudflareImageId).toBe(photoId);
       expect(mockedPrepareImage).not.toHaveBeenCalled();
       expect(publisher.uploadImage).not.toHaveBeenCalled();
       expect(mockedWriteFile).not.toHaveBeenCalled();
@@ -336,7 +405,7 @@ describe("Photo publishing", () => {
   describe("Upload checkpoints", () => {
     it("reuses a valid upload checkpoint", async () => {
       const checkpoint = {
-        id: "checkpoint-image",
+        id: photoId,
         uploadedAt: "2026-10-20T08:00:00.000Z",
       };
       mockCheckpoint(checkpoint);
@@ -350,31 +419,45 @@ describe("Photo publishing", () => {
     });
     it("prefers a checkpoint over existing KV metadata", async () => {
       storedPhoto = createPhoto({
-        cloudflareImageId: "kv-image",
+        cloudflareImageId: photoId,
         cloudflareUploadedAt: "2026-10-01T10:00:00.000Z",
       });
       mockCheckpoint({
-        id: "checkpoint-image",
+        id: photoId,
         uploadedAt: "2026-10-20T08:00:00.000Z",
       });
       const result = await publish();
-      expect(result.cloudflareImageId).toBe("checkpoint-image");
+      expect(result.cloudflareImageId).toBe(photoId);
+      expect(result.cloudflareUploadedAt).toBe("2026-10-20T08:00:00.000Z");
       expectNoUpload();
     });
-    it("reuses a checkpoint even with replaceImage enabled", async () => {
+    it("rejects replacement even when an upload checkpoint exists", async () => {
       mockCheckpoint({
-        id: "checkpoint-image",
+        id: photoId,
         uploadedAt: "2026-10-20T08:00:00.000Z",
       });
-      const result = await publish(true);
-      expect(result.cloudflareImageId).toBe("checkpoint-image");
+      await expect(publish(true)).rejects.toThrow(
+        `Image replacement is not yet supported safely: ${photoId}`,
+      );
       expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
+    });
+    it("rejects a checkpoint belonging to a different photo", async () => {
+      mockCheckpoint({
+        id: "another-photo",
+        uploadedAt: "2026-10-20T08:00:00.000Z",
+      });
+      await expect(publish()).rejects.toThrow(
+        `Image upload checkpoint ID mismatch: ${photoId}`,
+      );
+      expectNoUpload();
+      expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
     it.each([
       {},
       { id: "", uploadedAt: "2026-10-20T08:00:00.000Z" },
-      { id: "checkpoint-image", uploadedAt: "" },
-      { id: "checkpoint-image" },
+      { id: photoId, uploadedAt: "" },
+      { id: photoId },
       { uploadedAt: "2026-10-20T08:00:00.000Z" },
     ])("rejects invalid checkpoint metadata %#", async (checkpoint) => {
       mockCheckpoint(checkpoint);
@@ -384,26 +467,22 @@ describe("Photo publishing", () => {
       expect(publisher.uploadImage).not.toHaveBeenCalled();
       expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
-
     it.each([
       ["null root", null],
       ["array root", []],
       ["primitive root", "invalid"],
       ["numeric ID", { id: 123, uploadedAt: "2026-10-20T08:00:00.000Z" }],
       ["null ID", { id: null, uploadedAt: "2026-10-20T08:00:00.000Z" }],
-      ["numeric timestamp", { id: "checkpoint-image", uploadedAt: 123 }],
-      ["null timestamp", { id: "checkpoint-image", uploadedAt: null }],
+      ["numeric timestamp", { id: photoId, uploadedAt: 123 }],
+      ["null timestamp", { id: photoId, uploadedAt: null }],
     ])("rejects invalid checkpoint shape: %s", async (_scenario, value) => {
       mockCheckpoint(value);
-
       await expect(publish()).rejects.toThrow(
         `Invalid image upload checkpoint: ${checkpointPath}`,
       );
-
       expect(publisher.uploadImage).not.toHaveBeenCalled();
       expect(publisher.putPhoto).not.toHaveBeenCalled();
     });
-
     it.each([null, "EACCES"])(
       "propagates non-Error checkpoint read rejection: %#",
       async (rejection) => {
@@ -411,15 +490,12 @@ describe("Photo publishing", () => {
           if (String(filePath) === artifactPath) {
             return JSON.stringify(artifact);
           }
-
           throw rejection;
         });
-
         await expect(publish()).rejects.toBe(rejection);
         expect(publisher.putPhoto).not.toHaveBeenCalled();
       },
     );
-
     it("rejects malformed checkpoint JSON", async () => {
       mockedReadFile.mockImplementation(async (filePath) => {
         if (String(filePath) === artifactPath) {

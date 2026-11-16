@@ -4,7 +4,7 @@
   "cf-config": {
     "zone": "kevinellen.com",
     "account-id": "aae13859d2866d7a208e1526df50cff2",
-    "compatibility-date": "2026-11-09",
+    "compatibility-date": "2026-11-15",
     "images-account-hash": "y5zCV0xCeMBwfDh5UGa7tw",
     "kv": {
       "content": "f66a50df4fb14787938bd5e51d74bbeb",
@@ -66,7 +66,7 @@
     "typescript": "~6.0.0",
     "typescript-eslint": "8.72.0",
     "tz-lookup": "^6.1.25",
-    "wrangler": "^4.158.0"
+    "wrangler": "^4.162.0"
   },
   "overrides": {
     "@istanbuljs/load-nyc-config": {

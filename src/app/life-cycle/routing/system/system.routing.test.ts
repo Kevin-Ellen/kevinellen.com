@@ -96,4 +96,26 @@ describe("System routing", () => {
   it("returns null for an unrelated route with a ledger", () => {
     expect(resolve("/journals/example", ledger)).toBeNull();
   });
+
+  it("routes rss.xml when a ledger exists", () => {
+    const result = resolve("/rss.xml", ledger);
+
+    expect(result).toEqual({
+      kind: "system",
+      resolver: "rss-feed",
+      ledger,
+    });
+
+    expect(result?.ledger).toBe(ledger);
+  });
+
+  it("does not route rss.xml without a ledger", () => {
+    expect(resolve("/rss.xml")).toBeNull();
+  });
+
+  it("uses exact, case-sensitive matching for rss.xml", () => {
+    expect(resolve("/RSS.XML", ledger)).toBeNull();
+    expect(resolve("/rss.xml/", ledger)).toBeNull();
+    expect(resolve("/rss.xml/ ", ledger)).toBeNull();
+  });
 });

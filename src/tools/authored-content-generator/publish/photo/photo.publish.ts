@@ -16,6 +16,7 @@ type UploadedImage = Readonly<{
 type PhotoPublisher = Readonly<{
   getPhoto: (id: string) => Promise<PhotoAppInit | null>;
   putPhoto: (photo: PhotoAppInit) => Promise<void>;
+  getImage: (photo: PhotoAppInit) => Promise<UploadedImage | null>;
   uploadImage: (photo: PhotoAppInit, image: Buffer) => Promise<UploadedImage>;
 }>;
 
@@ -64,8 +65,8 @@ const readPhotoArtifact = async (
     throw new Error(`Invalid photo artifact: ${photoId}`);
   }
 
-  // The content generation and validation pipeline owns the
-  // complete PhotoAppInit contract.
+  // Artifact generation and validation own the
+  // complete PhotoAppInit content contract.
   return photoValue as PhotoAppInit;
 };
 
@@ -133,28 +134,58 @@ export const publishPhoto = async ({
 
   let uploaded: UploadedImage;
 
+  if (replaceImage) {
+    throw new Error(
+      `Image replacement is not yet supported safely: ${photo.id}`,
+    );
+  }
+
   if (checkpoint) {
+    if (checkpoint.id !== photo.id) {
+      throw new Error(`Image upload checkpoint ID mismatch: ${photo.id}`);
+    }
+
     uploaded = checkpoint;
 
     console.log(`↷ Reusing image upload checkpoint: ${photo.id}`);
-  } else if (existingUpload && !replaceImage) {
-    uploaded = existingUpload;
-
-    console.log(`↷ Image already uploaded: ${photo.id}`);
-  } else {
-    const imagePath = resolve(directory, "photos", photo.sourceFileName);
-
-    const image = await prepareImageForUpload(imagePath);
-
-    uploaded = await publisher.uploadImage(photo, image);
-
-    if (!isUploadedImage(uploaded)) {
-      throw new Error(`Image upload returned incomplete metadata: ${photo.id}`);
+  } else if (existingUpload) {
+    if (existingUpload.id !== photo.id) {
+      throw new Error(`Existing image ID mismatch: ${photo.id}`);
     }
 
-    await writeUploadCheckpoint(checkpointPath, uploaded);
+    uploaded = existingUpload;
 
-    console.log(`✓ Image uploaded: ${photo.id}`);
+    console.log(`↷ Image already recorded: ${photo.id}`);
+  } else {
+    // Neither the target KV nor the local checkpoint knows
+    // about the image. Check Cloudflare Images before uploading.
+    const remoteImage = await publisher.getImage(photo);
+
+    if (remoteImage) {
+      if (!isUploadedImage(remoteImage) || remoteImage.id !== photo.id) {
+        throw new Error(`Invalid remote image metadata: ${photo.id}`);
+      }
+
+      uploaded = remoteImage;
+
+      await writeUploadCheckpoint(checkpointPath, uploaded);
+
+      console.log(`↷ Reusing existing Cloudflare Image: ${photo.id}`);
+    } else {
+      const imagePath = resolve(directory, "photos", photo.sourceFileName);
+
+      const image = await prepareImageForUpload(imagePath);
+
+      uploaded = await publisher.uploadImage(photo, image);
+
+      if (!isUploadedImage(uploaded) || uploaded.id !== photo.id) {
+        throw new Error(`Image upload returned invalid metadata: ${photo.id}`);
+      }
+
+      await writeUploadCheckpoint(checkpointPath, uploaded);
+
+      console.log(`✓ Image uploaded: ${photo.id}`);
+    }
   }
 
   const published: PhotoAppInit = {

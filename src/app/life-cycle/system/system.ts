@@ -8,6 +8,7 @@ import type { PublishedRegistry } from "../../../shared/types/content/kv-ledger.
 import { resolveRobotsTxtSystem } from "./robots-txt/robots-txt.system";
 import { resolveWebmanifestSystem } from "./webmanifest/webmanifest.system";
 import { resolveSitemapSystem } from "./sitemap-xml/sitemap-xml.system";
+import { resolveRssFeedSystem } from "./rss-feed/rss-feed.system";
 
 type Input = Readonly<{
   resolver: SystemResolverId;
@@ -29,6 +30,14 @@ export const handleSystem = ({
       }
 
       return resolveSitemapSystem({ appInit, ledger });
+    },
+
+    "rss-feed": () => {
+      if (ledger === null) {
+        throw new Error("RSS feed requires a published ledger");
+      }
+
+      return resolveRssFeedSystem({ appInit, ledger });
     },
   };
 
