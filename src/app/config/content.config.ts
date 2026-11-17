@@ -10,6 +10,7 @@ import { approachToPhotographyAboutContentAuthored } from "../content/about/appr
 import { equipmentAboutContentAuthored } from "../content/about/equipment.about.content.authored";
 import { localInEssexAboutContentAuthored } from "../content/about/local-in-essex.about.content.authored";
 import { travelsAboutContentAuthored } from "../content/about/travels.about.content.authored";
+import { printsAboutContentAuthored } from "../content/about/prints.about.content.authored copy";
 
 import { termsLegalContentAuthored } from "../content/legal/terms.legal.content.authored";
 import { privacyLegalContentAuthored } from "../content/legal/privacy.legal.content.authored";
@@ -40,6 +41,7 @@ export const contentConfigAuthored = [
   equipmentAboutContentAuthored,
   localInEssexAboutContentAuthored,
   travelsAboutContentAuthored,
+  printsAboutContentAuthored,
 
   // Legal
   termsLegalContentAuthored,
