@@ -588,6 +588,9 @@
         "commentary": {
           "type": "string"
         },
+        "expandable": {
+          "type": "boolean"
+        },
         "kind": {
           "const": "featuredPhoto",
           "type": "string"
@@ -1475,6 +1478,9 @@
         "commentary": {
           "type": "string"
         },
+        "expandable": {
+          "type": "boolean"
+        },
         "kind": {
           "const": "photo",
           "type": "string"
@@ -1629,6 +1635,13 @@
           "type": "string"
         },
         "scientificName": {
+          "type": "string"
+        },
+        "taxonRank": {
+          "enum": [
+            "species",
+            "subspecies"
+          ],
           "type": "string"
         }
       },

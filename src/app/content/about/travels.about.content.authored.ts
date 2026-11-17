@@ -19,6 +19,13 @@ export const travelsAboutContentAuthored = {
     description:
       "Explore Kevin Ellen's travels, encounters with wildlife and experiences photographing nature and landscapes across different countries and environments.",
     sitemap: true,
+    openGraph: {
+      title: "A Little Further Afield — Travels",
+      description: "Different landscapes, unfamiliar wildlife and unexpected adventures. Exploring the natural world beyond Essex.",
+      image: "/assets/images/viru-bog-in-estonia-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
   body: {
     modules: [

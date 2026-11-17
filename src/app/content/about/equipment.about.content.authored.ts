@@ -19,6 +19,13 @@ export const equipmentAboutContentAuthored = {
     description:
       "Explore the cameras, lenses and equipment Kevin Ellen uses for wildlife and nature photography, both locally in Essex and further afield.",
     sitemap: true,
+    openGraph: {
+      title: "What Comes Along — My Photography Equipment",
+      description: "A camera, a rather large lens and the essentials for a day outdoors. A look at the equipment I use to photograph wildlife.",
+      image: "/assets/images/photography-equipment-in-the-field-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
 
   body: {

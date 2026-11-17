@@ -19,6 +19,13 @@ export const approachToPhotographyAboutContentAuthored = {
     description:
       "Explore Kevin Ellen's approach to wildlife and nature photography, from observing animal behaviour and working with natural light to photographing wildlife responsibly.",
     sitemap: true,
+    openGraph: {
+      title: "An Observer First — My Approach to Photography",
+      description: "Patience, fieldcraft and curiosity. Why observing wildlife and understanding its behaviour matters as much as the photograph.",
+      image: "/assets/images/great-crested-grebes-courting-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
   body: {
     modules: [

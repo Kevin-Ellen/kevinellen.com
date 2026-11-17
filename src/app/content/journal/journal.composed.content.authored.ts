@@ -20,6 +20,14 @@ export const journalContentAuthored = {
     description:
       "Wildlife photography, nature observations and field notes by Kevin Ellen. Stories from Epping Forest, Essex, and journeys further afield.",
     sitemap: true,
+    openGraph: {
+      title: "Stories from the Field — Wildlife & Nature Journal",
+      description:
+        "Wildlife encounters, changing landscapes and the stories behind the photographs. Field notes from Essex and further afield.",
+      image: "/assets/images/whitethroat-singing-og-1200-630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
 
   body: {
