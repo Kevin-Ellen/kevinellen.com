@@ -21,6 +21,13 @@ export const aboutContentAuthored = {
     description:
       "Meet Kevin Ellen, an independent wildlife and nature photographer based in Loughton, Essex, near Epping Forest. Exploring wildlife behaviour, local nature and journeys further afield.",
     sitemap: true,
+    openGraph: {
+      title: "Behind the Lens — Kevin Ellen",
+      description: "A little about the photographer, the wildlife encounters and the curiosity that keeps drawing me outdoors.",
+      image: "/assets/images/cattle-egrets-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
 
   body: {

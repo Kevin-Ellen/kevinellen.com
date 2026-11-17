@@ -19,6 +19,14 @@ export const topicsContentAuthored = {
     description:
       "Explore wildlife and nature photography, field notes, and journal entries organised by topic.",
     sitemap: true,
+    openGraph: {
+      title: "Explore Wildlife & Nature",
+      description:
+        "From raptors and wildlife behaviour to wild places and travel. Explore photography and field notes by subject.",
+      image: "/assets/images/blackbird-in-the-sun-og-1200-630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
   body: {
     modules: [

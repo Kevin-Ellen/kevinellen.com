@@ -19,6 +19,13 @@ export const localInEssexAboutContentAuthored = {
     description:
       "Discover Kevin Ellen's local wildlife photography around Essex, from Epping Forest to the county's woodlands, wetlands and nature reserves.",
     sitemap: true,
+    openGraph: {
+      title: "Wildlife on My Doorstep — Essex",
+      description: "From Epping Forest to Essex's wetlands and coastline. Discover the wildlife and places I return to throughout the seasons.",
+      image: "/assets/images/female-fallow-deer-in-epping-forest-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
   },
   body: {
     modules: [

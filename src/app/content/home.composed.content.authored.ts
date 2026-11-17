@@ -21,9 +21,12 @@ export const homeContentAuthored = {
       "Wildlife and nature photography by Kevin Ellen, based in Loughton, Essex, near Epping Forest. Field journals documenting wildlife behaviour, natural habitats and encounters in Essex and beyond.",
     sitemap: true,
     openGraph: {
-      image: "/assets/images/homepage-open-graph-1200x630.jpg",
+      title: "Wildlife & Nature Photography by Kevin Ellen",
+      description:
+        "Wild places, quiet moments and unexpected encounters. Explore wildlife photography and field notes from Essex and beyond.",
+      image: "/assets/images/kingfisher-diving-og-1200x630.jpg",
       width: 1200,
-      height: 630,
+      height: 628,
     },
   },
 
@@ -45,14 +48,14 @@ export const homeContentAuthored = {
           "A field journal of wildlife encounters — capturing behaviour, fleeting moments, and the quiet details often missed at first glance.",
 
         media: {
-          src: "/assets/images/homepage-hero-2x3.jpg",
+          src: "/assets/images/kingfisher-diving-2x3.jpg",
           width: 2,
           height: 3,
           alt: "",
           fetchPriority: "high",
           sources: [
             {
-              src: "/assets/images/homepage-hero-2560x720.jpg",
+              src: "/assets/images/kingfisher-diving-2560x720.jpg",
               media: "(min-width: 30rem)",
               width: 2560,
               height: 720,

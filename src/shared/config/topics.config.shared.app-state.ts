@@ -16,6 +16,14 @@ export const topicsConfigAuthored = {
       width: 3,
       height: 2,
     },
+    openGraph: {
+      title: "Wildlife Photography in Essex",
+      description:
+        "From Epping Forest to the Essex coastline. Wildlife encounters, familiar habitats and unexpected moments close to home.",
+      image: "/assets/images/female-mallard-landing-in-an-essex-lake-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
     dates: {
       created: "2026-10-30",
     },
@@ -33,6 +41,14 @@ export const topicsConfigAuthored = {
       alt: "Common kestrel perched among the rough branches of a large tree in Richmond Park, its warm brown plumage marked with dark spots.",
       width: 3,
       height: 2,
+    },
+    openGraph: {
+      title: "Raptors — Birds of Prey",
+      description:
+        "Kestrels, birds of prey and remarkable encounters. Exploring the behaviour and beauty of raptors in the wild.",
+      image: "/assets/images/common-kestrel-in-a-tree-in-richmond-park-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
     },
     dates: {
       created: "2026-10-30",
@@ -52,6 +68,14 @@ export const topicsConfigAuthored = {
       width: 3,
       height: 2,
     },
+    openGraph: {
+      title: "Exploring Nature Reserves",
+      description:
+        "Wild places worth protecting. Discover wildlife, habitats and the unexpected encounters found in nature reserves.",
+      image: "/assets/images/mute-swan-on-water-in-bieschbosch-netherlands-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
     dates: {
       created: "2026-10-30",
     },
@@ -70,10 +94,19 @@ export const topicsConfigAuthored = {
       width: 3,
       height: 2,
     },
+    openGraph: {
+      title: "Wildlife & Nature Beyond Essex",
+      description:
+        "Different landscapes, unfamiliar wildlife and journeys further afield. Field notes and photographs from the places I explore.",
+      image: "/assets/images/viru-bog-in-estonia-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
+    },
     dates: {
       created: "2026-10-30",
     },
   },
+
   "wildlife-behaviour": {
     label: "Wildlife Behaviour",
     description:
@@ -86,6 +119,14 @@ export const topicsConfigAuthored = {
       alt: "A kingfisher flying low over water with a small fish in its beak, against dense green reeds at Rye Meads RSPB.",
       width: 3,
       height: 2,
+    },
+    openGraph: {
+      title: "Wildlife Behaviour — Moments in Nature",
+      description:
+        "Feeding, hunting, movement and unexpected interactions. Observing the fascinating details of how wildlife lives.",
+      image: "/assets/images/kingfisher-flying-with-snack-rye-meads-rspb-og-1200x630.jpg",
+      width: 1200,
+      height: 628,
     },
     dates: {
       created: "2026-11-04",

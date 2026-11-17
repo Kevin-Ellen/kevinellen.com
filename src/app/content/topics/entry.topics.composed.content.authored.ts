@@ -32,6 +32,7 @@ export const createTopicEntryContentAuthored = ({
     title: `${topic.label} | Topics`,
     description: topic.description,
     sitemap: true,
+    ...(topic.openGraph ? { openGraph: topic.openGraph } : {}),
   },
 
   body: {
